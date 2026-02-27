@@ -49,19 +49,17 @@ typecheck:
 
 secret_detection:
   stage: quality
-  inherit:
-    variables: false
+  before_script: []
   allow_failure: true
 
 sast:
   stage: quality
-  inherit:
-    variables: false
+  before_script: []
+  allow_failure: true
 
 semgrep-sast:
   stage: quality
-  inherit:
-    variables: false
+  before_script: []
   allow_failure: true
 
 # ── Test stage ────────────────────────────────────────────────────────────────
