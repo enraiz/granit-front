@@ -64,4 +64,62 @@ describe('createLogger', () => {
       ''
     );
   });
+
+  it('debug calls console.log with styled format', () => {
+    const logger = createLogger('[Test]');
+    logger.debug('debug message');
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining('debug message'),
+      expect.any(String),
+      expect.any(String),
+      ''
+    );
+  });
+
+  it('debug passes context when provided', () => {
+    const logger = createLogger('[Test]');
+    const ctx = { requestId: '123' };
+    logger.debug('debug with context', ctx);
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining('debug with context'),
+      expect.any(String),
+      expect.any(String),
+      ctx
+    );
+  });
+
+  it('info calls console.info with styled format', () => {
+    const logger = createLogger('[Test]');
+    logger.info('info message');
+    expect(console.info).toHaveBeenCalledWith(
+      expect.stringContaining('info message'),
+      expect.any(String),
+      expect.any(String),
+      ''
+    );
+  });
+
+  it('info passes context when provided', () => {
+    const logger = createLogger('[Test]');
+    const ctx = { userId: 'u-42' };
+    logger.info('info with context', ctx);
+    expect(console.info).toHaveBeenCalledWith(
+      expect.stringContaining('info with context'),
+      expect.any(String),
+      expect.any(String),
+      ctx
+    );
+  });
+
+  it('error passes context when provided', () => {
+    const logger = createLogger('[Test]');
+    const err = new Error('boom');
+    const ctx = { traceId: 'abc' };
+    logger.error('with context', err, ctx);
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('[Test]'),
+      err,
+      ctx
+    );
+  });
 });

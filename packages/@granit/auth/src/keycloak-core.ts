@@ -13,6 +13,15 @@ export interface KeycloakCoreResult extends BaseAuthContextType {
   keycloakRef: React.MutableRefObject<Keycloak | null>;
 }
 
+/** Starts a 60 s interval that proactively keeps the Keycloak token alive. */
+function startTokenRefresh(keycloak: Keycloak): ReturnType<typeof setInterval> {
+  return setInterval(() => {
+    keycloak.updateToken(70).catch(() => {
+      // Token refresh failed — app will handle re-login
+    });
+  }, 60_000);
+}
+
 /**
  * Shared Keycloak initialization hook (web-only, no Capacitor logic).
  *
@@ -61,13 +70,7 @@ export function useKeycloakInit(config: KeycloakCoreConfig): KeycloakCoreResult 
         setAuthenticated(auth);
 
         if (auth) {
-          refreshInterval = setInterval(() => {
-            keycloak
-              .updateToken(70)
-              .catch(() => {
-                // Token refresh failed — app will handle re-login
-              });
-          }, 60_000);
+          refreshInterval = startTokenRefresh(keycloak);
 
           try {
             const userInfo = await keycloak.loadUserInfo();

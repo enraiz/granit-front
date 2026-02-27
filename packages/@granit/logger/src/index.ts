@@ -12,7 +12,7 @@ function resolveLogLevel(): LogLevelValue {
   // import.meta.env is provided by Vite and Vitest at runtime.
   // Cast to avoid requiring vite/client types in library tsconfig.
   const viteEnv = (import.meta as unknown as { env?: { DEV?: boolean } }).env;
-  return viteEnv?.DEV !== false ? LogLevel.DEBUG : LogLevel.WARN;
+  return viteEnv?.DEV === false ? LogLevel.WARN : LogLevel.DEBUG;
 }
 
 export interface Logger {
