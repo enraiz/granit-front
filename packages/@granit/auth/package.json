@@ -1,0 +1,14 @@
+{
+  "name": "@granit/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "@granit/types": "workspace:*",
+    "keycloak-js": "*",
+    "react": "^19.0.0"
+  }
+}

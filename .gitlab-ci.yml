@@ -1,0 +1,107 @@
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'develop'
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+
+variables:
+  NODE_VERSION: '24'
+  PNPM_VERSION: '10'
+  HUSKY: '0'
+
+stages:
+  - quality
+  - test
+  - analysis
+
+.node_base:
+  image: node:24-bookworm-slim
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest --activate
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store/
+
+# ── Quality stage ─────────────────────────────────────────────────────────────
+
+lint:
+  stage: quality
+  extends: .node_base
+  script:
+    - pnpm lint
+
+typecheck:
+  stage: quality
+  extends: .node_base
+  script:
+    - pnpm tsc
+
+secret_detection:
+  stage: quality
+  inherit:
+    variables: false
+  allow_failure: true
+
+sast:
+  stage: quality
+  inherit:
+    variables: false
+
+semgrep-sast:
+  stage: quality
+  inherit:
+    variables: false
+  allow_failure: true
+
+# ── Test stage ────────────────────────────────────────────────────────────────
+
+test:
+  stage: test
+  extends: .node_base
+  script:
+    - pnpm test:coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - coverage/
+    expire_in: 1 week
+
+# ── Analysis stage ────────────────────────────────────────────────────────────
+
+sonarqube:
+  stage: analysis
+  image:
+    name: sonarsource/sonar-scanner-cli
+    entrypoint: ['']
+  variables:
+    SONAR_PROJECT_KEY: 'granit-front'
+    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+    GIT_DEPTH: '0'
+  script:
+    - sonar-scanner
+      -Dsonar.projectKey=$SONAR_PROJECT_KEY
+      -Dsonar.sources=packages
+      -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+      -Dsonar.exclusions=**/*.test.ts,**/*.test.tsx,**/*.d.ts
+      -Dsonar.qualitygate.wait=true
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'develop'
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'
