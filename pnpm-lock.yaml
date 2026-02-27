@@ -83,6 +83,12 @@ importers:
 
   packages/@granit/logger: {}
 
+  packages/@granit/logger-otlp:
+    dependencies:
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
+
   packages/@granit/types: {}
 
   packages/@granit/utils:
