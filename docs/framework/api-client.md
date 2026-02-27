@@ -1,13 +1,14 @@
 # @granit/api-client
 
-Factory Axios avec intercepteur Bearer token pour les applications Digital Dynamics.
+Factory Axios avec intercepteurs Bearer token et multi-tenant pour les applications
+Digital Dynamics. Fournit également un mutator orval pour la génération de clients typés.
 
 ## API
 
 ### `createApiClient(config: ApiClientConfig): AxiosInstance`
 
-Crée une instance Axios pré-configurée avec un intercepteur de requête qui injecte
-automatiquement le Bearer token Keycloak à chaque appel.
+Crée une instance Axios pré-configurée avec des intercepteurs de requête qui injectent
+automatiquement le Bearer token Keycloak et le header `X-Tenant-Id` (si configuré).
 
 ```typescript
 import { createApiClient } from '@granit/api-client';
@@ -34,6 +35,38 @@ setTokenGetter(async () => {
 });
 ```
 
+### `setTenantGetter(getter: () => string | undefined): void`
+
+Enregistre une fonction synchrone qui retourne l'identifiant du tenant courant.
+**Opt-in** : si aucun getter n'est configuré, le header `X-Tenant-Id` n'est pas
+envoyé. Uniquement nécessaire pour les applications multi-tenant.
+
+```typescript
+import { setTenantGetter } from '@granit/api-client';
+
+// Exemple : tenant depuis un store React
+setTenantGetter(() => tenantStore.currentTenantId);
+```
+
+Le header `X-Tenant-Id` est aligné sur le backend Granit .NET
+(`Granit.MultiTenancy` — résolution par header, priorité maximale).
+
+### `createMutator(instance: AxiosInstance): MutatorFn`
+
+Factory qui crée une fonction [mutator orval](https://orval.dev/guides/custom-client)
+à partir d'une instance Axios existante. Le mutator réutilise les intercepteurs de
+l'instance (token, tenant) et retourne directement `response.data`.
+
+```typescript
+import { createApiClient, createMutator } from '@granit/api-client';
+
+const api = createApiClient({ baseURL: import.meta.env.VITE_API_URL });
+export const customInstance = createMutator(api);
+export default customInstance;
+```
+
+> Voir la documentation [orval](orval.md) pour la configuration complète.
+
 ### Gestion des erreurs 401/403
 
 La gestion des erreurs 401/403 est intentionnellement **laissée à l'application** consommatrice.
@@ -57,6 +90,9 @@ api.interceptors.response.use(
   }
 );
 ```
+
+Le backend retourne les erreurs au format RFC 7807 `ProblemDetails` — voir
+`@granit/types` pour le type TypeScript correspondant.
 
 ## Peer dependencies
 
