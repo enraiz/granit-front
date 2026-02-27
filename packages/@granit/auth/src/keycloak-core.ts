@@ -1,12 +1,9 @@
+import { setTokenGetter } from '@granit/api-client';
+import Keycloak from 'keycloak-js';
 import * as React from 'react';
 
-import Keycloak from 'keycloak-js';
-
-import { setTokenGetter } from '@granit/api-client';
-
-import type { KeycloakUserInfo } from '@granit/types';
-
 import type { BaseAuthContextType, KeycloakCoreConfig } from './types.ts';
+import type { KeycloakUserInfo } from '@granit/types';
 
 export interface KeycloakCoreResult extends BaseAuthContextType {
   /**

@@ -1,6 +1,5 @@
-import type Keycloak from 'keycloak-js';
-
 import type { KeycloakUserInfo } from '@granit/types';
+import type Keycloak from 'keycloak-js';
 
 /**
  * Base auth context shared by all consuming applications.
