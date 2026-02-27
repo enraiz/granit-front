@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { createMockProvider } from '../mock-provider.tsx';
 import { createAuthContext } from '../use-auth-context.ts';
+
 import type { BaseAuthContextType } from '../types.ts';
 
 const mockValue: BaseAuthContextType = {
