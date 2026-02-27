@@ -1,3 +1,5 @@
+<img src="../../../docs/images/granit-icon.svg" alt="" height="32" align="left" style="margin-right:10px" />
+
 # @granit/api-client
 
 Factory Axios avec intercepteur Bearer token pour les applications Digital Dynamics.

@@ -1,3 +1,5 @@
+<img src="../../../docs/images/granit-icon.svg" alt="" height="32" align="left" style="margin-right:10px" />
+
 # @granit/types
 
 Types TypeScript partagés entre les applications Digital Dynamics.
