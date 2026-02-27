@@ -68,6 +68,9 @@ importers:
 
   packages/@granit/auth:
     dependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
       '@granit/types':
         specifier: workspace:*
         version: link:../types

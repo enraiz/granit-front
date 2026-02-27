@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const LogLevel = {
   DEBUG: 0,
   INFO: 1,
@@ -11,9 +9,10 @@ type LogLevelValue = (typeof LogLevel)[keyof typeof LogLevel];
 type LogContext = Record<string, unknown>;
 
 function resolveLogLevel(): LogLevelValue {
-  // import.meta.env.DEV is true in Vite dev mode and in Vitest
-  const isDev = import.meta.env.DEV !== false;
-  return isDev ? LogLevel.DEBUG : LogLevel.WARN;
+  // import.meta.env is provided by Vite and Vitest at runtime.
+  // Cast to avoid requiring vite/client types in library tsconfig.
+  const viteEnv = (import.meta as unknown as { env?: { DEV?: boolean } }).env;
+  return viteEnv?.DEV !== false ? LogLevel.DEBUG : LogLevel.WARN;
 }
 
 export interface Logger {

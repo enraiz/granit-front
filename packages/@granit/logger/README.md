@@ -1,3 +1,5 @@
+<img src="../../../docs/images/granit-icon.svg" alt="" height="32" align="left" style="margin-right:10px" />
+
 # @granit/logger
 
 Factory de loggers configurables pour les applications Digital Dynamics.

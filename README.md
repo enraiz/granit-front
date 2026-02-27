@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/granit-logo.svg" alt="Granit Front" height="80" />
+</p>
+
 # granit-front
 
 Framework TypeScript/React partagé — équivalent JavaScript/TypeScript de `granit-dotnet`.
