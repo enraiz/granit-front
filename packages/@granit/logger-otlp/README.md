@@ -1,8 +1,8 @@
 <img src="../../../docs/images/granit-icon.svg" alt="" height="32" align="left" style="margin-right:10px" />
 
-# @granit/logger
+# @granit/logger-otlp
 
-Factory de loggers configurables pour les applications Digital Dynamics.
+Transport OTLP HTTP pour `@granit/logger` — envoie les logs vers un collecteur OpenTelemetry (Alloy, Aspire Dashboard).
 
 Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
 
