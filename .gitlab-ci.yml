@@ -75,21 +75,15 @@ typecheck:
 
 secret_detection:
   stage: gitlab-security
-  tags:
-    - docker
   before_script: []
   allow_failure: false
 
 sast:
   stage: gitlab-security
-  tags:
-    - docker
   before_script: []
 
 semgrep-sast:
   stage: gitlab-security
-  tags:
-    - docker
   before_script: []
   allow_failure: false
 
