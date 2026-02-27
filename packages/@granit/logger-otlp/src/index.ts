@@ -146,12 +146,10 @@ export function createOtlpTransport(options: OtlpTransportOptions): LogTransport
   let timer: ReturnType<typeof setTimeout> | null = null;
 
   function scheduleFlush(): void {
-    if (timer === null) {
-      timer = setTimeout(() => {
-        timer = null;
-        void flush();
-      }, flushInterval);
-    }
+    timer ??= setTimeout(() => {
+      timer = null;
+      void flush();
+    }, flushInterval);
   }
 
   function clearTimer(): void {
