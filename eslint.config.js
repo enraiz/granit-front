@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
@@ -9,12 +9,12 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
 
   {
-    plugins: { import: importPlugin },
+    plugins: { 'import-x': importPlugin },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       'no-console': 'error',
-      'import/order': [
+      'import-x/order': [
         'error',
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],

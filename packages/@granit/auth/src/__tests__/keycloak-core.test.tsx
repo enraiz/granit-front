@@ -50,7 +50,7 @@ const mockKeycloakInstance: Record<string, unknown> = {
 };
 
 vi.mock('keycloak-js', () => ({
-  default: vi.fn(() => mockKeycloakInstance),
+  default: vi.fn(function () { return mockKeycloakInstance; }),
 }));
 
 vi.mock('@granit/api-client', () => ({
