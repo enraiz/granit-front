@@ -24,13 +24,16 @@ import type { i18n } from 'i18next';
 export function createLocalization(config?: LocalizationConfig): i18n {
   const instance = createInstance();
 
-  void instance.use(initReactI18next).init({
-    defaultNS: config?.defaultNS ?? 'translation',
-    interpolation: {
-      escapeValue: false,
-    },
-    resources: {},
-  });
+  instance
+    .use(initReactI18next)
+    .init({
+      defaultNS: config?.defaultNS ?? 'translation',
+      interpolation: {
+        escapeValue: false,
+      },
+      resources: {},
+    })
+    .catch(() => undefined);
 
   return instance;
 }
