@@ -17,3 +17,18 @@ export interface PaginatedResponse<T> {
   page: number;
   pageSize: number;
 }
+
+// RFC 7807 Problem Details — standard error format from Granit .NET backend.
+// See: Granit.ExceptionHandling (400 BusinessException, 404 NotFoundException,
+// 403 ForbiddenException, 409 ConflictException, 422 ValidationException, 500).
+export interface ProblemDetails {
+  type?: string;
+  title: string;
+  status: number;
+  detail?: string;
+  instance?: string;
+  /** OpenTelemetry trace ID for correlation in Grafana/Loki/Tempo */
+  traceId?: string;
+  /** Domain error code (e.g. "Appointment:SlotUnavailable") from IHasErrorCode */
+  errorCode?: string;
+}

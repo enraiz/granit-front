@@ -1,6 +1,13 @@
+import path from 'node:path';
+
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@granit/storage': path.resolve(__dirname, 'packages/@granit/storage/src/index.ts'),
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

@@ -29,7 +29,7 @@ export interface LoginOptions {
   /** Force the Keycloak UI locale (e.g. `"fr"`). */
   locale?: string;
   /** Trigger a specific action: `"register"` for signup, or a required action name. */
-  action?: 'register' | string;
+  action?: string;
   prompt?: 'login' | 'consent' | 'none';
   /** Request additional OAuth scopes (space-delimited). */
   scope?: string;
