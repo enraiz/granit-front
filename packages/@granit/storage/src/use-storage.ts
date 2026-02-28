@@ -38,8 +38,8 @@ export function useStorage<T>(
       const handler = (e: StorageEvent) => {
         if (e.key === storage.key) onStoreChange();
       };
-      window.addEventListener('storage', handler);
-      return () => window.removeEventListener('storage', handler);
+      globalThis.addEventListener('storage', handler);
+      return () => globalThis.removeEventListener('storage', handler);
     },
     [storage.key],
   );
@@ -62,7 +62,7 @@ export function useStorage<T>(
   const setValue = useCallback(
     (next: T) => {
       storage.set(next);
-      window.dispatchEvent(
+      globalThis.dispatchEvent(
         new StorageEvent('storage', { key: storage.key }),
       );
     },

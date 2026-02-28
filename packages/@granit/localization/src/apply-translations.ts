@@ -34,6 +34,6 @@ export function applyTranslations(
   );
 
   if (instance.language !== data.cultureName) {
-    void instance.changeLanguage(data.cultureName);
+    instance.changeLanguage(data.cultureName).catch(() => undefined);
   }
 }

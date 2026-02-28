@@ -28,7 +28,7 @@ export function useLocale(): {
   const setLocale = useCallback(
     (nextLocale: string) => {
       storage.set(nextLocale);
-      void i18n.changeLanguage(nextLocale);
+      i18n.changeLanguage(nextLocale).catch(() => undefined);
     },
     [i18n, storage],
   );
