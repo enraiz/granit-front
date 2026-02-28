@@ -129,6 +129,7 @@ audit:npm:
 
 sonarqube:
   stage: analysis
+  timeout: 2h
   image:
     name: sonarsource/sonar-scanner-cli
     entrypoint: ['']
