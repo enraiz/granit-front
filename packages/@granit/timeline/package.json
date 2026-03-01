@@ -1,0 +1,13 @@
+{
+  "name": "@granit/timeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "axios": "*",
+    "react": "^19.0.0"
+  }
+}

@@ -6,6 +6,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@granit/storage': path.resolve(__dirname, 'packages/@granit/storage/src/index.ts'),
+      '@granit/logger': path.resolve(__dirname, 'packages/@granit/logger/src/index.ts'),
     },
   },
   test: {
