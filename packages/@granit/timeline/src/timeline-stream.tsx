@@ -78,9 +78,9 @@ export function TimelineStream({
 
   if (loading) {
     return (
-      <div className={className} role="status" aria-label="Loading timeline">
+      <output className={className} aria-label="Loading timeline">
         <span data-testid="timeline-loading">Loading…</span>
-      </div>
+      </output>
     );
   }
 

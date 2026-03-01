@@ -84,7 +84,7 @@ export function useTimelineFollowers({
   }, [apiClient, basePath, entityType, entityId, currentUserId]);
 
   useEffect(() => {
-    void loadFollowers();
+    loadFollowers().catch(() => {});
   }, [loadFollowers]);
 
   return { followers, isFollowing, loading, error, follow, unfollow };

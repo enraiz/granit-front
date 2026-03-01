@@ -45,7 +45,6 @@ export function TimelineEntry({
       data-entry-type={entryTypeClass}
       data-depth={depth}
       style={depth > 0 ? { marginLeft: `${depth * 24}px` } : undefined}
-      role="article"
       aria-label={`${entryTypeClass} by ${entry.authorDisplayName}`}
     >
       <header data-testid="timeline-entry-header">

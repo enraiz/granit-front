@@ -63,7 +63,7 @@ export function useWorkflowStatus({
   }, [apiClient, basePath, entityType, entityId]);
 
   useEffect(() => {
-    void refetch();
+    refetch().catch(() => {});
     return () => {
       abortRef.current?.abort();
     };

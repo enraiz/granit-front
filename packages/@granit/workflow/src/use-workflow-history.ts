@@ -63,7 +63,7 @@ export function useWorkflowHistory({
 
   useEffect(() => {
     if (enabled) {
-      void refetch();
+      refetch().catch(() => {});
     }
     return () => {
       abortRef.current?.abort();

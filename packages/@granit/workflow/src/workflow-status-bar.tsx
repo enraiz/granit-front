@@ -49,7 +49,7 @@ export function WorkflowStatusBar({
       </div>
 
       {transitions.length > 0 && (
-        <div data-testid="workflow-actions" role="group" aria-label="Workflow actions">
+        <fieldset data-testid="workflow-actions" aria-label="Workflow actions">
           {transitions.map((t) => {
             const label = t.requiresApproval && !t.allowed
               ? `Demander l'approbation`
@@ -69,7 +69,7 @@ export function WorkflowStatusBar({
               </button>
             );
           })}
-        </div>
+        </fieldset>
       )}
     </div>
   );

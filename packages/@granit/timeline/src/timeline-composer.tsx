@@ -155,7 +155,7 @@ export function TimelineComposer({
 
   return (
     <form
-      onSubmit={(e) => void handleSubmit(e)}
+      onSubmit={(e) => { handleSubmit(e).catch(() => {}); }}
       className={className}
       data-testid="timeline-composer"
     >
@@ -192,27 +192,28 @@ export function TimelineComposer({
         />
 
         {showMentions && mentionSuggestions.length > 0 && (
-          <ul
-            role="listbox"
+          <select
+            size={mentionSuggestions.length}
             aria-label="Mention suggestions"
             data-testid="timeline-mention-list"
             style={{ position: 'absolute', bottom: '100%', left: 0 }}
+            value={mentionSuggestions[mentionIndex]?.id ?? ''}
+            onChange={(e) => {
+              const selected = mentionSuggestions.find((s) => s.id === e.target.value);
+              if (selected) insertMention(selected);
+            }}
           >
             {mentionSuggestions.map((suggestion, index) => (
-              <li
+              <option
                 key={suggestion.id}
-                role="option"
-                aria-selected={index === mentionIndex}
+                value={suggestion.id}
                 data-testid="timeline-mention-option"
-                onClick={() => insertMention(suggestion)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') insertMention(suggestion);
-                }}
+                aria-selected={index === mentionIndex}
               >
                 {suggestion.displayName}
-              </li>
+              </option>
             ))}
-          </ul>
+          </select>
         )}
       </div>
 

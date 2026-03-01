@@ -116,7 +116,7 @@ export function useTimeline({
   }, []);
 
   useEffect(() => {
-    void loadInitial();
+    loadInitial().catch(() => {});
     return () => {
       abortRef.current?.abort();
     };

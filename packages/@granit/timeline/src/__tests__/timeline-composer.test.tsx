@@ -311,7 +311,9 @@ describe('TimelineComposer', () => {
       expect(screen.getByTestId('timeline-mention-list')).toBeTruthy();
     });
 
-    fireEvent.click(screen.getByTestId('timeline-mention-option'));
+    fireEvent.change(screen.getByTestId('timeline-mention-list'), {
+      target: { value: 'u-1' },
+    });
 
     await waitFor(() => {
       expect(textarea.value).toContain('@[Dr. Martin](user:u-1)');
