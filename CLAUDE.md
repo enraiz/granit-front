@@ -74,6 +74,24 @@ Before any GitLab operation, **invoke skill `/gitlab`** to load commands and con
 - **Hierarchy**: GitLab Free — `relates_to` links via API + references in parent description
 - **Templates**: `.gitlab/issue_templates/`
 
+## Third-party license notices
+
+The file `THIRD-PARTY-NOTICES.md` at the repository root lists every external
+dependency with its license type and copyright. This file is a legal obligation
+for MIT, Apache-2.0, BSD, ISC, and similar permissive licenses.
+
+**When adding, removing, or upgrading an external dependency:**
+
+1. Update `THIRD-PARTY-NOTICES.md` — add/remove/update the package entry with
+   its name, version, license (SPDX identifier), and copyright holder.
+2. Update the summary table at the top of the file if license counts change.
+3. Update the `Dernière mise à jour` date.
+4. If the new dependency uses a **non-permissive license** (GPL, LGPL, AGPL,
+   SSPL, or any commercial/non-commercial restriction), **flag it immediately**
+   to the user before proceeding. HDS/commercial context requires careful review.
+
+**NEVER** add a dependency without updating `THIRD-PARTY-NOTICES.md`.
+
 ## Git workflow
 
 - **Branching**: GitFlow (main + develop + `feature/*` + `release/*` + `hotfix/*`)
