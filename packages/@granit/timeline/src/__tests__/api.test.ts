@@ -1,0 +1,144 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+
+import {
+  createEntry,
+  deleteEntry,
+  fetchFollowers,
+  fetchStream,
+  followEntity,
+  unfollowEntity,
+} from '../api.ts';
+
+import type { CreateTimelineEntryRequest, TimelineStreamPage } from '../types.ts';
+import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+
+function createMockClient(): AxiosInstance {
+  return {
+    get: vi.fn(),
+    post: vi.fn(),
+    delete: vi.fn(),
+    put: vi.fn(),
+    patch: vi.fn(),
+    request: vi.fn(),
+    head: vi.fn(),
+    options: vi.fn(),
+    getUri: vi.fn(),
+    defaults: {} as AxiosInstance['defaults'],
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn(), clear: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn(), clear: vi.fn() },
+    },
+  } as unknown as AxiosInstance;
+}
+
+function axiosResponse<T>(data: T): AxiosResponse<T> {
+  return {
+    data,
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+    config: {} as InternalAxiosRequestConfig,
+  };
+}
+
+const BASE_PATH = '/api/timeline';
+
+describe('timeline API', () => {
+  let client: AxiosInstance;
+
+  beforeEach(() => {
+    client = createMockClient();
+  });
+
+  describe('fetchStream', () => {
+    it('calls GET /{entityType}/{entityId} with query params', async () => {
+      const page: TimelineStreamPage = { items: [], totalCount: 0 };
+      vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
+
+      const result = await fetchStream(client, BASE_PATH, 'Patient', 'p-1', {
+        skip: 0,
+        take: 20,
+      });
+
+      expect(client.get).toHaveBeenCalledWith('/api/timeline/Patient/p-1', {
+        params: { skip: 0, take: 20 },
+      });
+      expect(result).toEqual(page);
+    });
+  });
+
+  describe('createEntry', () => {
+    it('calls POST /{entityType}/{entityId}/entries', async () => {
+      const request: CreateTimelineEntryRequest = {
+        entryType: 0,
+        body: 'Hello',
+      };
+      const entry = {
+        id: 'e-1',
+        entityType: 'Patient',
+        entityId: 'p-1',
+        entryType: 0,
+        body: 'Hello',
+        authorId: 'u-1',
+        authorDisplayName: 'User',
+        parentEntryId: null,
+        createdAt: '2026-01-01T00:00:00Z',
+        attachmentBlobIds: [],
+      };
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(entry));
+
+      const result = await createEntry(client, BASE_PATH, 'Patient', 'p-1', request);
+
+      expect(client.post).toHaveBeenCalledWith(
+        '/api/timeline/Patient/p-1/entries',
+        request,
+      );
+      expect(result).toEqual(entry);
+    });
+  });
+
+  describe('deleteEntry', () => {
+    it('calls DELETE /{entityType}/{entityId}/entries/{id}', async () => {
+      vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
+
+      await deleteEntry(client, BASE_PATH, 'Patient', 'p-1', 'e-1');
+
+      expect(client.delete).toHaveBeenCalledWith(
+        '/api/timeline/Patient/p-1/entries/e-1',
+      );
+    });
+  });
+
+  describe('followEntity', () => {
+    it('calls POST /{entityType}/{entityId}/follow', async () => {
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
+
+      await followEntity(client, BASE_PATH, 'Patient', 'p-1');
+
+      expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
+    });
+  });
+
+  describe('unfollowEntity', () => {
+    it('calls DELETE /{entityType}/{entityId}/follow', async () => {
+      vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
+
+      await unfollowEntity(client, BASE_PATH, 'Patient', 'p-1');
+
+      expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
+    });
+  });
+
+  describe('fetchFollowers', () => {
+    it('calls GET /{entityType}/{entityId}/followers', async () => {
+      const followers = ['u-1', 'u-2'];
+      vi.mocked(client.get).mockResolvedValue(axiosResponse(followers));
+
+      const result = await fetchFollowers(client, BASE_PATH, 'Patient', 'p-1');
+
+      expect(client.get).toHaveBeenCalledWith('/api/timeline/Patient/p-1/followers');
+      expect(result).toEqual(followers);
+    });
+  });
+});
