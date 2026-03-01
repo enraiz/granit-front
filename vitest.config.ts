@@ -7,6 +7,7 @@ export default defineConfig({
     alias: {
       '@granit/storage': path.resolve(__dirname, 'packages/@granit/storage/src/index.ts'),
       '@granit/logger': path.resolve(__dirname, 'packages/@granit/logger/src/index.ts'),
+      '@granit/cookies': path.resolve(__dirname, 'packages/@granit/cookies/src/index.ts'),
     },
   },
   test: {

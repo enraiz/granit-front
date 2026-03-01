@@ -18,6 +18,8 @@
 | `@granit/api-client` | Axios factory (`createApiClient`, `setTokenGetter`) |
 | `@granit/auth` | Keycloak hooks, auth context factory, mock provider |
 | `@granit/timeline` | Unified activity feed: hooks (`useTimeline`, `useTimelineActions`, `useTimelineFollowers`), components (`TimelineStream`, `TimelineComposer`) |
+| `@granit/cookies` | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface |
+| `@granit/cookies-klaro` | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory |
 | `@granit/workflow` | Workflow lifecycle: hooks (`useWorkflowStatus`, `useWorkflowTransition`, `useWorkflowHistory`), components (`WorkflowStatusBar`, `WorkflowHistory`) |
 
 ## Stack & versions
@@ -67,6 +69,8 @@ pnpm --filter @granit/auth test
   - `@granit/utils` → `clsx`, `tailwind-merge`, `date-fns`
   - `@granit/api-client` → `axios`
   - `@granit/auth` → `react`, `keycloak-js`, `@granit/types`
+  - `@granit/cookies` → `react`
+  - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
   - `@granit/timeline` → `react`, `axios`
   - `@granit/workflow` → `react`, `axios`
 
