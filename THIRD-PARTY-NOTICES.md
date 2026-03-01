@@ -4,7 +4,7 @@ Ce fichier répertorie les bibliothèques tierces utilisées par le projet
 **granit-front** ainsi que leurs licences respectives. Il est mis à jour
 à chaque ajout ou modification de dépendance externe.
 
-Dernière mise à jour : 2026-02-28
+Dernière mise à jour : 2026-03-01
 
 ---
 
@@ -14,6 +14,7 @@ Dernière mise à jour : 2026-02-28
 | ------- | ------------------ |
 | MIT | 17 |
 | Apache-2.0 | 2 |
+| BSD-3-Clause | 1 |
 
 ---
 
@@ -51,3 +52,12 @@ Dernière mise à jour : 2026-02-28
 | ------- | ------- | --------- |
 | keycloak-js | 26.2.3 | Copyright Red Hat, Inc. |
 | typescript | 5.9.3 | Copyright (c) Microsoft Corporation |
+
+### BSD-3-Clause
+
+| Package | Version | Copyright |
+| ------- | ------- | --------- |
+| klaro | 0.7.x | Copyright (c) KIProtect GmbH, Berlin |
+
+> `klaro` est une peerDependency de `@granit/cookies-klaro`, installée
+> dans les applications consommatrices (guava-front).
