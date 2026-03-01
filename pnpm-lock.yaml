@@ -116,6 +116,15 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
 
+  packages/@granit/timeline:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
   packages/@granit/types: {}
 
   packages/@granit/utils:
@@ -129,6 +138,15 @@ importers:
       tailwind-merge:
         specifier: '*'
         version: 3.5.0
+
+  packages/@granit/workflow:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
 
 packages:
 
