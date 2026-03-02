@@ -21,7 +21,7 @@ In all examples, `$PROJECT` and `$PROJECT_ENCODED` are injected dynamically by S
      --description "$(cat <<'EOF'
    ## User Story
 
-   - **En tant que** [SRE / DevOps / Développeur],
+   - **En tant que** [persona canonique],
    - **je souhaite** [action/fonctionnalité],
    - **afin de** [bénéfice/valeur].
 
