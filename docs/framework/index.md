@@ -15,3 +15,4 @@ Documentation de référence de chaque module du framework.
 | [auth.md](auth.md) | Authentification Keycloak : hook d'init, factory de contexte React typé, mock provider |
 | [timeline.md](timeline.md) | Flux d'activité unifié : commentaires, notes, threading, @mentions, follow/unfollow |
 | [workflow.md](workflow.md) | Gestion du cycle de vie : barre de statut, transitions, historique d'audit HDS |
+| [notifications.md](notifications.md) | Centre de notifications temps-réel (SignalR), boîte de réception, badge, fil d'activité, préférences |

@@ -1,0 +1,17 @@
+{
+  "name": "@granit/notifications",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@granit/api-client": "workspace:*"
+  },
+  "peerDependencies": {
+    "@microsoft/signalr": ">=8.0.0",
+    "axios": "*",
+    "react": "^19.0.0"
+  }
+}

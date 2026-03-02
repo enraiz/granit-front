@@ -4,7 +4,7 @@ Ce fichier répertorie les bibliothèques tierces utilisées par le projet
 **granit-front** ainsi que leurs licences respectives. Il est mis à jour
 à chaque ajout ou modification de dépendance externe.
 
-Dernière mise à jour : 2026-03-01
+Dernière mise à jour : 2026-03-02
 
 ---
 
@@ -12,8 +12,8 @@ Dernière mise à jour : 2026-03-01
 
 | Licence | Nombre de packages |
 | ------- | ------------------ |
-| MIT | 17 |
-| Apache-2.0 | 2 |
+| MIT | 20 |
+| Apache-2.0 | 3 |
 | BSD-3-Clause | 1 |
 
 ---
@@ -29,7 +29,10 @@ Dernière mise à jour : 2026-03-01
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
 | @eslint/js | 10.0.1 | OpenJS Foundation |
+| @microsoft/signalr | 10.0.0 | Copyright (c) .NET Foundation |
+| @testing-library/jest-dom | 6.9.1 | Copyright (c) Testing Library Contributors |
 | @testing-library/react | 16.3.2 | Copyright (c) Testing Library Contributors |
+| @testing-library/user-event | 14.6.1 | Copyright (c) Testing Library Contributors |
 | @types/react | 19.2.14 | DefinitelyTyped Contributors |
 | @vitest/coverage-v8 | 4.0.18 | Vitest Contributors |
 | axios | 1.13.6 | Copyright (c) Matt Zabriskie |
