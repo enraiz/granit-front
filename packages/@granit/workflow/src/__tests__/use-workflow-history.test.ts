@@ -25,7 +25,7 @@ const sampleHistory: TransitionHistoryDto[] = [
 ];
 
 describe('useWorkflowHistory', () => {
-  it('loads history on mount', async () => {
+  it('should load history on mount', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(sampleHistory));
 
@@ -43,7 +43,7 @@ describe('useWorkflowHistory', () => {
     expect(result.current.history[1].transitionedBy).toBe('Dr. Marchand');
   });
 
-  it('sets error state on failure', async () => {
+  it('should set error state on failure', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Not found'));
 
@@ -58,7 +58,7 @@ describe('useWorkflowHistory', () => {
     expect(result.current.history).toHaveLength(0);
   });
 
-  it('does not fetch when enabled is false', async () => {
+  it('should not fetch when enabled is false', async () => {
     const client = createMockClient();
 
     const { result } = renderHook(
@@ -74,7 +74,7 @@ describe('useWorkflowHistory', () => {
     expect(result.current.history).toHaveLength(0);
   });
 
-  it('refetches when refetch is called', async () => {
+  it('should refetch when refetch is called', async () => {
     const client = createMockClient();
     vi.mocked(client.get)
       .mockResolvedValueOnce(axiosResponse([sampleHistory[0]]))

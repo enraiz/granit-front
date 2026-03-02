@@ -21,13 +21,13 @@ const mockValue: TestAuthContextType = {
 };
 
 describe('createAuthContext', () => {
-  it('returns AuthContext and useAuth', () => {
+  it('should return AuthContext and useAuth', () => {
     const { AuthContext, useAuth } = createAuthContext<TestAuthContextType>();
     expect(AuthContext).toBeDefined();
     expect(typeof useAuth).toBe('function');
   });
 
-  it('useAuth returns the context value when inside a Provider', () => {
+  it('should return the context value when useAuth is inside a Provider', () => {
     const { AuthContext, useAuth } = createAuthContext<TestAuthContextType>();
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -39,7 +39,7 @@ describe('createAuthContext', () => {
     expect(result.current.isAdmin).toBe(true);
   });
 
-  it('useAuth throws when used outside a Provider', () => {
+  it('should throw when useAuth is used outside a Provider', () => {
     const { useAuth } = createAuthContext<TestAuthContextType>();
     expect(() => renderHook(() => useAuth())).toThrowError(
       'useAuth must be used within an AuthContext.Provider'

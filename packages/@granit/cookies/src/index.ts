@@ -1,5 +1,5 @@
 export { CookieConsentProvider } from "./CookieConsentContext.tsx";
-export { useCookieConsent } from "./useCookieConsent.ts";
+export { useCookieConsent } from "./use-cookie-consent.ts";
 export type {
   CookieCategory,
   ConsentState,

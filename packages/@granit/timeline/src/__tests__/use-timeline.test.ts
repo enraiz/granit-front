@@ -25,7 +25,7 @@ function makeEntry(overrides: Partial<TimelineStreamEntry> = {}): TimelineStream
 }
 
 describe('useTimeline', () => {
-  it('loads entries on mount', async () => {
+  it('should load entries on mount', async () => {
     const client = createMockClient();
     const page: TimelineStreamPage = {
       items: [makeEntry()],
@@ -48,7 +48,7 @@ describe('useTimeline', () => {
     expect(result.current.hasMore).toBe(false);
   });
 
-  it('sets error state on failure', async () => {
+  it('should set error state on failure', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Network error'));
 
@@ -63,7 +63,7 @@ describe('useTimeline', () => {
     expect(result.current.entries).toHaveLength(0);
   });
 
-  it('detects hasMore when totalCount > loaded entries', async () => {
+  it('should detect hasMore when totalCount > loaded entries', async () => {
     const client = createMockClient();
     const items = Array.from({ length: 20 }, (_, i) =>
       makeEntry({ id: `e-${i}` }),
@@ -83,7 +83,7 @@ describe('useTimeline', () => {
     expect(result.current.totalCount).toBe(50);
   });
 
-  it('loads more entries via loadMore', async () => {
+  it('should load more entries via loadMore', async () => {
     const client = createMockClient();
     const firstPage: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-1' })],
@@ -113,7 +113,7 @@ describe('useTimeline', () => {
     expect(result.current.hasMore).toBe(false);
   });
 
-  it('adds an optimistic entry at the top', async () => {
+  it('should add an optimistic entry at the top', async () => {
     const client = createMockClient();
     const page: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-1' })],
@@ -136,7 +136,7 @@ describe('useTimeline', () => {
     expect(result.current.totalCount).toBe(2);
   });
 
-  it('removes an optimistic entry by id', async () => {
+  it('should remove an optimistic entry by id', async () => {
     const client = createMockClient();
     const page: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-1' }), makeEntry({ id: 'e-2' })],

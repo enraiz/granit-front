@@ -24,7 +24,7 @@ const MOCK_FEED: ActivityFeedPageDto = {
 };
 
 describe('useEntityActivityFeed', () => {
-  it('fetches activity feed for an entity', async () => {
+  it('should fetch activity feed for an entity', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_FEED));
 
@@ -43,7 +43,7 @@ describe('useEntityActivityFeed', () => {
     expect(result.current.entries[0].title).toBe('Consultation ajoutée');
   });
 
-  it('handles fetch errors', async () => {
+  it('should handle fetch errors', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Server error'));
 
@@ -62,7 +62,7 @@ describe('useEntityActivityFeed', () => {
     expect(result.current.error?.message).toBe('Server error');
   });
 
-  it('reports hasMore correctly', async () => {
+  it('should report hasMore correctly', async () => {
     const page: ActivityFeedPageDto = {
       items: [MOCK_FEED.items[0]],
       totalCount: 25,
@@ -85,7 +85,7 @@ describe('useEntityActivityFeed', () => {
     expect(result.current.hasMore).toBe(true);
   });
 
-  it('loads more entries when loadMore is called', async () => {
+  it('should load more entries when loadMore is called', async () => {
     const page1: ActivityFeedPageDto = {
       items: [MOCK_FEED.items[0]],
       totalCount: 2,
@@ -123,7 +123,7 @@ describe('useEntityActivityFeed', () => {
     expect(result.current.entries[1].title).toBe('Deuxième entrée');
   });
 
-  it('refreshes the feed', async () => {
+  it('should refresh the feed', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_FEED));
 

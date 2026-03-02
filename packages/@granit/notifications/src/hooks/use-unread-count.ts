@@ -45,11 +45,11 @@ export function useUnreadCount(
   // Initial fetch + polling
   useEffect(() => {
     mountedRef.current = true;
-    void refresh();
+    refresh();
 
     if (pollingInterval <= 0) return;
 
-    const id = setInterval(() => void refresh(), pollingInterval);
+    const id = setInterval(() => { refresh(); }, pollingInterval);
     return () => {
       mountedRef.current = false;
       clearInterval(id);

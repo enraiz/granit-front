@@ -7,7 +7,7 @@ import { useTimelineConfig } from '../timeline-provider.tsx';
 import { createMockClient, createWrapper } from './test-utils.tsx';
 
 describe('TimelineProvider', () => {
-  it('provides config to child hooks', () => {
+  it('should provide config to child hooks', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useTimelineConfig(), {
@@ -18,7 +18,7 @@ describe('TimelineProvider', () => {
     expect(result.current.basePath).toBe('/custom/path');
   });
 
-  it('uses default basePath', () => {
+  it('should use default basePath', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useTimelineConfig(), {
@@ -28,7 +28,7 @@ describe('TimelineProvider', () => {
     expect(result.current.basePath).toBe('/api/timeline');
   });
 
-  it('throws when used outside provider', () => {
+  it('should throw when used outside provider', () => {
     expect(() => {
       renderHook(() => useTimelineConfig());
     }).toThrow('useTimelineConfig must be used within a <TimelineProvider>');

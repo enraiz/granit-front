@@ -28,7 +28,7 @@ const ENTRIES: ActivityFeedEntryDto[] = [
 ];
 
 describe('EntityActivityFeed', () => {
-  it('renders entries', () => {
+  it('should render entries', () => {
     render(
       <EntityActivityFeed
         entries={ENTRIES}
@@ -44,7 +44,7 @@ describe('EntityActivityFeed', () => {
     expect(screen.getByText('Dr. Martin')).toBeInTheDocument();
   });
 
-  it('shows empty message when no entries', () => {
+  it('should show empty message when no entries', () => {
     render(
       <EntityActivityFeed
         entries={[]}
@@ -58,7 +58,7 @@ describe('EntityActivityFeed', () => {
     expect(screen.getByTestId('activity-feed-empty')).toHaveTextContent("Pas d'activité");
   });
 
-  it('shows loading state', () => {
+  it('should show loading state', () => {
     render(
       <EntityActivityFeed
         entries={[]}
@@ -71,7 +71,7 @@ describe('EntityActivityFeed', () => {
     expect(screen.getByTestId('activity-feed-loading')).toBeInTheDocument();
   });
 
-  it('renders load more button when hasMore', async () => {
+  it('should render load more button when hasMore', async () => {
     const onLoadMore = vi.fn();
     const user = userEvent.setup();
 
@@ -90,7 +90,7 @@ describe('EntityActivityFeed', () => {
     expect(onLoadMore).toHaveBeenCalled();
   });
 
-  it('disables load more button when loadingMore', () => {
+  it('should disable load more button when loadingMore', () => {
     render(
       <EntityActivityFeed
         entries={ENTRIES}
@@ -103,7 +103,7 @@ describe('EntityActivityFeed', () => {
     expect(screen.getByTestId('activity-feed-load-more')).toBeDisabled();
   });
 
-  it('sets data-severity on entries', () => {
+  it('should set data-severity on entries', () => {
     render(
       <EntityActivityFeed
         entries={ENTRIES}

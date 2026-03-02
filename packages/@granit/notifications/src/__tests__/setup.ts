@@ -2,18 +2,19 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Global mock for @microsoft/signalr — prevents real connections during tests.
-vi.mock('@microsoft/signalr', () => {
-  function createConnection() {
-    return {
-      start: vi.fn().mockResolvedValue(undefined),
-      stop: vi.fn().mockResolvedValue(undefined),
-      on: vi.fn(),
-      onreconnecting: vi.fn(),
-      onreconnected: vi.fn(),
-      onclose: vi.fn(),
-    };
-  }
 
+function createConnection() {
+  return {
+    start: vi.fn().mockResolvedValue(undefined),
+    stop: vi.fn().mockResolvedValue(undefined),
+    on: vi.fn(),
+    onreconnecting: vi.fn(),
+    onreconnected: vi.fn(),
+    onclose: vi.fn(),
+  };
+}
+
+vi.mock('@microsoft/signalr', () => {
   // Must be a real function so `new HubConnectionBuilder()` works.
   function HubConnectionBuilder() {
     return {

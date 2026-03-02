@@ -52,7 +52,7 @@ describe('timeline API', () => {
   });
 
   describe('fetchStream', () => {
-    it('calls GET /{entityType}/{entityId} with query params', async () => {
+    it('should call GET /{entityType}/{entityId} with query params', async () => {
       const page: TimelineStreamPage = { items: [], totalCount: 0 };
       vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
@@ -69,7 +69,7 @@ describe('timeline API', () => {
   });
 
   describe('createEntry', () => {
-    it('calls POST /{entityType}/{entityId}/entries', async () => {
+    it('should call POST /{entityType}/{entityId}/entries', async () => {
       const request: CreateTimelineEntryRequest = {
         entryType: 0,
         body: 'Hello',
@@ -99,7 +99,7 @@ describe('timeline API', () => {
   });
 
   describe('deleteEntry', () => {
-    it('calls DELETE /{entityType}/{entityId}/entries/{id}', async () => {
+    it('should call DELETE /{entityType}/{entityId}/entries/{id}', async () => {
       vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
       await deleteEntry(client, BASE_PATH, 'Patient', 'p-1', 'e-1');
@@ -111,7 +111,7 @@ describe('timeline API', () => {
   });
 
   describe('followEntity', () => {
-    it('calls POST /{entityType}/{entityId}/follow', async () => {
+    it('should call POST /{entityType}/{entityId}/follow', async () => {
       vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
 
       await followEntity(client, BASE_PATH, 'Patient', 'p-1');
@@ -121,7 +121,7 @@ describe('timeline API', () => {
   });
 
   describe('unfollowEntity', () => {
-    it('calls DELETE /{entityType}/{entityId}/follow', async () => {
+    it('should call DELETE /{entityType}/{entityId}/follow', async () => {
       vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
       await unfollowEntity(client, BASE_PATH, 'Patient', 'p-1');
@@ -131,7 +131,7 @@ describe('timeline API', () => {
   });
 
   describe('fetchFollowers', () => {
-    it('calls GET /{entityType}/{entityId}/followers', async () => {
+    it('should call GET /{entityType}/{entityId}/followers', async () => {
       const followers = ['u-1', 'u-2'];
       vi.mocked(client.get).mockResolvedValue(axiosResponse(followers));
 

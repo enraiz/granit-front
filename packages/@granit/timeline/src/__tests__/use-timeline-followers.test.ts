@@ -7,7 +7,7 @@ import { useTimelineFollowers } from '../use-timeline-followers.ts';
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
 describe('useTimelineFollowers', () => {
-  it('loads followers on mount', async () => {
+  it('should load followers on mount', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(['u-1', 'u-2']));
 
@@ -29,7 +29,7 @@ describe('useTimelineFollowers', () => {
     expect(result.current.isFollowing).toBe(true);
   });
 
-  it('detects isFollowing=false when user not in followers', async () => {
+  it('should detect isFollowing=false when user not in followers', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(['u-2']));
 
@@ -48,7 +48,7 @@ describe('useTimelineFollowers', () => {
     expect(result.current.isFollowing).toBe(false);
   });
 
-  it('follows an entity and updates local state', async () => {
+  it('should follow an entity and update local state', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
     vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
@@ -73,7 +73,7 @@ describe('useTimelineFollowers', () => {
     expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
   });
 
-  it('unfollows an entity and updates local state', async () => {
+  it('should unfollow an entity and update local state', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(['u-1']));
     vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
@@ -98,7 +98,7 @@ describe('useTimelineFollowers', () => {
     expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
   });
 
-  it('sets error state on follow failure', async () => {
+  it('should set error state on follow failure', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
     vi.mocked(client.post).mockRejectedValue(new Error('Forbidden'));
@@ -120,7 +120,7 @@ describe('useTimelineFollowers', () => {
     await waitFor(() => expect(result.current.error?.message).toBe('Forbidden'));
   });
 
-  it('handles missing currentUserId gracefully', async () => {
+  it('should handle missing currentUserId gracefully', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(['u-1']));
 

@@ -11,7 +11,7 @@ describe('workflow api', () => {
   const entityType = 'Document';
   const entityId = 'doc-1';
 
-  it('fetchStatus calls GET with correct URL', async () => {
+  it('should call GET with correct URL for fetchStatus', async () => {
     const client = createMockClient();
     const status: WorkflowStatusDto = {
       currentState: 'Draft',
@@ -27,7 +27,7 @@ describe('workflow api', () => {
     expect(result).toEqual(status);
   });
 
-  it('executeTransition calls POST with correct URL and body', async () => {
+  it('should call POST with correct URL and body for executeTransition', async () => {
     const client = createMockClient();
     const transitionResult: TransitionResultDto = {
       succeeded: true,
@@ -48,7 +48,7 @@ describe('workflow api', () => {
     expect(result).toEqual(transitionResult);
   });
 
-  it('fetchHistory calls GET with correct URL', async () => {
+  it('should call GET with correct URL for fetchHistory', async () => {
     const client = createMockClient();
     const history: TransitionHistoryDto[] = [
       {

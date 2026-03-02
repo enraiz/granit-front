@@ -78,18 +78,18 @@ export function useEntityActivityFeed(
 
   useEffect(() => {
     setLoading(true);
-    void fetchPage(0, false);
+    fetchPage(0, false);
     return () => abortRef.current?.abort();
   }, [fetchPage]);
 
   const loadMore = useCallback(() => {
     setLoadingMore(true);
-    void fetchPage(entries.length, true);
+    fetchPage(entries.length, true);
   }, [fetchPage, entries.length]);
 
   const refresh = useCallback(() => {
     setLoading(true);
-    void fetchPage(0, false);
+    fetchPage(0, false);
   }, [fetchPage]);
 
   const hasMore = entries.length < totalCount;

@@ -78,18 +78,18 @@ export function useNotifications(
   // Initial fetch
   useEffect(() => {
     setLoading(true);
-    void fetchPage(0, false);
+    fetchPage(0, false);
     return () => abortRef.current?.abort();
   }, [fetchPage]);
 
   const loadMore = useCallback(() => {
     setLoadingMore(true);
-    void fetchPage(notifications.length, true);
+    fetchPage(notifications.length, true);
   }, [fetchPage, notifications.length]);
 
   const refresh = useCallback(() => {
     setLoading(true);
-    void fetchPage(0, false);
+    fetchPage(0, false);
   }, [fetchPage]);
 
   const markRead = useCallback(

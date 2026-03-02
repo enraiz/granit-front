@@ -53,7 +53,6 @@ export function NotificationCenter({
       {open && (
         <section
           data-testid="notification-inbox"
-          role="region"
           aria-label="Centre de notifications"
         >
           <header data-testid="notification-inbox-header">
@@ -81,7 +80,7 @@ export function NotificationCenter({
           )}
 
           {notifications.length > 0 && (
-            <ul data-testid="notification-list" role="list">
+            <ul data-testid="notification-list">
               {notifications.map((n) => (
                 <li key={n.id}>
                   {renderItem ? (

@@ -6,7 +6,7 @@ import { useUnreadCount } from '../hooks/use-unread-count.js';
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.js';
 
 describe('useUnreadCount', () => {
-  it('fetches unread count on mount', async () => {
+  it('should fetch unread count on mount', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 7 }));
 
@@ -18,7 +18,7 @@ describe('useUnreadCount', () => {
     await waitFor(() => expect(result.current.count).toBe(7));
   });
 
-  it('returns 0 when fetch fails silently', async () => {
+  it('should return 0 when fetch fails silently', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('fail'));
 
@@ -31,7 +31,7 @@ describe('useUnreadCount', () => {
     await waitFor(() => expect(result.current.count).toBe(0));
   });
 
-  it('sets up polling when pollingInterval > 0', async () => {
+  it('should set up polling when pollingInterval > 0', async () => {
     const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 3 }));
@@ -49,7 +49,7 @@ describe('useUnreadCount', () => {
     setIntervalSpy.mockRestore();
   });
 
-  it('cleans up polling interval on unmount', async () => {
+  it('should clean up polling interval on unmount', async () => {
     const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 0 }));
@@ -68,7 +68,7 @@ describe('useUnreadCount', () => {
     clearIntervalSpy.mockRestore();
   });
 
-  it('allows manual refresh', async () => {
+  it('should allow manual refresh', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 2 }));
 

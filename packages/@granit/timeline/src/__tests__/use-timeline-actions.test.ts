@@ -7,7 +7,7 @@ import { useTimelineActions } from '../use-timeline-actions.ts';
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
 describe('useTimelineActions', () => {
-  it('posts an entry and calls onEntryCreated', async () => {
+  it('should post an entry and call onEntryCreated', async () => {
     const client = createMockClient();
     const createdEntry = {
       id: 'e-1',
@@ -53,7 +53,7 @@ describe('useTimelineActions', () => {
     );
   });
 
-  it('deletes an entry and calls onEntryDeleted', async () => {
+  it('should delete an entry and call onEntryDeleted', async () => {
     const client = createMockClient();
     vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
@@ -79,7 +79,7 @@ describe('useTimelineActions', () => {
     );
   });
 
-  it('sets error on post failure', async () => {
+  it('should set error on post failure', async () => {
     const client = createMockClient();
     vi.mocked(client.post).mockRejectedValue(new Error('Server error'));
 
@@ -99,7 +99,7 @@ describe('useTimelineActions', () => {
     await waitFor(() => expect(result.current.error?.message).toBe('Server error'));
   });
 
-  it('sets error on delete failure', async () => {
+  it('should set error on delete failure', async () => {
     const client = createMockClient();
     vi.mocked(client.delete).mockRejectedValue(new Error('Not found'));
 

@@ -15,20 +15,13 @@ export function NotificationItem({
   className,
 }: Readonly<NotificationItemProps>) {
   return (
-    <article
+    <button
       data-testid="notification-item"
       data-severity={notification.severity}
       data-read={notification.isRead}
       className={className}
-      role="button"
-      tabIndex={0}
+      type="button"
       onClick={() => onClick?.(notification)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick?.(notification);
-        }
-      }}
     >
       <header>
         <span data-testid="notification-title">{notification.title}</span>
@@ -42,6 +35,6 @@ export function NotificationItem({
       {notification.body && (
         <p data-testid="notification-body">{notification.body}</p>
       )}
-    </article>
+    </button>
   );
 }

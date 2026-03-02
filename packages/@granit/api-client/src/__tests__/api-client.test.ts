@@ -41,18 +41,18 @@ describe('createApiClient', () => {
     mod = await import('../index.ts');
   });
 
-  it('creates an instance with correct baseURL and default timeout', () => {
+  it('should create an instance with correct baseURL and default timeout', () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     expect(client.defaults.baseURL).toBe('https://api.example.com');
     expect(client.defaults.timeout).toBe(10_000);
   });
 
-  it('accepts a custom timeout', () => {
+  it('should accept a custom timeout', () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com', timeout: 30_000 });
     expect(client.defaults.timeout).toBe(30_000);
   });
 
-  it('sets Content-Type to application/json', () => {
+  it('should set Content-Type to application/json', () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     expect(client.defaults.headers['Content-Type']).toBe('application/json');
   });
@@ -66,7 +66,7 @@ describe('token interceptor', () => {
     mod = await import('../index.ts');
   });
 
-  it('injects Authorization header when token getter returns a token', async () => {
+  it('should inject Authorization header when token getter returns a token', async () => {
     mod.setTokenGetter(() => Promise.resolve('my-jwt-token'));
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = captureAdapter;
@@ -75,7 +75,7 @@ describe('token interceptor', () => {
     expect(response.config.headers.Authorization).toBe('Bearer my-jwt-token');
   });
 
-  it('does not inject Authorization header when token getter returns undefined', async () => {
+  it('should not inject Authorization header when token getter returns undefined', async () => {
     mod.setTokenGetter(() => Promise.resolve(undefined));
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = captureAdapter;
@@ -84,7 +84,7 @@ describe('token interceptor', () => {
     expect(response.config.headers.Authorization).toBeUndefined();
   });
 
-  it('does not inject Authorization header when no token getter is configured', async () => {
+  it('should not inject Authorization header when no token getter is configured', async () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = captureAdapter;
 
@@ -101,7 +101,7 @@ describe('tenant interceptor', () => {
     mod = await import('../index.ts');
   });
 
-  it('injects X-Tenant-Id header when tenant getter returns a value', async () => {
+  it('should inject X-Tenant-Id header when tenant getter returns a value', async () => {
     mod.setTenantGetter(() => 'tenant-42');
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = captureAdapter;
@@ -110,7 +110,7 @@ describe('tenant interceptor', () => {
     expect(response.config.headers['X-Tenant-Id']).toBe('tenant-42');
   });
 
-  it('does not inject X-Tenant-Id when tenant getter returns undefined', async () => {
+  it('should not inject X-Tenant-Id when tenant getter returns undefined', async () => {
     mod.setTenantGetter(() => undefined);
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = captureAdapter;
@@ -119,7 +119,7 @@ describe('tenant interceptor', () => {
     expect(response.config.headers['X-Tenant-Id']).toBeUndefined();
   });
 
-  it('does not inject X-Tenant-Id when no tenant getter is configured', async () => {
+  it('should not inject X-Tenant-Id when no tenant getter is configured', async () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = captureAdapter;
 
@@ -136,7 +136,7 @@ describe('combined interceptors', () => {
     mod = await import('../index.ts');
   });
 
-  it('injects both Authorization and X-Tenant-Id when both getters are configured', async () => {
+  it('should inject both Authorization and X-Tenant-Id when both getters are configured', async () => {
     mod.setTokenGetter(() => Promise.resolve('jwt-123'));
     mod.setTenantGetter(() => 'tenant-abc');
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
@@ -156,7 +156,7 @@ describe('setTokenGetter', () => {
     mod = await import('../index.ts');
   });
 
-  it('accepts an async getter function without throwing', () => {
+  it('should accept an async getter function without throwing', () => {
     expect(() => {
       mod.setTokenGetter(() => Promise.resolve('mock-token'));
     }).not.toThrow();
@@ -171,7 +171,7 @@ describe('setTenantGetter', () => {
     mod = await import('../index.ts');
   });
 
-  it('accepts a synchronous getter function without throwing', () => {
+  it('should accept a synchronous getter function without throwing', () => {
     expect(() => {
       mod.setTenantGetter(() => 'tenant-1');
     }).not.toThrow();
@@ -186,7 +186,7 @@ describe('createMutator', () => {
     mod = await import('../index.ts');
   });
 
-  it('returns response data instead of the full AxiosResponse', async () => {
+  it('should return response data instead of the full AxiosResponse', async () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = () =>
       Promise.resolve({
@@ -202,7 +202,7 @@ describe('createMutator', () => {
     expect(result).toEqual({ id: 1, name: 'test' });
   });
 
-  it('merges config and options', async () => {
+  it('should merge config and options', async () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     let capturedConfig: Record<string, unknown> = {};
     client.defaults.adapter = (config) => {
@@ -221,7 +221,7 @@ describe('createMutator', () => {
     expect(capturedConfig.params).toEqual({ page: 1 });
   });
 
-  it('propagates errors from the axios instance', async () => {
+  it('should propagate errors from the axios instance', async () => {
     const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
     client.defaults.adapter = () => Promise.reject(new Error('Network Error'));
 

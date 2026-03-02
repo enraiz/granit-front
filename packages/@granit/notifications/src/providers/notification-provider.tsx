@@ -86,13 +86,13 @@ export function NotificationProvider({
     connection.onclose(() => setConnectionState('disconnected'));
 
     setConnectionState('connecting');
-    void connection.start().then(
+    connection.start().then(
       () => setConnectionState('connected'),
       () => setConnectionState('disconnected'),
     );
 
     return () => {
-      void connection.stop();
+      connection.stop();
     };
   }, [hubUrl, tokenGetter]);
 

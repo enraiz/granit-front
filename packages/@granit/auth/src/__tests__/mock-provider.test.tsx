@@ -17,13 +17,13 @@ const mockValue: BaseAuthContextType = {
 };
 
 describe('createMockProvider', () => {
-  it('returns a component with displayName MockAuthProvider', () => {
+  it('should return a component with displayName MockAuthProvider', () => {
     const { AuthContext } = createAuthContext<BaseAuthContextType>();
     const Provider = createMockProvider(AuthContext, mockValue);
     expect(Provider.displayName).toBe('MockAuthProvider');
   });
 
-  it('renders children', () => {
+  it('should render children', () => {
     const { AuthContext } = createAuthContext<BaseAuthContextType>();
     const Provider = createMockProvider(AuthContext, mockValue);
     render(
@@ -34,7 +34,7 @@ describe('createMockProvider', () => {
     expect(screen.getByTestId('child')).toBeTruthy();
   });
 
-  it('provides the mock auth value to context consumers', () => {
+  it('should provide the mock auth value to context consumers', () => {
     const { AuthContext, useAuth } = createAuthContext<BaseAuthContextType>();
     const Provider = createMockProvider(AuthContext, mockValue);
 
@@ -48,7 +48,7 @@ describe('createMockProvider', () => {
     expect(result.current.user).toBeNull();
   });
 
-  it('provides a custom value with extended fields', () => {
+  it('should provide a custom value with extended fields', () => {
     interface ExtendedAuth extends BaseAuthContextType {
       role: string;
     }

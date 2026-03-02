@@ -22,7 +22,7 @@ const MOCK_PREFS: NotificationPreferenceDto[] = [
 ];
 
 describe('useNotificationPreferences', () => {
-  it('fetches preferences on mount', async () => {
+  it('should fetch preferences on mount', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
 
@@ -36,7 +36,7 @@ describe('useNotificationPreferences', () => {
     expect(result.current.preferences[0].notificationType).toBe('AppointmentReminder');
   });
 
-  it('toggleChannel updates preference optimistically', async () => {
+  it('should update preference optimistically via toggleChannel', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
 
@@ -59,7 +59,7 @@ describe('useNotificationPreferences', () => {
     expect(result.current.preferences[0].channels.email).toBe(false);
   });
 
-  it('rolls back on toggle failure', async () => {
+  it('should roll back on toggle failure', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
     vi.mocked(client.put).mockRejectedValue(new Error('Save failed'));
@@ -79,7 +79,7 @@ describe('useNotificationPreferences', () => {
     expect(result.current.error?.message).toBe('Save failed');
   });
 
-  it('handles initial fetch error', async () => {
+  it('should handle initial fetch error', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Load failed'));
 
@@ -94,7 +94,7 @@ describe('useNotificationPreferences', () => {
     expect(result.current.preferences).toHaveLength(0);
   });
 
-  it('refreshes preferences', async () => {
+  it('should refresh preferences', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
 

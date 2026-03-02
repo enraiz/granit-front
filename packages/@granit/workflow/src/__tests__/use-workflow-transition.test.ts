@@ -8,7 +8,7 @@ import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx
 import type { TransitionResultDto } from '../types.ts';
 
 describe('useWorkflowTransition', () => {
-  it('executes a transition successfully', async () => {
+  it('should execute a transition successfully', async () => {
     const client = createMockClient();
     const transitionResult: TransitionResultDto = {
       succeeded: true,
@@ -42,7 +42,7 @@ describe('useWorkflowTransition', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('handles transition error', async () => {
+  it('should handle transition error', async () => {
     const client = createMockClient();
     vi.mocked(client.post).mockRejectedValue(new Error('Forbidden'));
     const onError = vi.fn();
@@ -67,7 +67,7 @@ describe('useWorkflowTransition', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('sets loading state during transition', async () => {
+  it('should set loading state during transition', async () => {
     const client = createMockClient();
     let resolvePost!: (value: unknown) => void;
     vi.mocked(client.post).mockReturnValue(
@@ -103,7 +103,7 @@ describe('useWorkflowTransition', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('handles approval-requested outcome', async () => {
+  it('should handle approval-requested outcome', async () => {
     const client = createMockClient();
     const transitionResult: TransitionResultDto = {
       succeeded: true,

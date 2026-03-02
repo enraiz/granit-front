@@ -26,8 +26,8 @@ export const CookieConsentContext =
 
 interface CookieConsentProviderProps {
   /** The CMP implementation (Klaro, Cookiebot, etc.). */
-  readonly provider: ICookieConsentProvider;
-  readonly children: ReactNode;
+  provider: ICookieConsentProvider;
+  children: ReactNode;
 }
 
 /**
@@ -44,7 +44,7 @@ interface CookieConsentProviderProps {
 export function CookieConsentProvider({
   provider,
   children,
-}: CookieConsentProviderProps) {
+}: Readonly<CookieConsentProviderProps>) {
   const [consents, setConsents] = useState<ConsentState>(DEFAULT_CONSENTS);
   const [isLoaded, setIsLoaded] = useState(false);
 

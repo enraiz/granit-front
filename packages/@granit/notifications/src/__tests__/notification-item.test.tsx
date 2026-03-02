@@ -19,14 +19,14 @@ const NOTIFICATION: NotificationDto = {
 };
 
 describe('NotificationItem', () => {
-  it('renders title and body', () => {
+  it('should render title and body', () => {
     render(<NotificationItem notification={NOTIFICATION} />);
 
     expect(screen.getByTestId('notification-title')).toHaveTextContent('Nouveau rendez-vous');
     expect(screen.getByTestId('notification-body')).toHaveTextContent('Consultation prévue le 15 janvier');
   });
 
-  it('sets data-severity and data-read attributes', () => {
+  it('should set data-severity and data-read attributes', () => {
     render(<NotificationItem notification={NOTIFICATION} />);
 
     const item = screen.getByTestId('notification-item');
@@ -34,7 +34,7 @@ describe('NotificationItem', () => {
     expect(item).toHaveAttribute('data-read', 'false');
   });
 
-  it('hides body when null', () => {
+  it('should hide body when null', () => {
     render(
       <NotificationItem notification={{ ...NOTIFICATION, body: null }} />,
     );
@@ -42,7 +42,7 @@ describe('NotificationItem', () => {
     expect(screen.queryByTestId('notification-body')).toBeNull();
   });
 
-  it('calls onClick when clicked', async () => {
+  it('should call onClick when clicked', async () => {
     const onClick = vi.fn();
     const user = userEvent.setup();
 
@@ -53,7 +53,7 @@ describe('NotificationItem', () => {
     expect(onClick).toHaveBeenCalledWith(NOTIFICATION);
   });
 
-  it('calls onClick on Enter key', async () => {
+  it('should call onClick on Enter key', async () => {
     const onClick = vi.fn();
     const user = userEvent.setup();
 

@@ -98,14 +98,14 @@ describe('useKeycloakInit', () => {
     vi.clearAllMocks();
   });
 
-  it('starts with loading=true and authenticated=false', () => {
+  it('should start with loading=true and authenticated=false', () => {
     mockInit.mockResolvedValue(false);
     const { result } = renderHook(() => useKeycloakInit(config));
     expect(result.current.loading).toBe(true);
     expect(result.current.authenticated).toBe(false);
   });
 
-  it('sets loading=false after unauthenticated init', async () => {
+  it('should set loading=false after unauthenticated init', async () => {
     mockInit.mockResolvedValue(false);
     const { result } = renderHook(() => useKeycloakInit(config));
 
@@ -115,7 +115,7 @@ describe('useKeycloakInit', () => {
     expect(result.current.user).toBeNull();
   });
 
-  it('sets authenticated=true and loads user info after successful init', async () => {
+  it('should set authenticated=true and load user info after successful init', async () => {
     mockInit.mockResolvedValue(true);
     const { result } = renderHook(() => useKeycloakInit(config));
 
@@ -125,14 +125,14 @@ describe('useKeycloakInit', () => {
     expect(result.current.user).toMatchObject({ sub: 'user-1' });
   });
 
-  it('registers a token getter with setTokenGetter when authenticated', async () => {
+  it('should register a token getter with setTokenGetter when authenticated', async () => {
     mockInit.mockResolvedValue(true);
     renderHook(() => useKeycloakInit(config));
 
     await waitFor(() => expect(mockSetTokenGetter).toHaveBeenCalledOnce());
   });
 
-  it('stays unauthenticated when keycloak.init rejects', async () => {
+  it('should stay unauthenticated when keycloak.init rejects', async () => {
     mockInit.mockRejectedValue(new Error('network error'));
     const { result } = renderHook(() => useKeycloakInit(config));
 
@@ -141,7 +141,7 @@ describe('useKeycloakInit', () => {
     expect(result.current.authenticated).toBe(false);
   });
 
-  it('handles loadUserInfo failure gracefully (non-fatal)', async () => {
+  it('should handle loadUserInfo failure gracefully (non-fatal)', async () => {
     mockInit.mockResolvedValue(true);
     mockLoadUserInfo.mockRejectedValue(new Error('user info failed'));
     const { result } = renderHook(() => useKeycloakInit(config));
@@ -152,7 +152,7 @@ describe('useKeycloakInit', () => {
     expect(result.current.user).toBeNull();
   });
 
-  it('login calls keycloak.login()', async () => {
+  it('should call keycloak.login() on login', async () => {
     mockInit.mockResolvedValue(true);
     mockLogin.mockResolvedValue(undefined);
     const { result } = renderHook(() => useKeycloakInit(config));
@@ -166,7 +166,7 @@ describe('useKeycloakInit', () => {
     expect(mockLogin).toHaveBeenCalledOnce();
   });
 
-  it('logout calls keycloak.logout()', async () => {
+  it('should call keycloak.logout() on logout', async () => {
     mockInit.mockResolvedValue(true);
     mockLogout.mockResolvedValue(undefined);
     const { result } = renderHook(() => useKeycloakInit(config));
@@ -180,7 +180,7 @@ describe('useKeycloakInit', () => {
     expect(mockLogout).toHaveBeenCalledOnce();
   });
 
-  it('token getter returns token after successful updateToken', async () => {
+  it('should return token from getter after successful updateToken', async () => {
     mockInit.mockResolvedValue(true);
     mockUpdateToken.mockResolvedValue(true);
     renderHook(() => useKeycloakInit(config));
@@ -192,7 +192,7 @@ describe('useKeycloakInit', () => {
     expect(token).toBe('mock-access-token');
   });
 
-  it('token getter returns undefined when updateToken rejects', async () => {
+  it('should return undefined from getter when updateToken rejects', async () => {
     mockInit.mockResolvedValue(true);
     mockUpdateToken.mockRejectedValue(new Error('token expired'));
     renderHook(() => useKeycloakInit(config));
@@ -204,7 +204,7 @@ describe('useKeycloakInit', () => {
     expect(token).toBeUndefined();
   });
 
-  it('silentCheckSso is omitted from init options when silentCheckSso=false', async () => {
+  it('should omit silentCheckSso from init options when silentCheckSso=false', async () => {
     mockInit.mockResolvedValue(false);
     const { result } = renderHook(() =>
       useKeycloakInit({ ...config, silentCheckSso: false })
@@ -220,7 +220,7 @@ describe('useKeycloakInit', () => {
   // Story #2 — Lifecycle event callbacks
   // -------------------------------------------------------------------------
   describe('lifecycle events', () => {
-    it('calls onTokenExpired callback when token expires', async () => {
+    it('should call onTokenExpired callback when token expires', async () => {
       mockInit.mockResolvedValue(true);
       const onTokenExpired = vi.fn();
       renderHook(() => useKeycloakInit({ ...config, onTokenExpired }));
@@ -234,7 +234,7 @@ describe('useKeycloakInit', () => {
       expect(onTokenExpired).toHaveBeenCalledOnce();
     });
 
-    it('calls onAuthRefreshError and sets authenticated=false on refresh failure', async () => {
+    it('should call onAuthRefreshError and set authenticated=false on refresh failure', async () => {
       mockInit.mockResolvedValue(true);
       const onAuthRefreshError = vi.fn();
       const { result } = renderHook(() => useKeycloakInit({ ...config, onAuthRefreshError }));
@@ -249,7 +249,7 @@ describe('useKeycloakInit', () => {
       expect(result.current.authenticated).toBe(false);
     });
 
-    it('calls onAuthLogout and resets state on logout event', async () => {
+    it('should call onAuthLogout and reset state on logout event', async () => {
       mockInit.mockResolvedValue(true);
       const onAuthLogout = vi.fn();
       const { result } = renderHook(() => useKeycloakInit({ ...config, onAuthLogout }));
@@ -265,7 +265,7 @@ describe('useKeycloakInit', () => {
       expect(result.current.user).toBeNull();
     });
 
-    it('calls onEvent with event name for each Keycloak event', async () => {
+    it('should call onEvent with event name for each Keycloak event', async () => {
       mockInit.mockResolvedValue(true);
       const onEvent = vi.fn();
       renderHook(() => useKeycloakInit({ ...config, onEvent }));
@@ -285,7 +285,7 @@ describe('useKeycloakInit', () => {
       expect(onEvent).toHaveBeenCalledWith('onReady');
     });
 
-    it('works without any event callbacks (backward compat)', async () => {
+    it('should work without any event callbacks (backward compat)', async () => {
       mockInit.mockResolvedValue(true);
       renderHook(() => useKeycloakInit(config));
 
@@ -307,7 +307,7 @@ describe('useKeycloakInit', () => {
   // Story #3 — tokenParsed vs loadUserInfo
   // -------------------------------------------------------------------------
   describe('useTokenClaims', () => {
-    it('uses tokenParsed when useTokenClaims=true (no loadUserInfo call)', async () => {
+    it('should use tokenParsed when useTokenClaims=true (no loadUserInfo call)', async () => {
       mockInit.mockResolvedValue(true);
       mockKeycloakInstance.tokenParsed = tokenParsedFixture;
 
@@ -325,7 +325,7 @@ describe('useKeycloakInit', () => {
       expect(mockLoadUserInfo).not.toHaveBeenCalled();
     });
 
-    it('falls back to loadUserInfo when useTokenClaims is not set', async () => {
+    it('should fall back to loadUserInfo when useTokenClaims is not set', async () => {
       mockInit.mockResolvedValue(true);
       const { result } = renderHook(() => useKeycloakInit(config));
 
@@ -335,7 +335,7 @@ describe('useKeycloakInit', () => {
       expect(result.current.user).toMatchObject({ sub: 'user-1' });
     });
 
-    it('updates user from tokenParsed on token refresh when useTokenClaims=true', async () => {
+    it('should update user from tokenParsed on token refresh when useTokenClaims=true', async () => {
       mockInit.mockResolvedValue(true);
       mockKeycloakInstance.tokenParsed = tokenParsedFixture;
 
@@ -363,7 +363,7 @@ describe('useKeycloakInit', () => {
   // Story #4 — Login / logout / register with options
   // -------------------------------------------------------------------------
   describe('login/logout/register options', () => {
-    it('login passes options to keycloak.login()', async () => {
+    it('should pass options to keycloak.login() on login', async () => {
       mockInit.mockResolvedValue(true);
       mockLogin.mockResolvedValue(undefined);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -378,7 +378,7 @@ describe('useKeycloakInit', () => {
       expect(mockLogin).toHaveBeenCalledWith(opts);
     });
 
-    it('logout passes options to keycloak.logout()', async () => {
+    it('should pass options to keycloak.logout() on logout', async () => {
       mockInit.mockResolvedValue(true);
       mockLogout.mockResolvedValue(undefined);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -393,7 +393,7 @@ describe('useKeycloakInit', () => {
       expect(mockLogout).toHaveBeenCalledWith(opts);
     });
 
-    it('register calls keycloak.register()', async () => {
+    it('should call keycloak.register() on register', async () => {
       mockInit.mockResolvedValue(true);
       mockRegister.mockResolvedValue(undefined);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -407,7 +407,7 @@ describe('useKeycloakInit', () => {
       expect(mockRegister).toHaveBeenCalledOnce();
     });
 
-    it('register forwards options to keycloak.register()', async () => {
+    it('should forward options to keycloak.register() on register', async () => {
       mockInit.mockResolvedValue(true);
       mockRegister.mockResolvedValue(undefined);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -427,7 +427,7 @@ describe('useKeycloakInit', () => {
   // Story #5 — Role checking
   // -------------------------------------------------------------------------
   describe('role checking', () => {
-    it('hasRealmRole delegates to keycloak.hasRealmRole()', async () => {
+    it('should delegate hasRealmRole to keycloak.hasRealmRole()', async () => {
       mockInit.mockResolvedValue(true);
       mockHasRealmRole.mockReturnValue(true);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -438,7 +438,7 @@ describe('useKeycloakInit', () => {
       expect(mockHasRealmRole).toHaveBeenCalledWith('admin');
     });
 
-    it('hasResourceRole delegates to keycloak.hasResourceRole()', async () => {
+    it('should delegate hasResourceRole to keycloak.hasResourceRole()', async () => {
       mockInit.mockResolvedValue(true);
       mockHasResourceRole.mockReturnValue(true);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -449,7 +449,7 @@ describe('useKeycloakInit', () => {
       expect(mockHasResourceRole).toHaveBeenCalledWith('editor', 'guava-admin');
     });
 
-    it('hasRealmRole returns false when not authenticated', async () => {
+    it('should return false from hasRealmRole when not authenticated', async () => {
       mockInit.mockResolvedValue(false);
       mockHasRealmRole.mockReturnValue(false);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -459,7 +459,7 @@ describe('useKeycloakInit', () => {
       expect(result.current.hasRealmRole('admin')).toBe(false);
     });
 
-    it('hasResourceRole returns false when not authenticated', async () => {
+    it('should return false from hasResourceRole when not authenticated', async () => {
       mockInit.mockResolvedValue(false);
       mockHasResourceRole.mockReturnValue(false);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -474,7 +474,7 @@ describe('useKeycloakInit', () => {
   // Story #6 — isTokenExpired + silentCheckSsoFallback + tokenParsed
   // -------------------------------------------------------------------------
   describe('token state and SSO fallback', () => {
-    it('isTokenExpired delegates to keycloak.isTokenExpired()', async () => {
+    it('should delegate isTokenExpired to keycloak.isTokenExpired()', async () => {
       mockInit.mockResolvedValue(true);
       mockIsTokenExpired.mockReturnValue(false);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -485,7 +485,7 @@ describe('useKeycloakInit', () => {
       expect(mockIsTokenExpired).toHaveBeenCalledWith(30);
     });
 
-    it('isTokenExpired returns true when not authenticated (safe default)', async () => {
+    it('should return true from isTokenExpired when not authenticated (safe default)', async () => {
       mockInit.mockResolvedValue(false);
       mockIsTokenExpired.mockReturnValue(true);
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -495,7 +495,7 @@ describe('useKeycloakInit', () => {
       expect(result.current.isTokenExpired()).toBe(true);
     });
 
-    it('passes silentCheckSsoFallback to keycloak.init()', async () => {
+    it('should pass silentCheckSsoFallback to keycloak.init()', async () => {
       mockInit.mockResolvedValue(false);
       const { result } = renderHook(() =>
         useKeycloakInit({ ...config, silentCheckSsoFallback: false })
@@ -507,7 +507,7 @@ describe('useKeycloakInit', () => {
       expect(initArg.silentCheckSsoFallback).toBe(false);
     });
 
-    it('defaults silentCheckSsoFallback to true', async () => {
+    it('should default silentCheckSsoFallback to true', async () => {
       mockInit.mockResolvedValue(false);
       const { result } = renderHook(() => useKeycloakInit(config));
 
@@ -517,7 +517,7 @@ describe('useKeycloakInit', () => {
       expect(initArg.silentCheckSsoFallback).toBe(true);
     });
 
-    it('exposes tokenParsed from keycloak instance', async () => {
+    it('should expose tokenParsed from keycloak instance', async () => {
       mockInit.mockResolvedValue(true);
       mockKeycloakInstance.tokenParsed = tokenParsedFixture;
       const { result } = renderHook(() => useKeycloakInit(config));
@@ -527,7 +527,7 @@ describe('useKeycloakInit', () => {
       expect(result.current.tokenParsed).toMatchObject({ sub: 'user-1' });
     });
 
-    it('tokenParsed is undefined before authentication', () => {
+    it('should have undefined tokenParsed before authentication', () => {
       mockInit.mockResolvedValue(false);
       mockKeycloakInstance.tokenParsed = undefined;
       const { result } = renderHook(() => useKeycloakInit(config));

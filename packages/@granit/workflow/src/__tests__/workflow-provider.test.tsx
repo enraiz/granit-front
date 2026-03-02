@@ -6,7 +6,7 @@ import { useWorkflowConfig, WorkflowProvider } from '../workflow-provider.tsx';
 import { createMockClient } from './test-utils.tsx';
 
 describe('WorkflowProvider', () => {
-  it('provides config to children', () => {
+  it('should provide config to children', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useWorkflowConfig(), {
@@ -21,7 +21,7 @@ describe('WorkflowProvider', () => {
     expect(result.current.basePath).toBe('/api/wf');
   });
 
-  it('uses default basePath', () => {
+  it('should use default basePath', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useWorkflowConfig(), {
@@ -35,13 +35,13 @@ describe('WorkflowProvider', () => {
     expect(result.current.basePath).toBe('/api/workflow');
   });
 
-  it('throws when used outside provider', () => {
+  it('should throw when used outside provider', () => {
     expect(() => {
       renderHook(() => useWorkflowConfig());
     }).toThrow('useWorkflowConfig must be used within a <WorkflowProvider>');
   });
 
-  it('renders children', () => {
+  it('should render children', () => {
     const client = createMockClient();
 
     render(
