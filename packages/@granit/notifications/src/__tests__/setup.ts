@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Hoisted so that the mock factory (also hoisted) can reference them.
-const { createConnection, HubConnectionBuilder } = vi.hoisted(() => {
+const { HubConnectionBuilder } = vi.hoisted(() => {
   function createConnection() {
     return {
       start: vi.fn().mockResolvedValue(undefined),
