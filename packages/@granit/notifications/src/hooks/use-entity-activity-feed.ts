@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback } from 'react';
 
 import { fetchEntityActivityFeed } from '../api/notification-api.js';
 import { useNotificationContext } from '../providers/notification-provider.js';
 
-import type { ActivityFeedEntryDto } from '../types/index.js';
+import { usePaginatedFetch } from './use-paginated-fetch.js';
+
+import type { ActivityFeedEntryDto, ActivityFeedPageDto } from '../types/index.js';
 
 export interface UseEntityActivityFeedOptions {
   entityType: string;
@@ -34,65 +36,17 @@ export function useEntityActivityFeed(
   const { config } = useNotificationContext();
   const basePath = config.basePath ?? '/api';
 
-  const [entries, setEntries] = useState<ActivityFeedEntryDto[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
-
-  const fetchPage = useCallback(
-    async (skip: number, append: boolean) => {
-      abortRef.current?.abort();
-      const controller = new AbortController();
-      abortRef.current = controller;
-
-      try {
-        const page = await fetchEntityActivityFeed(
-          config.apiClient,
-          basePath,
-          entityType,
-          entityId,
-          { skip, take: pageSize },
-        );
-
-        if (controller.signal.aborted) return;
-
-        setEntries((prev) =>
-          append ? [...prev, ...page.items] : page.items,
-        );
-        setTotalCount(page.totalCount);
-        setError(null);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        setError(err instanceof Error ? err : new Error(String(err)));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-          setLoadingMore(false);
-        }
-      }
-    },
-    [config.apiClient, basePath, entityType, entityId, pageSize],
+  const fetcher = useCallback(
+    (skip: number, take: number) =>
+      fetchEntityActivityFeed(config.apiClient, basePath, entityType, entityId, { skip, take }),
+    [config.apiClient, basePath, entityType, entityId],
   );
 
-  useEffect(() => {
-    setLoading(true);
-    fetchPage(0, false);
-    return () => abortRef.current?.abort();
-  }, [fetchPage]);
-
-  const loadMore = useCallback(() => {
-    setLoadingMore(true);
-    fetchPage(entries.length, true);
-  }, [fetchPage, entries.length]);
-
-  const refresh = useCallback(() => {
-    setLoading(true);
-    fetchPage(0, false);
-  }, [fetchPage]);
-
-  const hasMore = entries.length < totalCount;
+  const { items: entries, totalCount, loading, loadingMore, error, hasMore, loadMore, refresh } =
+    usePaginatedFetch<ActivityFeedEntryDto, ActivityFeedPageDto>({
+      fetcher,
+      pageSize,
+    });
 
   return {
     entries,

@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback } from 'react';
 
 import { fetchNotifications, markAllAsRead, markAsRead } from '../api/notification-api.js';
 import { useNotificationContext } from '../providers/notification-provider.js';
 
-import type { NotificationDto } from '../types/index.js';
+import { usePaginatedFetch } from './use-paginated-fetch.js';
+
+import type { NotificationDto, NotificationPageDto } from '../types/index.js';
 
 export interface UseNotificationsOptions {
   pageSize?: number;
@@ -34,63 +36,32 @@ export function useNotifications(
   const { config, setUnreadCount } = useNotificationContext();
   const basePath = config.basePath ?? '/api';
 
-  const [notifications, setNotifications] = useState<NotificationDto[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
-
-  const fetchPage = useCallback(
-    async (skip: number, append: boolean) => {
-      abortRef.current?.abort();
-      const controller = new AbortController();
-      abortRef.current = controller;
-
-      try {
-        const page = await fetchNotifications(
-          config.apiClient,
-          basePath,
-          { skip, take: pageSize },
-        );
-
-        if (controller.signal.aborted) return;
-
-        setNotifications((prev) =>
-          append ? [...prev, ...page.items] : page.items,
-        );
-        setTotalCount(page.totalCount);
-        setUnreadCount(page.unreadCount);
-        setError(null);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        setError(err instanceof Error ? err : new Error(String(err)));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-          setLoadingMore(false);
-        }
-      }
-    },
-    [config.apiClient, basePath, pageSize, setUnreadCount],
+  const fetcher = useCallback(
+    (skip: number, take: number) =>
+      fetchNotifications(config.apiClient, basePath, { skip, take }),
+    [config.apiClient, basePath],
   );
 
-  // Initial fetch
-  useEffect(() => {
-    setLoading(true);
-    fetchPage(0, false);
-    return () => abortRef.current?.abort();
-  }, [fetchPage]);
+  const onSuccess = useCallback(
+    (page: NotificationPageDto) => setUnreadCount(page.unreadCount),
+    [setUnreadCount],
+  );
 
-  const loadMore = useCallback(() => {
-    setLoadingMore(true);
-    fetchPage(notifications.length, true);
-  }, [fetchPage, notifications.length]);
-
-  const refresh = useCallback(() => {
-    setLoading(true);
-    fetchPage(0, false);
-  }, [fetchPage]);
+  const {
+    items: notifications,
+    setItems: setNotifications,
+    totalCount,
+    loading,
+    loadingMore,
+    error,
+    hasMore,
+    loadMore,
+    refresh,
+  } = usePaginatedFetch<NotificationDto, NotificationPageDto>({
+    fetcher,
+    pageSize,
+    onSuccess,
+  });
 
   const markRead = useCallback(
     async (id: string) => {
@@ -100,7 +71,7 @@ export function useNotifications(
       );
       setUnreadCount((prev: number) => Math.max(0, prev - 1));
     },
-    [config.apiClient, basePath, setUnreadCount],
+    [config.apiClient, basePath, setUnreadCount, setNotifications],
   );
 
   const markAllRead = useCallback(async () => {
@@ -109,9 +80,7 @@ export function useNotifications(
       prev.map((n) => ({ ...n, isRead: true, readAt: new Date().toISOString() })),
     );
     setUnreadCount(0);
-  }, [config.apiClient, basePath, setUnreadCount]);
-
-  const hasMore = notifications.length < totalCount;
+  }, [config.apiClient, basePath, setUnreadCount, setNotifications]);
 
   return {
     notifications,
