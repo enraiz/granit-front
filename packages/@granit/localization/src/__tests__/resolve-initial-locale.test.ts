@@ -16,27 +16,27 @@ afterEach(() => {
 });
 
 describe('resolveInitialLocale', () => {
-  it('returns stored locale from localStorage when available', () => {
+  it('should return stored locale from localStorage when available', () => {
     localStorage.setItem('dd:locale', '"en"');
     expect(resolveInitialLocale(languages)).toBe('en');
   });
 
-  it('returns browser locale when no stored value and language is in available list', () => {
+  it('should return browser locale when no stored value and language is in available list', () => {
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('de-DE');
     expect(resolveInitialLocale(languages)).toBe('de');
   });
 
-  it('returns browser locale when no languages list is provided', () => {
+  it('should return browser locale when no languages list is provided', () => {
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('es-ES');
     expect(resolveInitialLocale()).toBe('es');
   });
 
-  it('skips browser locale when not in available languages list', () => {
+  it('should skip browser locale when not in available languages list', () => {
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('ja-JP');
     expect(resolveInitialLocale(languages)).toBe('fr');
   });
 
-  it('returns isDefault language when browser locale is not available', () => {
+  it('should return isDefault language when browser locale is not available', () => {
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('ja-JP');
     const langs: LanguageInfo[] = [
       { cultureName: 'en', displayName: 'English', isDefault: true },
@@ -45,7 +45,7 @@ describe('resolveInitialLocale', () => {
     expect(resolveInitialLocale(langs)).toBe('en');
   });
 
-  it('falls back to "fr" when nothing else matches', () => {
+  it('should fall back to "fr" when nothing else matches', () => {
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('ja-JP');
     const langs: LanguageInfo[] = [
       { cultureName: 'en', displayName: 'English', isDefault: false },
@@ -54,12 +54,12 @@ describe('resolveInitialLocale', () => {
     expect(resolveInitialLocale(langs)).toBe('fr');
   });
 
-  it('uses custom storageKey', () => {
+  it('should use custom storageKey', () => {
     localStorage.setItem('dd:app-locale', '"de"');
     expect(resolveInitialLocale(languages, 'app-locale')).toBe('de');
   });
 
-  it('localStorage takes priority over navigator', () => {
+  it('should prioritize localStorage over navigator', () => {
     localStorage.setItem('dd:locale', '"de"');
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('en-US');
     expect(resolveInitialLocale(languages)).toBe('de');

@@ -17,7 +17,7 @@ function createWrapper(i18n: ReturnType<typeof createLocalization>) {
 }
 
 describe('useLocale', () => {
-  it('returns the current locale from i18next', async () => {
+  it('should return the current locale from i18next', async () => {
     const i18n = createLocalization();
     await i18n.changeLanguage('en');
 
@@ -28,7 +28,7 @@ describe('useLocale', () => {
     expect(result.current.locale).toBe('en');
   });
 
-  it('returns "fr" as fallback when no language is set', () => {
+  it('should return "fr" as fallback when no language is set', () => {
     const i18n = createLocalization();
 
     const { result } = renderHook(() => useLocale(), {
@@ -38,7 +38,7 @@ describe('useLocale', () => {
     expect(result.current.locale).toBe('fr');
   });
 
-  it('setLocale persists to localStorage and changes i18next language', async () => {
+  it('should persist to localStorage and change i18next language when setLocale is called', async () => {
     const i18n = createLocalization();
     await i18n.changeLanguage('fr');
 
@@ -54,7 +54,7 @@ describe('useLocale', () => {
     expect(i18n.language).toBe('en');
   });
 
-  it('setLocale returns a stable function reference', () => {
+  it('should return a stable function reference for setLocale', () => {
     const i18n = createLocalization();
 
     const { result, rerender } = renderHook(() => useLocale(), {

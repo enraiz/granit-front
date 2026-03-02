@@ -23,23 +23,23 @@ function makeEntry(overrides: Partial<TimelineStreamEntry> = {}): TimelineStream
 }
 
 describe('TimelineStream', () => {
-  it('shows loading state', () => {
+  it('should show loading state', () => {
     render(<TimelineStream entries={[]} loading={true} />);
     expect(screen.getByTestId('timeline-loading')).toBeTruthy();
   });
 
-  it('shows empty message when no entries', () => {
+  it('should show empty message when no entries', () => {
     render(<TimelineStream entries={[]} />);
     expect(screen.getByTestId('timeline-empty')).toBeTruthy();
     expect(screen.getByText('No entries yet.')).toBeTruthy();
   });
 
-  it('shows custom empty message', () => {
+  it('should show custom empty message', () => {
     render(<TimelineStream entries={[]} emptyMessage="Nothing here." />);
     expect(screen.getByText('Nothing here.')).toBeTruthy();
   });
 
-  it('renders entries', () => {
+  it('should render entries', () => {
     const entries = [
       makeEntry({ id: 'e-1', body: 'First' }),
       makeEntry({ id: 'e-2', body: 'Second' }),
@@ -53,7 +53,7 @@ describe('TimelineStream', () => {
     expect(screen.getByText('Second')).toBeTruthy();
   });
 
-  it('renders threaded entries with indentation', () => {
+  it('should render threaded entries with indentation', () => {
     const entries = [
       makeEntry({ id: 'e-1', body: 'Root comment' }),
       makeEntry({ id: 'e-2', body: 'Reply', parentEntryId: 'e-1' }),
@@ -67,7 +67,7 @@ describe('TimelineStream', () => {
     expect(entryElements[1].getAttribute('data-depth')).toBe('1');
   });
 
-  it('renders nested threading (depth > 1)', () => {
+  it('should render nested threading (depth > 1)', () => {
     const entries = [
       makeEntry({ id: 'e-1', body: 'Root' }),
       makeEntry({ id: 'e-2', body: 'Reply L1', parentEntryId: 'e-1' }),
@@ -81,7 +81,7 @@ describe('TimelineStream', () => {
     expect(entryElements[2].getAttribute('data-depth')).toBe('2');
   });
 
-  it('shows load more button when hasMore is true', () => {
+  it('should show load more button when hasMore is true', () => {
     const entries = [makeEntry()];
     const onLoadMore = vi.fn();
 
@@ -94,7 +94,7 @@ describe('TimelineStream', () => {
     expect(onLoadMore).toHaveBeenCalledTimes(1);
   });
 
-  it('disables load more button when loadingMore', () => {
+  it('should disable load more button when loadingMore', () => {
     const entries = [makeEntry()];
 
     render(<TimelineStream entries={entries} hasMore={true} loadingMore={true} />);
@@ -104,7 +104,7 @@ describe('TimelineStream', () => {
     expect(btn.textContent).toBe('Loading…');
   });
 
-  it('does not show load more when hasMore is false', () => {
+  it('should not show load more when hasMore is false', () => {
     const entries = [makeEntry()];
 
     render(<TimelineStream entries={entries} hasMore={false} />);
@@ -112,7 +112,7 @@ describe('TimelineStream', () => {
     expect(screen.queryByTestId('timeline-load-more')).toBeNull();
   });
 
-  it('calls onReply when reply button is clicked', () => {
+  it('should call onReply when reply button is clicked', () => {
     const onReply = vi.fn();
     const entries = [makeEntry({ id: 'e-1' })];
 
@@ -122,7 +122,7 @@ describe('TimelineStream', () => {
     expect(onReply).toHaveBeenCalledWith('e-1');
   });
 
-  it('calls onDelete when delete button is clicked', () => {
+  it('should call onDelete when delete button is clicked', () => {
     const onDelete = vi.fn();
     const entries = [makeEntry({ id: 'e-1' })];
 
@@ -132,7 +132,7 @@ describe('TimelineStream', () => {
     expect(onDelete).toHaveBeenCalledWith('e-1');
   });
 
-  it('uses custom renderEntry when provided', () => {
+  it('should use custom renderEntry when provided', () => {
     const entries = [makeEntry({ id: 'e-1', body: 'Custom' })];
 
     render(

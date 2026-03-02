@@ -20,7 +20,7 @@ const PREFS: NotificationPreferenceDto[] = [
 ];
 
 describe('NotificationPreferences', () => {
-  it('renders a table with preferences', () => {
+  it('should render a table with preferences', () => {
     render(
       <NotificationPreferences
         preferences={PREFS}
@@ -35,7 +35,7 @@ describe('NotificationPreferences', () => {
     expect(rows).toHaveLength(2);
   });
 
-  it('shows loading state', () => {
+  it('should show loading state', () => {
     render(
       <NotificationPreferences
         preferences={[]}
@@ -48,7 +48,7 @@ describe('NotificationPreferences', () => {
     expect(screen.getByTestId('preferences-loading')).toBeInTheDocument();
   });
 
-  it('renders checkboxes reflecting channel state', () => {
+  it('should render checkboxes reflecting channel state', () => {
     render(
       <NotificationPreferences
         preferences={PREFS}
@@ -65,7 +65,7 @@ describe('NotificationPreferences', () => {
     expect(pushCheckbox.checked).toBe(false);
   });
 
-  it('calls onToggle when checkbox is clicked', async () => {
+  it('should call onToggle when checkbox is clicked', async () => {
     const onToggle = vi.fn();
     const user = userEvent.setup();
 
@@ -83,7 +83,7 @@ describe('NotificationPreferences', () => {
     expect(onToggle).toHaveBeenCalledWith('AppointmentReminder', 'push', true);
   });
 
-  it('disables checkboxes when saving', () => {
+  it('should disable checkboxes when saving', () => {
     render(
       <NotificationPreferences
         preferences={PREFS}

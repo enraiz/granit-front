@@ -1,4 +1,4 @@
-export { createKlaroCookieConsentProvider } from "./createKlaroCookieConsentProvider.ts";
+export { createKlaroCookieConsentProvider } from "./create-klaro-cookie-consent-provider.ts";
 export type {
   KlaroConfig,
   KlaroServiceMapping,

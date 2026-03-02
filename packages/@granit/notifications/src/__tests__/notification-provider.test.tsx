@@ -6,7 +6,7 @@ import { useNotificationContext } from '../providers/notification-provider.js';
 import { createMockClient, createWrapper } from './test-utils.js';
 
 describe('NotificationProvider', () => {
-  it('provides context with initial values', () => {
+  it('should provide context with initial values', () => {
     const client = createMockClient();
     // Mock the unread-count fetch that useUnreadCount may trigger indirectly
     vi.mocked(client.get).mockResolvedValue({ data: { count: 0 } });
@@ -21,7 +21,7 @@ describe('NotificationProvider', () => {
     expect(result.current.unreadCount).toBe(0);
   });
 
-  it('throws when used outside provider', () => {
+  it('should throw when used outside provider', () => {
     expect(() => {
       renderHook(() => useNotificationContext());
     }).toThrow('useNotificationContext must be used within a <NotificationProvider>');

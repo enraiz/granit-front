@@ -33,7 +33,7 @@ describe('createOtlpTransport', () => {
     vi.restoreAllMocks();
   });
 
-  it('buffers entries without sending immediately', () => {
+  it('should buffer entries without sending immediately', () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -43,7 +43,7 @@ describe('createOtlpTransport', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('auto-flushes when batchSize is reached', () => {
+  it('should auto-flush when batchSize is reached', () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -56,7 +56,7 @@ describe('createOtlpTransport', () => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it('auto-flushes on timer when batchSize not reached', async () => {
+  it('should auto-flush on timer when batchSize not reached', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -71,7 +71,7 @@ describe('createOtlpTransport', () => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it('flush sends buffered entries via fetch', async () => {
+  it('should send buffered entries via fetch on flush', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -83,7 +83,7 @@ describe('createOtlpTransport', () => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it('flush is a no-op when buffer is empty', async () => {
+  it('should be a no-op flush when buffer is empty', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -92,7 +92,7 @@ describe('createOtlpTransport', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('clears buffer after flush', async () => {
+  it('should clear buffer after flush', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -106,7 +106,7 @@ describe('createOtlpTransport', () => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it('sends correct OTLP JSON structure', async () => {
+  it('should send correct OTLP JSON structure', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'guava-front',
@@ -143,7 +143,7 @@ describe('createOtlpTransport', () => {
     expect(record.body.stringValue).toContain('hello');
   });
 
-  it('maps severity numbers correctly', async () => {
+  it('should map severity numbers correctly', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -165,7 +165,7 @@ describe('createOtlpTransport', () => {
     expect(records[3].severityNumber).toBe(17); // ERROR
   });
 
-  it('includes context as log attributes', async () => {
+  it('should include context as log attributes', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -188,7 +188,7 @@ describe('createOtlpTransport', () => {
     });
   });
 
-  it('includes error semantic attributes', async () => {
+  it('should include error semantic attributes', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -216,7 +216,7 @@ describe('createOtlpTransport', () => {
     );
   });
 
-  it('includes traceId and spanId when getTraceContext is provided', async () => {
+  it('should include traceId and spanId when getTraceContext is provided', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -234,7 +234,7 @@ describe('createOtlpTransport', () => {
     expect(record.spanId).toBe('span-def');
   });
 
-  it('uses empty traceId/spanId when getTraceContext is not provided', async () => {
+  it('should use empty traceId/spanId when getTraceContext is not provided', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -251,7 +251,7 @@ describe('createOtlpTransport', () => {
     expect(record.spanId).toBe('');
   });
 
-  it('sends correct Content-Type and custom headers', async () => {
+  it('should send correct Content-Type and custom headers', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -267,7 +267,7 @@ describe('createOtlpTransport', () => {
     expect(headers['X-Custom']).toBe('value');
   });
 
-  it('uses keepalive for reliable delivery on unload', async () => {
+  it('should use keepalive for reliable delivery on unload', async () => {
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',
       serviceName: 'test',
@@ -280,7 +280,7 @@ describe('createOtlpTransport', () => {
     expect(init.keepalive).toBe(true);
   });
 
-  it('does not throw when fetch fails', async () => {
+  it('should not throw when fetch fails', async () => {
     vi.mocked(fetch).mockRejectedValueOnce(new Error('network error'));
     const transport = createOtlpTransport({
       endpoint: '/v1/logs',

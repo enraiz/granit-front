@@ -49,7 +49,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesResult {
 
   useEffect(() => {
     mountedRef.current = true;
-    void load();
+    load();
     return () => {
       mountedRef.current = false;
     };
@@ -99,7 +99,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesResult {
 
   const refresh = useCallback(() => {
     setLoading(true);
-    void load();
+    load();
   }, [load]);
 
   return { preferences, loading, error, saving, toggleChannel, refresh };

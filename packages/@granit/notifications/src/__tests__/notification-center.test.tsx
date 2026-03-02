@@ -32,7 +32,7 @@ const NOTIFICATIONS: NotificationDto[] = [
 ];
 
 describe('NotificationCenter', () => {
-  it('renders bell button with badge', () => {
+  it('should render bell button with badge', () => {
     render(
       <NotificationCenter
         notifications={NOTIFICATIONS}
@@ -46,7 +46,7 @@ describe('NotificationCenter', () => {
     expect(screen.getByTestId('notification-badge')).toHaveTextContent('1');
   });
 
-  it('opens inbox on bell click', async () => {
+  it('should open inbox on bell click', async () => {
     const user = userEvent.setup();
 
     render(
@@ -66,7 +66,7 @@ describe('NotificationCenter', () => {
     expect(screen.getByTestId('notification-list')).toBeInTheDocument();
   });
 
-  it('shows empty message when no notifications', async () => {
+  it('should show empty message when no notifications', async () => {
     const user = userEvent.setup();
 
     render(
@@ -84,7 +84,7 @@ describe('NotificationCenter', () => {
     expect(screen.getByTestId('notification-empty')).toHaveTextContent('Rien à afficher');
   });
 
-  it('shows loading state', async () => {
+  it('should show loading state', async () => {
     const user = userEvent.setup();
 
     render(
@@ -101,7 +101,7 @@ describe('NotificationCenter', () => {
     expect(screen.getByTestId('notification-loading')).toBeInTheDocument();
   });
 
-  it('shows load more button when hasMore', async () => {
+  it('should show load more button when hasMore', async () => {
     const onLoadMore = vi.fn();
     const user = userEvent.setup();
 
@@ -121,7 +121,7 @@ describe('NotificationCenter', () => {
     expect(onLoadMore).toHaveBeenCalled();
   });
 
-  it('shows mark all read button when unread > 0', async () => {
+  it('should show mark all read button when unread > 0', async () => {
     const onMarkAllRead = vi.fn();
     const user = userEvent.setup();
 

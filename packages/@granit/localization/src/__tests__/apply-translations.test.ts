@@ -31,7 +31,7 @@ const localizationData: ApplicationLocalizationDto = {
 };
 
 describe('applyTranslations', () => {
-  it('merges all resource modules into the translation namespace', () => {
+  it('should merge all resource modules into the translation namespace', () => {
     const i18n = createMockI18n();
     applyTranslations(i18n as never, localizationData);
 
@@ -49,21 +49,21 @@ describe('applyTranslations', () => {
     );
   });
 
-  it('does not call changeLanguage when instance language matches', () => {
+  it('should not call changeLanguage when instance language matches', () => {
     const i18n = createMockI18n('fr');
     applyTranslations(i18n as never, localizationData);
 
     expect(i18n.changeLanguage).not.toHaveBeenCalled();
   });
 
-  it('calls changeLanguage when instance language differs', () => {
+  it('should call changeLanguage when instance language differs', () => {
     const i18n = createMockI18n('en');
     applyTranslations(i18n as never, localizationData);
 
     expect(i18n.changeLanguage).toHaveBeenCalledWith('fr');
   });
 
-  it('handles empty resources', () => {
+  it('should handle empty resources', () => {
     const i18n = createMockI18n();
     const data: ApplicationLocalizationDto = {
       cultureName: 'en',
@@ -81,7 +81,7 @@ describe('applyTranslations', () => {
     );
   });
 
-  it('later modules override earlier ones on key collision', () => {
+  it('should let later modules override earlier ones on key collision', () => {
     const i18n = createMockI18n();
     const data: ApplicationLocalizationDto = {
       cultureName: 'fr',

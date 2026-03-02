@@ -1,12 +1,12 @@
 import type { TransitionDto } from './types.ts';
 
 export interface WorkflowStatusBarProps {
-  readonly currentState: string;
-  readonly states: readonly string[];
-  readonly transitions: readonly TransitionDto[];
-  readonly onTransition?: (targetState: string, comment?: string) => void;
-  readonly isLoading?: boolean;
-  readonly className?: string;
+  currentState: string;
+  states: readonly string[];
+  transitions: readonly TransitionDto[];
+  onTransition?: (targetState: string, comment?: string) => void;
+  isLoading?: boolean;
+  className?: string;
 }
 
 /**
@@ -23,7 +23,7 @@ export function WorkflowStatusBar({
   onTransition,
   isLoading = false,
   className,
-}: WorkflowStatusBarProps) {
+}: Readonly<WorkflowStatusBarProps>) {
   const currentIndex = states.indexOf(currentState);
 
   return (

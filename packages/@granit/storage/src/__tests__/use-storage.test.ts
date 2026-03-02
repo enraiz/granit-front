@@ -9,18 +9,18 @@ afterEach(() => {
 });
 
 describe('useStorage', () => {
-  it('returns defaultValue when key does not exist', () => {
+  it('should return defaultValue when key does not exist', () => {
     const { result } = renderHook(() => useStorage('theme', 'light'));
     expect(result.current[0]).toBe('light');
   });
 
-  it('returns stored value when key exists', () => {
+  it('should return stored value when key exists', () => {
     localStorage.setItem('dd:theme', '"dark"');
     const { result } = renderHook(() => useStorage('theme', 'light'));
     expect(result.current[0]).toBe('dark');
   });
 
-  it('setValue updates the value and persists to localStorage', () => {
+  it('should update the value and persist to localStorage', () => {
     const { result } = renderHook(() => useStorage('theme', 'light'));
 
     act(() => {
@@ -31,7 +31,7 @@ describe('useStorage', () => {
     expect(localStorage.getItem('dd:theme')).toBe('"dark"');
   });
 
-  it('setValue triggers re-render with the new value', () => {
+  it('should trigger re-render with the new value', () => {
     const { result } = renderHook(() => useStorage<number>('count', 0));
 
     act(() => {
@@ -41,7 +41,7 @@ describe('useStorage', () => {
     expect(result.current[0]).toBe(42);
   });
 
-  it('returns defaultValue for corrupted JSON', () => {
+  it('should return defaultValue for corrupted JSON', () => {
     localStorage.setItem('dd:broken', '{bad-json');
     const { result } = renderHook(() =>
       useStorage<Record<string, unknown>>('broken', {}),
@@ -49,7 +49,7 @@ describe('useStorage', () => {
     expect(result.current[0]).toEqual({});
   });
 
-  it('works with sessionStorage option', () => {
+  it('should work with sessionStorage option', () => {
     const { result } = renderHook(() =>
       useStorage('session-key', 'default', { storage: 'session' }),
     );
@@ -63,7 +63,7 @@ describe('useStorage', () => {
     expect(localStorage.getItem('dd:session-key')).toBeNull();
   });
 
-  it('works with object values', () => {
+  it('should work with object values', () => {
     const { result } = renderHook(() =>
       useStorage('sidebar', { open: false }),
     );
@@ -75,7 +75,7 @@ describe('useStorage', () => {
     expect(result.current[0]).toEqual({ open: true });
   });
 
-  it('re-renders on cross-tab storage event', () => {
+  it('should re-render on cross-tab storage event', () => {
     const { result } = renderHook(() => useStorage('theme', 'light'));
 
     act(() => {
@@ -88,7 +88,7 @@ describe('useStorage', () => {
     expect(result.current[0]).toBe('dark');
   });
 
-  it('ignores storage events for other keys', () => {
+  it('should ignore storage events for other keys', () => {
     const { result } = renderHook(() => useStorage('theme', 'light'));
 
     act(() => {
@@ -101,7 +101,7 @@ describe('useStorage', () => {
     expect(result.current[0]).toBe('light');
   });
 
-  it('uses custom serializer and deserializer', () => {
+  it('should use custom serializer and deserializer', () => {
     const { result } = renderHook(() =>
       useStorage<Date>('date', new Date('2026-01-01T00:00:00Z'), {
         serialize: (d) => d.toISOString(),

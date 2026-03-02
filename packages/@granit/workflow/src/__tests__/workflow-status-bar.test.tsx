@@ -8,7 +8,7 @@ import type { TransitionDto } from '../types.ts';
 const STATES = ['Draft', 'PendingReview', 'Published', 'Archived'];
 
 describe('WorkflowStatusBar', () => {
-  it('renders all states', () => {
+  it('should render all states', () => {
     render(
       <WorkflowStatusBar
         currentState="Draft"
@@ -24,7 +24,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.getByTestId('workflow-state-Archived')).toBeTruthy();
   });
 
-  it('marks current state with data-current', () => {
+  it('should mark current state with data-current', () => {
     render(
       <WorkflowStatusBar
         currentState="Published"
@@ -37,7 +37,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.getByTestId('workflow-state-Draft').getAttribute('data-current')).toBe('false');
   });
 
-  it('marks past states with data-past', () => {
+  it('should mark past states with data-past', () => {
     render(
       <WorkflowStatusBar
         currentState="Published"
@@ -52,7 +52,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.getByTestId('workflow-state-Archived').getAttribute('data-past')).toBe('false');
   });
 
-  it('sets aria-current on active state', () => {
+  it('should set aria-current on active state', () => {
     render(
       <WorkflowStatusBar
         currentState="Draft"
@@ -65,7 +65,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.getByTestId('workflow-state-Published').getAttribute('aria-current')).toBeNull();
   });
 
-  it('renders transition action buttons', () => {
+  it('should render transition action buttons', () => {
     const transitions: TransitionDto[] = [
       { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
       { targetState: 'Archived', name: 'Archiver', allowed: true, requiresApproval: false },
@@ -84,7 +84,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.getByTestId('workflow-action-Archived').textContent).toBe('Archiver');
   });
 
-  it('calls onTransition when clicking an action', () => {
+  it('should call onTransition when clicking an action', () => {
     const onTransition = vi.fn();
     const transitions: TransitionDto[] = [
       { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
@@ -104,7 +104,7 @@ describe('WorkflowStatusBar', () => {
     expect(onTransition).toHaveBeenCalledWith('Published');
   });
 
-  it('disables buttons when isLoading is true', () => {
+  it('should disable buttons when isLoading is true', () => {
     const transitions: TransitionDto[] = [
       { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
     ];
@@ -123,7 +123,7 @@ describe('WorkflowStatusBar', () => {
     ).toBe(true);
   });
 
-  it('shows approval label when requiresApproval is true and not allowed', () => {
+  it('should show approval label when requiresApproval is true and not allowed', () => {
     const transitions: TransitionDto[] = [
       { targetState: 'Published', name: 'Publier', allowed: false, requiresApproval: true },
     ];
@@ -141,7 +141,7 @@ describe('WorkflowStatusBar', () => {
     );
   });
 
-  it('shows normal label when requiresApproval but allowed', () => {
+  it('should show normal label when requiresApproval but allowed', () => {
     const transitions: TransitionDto[] = [
       { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: true },
     ];
@@ -157,7 +157,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.getByTestId('workflow-action-Published').textContent).toBe('Publier');
   });
 
-  it('hides actions div when no transitions', () => {
+  it('should hide actions div when no transitions', () => {
     render(
       <WorkflowStatusBar
         currentState="Archived"
@@ -169,7 +169,7 @@ describe('WorkflowStatusBar', () => {
     expect(screen.queryByTestId('workflow-actions')).toBeNull();
   });
 
-  it('applies custom className', () => {
+  it('should apply custom className', () => {
     render(
       <WorkflowStatusBar
         currentState="Draft"

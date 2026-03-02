@@ -8,7 +8,7 @@ import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx
 import type { WorkflowStatusDto } from '../types.ts';
 
 describe('useWorkflowStatus', () => {
-  it('loads status on mount', async () => {
+  it('should load status on mount', async () => {
     const client = createMockClient();
     const status: WorkflowStatusDto = {
       currentState: 'Draft',
@@ -32,7 +32,7 @@ describe('useWorkflowStatus', () => {
     expect(result.current.transitions[0].name).toBe('Publier');
   });
 
-  it('sets error state on failure', async () => {
+  it('should set error state on failure', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Network error'));
 
@@ -48,7 +48,7 @@ describe('useWorkflowStatus', () => {
     expect(result.current.transitions).toHaveLength(0);
   });
 
-  it('refetches when refetch is called', async () => {
+  it('should refetch when refetch is called', async () => {
     const client = createMockClient();
     const status1: WorkflowStatusDto = {
       currentState: 'Draft',

@@ -1,10 +1,10 @@
 import type { TransitionHistoryDto } from './types.ts';
 
 export interface WorkflowHistoryProps {
-  readonly history: readonly TransitionHistoryDto[];
-  readonly loading?: boolean;
-  readonly emptyMessage?: string;
-  readonly className?: string;
+  history: readonly TransitionHistoryDto[];
+  loading?: boolean;
+  emptyMessage?: string;
+  className?: string;
 }
 
 /**
@@ -18,7 +18,7 @@ export function WorkflowHistory({
   loading = false,
   emptyMessage = 'No transitions yet.',
   className,
-}: WorkflowHistoryProps) {
+}: Readonly<WorkflowHistoryProps>) {
   if (loading) {
     return (
       <div className={className} data-testid="workflow-history-loading">

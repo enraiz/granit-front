@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-import { createKlaroCookieConsentProvider } from "./createKlaroCookieConsentProvider.ts";
+import { createKlaroCookieConsentProvider } from "./create-klaro-cookie-consent-provider.ts";
 
 import type { KlaroConsentManager, KlaroConfig, KlaroWatcher } from "./types.ts";
 
@@ -33,7 +33,7 @@ describe("createKlaroCookieConsentProvider", () => {
     vi.clearAllMocks();
   });
 
-  it("returns default consents before init", () => {
+  it("should return default consents before init", () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -46,7 +46,7 @@ describe("createKlaroCookieConsentProvider", () => {
     expect(consents.marketing).toBe(false);
   });
 
-  it("initializes Klaro manager on init()", async () => {
+  it("should initialize Klaro manager on init()", async () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -60,7 +60,7 @@ describe("createKlaroCookieConsentProvider", () => {
     expect(consents.strictly_necessary).toBe(true);
   });
 
-  it("returns true for category when all services consented", async () => {
+  it("should return true for category when all services consented", async () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -77,7 +77,7 @@ describe("createKlaroCookieConsentProvider", () => {
     expect(consents.marketing).toBe(false);
   });
 
-  it("returns false for category when one service not consented (all-or-nothing)", async () => {
+  it("should return false for category when one service not consented (all-or-nothing)", async () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -94,7 +94,7 @@ describe("createKlaroCookieConsentProvider", () => {
     expect(consents.analytics).toBe(false);
   });
 
-  it("strictly_necessary is always true", async () => {
+  it("should always keep strictly_necessary true", async () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -107,7 +107,7 @@ describe("createKlaroCookieConsentProvider", () => {
     expect(consents.strictly_necessary).toBe(true);
   });
 
-  it("onConsentChange watches the manager and calls back on change", async () => {
+  it("should watch the manager and call back on change via onConsentChange", async () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -138,7 +138,7 @@ describe("createKlaroCookieConsentProvider", () => {
     );
   });
 
-  it("onConsentChange cleanup replaces update with no-op", async () => {
+  it("should replace update with no-op on onConsentChange cleanup", async () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,
@@ -162,7 +162,7 @@ describe("createKlaroCookieConsentProvider", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it("onConsentChange returns no-op when manager not initialized", () => {
+  it("should return no-op from onConsentChange when manager not initialized", () => {
     const provider = createKlaroCookieConsentProvider({
       klaroConfig,
       serviceMappings,

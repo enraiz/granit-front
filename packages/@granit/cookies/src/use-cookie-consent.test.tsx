@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 
 import { CookieConsentProvider } from "./CookieConsentContext.tsx";
-import { useCookieConsent } from "./useCookieConsent.ts";
+import { useCookieConsent } from "./use-cookie-consent.ts";
 
 import type { CookieConsentProvider as ICookieConsentProvider, ConsentState } from "./types.ts";
 import type { ReactNode } from "react";
@@ -36,13 +36,13 @@ function createWrapper(provider: ICookieConsentProvider) {
 }
 
 describe("useCookieConsent", () => {
-  it("throws when used outside CookieConsentProvider", () => {
+  it("should throw when used outside CookieConsentProvider", () => {
     expect(() => renderHook(() => useCookieConsent())).toThrow(
       "useCookieConsent must be used within a CookieConsentProvider"
     );
   });
 
-  it("returns default consents before initialization", () => {
+  it("should return default consents before initialization", () => {
     const provider = createMockProvider();
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -54,7 +54,7 @@ describe("useCookieConsent", () => {
     expect(result.current.isLoaded).toBe(false);
   });
 
-  it("calls provider.init on mount", () => {
+  it("should call provider.init on mount", () => {
     const provider = createMockProvider();
 
     renderHook(() => useCookieConsent(), {
@@ -64,7 +64,7 @@ describe("useCookieConsent", () => {
     expect(provider.init).toHaveBeenCalledOnce();
   });
 
-  it("loads consents after initialization", async () => {
+  it("should load consents after initialization", async () => {
     const provider = createMockProvider({ analytics: true });
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -80,7 +80,7 @@ describe("useCookieConsent", () => {
     expect(provider.onConsentChange).toHaveBeenCalled();
   });
 
-  it("acceptCategory updates consent state", async () => {
+  it("should update consent state on acceptCategory", async () => {
     const provider = createMockProvider();
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -98,7 +98,7 @@ describe("useCookieConsent", () => {
     expect(result.current.consents.analytics).toBe(true);
   });
 
-  it("revokeCategory updates consent state", async () => {
+  it("should update consent state on revokeCategory", async () => {
     const provider = createMockProvider({ preferences: true });
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -116,7 +116,7 @@ describe("useCookieConsent", () => {
     expect(result.current.consents.preferences).toBe(false);
   });
 
-  it("revokeCategory ignores strictly_necessary", async () => {
+  it("should ignore strictly_necessary on revokeCategory", async () => {
     const provider = createMockProvider();
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -134,7 +134,7 @@ describe("useCookieConsent", () => {
     expect(result.current.consents.strictly_necessary).toBe(true);
   });
 
-  it("acceptAll grants all categories", async () => {
+  it("should grant all categories on acceptAll", async () => {
     const provider = createMockProvider();
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -157,7 +157,7 @@ describe("useCookieConsent", () => {
     });
   });
 
-  it("revokeAll revokes non-essential categories", async () => {
+  it("should revoke non-essential categories on revokeAll", async () => {
     const provider = createMockProvider({
       preferences: true,
       analytics: true,

@@ -27,7 +27,7 @@ const MOCK_PAGE: NotificationPageDto = {
 };
 
 describe('useNotifications', () => {
-  it('fetches notifications on mount', async () => {
+  it('should fetch notifications on mount', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
 
@@ -42,7 +42,7 @@ describe('useNotifications', () => {
     expect(result.current.totalCount).toBe(1);
   });
 
-  it('marks a notification as read', async () => {
+  it('should mark a notification as read', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
     vi.mocked(client.patch).mockResolvedValue(
@@ -62,7 +62,7 @@ describe('useNotifications', () => {
     expect(result.current.notifications[0].isRead).toBe(true);
   });
 
-  it('marks all as read', async () => {
+  it('should mark all as read', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
     vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
@@ -80,7 +80,7 @@ describe('useNotifications', () => {
     expect(result.current.notifications.every((n) => n.isRead)).toBe(true);
   });
 
-  it('reports hasMore when totalCount > loaded items', async () => {
+  it('should report hasMore when totalCount > loaded items', async () => {
     const page: NotificationPageDto = {
       items: [MOCK_NOTIFICATION],
       totalCount: 50,
@@ -98,7 +98,7 @@ describe('useNotifications', () => {
     expect(result.current.hasMore).toBe(true);
   });
 
-  it('handles fetch errors', async () => {
+  it('should handle fetch errors', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Network error'));
 
@@ -112,7 +112,7 @@ describe('useNotifications', () => {
     expect(result.current.error?.message).toBe('Network error');
   });
 
-  it('loads more notifications when loadMore is called', async () => {
+  it('should load more notifications when loadMore is called', async () => {
     const page1: NotificationPageDto = {
       items: [MOCK_NOTIFICATION],
       totalCount: 2,
@@ -151,7 +151,7 @@ describe('useNotifications', () => {
     expect(result.current.notifications[1].title).toBe('Deuxième notification');
   });
 
-  it('refreshes the notification list', async () => {
+  it('should refresh the notification list', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
 

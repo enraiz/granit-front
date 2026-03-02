@@ -6,7 +6,7 @@ import { TimelineComposer } from '../timeline-composer.tsx';
 import { TimelineEntryType } from '../types.ts';
 
 describe('TimelineComposer', () => {
-  it('renders textarea and submit button', () => {
+  it('should render textarea and submit button', () => {
     const onSubmit = vi.fn();
     render(<TimelineComposer onSubmit={onSubmit} />);
 
@@ -14,14 +14,14 @@ describe('TimelineComposer', () => {
     expect(screen.getByTestId('timeline-composer-submit')).toBeTruthy();
   });
 
-  it('disables submit when body is empty', () => {
+  it('should disable submit when body is empty', () => {
     const onSubmit = vi.fn();
     render(<TimelineComposer onSubmit={onSubmit} />);
 
     expect((screen.getByTestId('timeline-composer-submit') as HTMLButtonElement).disabled).toBe(true);
   });
 
-  it('submits a comment and clears the textarea', async () => {
+  it('should submit a comment and clear the textarea', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
 
     render(<TimelineComposer onSubmit={onSubmit} />);
@@ -48,7 +48,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('submits with parentEntryId when provided', async () => {
+  it('should submit with parentEntryId when provided', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
 
     render(<TimelineComposer onSubmit={onSubmit} parentEntryId="e-parent" />);
@@ -64,7 +64,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('shows entry type selector when multiple types are available', () => {
+  it('should show entry type selector when multiple types are available', () => {
     const onSubmit = vi.fn();
     render(
       <TimelineComposer
@@ -78,7 +78,7 @@ describe('TimelineComposer', () => {
     expect(screen.getByText('Internal note')).toBeTruthy();
   });
 
-  it('switches entry type via radio buttons', async () => {
+  it('should switch entry type via radio buttons', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
 
     render(
@@ -102,7 +102,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('hides type selector when only one type is available', () => {
+  it('should hide type selector when only one type is available', () => {
     const onSubmit = vi.fn();
     render(
       <TimelineComposer
@@ -114,7 +114,7 @@ describe('TimelineComposer', () => {
     expect(screen.queryByTestId('timeline-composer-type-selector')).toBeNull();
   });
 
-  it('shows custom placeholder and submit label', () => {
+  it('should show custom placeholder and submit label', () => {
     const onSubmit = vi.fn();
     render(
       <TimelineComposer
@@ -131,7 +131,7 @@ describe('TimelineComposer', () => {
     expect(screen.getByTestId('timeline-composer-submit').textContent).toBe('Envoyer');
   });
 
-  it('triggers mention search on @ character', async () => {
+  it('should trigger mention search on @ character', async () => {
     const searchMentions = vi.fn().mockResolvedValue([
       { id: 'u-1', displayName: 'Dr. Martin' },
       { id: 'u-2', displayName: 'Dr. Marchand' },
@@ -158,7 +158,7 @@ describe('TimelineComposer', () => {
     expect(screen.getAllByTestId('timeline-mention-option')).toHaveLength(2);
   });
 
-  it('navigates mention suggestions with ArrowDown and ArrowUp', async () => {
+  it('should navigate mention suggestions with ArrowDown and ArrowUp', async () => {
     const searchMentions = vi.fn().mockResolvedValue([
       { id: 'u-1', displayName: 'Dr. Martin' },
       { id: 'u-2', displayName: 'Dr. Marchand' },
@@ -196,7 +196,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('selects mention with Enter key', async () => {
+  it('should select mention with Enter key', async () => {
     const searchMentions = vi.fn().mockResolvedValue([
       { id: 'u-1', displayName: 'Dr. Martin' },
     ]);
@@ -229,7 +229,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('closes mention dropdown with Escape key', async () => {
+  it('should close mention dropdown with Escape key', async () => {
     const searchMentions = vi.fn().mockResolvedValue([
       { id: 'u-1', displayName: 'Dr. Martin' },
     ]);
@@ -255,7 +255,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('dismisses mentions when @ is no longer in text', async () => {
+  it('should dismiss mentions when @ is no longer in text', async () => {
     const searchMentions = vi.fn().mockResolvedValue([
       { id: 'u-1', displayName: 'Dr. Martin' },
     ]);
@@ -284,7 +284,7 @@ describe('TimelineComposer', () => {
     });
   });
 
-  it('inserts mention on click', async () => {
+  it('should insert mention on click', async () => {
     const searchMentions = vi.fn().mockResolvedValue([
       { id: 'u-1', displayName: 'Dr. Martin' },
     ]);

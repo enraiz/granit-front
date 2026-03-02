@@ -41,7 +41,7 @@ export function EntityActivityFeed({
       )}
 
       {entries.length > 0 && (
-        <ol data-testid="activity-feed-list" role="list">
+        <ol data-testid="activity-feed-list">
           {entries.map((entry) => (
             <li key={entry.id} data-testid="activity-feed-entry" data-severity={entry.severity}>
               {renderEntry ? (

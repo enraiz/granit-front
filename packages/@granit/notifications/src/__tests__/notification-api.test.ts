@@ -24,7 +24,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // fetchNotifications
   // -----------------------------------------------------------------------
-  it('fetchNotifications sends GET with pagination params', async () => {
+  it('should send GET with pagination params (fetchNotifications)', async () => {
     const page: NotificationPageDto = {
       items: [],
       totalCount: 0,
@@ -44,7 +44,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // markAsRead
   // -----------------------------------------------------------------------
-  it('markAsRead sends PATCH to the correct URL', async () => {
+  it('should send PATCH to the correct URL (markAsRead)', async () => {
     const notification: NotificationDto = {
       id: 'n-1',
       title: 'Test',
@@ -68,7 +68,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // markAllAsRead
   // -----------------------------------------------------------------------
-  it('markAllAsRead sends POST to read-all', async () => {
+  it('should send POST to read-all (markAllAsRead)', async () => {
     const client = createMockClient();
     vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
 
@@ -80,7 +80,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // fetchUnreadCount
   // -----------------------------------------------------------------------
-  it('fetchUnreadCount returns the count number', async () => {
+  it('should return the count number (fetchUnreadCount)', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 42 }));
 
@@ -93,7 +93,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // fetchEntityActivityFeed
   // -----------------------------------------------------------------------
-  it('fetchEntityActivityFeed sends GET with entity path', async () => {
+  it('should send GET with entity path (fetchEntityActivityFeed)', async () => {
     const page: ActivityFeedPageDto = { items: [], totalCount: 0 };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
@@ -115,7 +115,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // fetchPreferences
   // -----------------------------------------------------------------------
-  it('fetchPreferences sends GET for preferences', async () => {
+  it('should send GET for preferences (fetchPreferences)', async () => {
     const prefs: NotificationPreferenceDto[] = [];
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(prefs));
@@ -129,7 +129,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // updatePreference
   // -----------------------------------------------------------------------
-  it('updatePreference sends PUT with preference data', async () => {
+  it('should send PUT with preference data (updatePreference)', async () => {
     const pref: NotificationPreferenceDto = {
       notificationType: 'AppointmentReminder',
       label: 'Rappel de rendez-vous',
