@@ -1,4 +1,4 @@
-import { setTokenGetter } from '@granit/api-client';
+import { setTokenGetter, setOnUnauthorized } from '@granit/api-client';
 import Keycloak from 'keycloak-js';
 import * as React from 'react';
 
@@ -105,6 +105,8 @@ export function useKeycloakInit(config: KeycloakCoreConfig): KeycloakCoreResult 
           setAuthenticated(false);
           config.onAuthRefreshError?.();
           config.onEvent?.('onAuthRefreshError');
+          // Session revoked via back-channel logout → refresh fails → force logout
+          keycloak.logout();
         };
 
         keycloak.onAuthLogout = () => {
@@ -166,6 +168,10 @@ export function useKeycloakInit(config: KeycloakCoreConfig): KeycloakCoreResult 
               }
             }
             return undefined;
+          });
+
+          setOnUnauthorized(() => {
+            keycloakRef.current?.logout();
           });
         }
       } catch {

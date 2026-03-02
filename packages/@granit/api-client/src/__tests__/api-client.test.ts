@@ -13,6 +13,7 @@ interface ApiClientModule {
   createApiClient: (config: ApiClientConfig) => AxiosInstance;
   setTokenGetter: (getter: () => Promise<string | undefined>) => void;
   setTenantGetter: (getter: () => string | undefined) => void;
+  setOnUnauthorized: (callback: () => void) => void;
   createMutator: (
     instance: AxiosInstance,
   ) => <T>(config: AxiosRequestConfig, options?: AxiosRequestConfig) => Promise<T>;
@@ -227,5 +228,70 @@ describe('createMutator', () => {
 
     const mutator = mod.createMutator(client);
     await expect(mutator({ url: '/test', method: 'GET' })).rejects.toThrow('Network Error');
+  });
+});
+
+describe('401 response interceptor', () => {
+  let mod: ApiClientModule;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    mod = await import('../index.ts');
+  });
+
+  function rejectAdapter(status: number) {
+    return (config: InternalAxiosRequestConfig) =>
+      Promise.reject({
+        response: { status, data: {}, headers: {}, config, statusText: 'Error' },
+        config,
+        isAxiosError: true,
+      });
+  }
+
+  it('should call onUnauthorized callback on 401 response', async () => {
+    const callback = vi.fn();
+    mod.setOnUnauthorized(callback);
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = rejectAdapter(401);
+
+    await expect(client.get('/test')).rejects.toBeDefined();
+    expect(callback).toHaveBeenCalledOnce();
+  });
+
+  it('should not call onUnauthorized when no callback is registered', async () => {
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = rejectAdapter(401);
+
+    await expect(client.get('/test')).rejects.toBeDefined();
+    // No callback registered — should not throw
+  });
+
+  it('should not call onUnauthorized on 403 response', async () => {
+    const callback = vi.fn();
+    mod.setOnUnauthorized(callback);
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = rejectAdapter(403);
+
+    await expect(client.get('/test')).rejects.toBeDefined();
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should still propagate the error after calling onUnauthorized', async () => {
+    mod.setOnUnauthorized(vi.fn());
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = rejectAdapter(401);
+
+    await expect(client.get('/test')).rejects.toMatchObject({
+      response: { status: 401 },
+    });
+  });
+
+  it('should pass through successful responses unchanged', async () => {
+    mod.setOnUnauthorized(vi.fn());
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.get('/test');
+    expect(response.status).toBe(200);
   });
 });

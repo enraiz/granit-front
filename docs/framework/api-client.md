@@ -67,10 +67,46 @@ export default customInstance;
 
 > Voir la documentation [orval](orval.md) pour la configuration complète.
 
-### Gestion des erreurs 401/403
+### `setOnUnauthorized(callback: () => void): void`
 
-La gestion des erreurs 401/403 est intentionnellement **laissée à l'application** consommatrice.
-Ajouter un intercepteur de réponse après la création de l'instance :
+Enregistre un callback invoqué automatiquement lorsqu'une requête reçoit une
+réponse HTTP 401. Chaque instance créée par `createApiClient` inclut un
+intercepteur de réponse qui déclenche ce callback.
+
+Typiquement wiré par `@granit/auth` pour forcer un logout Keycloak lorsque le
+backend rejette un token (ex : session révoquée via back-channel logout).
+
+```typescript
+import { setOnUnauthorized } from '@granit/api-client';
+
+// Appelé automatiquement par useKeycloakInit — appel manuel si sans @granit/auth
+setOnUnauthorized(() => {
+  keycloak.logout();
+});
+```
+
+> L'erreur 401 est toujours propagée après l'appel du callback — les composants
+> peuvent donc la capter dans leur propre logique `catch`.
+
+### Intercepteur de réponse 401
+
+Toute instance créée par `createApiClient` inclut un intercepteur de réponse
+qui :
+
+1. Détecte les réponses HTTP 401
+2. Appelle le callback `onUnauthorized` (s'il a été enregistré via
+   `setOnUnauthorized`)
+3. Propage l'erreur normalement (le callback ne « swallow » pas l'erreur)
+
+Cet intercepteur est central pour la gestion des sessions révoquées : lorsque
+le backend invalide une session via back-channel logout Keycloak, les appels
+API suivants reçoivent un 401 → le callback force le logout côté frontend.
+
+### Gestion des erreurs 403
+
+La gestion des erreurs 403 (permissions insuffisantes) reste à la charge de
+l'application consommatrice. Ajouter un intercepteur de réponse après la
+création de l'instance :
 
 ```typescript
 import axios from 'axios';
@@ -79,12 +115,8 @@ import { logger } from '@/lib/logger';
 api.interceptors.response.use(
   (response) => response,
   async (error: unknown) => {
-    if (axios.isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        logger.warn('[API] Session expirée — token invalide');
-      } else if (error.response?.status === 403) {
-        logger.warn('[API] Accès refusé — permissions insuffisantes');
-      }
+    if (axios.isAxiosError(error) && error.response?.status === 403) {
+      logger.warn('[API] Accès refusé — permissions insuffisantes');
     }
     throw error;
   }
