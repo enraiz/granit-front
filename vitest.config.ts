@@ -13,6 +13,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['packages/@granit/notifications/src/__tests__/setup.ts'],
     include: ['packages/@granit/*/src/**/*.test.ts', 'packages/@granit/*/src/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
