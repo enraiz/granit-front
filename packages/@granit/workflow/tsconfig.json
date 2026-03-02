@@ -2,7 +2,8 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@granit/logger": ["../logger/src/index.ts"]
+      "@granit/logger": ["../logger/src/index.ts"],
+      "@granit/api-client/test-utils": ["../api-client/src/test-utils.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
