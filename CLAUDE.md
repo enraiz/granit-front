@@ -8,6 +8,21 @@
 - **Location**: `/home/jf/dev/digital-dynamics/granit-front/`
 - **Consumers**: guava-front, guava-admin (via pnpm `link:` protocol + Vite aliases)
 
+## GitLab repositories
+
+| ID | Repo | Path |
+| -- | ---- | ---- |
+| 5 | governance-compliance | `digital-dynamics/governance-compliance` |
+| 6 | granit-dotnet | `digital-dynamics/granit-dotnet` |
+| 9 | **granit-front** | `digital-dynamics/granit-front` |
+| 10 | guava-admin | `digital-dynamics/guava-platform/applications/guava-admin` |
+| 4 | guava-app-template | `digital-dynamics/guava-platform/applications/guava-app-template` |
+| 7 | guava-backend | `digital-dynamics/guava-platform/applications/guava-backend` |
+| 1 | guava-front | `digital-dynamics/guava-platform/applications/guava-front` |
+| 3 | gitops | `digital-dynamics/guava-platform/infrastructure/gitops` |
+| 2 | iac | `digital-dynamics/guava-platform/infrastructure/iac` |
+| 8 | project-governance | `digital-dynamics/guava-platform/project-governance` |
+
 ## Packages
 
 | Package | Purpose |
@@ -21,6 +36,7 @@
 | `@granit/cookies` | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface |
 | `@granit/cookies-klaro` | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory |
 | `@granit/workflow` | Workflow lifecycle: hooks (`useWorkflowStatus`, `useWorkflowTransition`, `useWorkflowHistory`), components (`WorkflowStatusBar`, `WorkflowHistory`) |
+| `@granit/notifications` | Real-time notifications: SignalR provider, hooks (`useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`), headless components (`NotificationCenter`, `NotificationBadge`, `NotificationItem`, `EntityActivityFeed`, `NotificationPreferences`) |
 
 ## Stack & versions
 
@@ -49,6 +65,14 @@ pnpm --filter @granit/auth test
 - **Coverage**: ≥ 80% on all new code — flagged as top priority if below
 - **pnpm only** — never npm or yarn
 
+## Coding conventions
+
+Full frontend conventions: `granit-dotnet/docs/guide/conventions/frontend/`
+
+- [Style & naming](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/style-et-nommage.md) — TypeScript strict, naming, `type` vs `interface`, exports, imports, ESLint, feature-based organization
+- [Components](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/composants.md) — React, TS patterns, shadcn/ui, CVA, Storybook, WCAG, design tokens, performance, HDS security
+- [State & API](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/etat-et-api.md) — React Query, Query Factory, Orval, auth, routing, logging, i18n, Zod forms, tests
+
 ## Tech rules
 
 - **TypeScript strict** on all `.ts`/`.tsx` files — no implicit `any`
@@ -73,6 +97,7 @@ pnpm --filter @granit/auth test
   - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
   - `@granit/timeline` → `react`, `axios`
   - `@granit/workflow` → `react`, `axios`
+  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`
 
 ## GitLab issues
 
@@ -100,6 +125,13 @@ for MIT, Apache-2.0, BSD, ISC, and similar permissive licenses.
 
 **NEVER** add a dependency without updating `THIRD-PARTY-NOTICES.md`.
 
+## Definition of Done — mandatory before any push
+
+**NEVER push or create an MR** without: tests passing, lint clean (`pnpm lint`),
+TypeScript clean (`pnpm tsc`), markdownlint clean on modified `.md` files.
+These checks are **blocking**. If the user asks to push without them, remind them
+and refuse until the DoD is satisfied or the user explicitly overrides each item.
+
 ## Git workflow
 
 - **Branching**: GitFlow (main + develop + `feature/*` + `release/*` + `hotfix/*`)
@@ -110,7 +142,21 @@ for MIT, Apache-2.0, BSD, ISC, and similar permissive licenses.
 - **Pre-commit hooks**: `pnpm lint && pnpm tsc`
 - **Commit-msg hook**: `pnpm exec commitlint --edit`
 
+**MR target — STRICT RULE:**
+
+| Branch type | Default target | Exception |
+| ----------- | -------------- | --------- |
+| `feature/*` | `develop` | Only if user explicitly says "target main" |
+| `hotfix/*` | `main` + `develop` | Both, always |
+| `release/*` | `main` + `develop` | Both, always |
+| `fix/*` | `develop` | Only if user explicitly says "target main" |
+
+NEVER target `main` for a `feature/*` or `fix/*` branch unless the user explicitly
+requests it. When in doubt, ask before creating the MR.
+
 ## Security
+
+See `granit-dotnet/docs/guide/conventions/securite.md` for code-level security rules.
 
 **ALWAYS:**
 
@@ -143,26 +189,30 @@ Any change to a public API (`src/index.ts` exports) may break consumers.
 
 ## Language
 
-| Content | Language |
-| ------- | -------- |
-| Code — identifiers, inline comments (`//`), JSDoc | **English** |
-| `docs/**/*.md` | **French** |
-| GitLab issues (title, description, comments) | **French** |
-| Commits (Conventional Commits messages) | **French** |
-| `CLAUDE.md`, skills | **English** |
+See `granit-dotnet/docs/guide/conventions/langues.md` for full language and localization rules.
 
-**Diacritics**: ALWAYS use correct French accents (é, è, ê, à, â, ù, û, ô, î, ï, ç, œ)
-in all French content. Never in code.
+- **Code** (identifiers, JSDoc, comments): **English**
+- **Docs, issues, commits**: **French** (with correct diacritics: é, è, ê, à, â, ù, û, ô, î, ï, ç, œ)
+- **`CLAUDE.md`, skills**: **English**
 
 ## Personas (user stories)
 
-Persona registry: `governance-compliance/docs/03-organization/ORG-05-PERSONAS.md`.
+Two persona registries:
 
-**Available personas:** SRE, Ingénieur DevOps, Développeur, Architecte, DBA, RSSI,
-DPO, CTO, Direction, Directeur juridique, Auditeur interne, Auditeur externe,
+- **Infrastructure & governance (15 personas)**: `governance-compliance/docs/03-organization/ORG-05-PERSONAS.md`
+- **Application-level (5 personas)**: `granit-dotnet/docs/guide/personas-applicatifs.md`
+
+**STRICT RULES:**
+
+- **ALWAYS** use a canonical persona in user stories (`As a [persona]`)
+- **NEVER** introduce a new persona without user validation and registry update
+- **NEVER** use hybrid roles (`SRE / DevOps`) — choose the primary persona
+- Context (on-call, audit, incident) belongs in the story body, not in the persona
+
+**Infra/governance personas:** SRE, Ingénieur DevOps, Développeur, Architecte, DBA,
+RSSI, DPO, CTO, Direction, Directeur juridique, Auditeur interne, Auditeur externe,
 Utilisateur, Professionnel de santé, Product Owner
 
-**NEVER** introduce a new persona without updating the registry.
+**Application personas:** Visiteur, Utilisateur authentifié, Administrateur d'application,
+Approbateur, Gestionnaire de contenu
 
-# currentDate
-Today's date is 2026-02-27.
