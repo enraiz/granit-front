@@ -1,38 +1,8 @@
-import { vi } from 'vitest';
-
 import { TimelineProvider } from '../timeline-provider.tsx';
 
-import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import type { AxiosInstance } from 'axios';
 
-
-export function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn(),
-    post: vi.fn(),
-    delete: vi.fn(),
-    put: vi.fn(),
-    patch: vi.fn(),
-    request: vi.fn(),
-    head: vi.fn(),
-    options: vi.fn(),
-    getUri: vi.fn(),
-    defaults: {} as AxiosInstance['defaults'],
-    interceptors: {
-      request: { use: vi.fn(), eject: vi.fn(), clear: vi.fn() },
-      response: { use: vi.fn(), eject: vi.fn(), clear: vi.fn() },
-    },
-  } as unknown as AxiosInstance;
-}
-
-export function axiosResponse<T>(data: T): AxiosResponse<T> {
-  return {
-    data,
-    status: 200,
-    statusText: 'OK',
-    headers: {},
-    config: {} as InternalAxiosRequestConfig,
-  };
-}
+export { createMockClient, axiosResponse } from '@granit/api-client/test-utils';
 
 export function createWrapper(client: AxiosInstance, basePath = '/api/timeline') {
   return function Wrapper({ children }: Readonly<{ children: React.ReactNode }>) {
