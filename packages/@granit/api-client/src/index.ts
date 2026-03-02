@@ -1,4 +1,5 @@
 import axios, {
+  type AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
   type InternalAxiosRequestConfig,
@@ -18,6 +19,9 @@ let _tokenGetter: (() => Promise<string | undefined>) | null = null;
 // Call setTenantGetter() from the app initialization code.
 let _tenantGetter: (() => string | undefined) | null = null;
 
+// Global callback invoked on any 401 response — wired by @granit/auth to force logout.
+let _onUnauthorized: (() => void) | null = null;
+
 export function setTokenGetter(getter: () => Promise<string | undefined>): void {
   _tokenGetter = getter;
 }
@@ -27,11 +31,19 @@ export function setTenantGetter(getter: () => string | undefined): void {
 }
 
 /**
- * Create a pre-configured Axios instance with Bearer token and optional
- * X-Tenant-Id request interceptors.
+ * Register a callback invoked on any HTTP 401 response.
  *
- * 401/403 response handling is intentionally left to the consuming app — add your own
- * `api.interceptors.response.use(...)` after calling this factory.
+ * Typically wired by `@granit/auth` to force a Keycloak logout when the
+ * backend rejects a token (e.g. session revoked via back-channel logout).
+ */
+export function setOnUnauthorized(callback: () => void): void {
+  _onUnauthorized = callback;
+}
+
+/**
+ * Create a pre-configured Axios instance with Bearer token injection,
+ * optional X-Tenant-Id header, and a 401 response interceptor that
+ * triggers the `onUnauthorized` callback (if registered via {@link setOnUnauthorized}).
  */
 export function createApiClient(config: ApiClientConfig): AxiosInstance {
   const instance = axios.create({
@@ -60,6 +72,16 @@ export function createApiClient(config: ApiClientConfig): AxiosInstance {
     },
     /* v8 ignore next 3 */
     (error: unknown) => {
+      throw error;
+    }
+  );
+
+  instance.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError) => {
+      if (error.response?.status === 401 && _onUnauthorized) {
+        _onUnauthorized();
+      }
       throw error;
     }
   );

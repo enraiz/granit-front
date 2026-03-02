@@ -198,7 +198,7 @@ individuellement ou via le handler générique `onEvent`.
 | Événement | Callback dédié | Effet sur l'état |
 | --- | --- | --- |
 | Token expiré | `onTokenExpired` | Aucun (le refresh automatique s'en charge) |
-| Échec du refresh | `onAuthRefreshError` | `authenticated` → `false` |
+| Échec du refresh | `onAuthRefreshError` | `authenticated` → `false`, **logout forcé** |
 | Session terminée | `onAuthLogout` | `authenticated` → `false`, `user` → `null` |
 | Refresh réussi | — | Met à jour `user` si `useTokenClaims` est actif |
 | Auth réussie | — | — |
@@ -207,6 +207,72 @@ individuellement ou via le handler générique `onEvent`.
 
 Quand `useTokenClaims` est activé, l'utilisateur est automatiquement mis à jour
 à partir du `tokenParsed` après chaque refresh de token réussi.
+
+## Gestion des sessions révoquées
+
+Lorsque le backend révoque une session via le **back-channel logout Keycloak**
+(voir `Granit.Authentication.Keycloak` côté .NET), le frontend gère
+automatiquement la déconnexion via deux mécanismes complémentaires :
+
+### Flux de révocation
+
+```text
+Keycloak ──back-channel logout──► Backend (.NET)
+                                      │
+                                      ▼
+                              Session marquée révoquée
+                              (IDistributedCache)
+                                      │
+  ┌───────────────────────────────────┘
+  │
+  ▼                                        ▼
+Token refresh (60s)                   Appel API
+  │                                        │
+  ▼                                        ▼
+keycloak.updateToken() échoue         HTTP 401
+  │                                        │
+  ▼                                        ▼
+onAuthRefreshError                    intercepteur 401
+  │                                  (@granit/api-client)
+  ▼                                        │
+keycloak.logout()                          ▼
+                                      setOnUnauthorized()
+                                           │
+                                           ▼
+                                      keycloak.logout()
+```
+
+### Mécanisme 1 — Échec du refresh token
+
+Le hook `useKeycloakInit` renouvelle automatiquement le token toutes les 60
+secondes. Lorsque la session a été révoquée :
+
+1. `keycloak.updateToken()` échoue (le refresh token est invalidé)
+2. Le callback `onAuthRefreshError` se déclenche
+3. `authenticated` passe à `false`
+4. `keycloak.logout()` est appelé automatiquement → redirection vers la page
+   de login Keycloak
+
+Ce comportement est intégré par défaut — aucune configuration nécessaire.
+
+### Mécanisme 2 — Intercepteur HTTP 401
+
+Si un appel API survient entre deux cycles de refresh (fenêtre de 60s), le
+backend rejette la requête avec un 401. L'intercepteur intégré dans
+`@granit/api-client` gère ce cas :
+
+1. `setOnUnauthorized` est wiré automatiquement par `useKeycloakInit`
+2. L'intercepteur de réponse détecte le 401
+3. Le callback appelle `keycloak.logout()` → redirection vers login
+
+> Voir la documentation [`@granit/api-client`](api-client.md) pour les détails
+> de l'API `setOnUnauthorized`.
+
+### Délai de détection
+
+Le pire cas est le délai du cycle de refresh (60 secondes). Pendant cette
+fenêtre, un appel API peut recevoir un 401 qui déclenche immédiatement le
+logout via l'intercepteur. Les deux mécanismes sont donc complémentaires.
 
 ## Vérification des rôles
 
