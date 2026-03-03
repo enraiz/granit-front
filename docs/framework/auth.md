@@ -308,4 +308,4 @@ Les deux méthodes retournent `false` si l'utilisateur n'est pas authentifié.
 
 - `react`
 - `keycloak-js`
-- `@granit/types`
+- `@granit/api-client`

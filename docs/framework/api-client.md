@@ -123,8 +123,8 @@ api.interceptors.response.use(
 );
 ```
 
-Le backend retourne les erreurs au format RFC 7807 `ProblemDetails` — voir
-`@granit/types` pour le type TypeScript correspondant.
+Le backend retourne les erreurs au format RFC 7807 — le type `ProblemDetails`
+est exporté par ce même package.
 
 ## Peer dependencies
 

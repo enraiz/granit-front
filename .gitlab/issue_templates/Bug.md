@@ -4,7 +4,7 @@ Description claire et concise du probleme.
 
 ## Package concerne
 
-`@granit/logger` | `@granit/types` | `@granit/utils` | `@granit/api-client` | `@granit/auth`
+`@granit/logger` | `@granit/utils` | `@granit/api-client` | `@granit/auth`
 
 ## Etapes pour reproduire
 

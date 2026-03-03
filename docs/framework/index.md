@@ -9,10 +9,9 @@ Documentation de référence de chaque module du framework.
 | Document | Description |
 | --- | --- |
 | [logger.md](logger.md) | Factory de loggers configurables, niveaux par environnement |
-| [types.md](types.md) | Types TypeScript partagés : `KeycloakUserInfo`, `PaginatedResponse<T>` |
 | [utils.md](utils.md) | Utilitaires : classes CSS Tailwind (`cn`), formatage de dates et nombres |
-| [api-client.md](api-client.md) | Factory Axios, intercepteur Bearer token, gestion 401/403 |
-| [auth.md](auth.md) | Authentification Keycloak : hook d'init, factory de contexte React typé, mock provider |
+| [api-client.md](api-client.md) | Factory Axios, intercepteur Bearer token, gestion 401/403, types de réponse (`PaginatedResponse`, `ProblemDetails`) |
+| [auth.md](auth.md) | Authentification Keycloak : hook d'init, factory de contexte React typé, mock provider, type `KeycloakUserInfo` |
 | [timeline.md](timeline.md) | Flux d'activité unifié : commentaires, notes, threading, @mentions, follow/unfollow |
 | [workflow.md](workflow.md) | Gestion du cycle de vie : barre de statut, transitions, historique d'audit HDS |
 | [notifications.md](notifications.md) | Centre de notifications temps-réel (SignalR), boîte de réception, badge, fil d'activité, préférences |

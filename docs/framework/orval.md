@@ -168,10 +168,10 @@ function UserActions({ userId }: { userId: string }) {
 ## Gestion des erreurs RFC 7807
 
 Le backend retourne les erreurs au format `application/problem+json`. Le type
-`ProblemDetails` de `@granit/types` permet de les typer :
+`ProblemDetails` de `@granit/api-client` permet de les typer :
 
 ```typescript
-import type { ProblemDetails } from '@granit/types';
+import type { ProblemDetails } from '@granit/api-client';
 
 const { mutate } = useCreatePatient({
   mutation: {

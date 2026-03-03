@@ -28,10 +28,9 @@
 | Package | Purpose |
 | ------- | ------- |
 | `@granit/logger` | Configurable logger factory (`createLogger(prefix)`) |
-| `@granit/types` | Shared TypeScript types (`KeycloakUserInfo`, `PaginatedResponse`) |
 | `@granit/utils` | Shared utilities (`cn`, `formatDate`, `formatNumber`, …) |
-| `@granit/api-client` | Axios factory (`createApiClient`, `setTokenGetter`) |
-| `@granit/auth` | Keycloak hooks, auth context factory, mock provider |
+| `@granit/api-client` | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`PaginatedResponse`, `ProblemDetails`) |
+| `@granit/auth` | Keycloak hooks, auth context factory, mock provider, `KeycloakUserInfo` type |
 | `@granit/timeline` | Unified activity feed: hooks (`useTimeline`, `useTimelineActions`, `useTimelineFollowers`), components (`TimelineStream`, `TimelineComposer`) |
 | `@granit/cookies` | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface |
 | `@granit/cookies-klaro` | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory |
@@ -92,7 +91,7 @@ Full frontend conventions: `granit-dotnet/docs/guide/conventions/frontend/`
 - **Peer dep matrix**:
   - `@granit/utils` → `clsx`, `tailwind-merge`, `date-fns`
   - `@granit/api-client` → `axios`
-  - `@granit/auth` → `react`, `keycloak-js`, `@granit/types`
+  - `@granit/auth` → `react`, `keycloak-js`, `@granit/api-client`
   - `@granit/cookies` → `react`
   - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
   - `@granit/timeline` → `react`, `axios`
