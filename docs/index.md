@@ -7,7 +7,7 @@
 Framework TypeScript/React partagé pour les applications front-end Digital Dynamics.
 
 Granit-front fournit les briques communes à toutes les applications front-end :
-logger configurable, types OIDC partagés, utilitaires Tailwind et formatage,
+logger configurable, utilitaires Tailwind et formatage,
 client HTTP Axios avec Bearer token, et couche d'authentification Keycloak.
 
 Équivalent JavaScript/TypeScript de [`granit-dotnet`](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet).
@@ -21,10 +21,9 @@ TypeScript 5 (strict) · React 19 · Vitest 3 · ESLint 9 · pnpm workspace · N
 | Package | Rôle |
 | --- | --- |
 | [`@granit/logger`](framework/logger.md) | Factory de loggers configurables (`createLogger`) |
-| [`@granit/types`](framework/types.md) | Types TypeScript partagés (`KeycloakUserInfo`, `PaginatedResponse`) |
 | [`@granit/utils`](framework/utils.md) | Utilitaires partagés (`cn`, `formatDate`, `formatNumber`, …) |
-| [`@granit/api-client`](framework/api-client.md) | Factory Axios avec intercepteur Bearer token |
-| [`@granit/auth`](framework/auth.md) | Hooks Keycloak, factory de contexte auth, mock provider |
+| [`@granit/api-client`](framework/api-client.md) | Factory Axios avec intercepteur Bearer token, types de réponse (`PaginatedResponse`, `ProblemDetails`) |
+| [`@granit/auth`](framework/auth.md) | Hooks Keycloak, factory de contexte auth, mock provider, type `KeycloakUserInfo` |
 
 ## Documentation
 

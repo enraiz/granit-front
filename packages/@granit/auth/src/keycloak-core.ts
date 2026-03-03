@@ -2,15 +2,14 @@ import { setTokenGetter, setOnUnauthorized } from '@granit/api-client';
 import Keycloak from 'keycloak-js';
 import * as React from 'react';
 
-import type { BaseAuthContextType, KeycloakCoreConfig, LoginOptions, LogoutOptions } from './types.ts';
-import type { KeycloakUserInfo } from '@granit/types';
+import type { BaseAuthContextType, KeycloakCoreConfig, KeycloakUserInfo, LoginOptions, LogoutOptions } from './types.ts';
 
 export interface KeycloakCoreResult extends BaseAuthContextType {
   /**
    * Direct ref to the Keycloak instance.
    * Expose to consuming apps that need to build custom login/logout URLs (e.g. Capacitor).
    */
-  keycloakRef: React.MutableRefObject<Keycloak | null>;
+  keycloakRef: React.RefObject<Keycloak | null>;
 
   /** Redirect to the Keycloak login page with optional overrides. */
   login: (options?: LoginOptions) => void;

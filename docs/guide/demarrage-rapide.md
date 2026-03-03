@@ -13,7 +13,6 @@ flowchart LR
     APP --> API["@granit/api-client"]
     APP --> UTILS["@granit/utils"]
     APP --> LOGGER["@granit/logger"]
-    AUTH --> TYPES["@granit/types"]
     AUTH --> API
 ```
 
@@ -41,7 +40,6 @@ Dans le `package.json` de l'application, ajouter les packages via le protocole `
 {
   "dependencies": {
     "@granit/logger":     "link:../granit-front/packages/@granit/logger",
-    "@granit/types":      "link:../granit-front/packages/@granit/types",
     "@granit/utils":      "link:../granit-front/packages/@granit/utils",
     "@granit/api-client": "link:../granit-front/packages/@granit/api-client",
     "@granit/auth":       "link:../granit-front/packages/@granit/auth"
@@ -71,7 +69,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@granit/logger':     path.join(GRANIT, 'logger/src/index.ts'),
-      '@granit/types':      path.join(GRANIT, 'types/src/index.ts'),
       '@granit/utils':      path.join(GRANIT, 'utils/src/index.ts'),
       '@granit/api-client': path.join(GRANIT, 'api-client/src/index.ts'),
       '@granit/auth':       path.join(GRANIT, 'auth/src/index.ts'),
@@ -90,7 +87,6 @@ Ajouter les `paths` correspondants dans **chaque** tsconfig de l'application
   "compilerOptions": {
     "paths": {
       "@granit/logger":     ["../granit-front/packages/@granit/logger/src/index.ts"],
-      "@granit/types":      ["../granit-front/packages/@granit/types/src/index.ts"],
       "@granit/utils":      ["../granit-front/packages/@granit/utils/src/index.ts"],
       "@granit/api-client": ["../granit-front/packages/@granit/api-client/src/index.ts"],
       "@granit/auth":       ["../granit-front/packages/@granit/auth/src/index.ts"]

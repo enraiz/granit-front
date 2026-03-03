@@ -7,17 +7,16 @@
 Framework TypeScript/React partagé — équivalent JavaScript/TypeScript de `granit-dotnet`.
 
 Fournit les briques communes à toutes les applications front-end Digital Dynamics : logger,
-types OIDC, utilitaires, client HTTP Axios et couche d'authentification Keycloak.
+utilitaires, client HTTP Axios et couche d'authentification Keycloak.
 
 ## Packages
 
 | Package | Description |
 | --- | --- |
 | [`@granit/logger`](docs/framework/logger.md) | Factory de loggers configurables (`createLogger`) |
-| [`@granit/types`](docs/framework/types.md) | Types TypeScript partagés (`KeycloakUserInfo`, `PaginatedResponse`) |
 | [`@granit/utils`](docs/framework/utils.md) | Utilitaires partagés (`cn`, `formatDate`, `formatNumber`, …) |
-| [`@granit/api-client`](docs/framework/api-client.md) | Factory Axios avec intercepteur Bearer token |
-| [`@granit/auth`](docs/framework/auth.md) | Hooks Keycloak, factory de contexte auth, mock provider |
+| [`@granit/api-client`](docs/framework/api-client.md) | Factory Axios avec intercepteur Bearer token, types de réponse (`PaginatedResponse`, `ProblemDetails`) |
+| [`@granit/auth`](docs/framework/auth.md) | Hooks Keycloak, factory de contexte auth, mock provider, type `KeycloakUserInfo` |
 
 ## Documentation
 
@@ -39,7 +38,6 @@ Les packages sont consommés directement depuis les sources TypeScript — aucun
 {
   "dependencies": {
     "@granit/logger":     "link:../../../granit-front/packages/@granit/logger",
-    "@granit/types":      "link:../../../granit-front/packages/@granit/types",
     "@granit/utils":      "link:../../../granit-front/packages/@granit/utils",
     "@granit/api-client": "link:../../../granit-front/packages/@granit/api-client",
     "@granit/auth":       "link:../../../granit-front/packages/@granit/auth"
@@ -58,7 +56,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@granit/logger':     path.join(GRANIT, 'logger/src/index.ts'),
-      '@granit/types':      path.join(GRANIT, 'types/src/index.ts'),
       '@granit/utils':      path.join(GRANIT, 'utils/src/index.ts'),
       '@granit/api-client': path.join(GRANIT, 'api-client/src/index.ts'),
       '@granit/auth':       path.join(GRANIT, 'auth/src/index.ts'),
@@ -74,7 +71,6 @@ export default defineConfig({
   "compilerOptions": {
     "paths": {
       "@granit/logger":     ["../../../granit-front/packages/@granit/logger/src/index.ts"],
-      "@granit/types":      ["../../../granit-front/packages/@granit/types/src/index.ts"],
       "@granit/utils":      ["../../../granit-front/packages/@granit/utils/src/index.ts"],
       "@granit/api-client": ["../../../granit-front/packages/@granit/api-client/src/index.ts"],
       "@granit/auth":       ["../../../granit-front/packages/@granit/auth/src/index.ts"]
