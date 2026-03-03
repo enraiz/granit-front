@@ -1,15 +1,29 @@
 {
   "name": "@granit/auth",
   "version": "0.1.0",
-  "private": true,
+  "license": "UNLICENSED",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
   "peerDependencies": {
     "@granit/api-client": "workspace:*",
-    "@granit/types": "workspace:*",
     "keycloak-js": "*",
     "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
   }
 }

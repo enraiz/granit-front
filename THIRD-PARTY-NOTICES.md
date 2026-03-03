@@ -4,7 +4,7 @@ Ce fichier répertorie les bibliothèques tierces utilisées par le projet
 **granit-front** ainsi que leurs licences respectives. Il est mis à jour
 à chaque ajout ou modification de dépendance externe.
 
-Dernière mise à jour : 2026-03-02
+Dernière mise à jour : 2026-03-03
 
 ---
 
@@ -12,7 +12,7 @@ Dernière mise à jour : 2026-03-02
 
 | Licence | Nombre de packages |
 | ------- | ------------------ |
-| MIT | 20 |
+| MIT | 21 |
 | Apache-2.0 | 3 |
 | BSD-3-Clause | 1 |
 
@@ -46,6 +46,7 @@ Dernière mise à jour : 2026-03-02
 | react-dom | 19.2.4 | Copyright (c) Meta Platforms, Inc. |
 | react-i18next | 16.5.4 | Copyright (c) i18next Contributors |
 | tailwind-merge | 3.5.0 | Copyright (c) Dany Castillo |
+| tsup | 8.5.1 | Copyright (c) EGOIST |
 | typescript-eslint | 8.56.1 | typescript-eslint Contributors |
 | vitest | 4.0.18 | Vitest Contributors |
 

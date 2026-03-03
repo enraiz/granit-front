@@ -1,10 +1,10 @@
 # =============================================================================
 # GitLab CI/CD - Granit Front
 # =============================================================================
-# Pipeline : quality -> gitlab-security -> test -> analysis
+# Pipeline : quality -> gitlab-security -> test -> build -> publish -> analysis
 #
 # Variables requises (Settings > CI/CD > Variables) :
-#   Aucune — les packages sont consommés via link: en local
+#   Aucune — le CI_JOB_TOKEN est utilisé automatiquement pour le registry npm
 #
 # Variables optionnelles :
 #   SONAR_HOST_URL  : URL du serveur SonarQube (ex: https://sonar.digitaldynamics.be)
@@ -31,6 +31,8 @@ stages:
   - quality
   - gitlab-security
   - test
+  - build
+  - publish
   - analysis
 
 # ---------------------------------------------------------------------------
@@ -105,6 +107,42 @@ test:
     paths:
       - coverage/
     expire_in: 1 week
+
+# ---------------------------------------------------------------------------
+# BUILD
+# ---------------------------------------------------------------------------
+
+build:
+  stage: build
+  extends: .node_base
+  script:
+    - pnpm build
+  artifacts:
+    paths:
+      - packages/@granit/*/dist/
+    expire_in: 1 day
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'develop'
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+
+# ---------------------------------------------------------------------------
+# PUBLISH
+# ---------------------------------------------------------------------------
+
+publish:
+  stage: publish
+  extends: .node_base
+  script:
+    - echo "@granit:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/"
+        > .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}"
+        >> .npmrc
+    - pnpm -r publish --no-git-checks --access restricted
+  dependencies:
+    - build
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
 
 # ---------------------------------------------------------------------------
 # ANALYSIS
