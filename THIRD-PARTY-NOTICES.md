@@ -4,7 +4,7 @@ Ce fichier répertorie les bibliothèques tierces utilisées par le projet
 **granit-front** ainsi que leurs licences respectives. Il est mis à jour
 à chaque ajout ou modification de dépendance externe.
 
-Dernière mise à jour : 2026-03-03
+Dernière mise à jour : 2026-03-04
 
 ---
 
@@ -12,8 +12,9 @@ Dernière mise à jour : 2026-03-03
 
 | Licence | Nombre de packages |
 | ------- | ------------------ |
-| MIT | 21 |
-| Apache-2.0 | 3 |
+| MIT | 28 |
+| Apache-2.0 | 4 |
+| ISC | 1 |
 | BSD-3-Clause | 1 |
 
 ---
@@ -28,6 +29,9 @@ Dernière mise à jour : 2026-03-03
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
+| @tanstack/react-query | 5.90.0 | Copyright (c) Tanner Linsley |
+| @tanstack/react-table | 8.21.0 | Copyright (c) Tanner Linsley |
+| @tanstack/react-virtual | 3.13.0 | Copyright (c) Tanner Linsley |
 | @eslint/js | 10.0.1 | OpenJS Foundation |
 | @microsoft/signalr | 10.0.0 | Copyright (c) .NET Foundation |
 | @testing-library/jest-dom | 6.9.1 | Copyright (c) Testing Library Contributors |
@@ -36,6 +40,7 @@ Dernière mise à jour : 2026-03-03
 | @types/react | 19.2.14 | DefinitelyTyped Contributors |
 | @vitest/coverage-v8 | 4.0.18 | Vitest Contributors |
 | axios | 1.13.6 | Copyright (c) Matt Zabriskie |
+| cmdk | 1.1.0 | Copyright (c) Paco Coursey |
 | clsx | 2.1.1 | Copyright (c) Luke Edwards |
 | date-fns | 4.1.0 | Copyright (c) Sasha Koss |
 | eslint | 10.0.2 | OpenJS Foundation |
@@ -48,14 +53,24 @@ Dernière mise à jour : 2026-03-03
 | tailwind-merge | 3.5.0 | Copyright (c) Dany Castillo |
 | tsup | 8.5.1 | Copyright (c) EGOIST |
 | typescript-eslint | 8.56.1 | typescript-eslint Contributors |
+| radix-ui | 1.4.3 | Copyright (c) WorkOS |
+| react-hook-form | 7.71.1 | Copyright (c) react-hook-form Contributors |
+| sonner | 2.0.0 | Copyright (c) Emil Kowalski |
 | vitest | 4.0.18 | Vitest Contributors |
 
 ### Apache-2.0
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
+| class-variance-authority | 0.7.1 | Copyright (c) Joe Bell |
 | keycloak-js | 26.2.3 | Copyright Red Hat, Inc. |
 | typescript | 5.9.3 | Copyright (c) Microsoft Corporation |
+
+### ISC
+
+| Package | Version | Copyright |
+| ------- | ------- | --------- |
+| lucide-react | 0.575.0 | Copyright (c) Lucide Contributors |
 
 ### BSD-3-Clause
 
