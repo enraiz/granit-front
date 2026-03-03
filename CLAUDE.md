@@ -38,6 +38,7 @@
 | `@granit/notifications` | Real-time notifications: SignalR provider, hooks (`useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`), headless components (`NotificationCenter`, `NotificationBadge`, `NotificationItem`, `EntityActivityFeed`, `NotificationPreferences`) |
 | `@granit/ui` | Shared Shadcn-compatible UI components for user-facing apps (Button, Badge, Table, Dialog, DropdownMenu, Select, etc.) — Radix UI + Tailwind CSS + CVA |
 | `@granit/ui-back` | Shared Shadcn-compatible UI components for back-office apps — same interface as `@granit/ui`, separate package for independent evolution. guava-admin aliases `@granit/ui` → `@granit/ui-back` via Vite |
+| `@granit/querying` | Odoo-like data grid: hooks (`useQueryMeta`, `useQueryEndpoint`, `useSavedViews`, `useSmartFilter`), components (`SmartFilterBar`, `FilterPresets`, `QueryDataTable`, `QueryView`, `SavedViewSelector`, `GroupBySelector`, `DatePeriodPicker`, `ColumnVisibility`, `BulkActions`, `GroupByRows`), types mirroring `Granit.Querying` .NET contract |
 
 ## Stack & versions
 
@@ -101,6 +102,7 @@ Full frontend conventions: `granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`
   - `@granit/ui` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/ui-back` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
+  - `@granit/querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@tanstack/react-table`, `cmdk`, `@granit/ui`, `@granit/utils`
 
 ## GitLab issues
 
