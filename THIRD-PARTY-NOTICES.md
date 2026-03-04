@@ -13,7 +13,7 @@ Dernière mise à jour : 2026-03-04
 | Licence | Nombre de packages |
 | ------- | ------------------ |
 | MIT | 35 |
-| Apache-2.0 | 4 |
+| Apache-2.0 | 14 |
 | ISC | 1 |
 | BSD-3-Clause | 1 |
 
@@ -69,6 +69,16 @@ Dernière mise à jour : 2026-03-04
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
+| @opentelemetry/api | 1.9.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/context-zone | 2.6.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/exporter-trace-otlp-http | 0.213.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/instrumentation | 0.213.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/instrumentation-document-load | 0.57.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/instrumentation-fetch | 0.213.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/instrumentation-xml-http-request | 0.213.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/resources | 2.6.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/sdk-trace-web | 2.6.0 | Copyright The OpenTelemetry Authors |
+| @opentelemetry/semantic-conventions | 1.40.0 | Copyright The OpenTelemetry Authors |
 | class-variance-authority | 0.7.1 | Copyright (c) Joe Bell |
 | keycloak-js | 26.2.3 | Copyright Red Hat, Inc. |
 | typescript | 5.9.3 | Copyright (c) Microsoft Corporation |
