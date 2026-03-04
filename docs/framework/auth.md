@@ -293,6 +293,109 @@ Les deux méthodes retournent `false` si l'utilisateur n'est pas authentifié.
 | `guava-front` | `register: () => void` |
 | `guava-admin` | `hasAdminRole: boolean` |
 
+## Administration des permissions
+
+Hooks destinés aux interfaces d'administration (gestion des rôles, matrice de permissions).
+Miroir TypeScript du contrat .NET `Granit.Authorization`.
+
+### `permissionKeys`
+
+Factory de query keys pour React Query. Partagée entre tous les hooks de permissions.
+
+```typescript
+import { permissionKeys } from '@granit/auth';
+
+permissionKeys.all;            // ['auth', 'permissions']
+permissionKeys.me();           // ['auth', 'permissions', 'me', undefined]
+permissionKeys.definitions();  // ['auth', 'permissions', 'definitions']
+permissionKeys.role('admin');  // ['auth', 'permissions', 'roles', 'admin']
+```
+
+### `usePermissions(options): UsePermissionsReturn`
+
+Récupère et cache les permissions de l'utilisateur courant.
+
+```typescript
+const { hasPermission, hasAnyPermission, isLoading } = usePermissions({
+  client: api,
+  basePath: '/auth', // défaut
+});
+
+if (hasPermission('Invoices.Delete')) { /* ... */ }
+```
+
+### `usePermissionDefinitions(options): UseQueryResult<PermissionGroupDto[]>`
+
+Récupère l'arbre complet des définitions de permissions groupées par module.
+Appelle `GET {basePath}/definitions`.
+
+```typescript
+import { usePermissionDefinitions } from '@granit/auth';
+
+const { data: groups, isLoading } = usePermissionDefinitions({ client: api });
+
+// Chaque groupe contient :
+// { name: 'Invoices', displayName: 'Facturation', permissions: [...] }
+```
+
+### `useRolePermissions(options): UseQueryResult<PermissionGrantDto>`
+
+Récupère les permissions accordées à un rôle spécifique.
+Appelle `GET {basePath}/roles/{roleName}`.
+
+```typescript
+import { useRolePermissions } from '@granit/auth';
+
+const { data: grant } = useRolePermissions({
+  client: api,
+  roleName: 'admin',
+});
+
+// { roleName: 'admin', permissions: ['Invoices.Create', 'Users.View'] }
+```
+
+### `usePermissionGrant(options): UsePermissionGrantReturn`
+
+Mutations pour accorder et révoquer des permissions individuelles sur un rôle.
+Invalide automatiquement le cache du rôle après chaque mutation réussie.
+
+```typescript
+import { usePermissionGrant } from '@granit/auth';
+
+const { grant, revoke } = usePermissionGrant({ client: api });
+
+// Accorder
+grant.mutate({ roleName: 'editor', permissionName: 'Invoices.Create' });
+
+// Révoquer
+revoke.mutate({ roleName: 'editor', permissionName: 'Invoices.Delete' });
+```
+
+| Mutation | Méthode HTTP | Endpoint |
+| --- | --- | --- |
+| `grant` | `PUT` | `{basePath}/roles/{roleName}/permissions/{permissionName}` |
+| `revoke` | `DELETE` | `{basePath}/roles/{roleName}/permissions/{permissionName}` |
+
+### DTOs d'administration
+
+```typescript
+type PermissionDefinitionDto = {
+  name: string;
+  displayName: string | null;
+};
+
+type PermissionGroupDto = {
+  name: string;
+  displayName: string | null;
+  permissions: readonly PermissionDefinitionDto[];
+};
+
+type PermissionGrantDto = {
+  roleName: string;
+  permissions: readonly string[];
+};
+```
+
 ## Types exportés
 
 | Export | Type | Description |
@@ -303,9 +406,18 @@ Les deux méthodes retournent `false` si l'utilisateur n'est pas authentifié.
 | `KeycloakEvent` | `type` | Union des événements du cycle de vie |
 | `LoginOptions` | `interface` | Options de login |
 | `LogoutOptions` | `interface` | Options de logout |
+| `PermissionDefinitionDto` | `type` | Définition d'une permission |
+| `PermissionGroupDto` | `type` | Groupe de définitions de permissions |
+| `PermissionGrantDto` | `type` | Permissions accordées à un rôle |
+| `UsePermissionDefinitionsOptions` | `type` | Options du hook definitions |
+| `UseRolePermissionsOptions` | `type` | Options du hook role permissions |
+| `UsePermissionGrantOptions` | `type` | Options du hook grant/revoke |
+| `PermissionGrantParams` | `type` | Paramètres des mutations grant/revoke |
+| `UsePermissionGrantReturn` | `type` | Retour du hook grant/revoke |
 
 ## Peer dependencies
 
 - `react`
 - `keycloak-js`
+- `@tanstack/react-query`
 - `@granit/api-client`

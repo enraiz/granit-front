@@ -248,4 +248,51 @@ describe('BulkActions', () => {
     await user.click(screen.getByText('Delete'));
     expect(onAction).toHaveBeenCalledWith(['1', '2']);
   });
+
+  it('selects all visible when checkbox is checked', async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    render(
+      <BulkActions
+        totalCount={100}
+        selectedIds={['1']}
+        onSelectionChange={onSelectionChange}
+        visibleIds={['1', '2', '3']}
+        actions={[]}
+      />,
+    );
+    const checkbox = screen.getByLabelText('Select all visible');
+    await user.click(checkbox);
+    expect(onSelectionChange).toHaveBeenCalledWith(['1', '2', '3']);
+  });
+
+  it('deselects visible items when checkbox is unchecked', async () => {
+    const user = userEvent.setup();
+    const onSelectionChange = vi.fn();
+    render(
+      <BulkActions
+        totalCount={100}
+        selectedIds={['1', '2', '3', '4']}
+        onSelectionChange={onSelectionChange}
+        visibleIds={['1', '2', '3']}
+        actions={[]}
+      />,
+    );
+    const checkbox = screen.getByLabelText('Select all visible');
+    await user.click(checkbox);
+    expect(onSelectionChange).toHaveBeenCalledWith(['4']);
+  });
+
+  it('renders action with custom variant', () => {
+    render(
+      <BulkActions
+        totalCount={100}
+        selectedIds={['1']}
+        onSelectionChange={vi.fn()}
+        visibleIds={['1']}
+        actions={[{ id: 'delete', label: 'Delete', variant: 'destructive', onAction: vi.fn() }]}
+      />,
+    );
+    expect(screen.getByText('Delete')).toBeInTheDocument();
+  });
 });

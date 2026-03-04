@@ -13,6 +13,8 @@ const EMPTY_SET: ReadonlySet<string> = new Set<string>();
 export const permissionKeys = {
   all: ['auth', 'permissions'] as const,
   me: (userId?: string) => [...permissionKeys.all, 'me', userId] as const,
+  definitions: () => [...permissionKeys.all, 'definitions'] as const,
+  role: (roleName: string) => [...permissionKeys.all, 'roles', roleName] as const,
 };
 
 // ---------------------------------------------------------------------------

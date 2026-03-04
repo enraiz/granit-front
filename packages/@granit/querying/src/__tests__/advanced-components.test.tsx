@@ -1,13 +1,17 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
+import { Command } from 'cmdk';
 import { describe, expect, it, vi } from 'vitest';
+
 
 import { ColumnVisibility } from '../components/column-visibility.js';
 import { QueryView } from '../components/query-view.js';
 import { SavedViewSelector } from '../components/saved-view-selector.js';
+import { FacetBadge } from '../components/smart-filter-bar/facet-badge.js';
 import { SmartFilterBar } from '../components/smart-filter-bar/smart-filter-bar.js';
+import { SuggestionList } from '../components/smart-filter-bar/suggestion-list.js';
 import { QueryProvider } from '../providers/query-provider.js';
 
 import type { UseQueryEndpointReturn } from '../hooks/use-query-endpoint.js';
@@ -15,7 +19,7 @@ import type { UseSavedViewsReturn } from '../hooks/use-saved-views.js';
 import type { UseSmartFilterReturn } from '../hooks/use-smart-filter.js';
 import type { QueryConfig } from '../providers/query-provider.js';
 import type { ColumnDefinition, GroupByField } from '../types/query-metadata.js';
-import type { FilterToken, SmartFilterPhase } from '../types/smart-filter.js';
+import type { FilterSuggestion, FilterToken, SmartFilterPhase } from '../types/smart-filter.js';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { ReactNode } from 'react';
 
@@ -398,5 +402,285 @@ describe('ColumnVisibility — toggle', () => {
     const nameCheckbox = await screen.findByText('Name');
     await user.click(nameCheckbox);
     expect(onVisibilityChange).toHaveBeenCalledWith(['Age']);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SmartFilterBar — keyboard handling & suggestion selection
+// ---------------------------------------------------------------------------
+
+describe('SmartFilterBar — keyboard handling', () => {
+  it('calls addSearchToken on Enter in idle phase', () => {
+    const addSearchToken = vi.fn();
+    const smartFilter = createSmartFilterMock({
+      phase: 'idle',
+      inputValue: 'hello',
+      addSearchToken,
+    });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(addSearchToken).toHaveBeenCalledWith('hello');
+  });
+
+  it('calls addSearchToken on Enter in selectField phase', () => {
+    const addSearchToken = vi.fn();
+    const smartFilter = createSmartFilterMock({
+      phase: 'selectField',
+      inputValue: 'test',
+      addSearchToken,
+    });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(addSearchToken).toHaveBeenCalledWith('test');
+  });
+
+  it('calls confirmValue on Enter in enterValue phase', () => {
+    const confirmValue = vi.fn();
+    const smartFilter = createSmartFilterMock({
+      phase: 'enterValue',
+      inputValue: '42',
+      confirmValue,
+    });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(confirmValue).toHaveBeenCalledWith('42');
+  });
+
+  it('does nothing on Enter with empty input', () => {
+    const addSearchToken = vi.fn();
+    const confirmValue = vi.fn();
+    const smartFilter = createSmartFilterMock({
+      phase: 'idle',
+      inputValue: '',
+      addSearchToken,
+      confirmValue,
+    });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(addSearchToken).not.toHaveBeenCalled();
+    expect(confirmValue).not.toHaveBeenCalled();
+  });
+
+  it('calls cancel on Escape', () => {
+    const cancel = vi.fn();
+    const smartFilter = createSmartFilterMock({ cancel });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Escape' });
+    expect(cancel).toHaveBeenCalledOnce();
+  });
+
+  it('calls removeToken on Backspace when input is empty and tokens exist', () => {
+    const removeToken = vi.fn();
+    const tokens: FilterToken[] = [
+      { id: 't-1', type: 'search', label: 'hello' },
+      { id: 't-2', type: 'search', label: 'world' },
+    ];
+    const smartFilter = createSmartFilterMock({ tokens, inputValue: '', removeToken });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Backspace' });
+    expect(removeToken).toHaveBeenCalledWith('t-2');
+  });
+
+  it('does not call removeToken on Backspace when input has text', () => {
+    const removeToken = vi.fn();
+    const tokens: FilterToken[] = [{ id: 't-1', type: 'search', label: 'hello' }];
+    const smartFilter = createSmartFilterMock({ tokens, inputValue: 'abc', removeToken });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Backspace' });
+    expect(removeToken).not.toHaveBeenCalled();
+  });
+
+  it('does not call removeToken on Backspace when no tokens', () => {
+    const removeToken = vi.fn();
+    const smartFilter = createSmartFilterMock({ tokens: [], inputValue: '', removeToken });
+    const { container } = render(<SmartFilterBar smartFilter={smartFilter} />);
+    const input = container.querySelector('[data-slot="smart-filter-input"]')!;
+    fireEvent.keyDown(input, { key: 'Backspace' });
+    expect(removeToken).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// FacetBadge
+// ---------------------------------------------------------------------------
+
+describe('FacetBadge', () => {
+  it('renders token label', () => {
+    const token: FilterToken = { id: 't-1', type: 'filter', label: 'Status = Active', field: 'Status', operator: 'Eq', value: 'Active' };
+    render(<FacetBadge token={token} onRemove={vi.fn()} />);
+    expect(screen.getByText('Status = Active')).toBeInTheDocument();
+  });
+
+  it('calls onRemove when remove button is clicked', async () => {
+    const user = userEvent.setup();
+    const onRemove = vi.fn();
+    const token: FilterToken = { id: 't-1', type: 'filter', label: 'Status = Active', field: 'Status', operator: 'Eq', value: 'Active' };
+    render(<FacetBadge token={token} onRemove={onRemove} />);
+    await user.click(screen.getByLabelText('Remove Status = Active'));
+    expect(onRemove).toHaveBeenCalledWith('t-1');
+  });
+
+  it('has data-slot and data-token-type attributes', () => {
+    const token: FilterToken = { id: 't-1', type: 'search', label: 'hello' };
+    const { container } = render(<FacetBadge token={token} onRemove={vi.fn()} />);
+    const badge = container.querySelector('[data-slot="facet-badge"]');
+    expect(badge).toBeInTheDocument();
+    expect(badge).toHaveAttribute('data-token-type', 'search');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SuggestionList
+// ---------------------------------------------------------------------------
+
+describe('SuggestionList', () => {
+  it('renders empty state when no suggestions', () => {
+    const { container } = render(
+      <Command>
+        <SuggestionList suggestions={[]} onSelect={vi.fn()} />
+      </Command>,
+    );
+    expect(container.querySelector('[data-slot="suggestion-empty"]')).toBeInTheDocument();
+  });
+
+  it('renders suggestion items', () => {
+    const suggestions: FilterSuggestion[] = [
+      { id: 's-1', type: 'filter', label: 'Name', field: 'Name' },
+      { id: 's-2', type: 'filter', label: 'Status', field: 'Status', description: 'Filter by status' },
+    ];
+    const { container } = render(
+      <Command>
+        <SuggestionList suggestions={suggestions} onSelect={vi.fn()} />
+      </Command>,
+    );
+    expect(container.querySelector('[data-slot="suggestion-list"]')).toBeInTheDocument();
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Status')).toBeInTheDocument();
+    expect(screen.getByText('Filter by status')).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SavedViewSelector — CRUD interactions
+// ---------------------------------------------------------------------------
+
+describe('SavedViewSelector — CRUD', () => {
+  it('submits create form and calls create.mutate', async () => {
+    const user = userEvent.setup();
+    const mutateFn = vi.fn((_data: unknown, opts?: { onSuccess?: () => void }) => {
+      opts?.onSuccess?.();
+    });
+    const savedViews = createSavedViewsMock({
+      create: { mutate: mutateFn, isPending: false } as unknown as UseSavedViewsReturn['create'],
+    });
+    render(
+      <SavedViewSelector savedViews={savedViews} onSelect={vi.fn()} onSave={() => ({ filterJson: '{}' })} />,
+    );
+
+    // Open dropdown and create dialog
+    await user.click(screen.getByText('Views'));
+    await user.click(await screen.findByText('Save current view'));
+
+    // Fill in and submit
+    const input = await screen.findByLabelText('View name');
+    await user.type(input, 'My Report');
+    await user.click(screen.getByText('Save'));
+
+    expect(mutateFn).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'My Report', filterJson: '{}' }),
+      expect.anything(),
+    );
+  });
+
+  it('does not submit when name is empty', async () => {
+    const user = userEvent.setup();
+    const mutateFn = vi.fn();
+    const savedViews = createSavedViewsMock({
+      create: { mutate: mutateFn, isPending: false } as unknown as UseSavedViewsReturn['create'],
+    });
+    render(
+      <SavedViewSelector savedViews={savedViews} onSelect={vi.fn()} />,
+    );
+    await user.click(screen.getByText('Views'));
+    await user.click(await screen.findByText('Save current view'));
+    // Save button should be disabled when empty
+    expect(screen.getByText('Save')).toBeDisabled();
+  });
+
+  it('cancels create dialog', async () => {
+    const user = userEvent.setup();
+    const savedViews = createSavedViewsMock();
+    render(
+      <SavedViewSelector savedViews={savedViews} onSelect={vi.fn()} />,
+    );
+    await user.click(screen.getByText('Views'));
+    await user.click(await screen.findByText('Save current view'));
+    expect(await screen.findByText('Save view')).toBeInTheDocument();
+
+    await user.click(screen.getByText('Cancel'));
+    // Dialog title should be gone after cancel
+    expect(screen.queryByText('Save view')).not.toBeInTheDocument();
+  });
+
+  it('calls remove.mutate when delete is clicked', async () => {
+    const user = userEvent.setup();
+    const removeMutate = vi.fn();
+    const savedViews = createSavedViewsMock({
+      views: {
+        data: [{ id: 'v-1', name: 'My View', isDefault: false, isShared: false }],
+        isLoading: false,
+        isSuccess: true,
+      } as unknown as UseSavedViewsReturn['views'],
+      remove: { mutate: removeMutate, isPending: false } as unknown as UseSavedViewsReturn['remove'],
+    });
+    render(
+      <SavedViewSelector savedViews={savedViews} onSelect={vi.fn()} />,
+    );
+    await user.click(screen.getByText('Views'));
+    await user.click(await screen.findByLabelText('Delete My View'));
+    expect(removeMutate).toHaveBeenCalledWith('v-1');
+  });
+
+  it('calls setDefault.mutate when star is clicked for non-default view', async () => {
+    const user = userEvent.setup();
+    const setDefaultMutate = vi.fn();
+    const savedViews = createSavedViewsMock({
+      views: {
+        data: [{ id: 'v-1', name: 'My View', isDefault: false, isShared: false }],
+        isLoading: false,
+        isSuccess: true,
+      } as unknown as UseSavedViewsReturn['views'],
+      setDefault: { mutate: setDefaultMutate, isPending: false } as unknown as UseSavedViewsReturn['setDefault'],
+    });
+    render(
+      <SavedViewSelector savedViews={savedViews} onSelect={vi.fn()} />,
+    );
+    await user.click(screen.getByText('Views'));
+    await user.click(await screen.findByLabelText('Set My View as default'));
+    expect(setDefaultMutate).toHaveBeenCalledWith('v-1');
+  });
+
+  it('does not show set-default button for default views', async () => {
+    const user = userEvent.setup();
+    const savedViews = createSavedViewsMock({
+      views: {
+        data: [{ id: 'v-1', name: 'Default View', isDefault: true, isShared: false }],
+        isLoading: false,
+        isSuccess: true,
+      } as unknown as UseSavedViewsReturn['views'],
+    });
+    render(
+      <SavedViewSelector savedViews={savedViews} onSelect={vi.fn()} />,
+    );
+    await user.click(screen.getByText('Views'));
+    await screen.findByText('Default View');
+    expect(screen.queryByLabelText('Set Default View as default')).not.toBeInTheDocument();
   });
 });

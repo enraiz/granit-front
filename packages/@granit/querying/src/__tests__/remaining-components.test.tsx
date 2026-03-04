@@ -71,6 +71,28 @@ describe('GroupBySelector', () => {
     await user.click(screen.getByText('Status'));
     expect(await screen.findByText('No grouping')).toBeInTheDocument();
   });
+
+  it('calls onValueChange with undefined when "No grouping" is clicked', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(
+      <GroupBySelector fields={fields} value="Status" onValueChange={onValueChange} />,
+    );
+    await user.click(screen.getByText('Status'));
+    await user.click(await screen.findByText('No grouping'));
+    expect(onValueChange).toHaveBeenCalledWith(undefined);
+  });
+
+  it('calls onValueChange with field name when a field is clicked', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(
+      <GroupBySelector fields={fields} onValueChange={onValueChange} />,
+    );
+    await user.click(screen.getByText('Group by'));
+    await user.click(await screen.findByText('Department'));
+    expect(onValueChange).toHaveBeenCalledWith('Department');
+  });
 });
 
 // ---------------------------------------------------------------------------
