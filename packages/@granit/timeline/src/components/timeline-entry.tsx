@@ -1,4 +1,6 @@
+import { Button } from '@granit/ui';
 import { useCallback } from 'react';
+
 
 import { TimelineEntryType } from '../types/index.js';
 
@@ -61,14 +63,14 @@ export function TimelineEntry({
       {!isSystemLog && (
         <footer data-testid="timeline-entry-actions">
           {onReply && (
-            <button type="button" onClick={handleReply} data-testid="timeline-reply-btn">
+            <Button variant="ghost" size="sm" onClick={handleReply} data-testid="timeline-reply-btn">
               Reply
-            </button>
+            </Button>
           )}
           {onDelete && (
-            <button type="button" onClick={handleDelete} data-testid="timeline-delete-btn">
+            <Button variant="ghost" size="sm" onClick={handleDelete} data-testid="timeline-delete-btn">
               Delete
-            </button>
+            </Button>
           )}
         </footer>
       )}

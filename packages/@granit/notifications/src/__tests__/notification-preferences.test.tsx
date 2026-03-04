@@ -58,11 +58,11 @@ describe('NotificationPreferences', () => {
       />,
     );
 
-    const emailCheckbox = screen.getByTestId('pref-AppointmentReminder-email') as HTMLInputElement;
-    expect(emailCheckbox.checked).toBe(true);
+    const emailCheckbox = screen.getByTestId('pref-AppointmentReminder-email');
+    expect(emailCheckbox).toHaveAttribute('data-state', 'checked');
 
-    const pushCheckbox = screen.getByTestId('pref-AppointmentReminder-push') as HTMLInputElement;
-    expect(pushCheckbox.checked).toBe(false);
+    const pushCheckbox = screen.getByTestId('pref-AppointmentReminder-push');
+    expect(pushCheckbox).toHaveAttribute('data-state', 'unchecked');
   });
 
   it('should call onToggle when checkbox is clicked', async () => {
@@ -93,7 +93,7 @@ describe('NotificationPreferences', () => {
       />,
     );
 
-    const checkbox = screen.getByTestId('pref-AppointmentReminder-email') as HTMLInputElement;
-    expect(checkbox.disabled).toBe(true);
+    const checkbox = screen.getByTestId('pref-AppointmentReminder-email');
+    expect(checkbox).toBeDisabled();
   });
 });

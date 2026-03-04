@@ -100,9 +100,9 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/auth` → `react`, `keycloak-js`, `@granit/api-client`
   - `@granit/cookies` → `react`
   - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
-  - `@granit/timeline` → `react`, `axios`
-  - `@granit/workflow` → `react`, `axios`
-  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`
+  - `@granit/timeline` → `react`, `axios`, `@granit/ui`, `lucide-react`
+  - `@granit/workflow` → `react`, `axios`, `@granit/ui`, `lucide-react`
+  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`, `@granit/ui`, `lucide-react`
   - `@granit/ui` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/ui-back` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@tanstack/react-table`, `cmdk`, `@granit/ui`, `@granit/utils`

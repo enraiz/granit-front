@@ -1,3 +1,5 @@
+import { Spinner, Table, TableBody, TableCell, TableRow } from '@granit/ui';
+
 import type { TransitionHistoryDto } from '../types/index.js';
 
 export interface WorkflowHistoryProps {
@@ -10,7 +12,7 @@ export interface WorkflowHistoryProps {
 /**
  * Displays the workflow transition history (HDS audit trail).
  *
- * Renders each transition as a row showing: previous state -> new state,
+ * Renders each transition as a table row showing: previous state -> new state,
  * author, date, and optional comment.
  */
 export function WorkflowHistory({
@@ -21,8 +23,8 @@ export function WorkflowHistory({
 }: Readonly<WorkflowHistoryProps>) {
   if (loading) {
     return (
-      <div className={className} data-testid="workflow-history-loading">
-        Loading…
+      <div className={className} data-testid="workflow-history-loading" aria-busy="true">
+        <Spinner />
       </div>
     );
   }
@@ -36,31 +38,35 @@ export function WorkflowHistory({
   }
 
   return (
-    <ul className={className} data-testid="workflow-history">
-      {history.map((entry, index) => (
-        <li
-          key={`${entry.transitionedAt}-${index}`}
-          data-testid="workflow-history-entry"
-        >
-          <span data-testid="workflow-history-states">
-            {entry.previousState} → {entry.newState}
-          </span>
-          <span data-testid="workflow-history-author">
-            {entry.transitionedBy}
-          </span>
-          <time
-            dateTime={entry.transitionedAt}
-            data-testid="workflow-history-date"
+    <Table className={className} data-testid="workflow-history">
+      <TableBody>
+        {history.map((entry, index) => (
+          <TableRow
+            key={`${entry.transitionedAt}-${index}`}
+            data-testid="workflow-history-entry"
           >
-            {entry.transitionedAt}
-          </time>
-          {entry.comment && (
-            <span data-testid="workflow-history-comment">
-              {entry.comment}
-            </span>
-          )}
-        </li>
-      ))}
-    </ul>
+            <TableCell data-testid="workflow-history-states">
+              {entry.previousState} → {entry.newState}
+            </TableCell>
+            <TableCell data-testid="workflow-history-author">
+              {entry.transitionedBy}
+            </TableCell>
+            <TableCell>
+              <time
+                dateTime={entry.transitionedAt}
+                data-testid="workflow-history-date"
+              >
+                {entry.transitionedAt}
+              </time>
+            </TableCell>
+            {entry.comment && (
+              <TableCell data-testid="workflow-history-comment">
+                {entry.comment}
+              </TableCell>
+            )}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

@@ -1,3 +1,5 @@
+import { Badge } from '@granit/ui';
+
 export interface NotificationBadgeProps {
   count: number;
   max?: number;
@@ -5,7 +7,7 @@ export interface NotificationBadgeProps {
 }
 
 /**
- * Headless badge showing the unread notification count.
+ * Badge showing the unread notification count.
  * Renders nothing when count is 0.
  */
 export function NotificationBadge({
@@ -18,13 +20,14 @@ export function NotificationBadge({
   const display = count > max ? `${max}+` : String(count);
 
   return (
-    <span
+    <Badge
+      variant="destructive"
       data-testid="notification-badge"
       data-count={count}
       className={className}
       aria-label={`${count} notifications non lues`}
     >
       {display}
-    </span>
+    </Badge>
   );
 }
