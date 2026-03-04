@@ -155,7 +155,9 @@ export function ImportDialog({
           {(['upload', 'map', 'execute', 'report'] as const).map((s, i, arr) => {
             const currentIndex = arr.indexOf(step);
             const isPast = i < currentIndex;
-            const stepClass = s === step ? 'bg-primary' : isPast ? 'bg-primary/40' : 'bg-muted';
+            let stepClass = 'bg-muted';
+            if (s === step) stepClass = 'bg-primary';
+            else if (isPast) stepClass = 'bg-primary/40';
             return (
               <div key={s} className={`h-1 flex-1 rounded-full ${stepClass}`} />
             );
