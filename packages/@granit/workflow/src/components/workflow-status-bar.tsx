@@ -33,7 +33,9 @@ export function WorkflowStatusBar({
         {states.map((state, index) => {
           const isCurrent = state === currentState;
           const isPast = index < currentIndex;
-          const variant = isCurrent ? 'default' : isPast ? 'secondary' : 'outline';
+          let variant: 'default' | 'secondary' | 'outline' = 'outline';
+          if (isCurrent) variant = 'default';
+          else if (isPast) variant = 'secondary';
 
           return (
             <Badge
