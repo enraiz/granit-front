@@ -22,7 +22,7 @@ export interface UseExportJobReturn {
   readonly reset: () => void;
 }
 
-const TERMINAL_STATUSES: readonly ExportJobStatus[] = ['Completed', 'Failed'];
+const TERMINAL_STATUSES = new Set<ExportJobStatus>(['Completed', 'Failed']);
 const POLL_INTERVAL = 2000;
 
 /**
@@ -48,11 +48,11 @@ export function useExportJob(): UseExportJobReturn {
 
   const statusQuery = useQuery({
     queryKey: buildExportQueryKey(config, 'job', activeJobId ?? ''),
-    queryFn: () => fetchExportJobStatus(config.client, config.basePath, activeJobId!),
-    enabled: !!activeJobId && !TERMINAL_STATUSES.includes(createMutation.data?.status ?? 'Queued'),
+    queryFn: () => fetchExportJobStatus(config.client, config.basePath, activeJobId ?? ''),
+    enabled: !!activeJobId && !TERMINAL_STATUSES.has(createMutation.data?.status ?? 'Queued'),
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status && TERMINAL_STATUSES.includes(status)) return false;
+      if (status && TERMINAL_STATUSES.has(status)) return false;
       return POLL_INTERVAL;
     },
   });
@@ -63,7 +63,7 @@ export function useExportJob(): UseExportJobReturn {
     if (job?.status !== 'Completed' || downloadTriggered.current) return;
     downloadTriggered.current = true;
 
-    void downloadExportFile(config.client, config.basePath, job.id).then(
+    downloadExportFile(config.client, config.basePath, job.id).then(
       ({ blob, fileName }) => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -72,16 +72,16 @@ export function useExportJob(): UseExportJobReturn {
         link.click();
         URL.revokeObjectURL(url);
       },
-    );
+    ).catch(() => { /* download errors surfaced via UI */ });
   }, [job, config.client, config.basePath]);
 
-  const isExporting = !!activeJobId && (!job || !TERMINAL_STATUSES.includes(job.status));
+  const isExporting = !!activeJobId && (!job || !TERMINAL_STATUSES.has(job.status));
 
   const reset = useCallback(() => {
     if (activeJobId) {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildExportQueryKey(config, 'job', activeJobId),
-      });
+      }).catch(() => { /* best-effort invalidation */ });
     }
     setActiveJobId(null);
     downloadTriggered.current = false;

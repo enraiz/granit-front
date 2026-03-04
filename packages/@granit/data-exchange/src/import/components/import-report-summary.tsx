@@ -47,11 +47,9 @@ export function ImportReportSummary({
           <XCircle className="h-5 w-5 text-red-600" aria-hidden="true" />
         )}
         <span className="font-medium">
-          {isComplete
-            ? 'Import completed'
-            : isPartial
-              ? 'Partially completed'
-              : `Import ${report.finalStatus.toLowerCase()}`}
+          {isComplete && 'Import completed'}
+          {isPartial && 'Partially completed'}
+          {!isComplete && !isPartial && `Import ${report.finalStatus.toLowerCase()}`}
         </span>
         <Badge variant={isComplete ? 'default' : 'destructive'} className="text-xs">
           {report.duration}

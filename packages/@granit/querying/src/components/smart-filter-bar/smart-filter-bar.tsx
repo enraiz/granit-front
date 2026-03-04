@@ -11,7 +11,7 @@ import { FacetBadge } from './facet-badge.js';
 import { SuggestionList } from './suggestion-list.js';
 
 import type { UseSmartFilterReturn } from '../../hooks/use-smart-filter.js';
-import type { FilterSuggestion } from '../../types/smart-filter.js';
+import type { FilterSuggestion, SmartFilterPhase } from '../../types/smart-filter.js';
 import type { KeyboardEvent } from 'react';
 
 
@@ -100,7 +100,7 @@ export function SmartFilterBar({
         cancel();
         e.preventDefault();
       } else if (e.key === 'Backspace' && !inputValue && tokens.length > 0) {
-        removeToken(tokens[tokens.length - 1].id);
+        removeToken(tokens.at(-1)!.id);
         e.preventDefault();
       }
     },
@@ -109,12 +109,11 @@ export function SmartFilterBar({
 
   const showSuggestions = suggestions.length > 0 && phase !== 'enterValue';
 
-  const phaseHint =
-    phase === 'selectOperator'
-      ? 'Select operator'
-      : phase === 'enterValue'
-        ? 'Enter value, press Enter'
-        : undefined;
+  const PHASE_HINTS: Partial<Record<SmartFilterPhase, string>> = {
+    selectOperator: 'Select operator',
+    enterValue: 'Enter value, press Enter',
+  };
+  const phaseHint = PHASE_HINTS[phase];
 
   return (
     <div data-slot="smart-filter-bar" className={className}>

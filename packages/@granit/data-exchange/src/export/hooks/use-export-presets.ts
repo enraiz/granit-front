@@ -36,16 +36,16 @@ export function useExportPresets(
   const save = useMutation({
     mutationFn: (request: SaveExportPresetRequest) =>
       saveExportPreset(config.client, config.basePath, request),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: presetsQueryKey });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: presetsQueryKey });
     },
   });
 
   const remove = useMutation({
     mutationFn: (presetName: string) =>
       deleteExportPreset(config.client, config.basePath, definitionName!, presetName),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: presetsQueryKey });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: presetsQueryKey });
     },
   });
 

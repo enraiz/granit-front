@@ -115,9 +115,10 @@ export function QueryDataTable<T>({
                   const isSortable =
                     header.column.getCanSort() && onToggleSort;
 
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : isSortable ? (
+                  const headerContent = header.isPlaceholder
+                    ? null
+                    : isSortable
+                      ? (
                         <SortableHeader
                           label={
                             typeof header.column.columnDef.header === 'string'
@@ -127,12 +128,15 @@ export function QueryDataTable<T>({
                           direction={sortEntry?.direction}
                           onToggle={() => onToggleSort(header.column.id)}
                         />
-                      ) : (
-                        flexRender(
+                      )
+                      : flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
-                        )
-                      )}
+                        );
+
+                  return (
+                    <TableHead key={header.id}>
+                      {headerContent}
                     </TableHead>
                   );
                 })}
@@ -140,7 +144,7 @@ export function QueryDataTable<T>({
             ))}
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isLoading &&
               Array.from({ length: skeletonRows }).map((_, i) => (
                 <TableRow key={`skeleton-${String(i)}`}>
                   {columns.map((_, j) => (
@@ -149,14 +153,15 @@ export function QueryDataTable<T>({
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : table.getRowModel().rows.length === 0 ? (
+              ))}
+            {!isLoading && table.getRowModel().rows.length === 0 && (
               <TableRow>
                 <TableCell colSpan={columns.length}>
                   <EmptyState message={emptyMessage} />
                 </TableCell>
               </TableRow>
-            ) : (
+            )}
+            {!isLoading &&
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() ? 'selected' : undefined}>
                   {row.getVisibleCells().map((cell) => (
@@ -165,8 +170,7 @@ export function QueryDataTable<T>({
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            )}
+              ))}
           </TableBody>
         </Table>
       </div>

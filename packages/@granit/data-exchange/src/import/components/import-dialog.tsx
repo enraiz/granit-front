@@ -152,19 +152,15 @@ export function ImportDialog({
 
         {/* Step indicator */}
         <div className="flex gap-1">
-          {(['upload', 'map', 'execute', 'report'] as const).map((s) => (
-            <div
-              key={s}
-              className={`h-1 flex-1 rounded-full ${
-                s === step
-                  ? 'bg-primary'
-                  : (['upload', 'map', 'execute', 'report'] as const).indexOf(s) <
-                      (['upload', 'map', 'execute', 'report'] as const).indexOf(step)
-                    ? 'bg-primary/40'
-                    : 'bg-muted'
-              }`}
-            />
-          ))}
+          {(['upload', 'map', 'execute', 'report'] as const).map((s, i, arr) => {
+            const currentIndex = arr.indexOf(step);
+            const stepClass = s === step
+              ? 'bg-primary'
+              : i < currentIndex ? 'bg-primary/40' : 'bg-muted';
+            return (
+              <div key={s} className={`h-1 flex-1 rounded-full ${stepClass}`} />
+            );
+          })}
         </div>
 
         <div className="space-y-4">
@@ -211,17 +207,19 @@ export function ImportDialog({
           {/* Step: Execute */}
           {step === 'execute' && (
             <div className="flex flex-col items-center gap-4 py-8">
-              {importJob.isExecuting ? (
+              {importJob.isExecuting && (
                 <>
                   <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
                   <p className="text-sm text-muted-foreground">Import in progress…</p>
                 </>
-              ) : importJob.job?.status === 'Mapped' ? (
+              )}
+              {!importJob.isExecuting && importJob.job?.status === 'Mapped' && (
                 <>
                   <CheckCircle className="h-8 w-8 text-green-600" aria-hidden="true" />
                   <p className="text-sm">Mappings confirmed. Ready to execute.</p>
                 </>
-              ) : (
+              )}
+              {!importJob.isExecuting && importJob.job?.status !== 'Mapped' && (
                 <>
                   {statusIcon === 'loading' && <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />}
                   {statusIcon === 'success' && <CheckCircle className="h-8 w-8 text-green-600" aria-hidden="true" />}

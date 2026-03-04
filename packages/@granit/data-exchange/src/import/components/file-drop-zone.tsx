@@ -28,7 +28,7 @@ export function FileDropZone({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = useCallback(
-    (e: DragEvent<HTMLDivElement>) => {
+    (e: DragEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (!disabled) setIsDragOver(true);
     },
@@ -40,7 +40,7 @@ export function FileDropZone({
   }, []);
 
   const handleDrop = useCallback(
-    (e: DragEvent<HTMLDivElement>) => {
+    (e: DragEvent<HTMLButtonElement>) => {
       e.preventDefault();
       setIsDragOver(false);
       if (disabled) return;
@@ -64,13 +64,13 @@ export function FileDropZone({
   );
 
   return (
-    <div
+    <button
+      type="button"
       data-slot="file-drop-zone"
-      role="button"
       tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}
+      disabled={disabled}
       className={cn(
-        'flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 text-center transition-colors',
+        'flex w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed bg-transparent p-8 text-center transition-colors',
         isDragOver && 'border-primary bg-primary/5',
         !isDragOver && 'border-muted-foreground/25',
         disabled && 'cursor-not-allowed opacity-50',
@@ -81,12 +81,6 @@ export function FileDropZone({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={handleClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleClick();
-        }
-      }}
     >
       <Upload className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
       <p className="text-sm text-muted-foreground">
@@ -107,6 +101,6 @@ export function FileDropZone({
         tabIndex={-1}
         aria-hidden="true"
       />
-    </div>
+    </button>
   );
 }

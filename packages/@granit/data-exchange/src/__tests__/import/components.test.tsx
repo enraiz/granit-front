@@ -74,7 +74,7 @@ describe('FileDropZone', () => {
 
   it('renders as disabled', () => {
     render(<FileDropZone onFileSelect={() => {}} disabled />);
-    expect(screen.getByRole('button')).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('button')).toBeDisabled();
   });
 });
 

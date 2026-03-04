@@ -366,11 +366,13 @@ export function ExportDialog({
               <div data-slot="export-status" className="space-y-2">
                 <Separator />
                 <div className="flex items-center gap-2 text-sm">
-                  {exportJob.job.status === 'Completed' ? (
+                  {exportJob.job.status === 'Completed' && (
                     <Check className="h-4 w-4 text-green-600" aria-hidden="true" />
-                  ) : exportJob.job.status === 'Failed' ? (
+                  )}
+                  {exportJob.job.status === 'Failed' && (
                     <X className="h-4 w-4 text-red-600" aria-hidden="true" />
-                  ) : (
+                  )}
+                  {exportJob.job.status !== 'Completed' && exportJob.job.status !== 'Failed' && (
                     <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                   )}
                   <span>{STATUS_LABELS[exportJob.job.status]}</span>

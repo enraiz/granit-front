@@ -40,12 +40,12 @@ export interface UseImportJobReturn {
   readonly reset: () => void;
 }
 
-const TERMINAL_STATUSES: readonly ImportJobStatus[] = [
+const TERMINAL_STATUSES = new Set<ImportJobStatus>([
   'Completed',
   'PartiallyCompleted',
   'Failed',
   'Cancelled',
-];
+]);
 
 const POLL_INTERVAL = 2000;
 
@@ -73,26 +73,28 @@ export function useImportJob(): UseImportJobReturn {
 
   const confirmMutation = useMutation({
     mutationFn: (request: ConfirmMappingsRequest) =>
-      confirmMappings(config.client, config.basePath, activeJobId!, request),
-    onSuccess: () => {
+      confirmMappings(config.client, config.basePath, activeJobId ?? '', request),
+    onSuccess: async () => {
       if (activeJobId) {
-        void fetchImportJob(config.client, config.basePath, activeJobId).then(setJob);
+        const updated = await fetchImportJob(config.client, config.basePath, activeJobId);
+        setJob(updated);
       }
     },
   });
 
   const executeMutation = useMutation({
-    mutationFn: () => executeImport(config.client, config.basePath, activeJobId!),
+    mutationFn: () => executeImport(config.client, config.basePath, activeJobId ?? ''),
     onSuccess: () => {
       setExecutionDispatched(true);
     },
   });
 
   const cancelMutation = useMutation({
-    mutationFn: () => cancelImportJob(config.client, config.basePath, activeJobId!),
-    onSuccess: () => {
+    mutationFn: () => cancelImportJob(config.client, config.basePath, activeJobId ?? ''),
+    onSuccess: async () => {
       if (activeJobId) {
-        void fetchImportJob(config.client, config.basePath, activeJobId).then(setJob);
+        const updated = await fetchImportJob(config.client, config.basePath, activeJobId);
+        setJob(updated);
       }
     },
   });
@@ -100,17 +102,17 @@ export function useImportJob(): UseImportJobReturn {
   // Poll job status during execution
   const statusQuery = useQuery({
     queryKey: buildImportQueryKey(config, 'job', activeJobId ?? ''),
-    queryFn: () => fetchImportJob(config.client, config.basePath, activeJobId!),
+    queryFn: () => fetchImportJob(config.client, config.basePath, activeJobId ?? ''),
     enabled: !!activeJobId && executionDispatched,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status && TERMINAL_STATUSES.includes(status)) return false;
+      if (status && TERMINAL_STATUSES.has(status)) return false;
       return POLL_INTERVAL;
     },
   });
 
   const currentJob = statusQuery.data ?? job;
-  const isTerminal = !!currentJob && TERMINAL_STATUSES.includes(currentJob.status);
+  const isTerminal = !!currentJob && TERMINAL_STATUSES.has(currentJob.status);
   const isPolling = !!activeJobId && executionDispatched && !isTerminal;
 
   const upload = useCallback(
@@ -137,9 +139,9 @@ export function useImportJob(): UseImportJobReturn {
 
   const reset = useCallback(() => {
     if (activeJobId) {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildImportQueryKey(config, 'job', activeJobId),
-      });
+      }).catch(() => { /* best-effort invalidation */ });
     }
     setActiveJobId(null);
     setJob(null);

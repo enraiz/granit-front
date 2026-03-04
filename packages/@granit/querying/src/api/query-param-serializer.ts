@@ -17,32 +17,25 @@ import type { QueryParams } from '../types/query-params.js';
  *   &groupBy=field
  * ```
  */
-export function serializeQueryParams(params: QueryParams): string {
-  const entries: [string, string][] = [];
+function serializeScalarParams(
+  entries: [string, string][],
+  params: QueryParams,
+): void {
+  if (params.page != null) entries.push(['page', String(params.page)]);
+  if (params.pageSize != null) entries.push(['pageSize', String(params.pageSize)]);
+  if (params.cursor) entries.push(['cursor', params.cursor]);
+  if (params.search) entries.push(['search', params.search]);
+  if (params.groupBy) entries.push(['groupBy', params.groupBy]);
+}
 
-  if (params.page != null) {
-    entries.push(['page', String(params.page)]);
+function serializeFilters(entries: [string, string][], params: QueryParams): void {
+  if (!params.filters) return;
+  for (const filter of params.filters) {
+    entries.push([`filter[${filter.field}.${filter.operator}]`, filter.value]);
   }
+}
 
-  if (params.pageSize != null) {
-    entries.push(['pageSize', String(params.pageSize)]);
-  }
-
-  if (params.cursor) {
-    entries.push(['cursor', params.cursor]);
-  }
-
-  if (params.search) {
-    entries.push(['search', params.search]);
-  }
-
-  if (params.filters) {
-    for (const filter of params.filters) {
-      const key = `filter[${filter.field}.${filter.operator}]`;
-      entries.push([key, filter.value]);
-    }
-  }
-
+function serializeSortAndPresets(entries: [string, string][], params: QueryParams): void {
   if (params.sort && params.sort.length > 0) {
     const sortStr = params.sort
       .map((s) => (s.direction === 'desc' ? `-${s.field}` : s.field))
@@ -61,11 +54,13 @@ export function serializeQueryParams(params: QueryParams): string {
   if (params.quickFilters && params.quickFilters.length > 0) {
     entries.push(['quickFilters', params.quickFilters.join(',')]);
   }
+}
 
-  if (params.groupBy) {
-    entries.push(['groupBy', params.groupBy]);
-  }
-
+export function serializeQueryParams(params: QueryParams): string {
+  const entries: [string, string][] = [];
+  serializeScalarParams(entries, params);
+  serializeFilters(entries, params);
+  serializeSortAndPresets(entries, params);
   return new URLSearchParams(entries).toString();
 }
 
