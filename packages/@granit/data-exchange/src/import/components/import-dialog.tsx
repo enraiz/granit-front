@@ -154,9 +154,8 @@ export function ImportDialog({
         <div className="flex gap-1">
           {(['upload', 'map', 'execute', 'report'] as const).map((s, i, arr) => {
             const currentIndex = arr.indexOf(step);
-            const stepClass = s === step
-              ? 'bg-primary'
-              : i < currentIndex ? 'bg-primary/40' : 'bg-muted';
+            const isPast = i < currentIndex;
+            const stepClass = s === step ? 'bg-primary' : isPast ? 'bg-primary/40' : 'bg-muted';
             return (
               <div key={s} className={`h-1 flex-1 rounded-full ${stepClass}`} />
             );

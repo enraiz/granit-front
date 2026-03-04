@@ -73,8 +73,8 @@ export function usePermissions(options: UsePermissionsOptions): UsePermissionsRe
     [permissionSet],
   );
 
-  const refetch = React.useCallback(() => {
-    void query.refetch();
+  const refetch = React.useCallback(async () => {
+    await query.refetch();
   }, [query.refetch]);
 
   return {

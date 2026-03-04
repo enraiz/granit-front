@@ -115,9 +115,9 @@ export function QueryDataTable<T>({
                   const isSortable =
                     header.column.getCanSort() && onToggleSort;
 
-                  const headerContent = header.isPlaceholder
-                    ? null
-                    : isSortable
+                  let headerContent: React.ReactNode = null;
+                  if (!header.isPlaceholder) {
+                    headerContent = isSortable
                       ? (
                         <SortableHeader
                           label={
@@ -133,6 +133,7 @@ export function QueryDataTable<T>({
                           header.column.columnDef.header,
                           header.getContext(),
                         );
+                  }
 
                   return (
                     <TableHead key={header.id}>
