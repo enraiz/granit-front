@@ -64,6 +64,8 @@ export interface NotificationConfig {
   basePath?: string;
   hubUrl?: string;
   tokenGetter?: () => Promise<string | null>;
+  /** When false, skip SignalR connection (useful for mock/dev mode). Defaults to true. */
+  enabled?: boolean;
 }
 
 // ---------------------------------------------------------------------------
