@@ -38,7 +38,7 @@ export class GranitErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  private logger: Logger;
+  private readonly logger: Logger;
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
@@ -60,7 +60,7 @@ export class GranitErrorBoundary extends React.Component<
     this.props.onError?.(error, errorInfo);
   }
 
-  private resetErrorBoundary = () => {
+  private readonly resetErrorBoundary = () => {
     this.setState({ error: null });
   };
 

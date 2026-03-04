@@ -42,10 +42,10 @@ export function useErrorContext(): ErrorContextValue {
 export function ErrorContextProvider({
   config,
   children,
-}: {
+}: Readonly<{
   config?: ErrorContextConfig;
   children: React.ReactNode;
-}) {
+}>) {
   const maxBreadcrumbs = config?.maxBreadcrumbs ?? 20;
   const [breadcrumbs, setBreadcrumbs] = React.useState<Breadcrumb[]>([]);
 

@@ -52,7 +52,7 @@ export function useTracer(): Tracer {
  * </TracingProvider>
  * ```
  */
-export function TracingProvider({ config, children }: TracingProviderProps) {
+export function TracingProvider({ config, children }: Readonly<TracingProviderProps>) {
   const tracerRef = React.useRef<Tracer | null>(null);
 
   if (!tracerRef.current) {
