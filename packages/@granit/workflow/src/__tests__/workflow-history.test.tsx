@@ -27,7 +27,7 @@ describe('WorkflowHistory', () => {
     render(<WorkflowHistory history={[]} loading />);
 
     expect(screen.getByTestId('workflow-history-loading')).toBeTruthy();
-    expect(screen.getByTestId('workflow-history-loading').textContent).toContain('Loading');
+    expect(screen.getByRole('status')).toBeTruthy();
   });
 
   it('should show empty message when no history', () => {
@@ -90,6 +90,6 @@ describe('WorkflowHistory', () => {
   it('should apply custom className', () => {
     render(<WorkflowHistory history={sampleHistory} className="custom-history" />);
 
-    expect(screen.getByTestId('workflow-history').className).toBe('custom-history');
+    expect(screen.getByTestId('workflow-history').className).toContain('custom-history');
   });
 });

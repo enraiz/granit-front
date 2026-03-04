@@ -30,7 +30,7 @@
 | `@granit/logger` | Configurable logger factory (`createLogger(prefix)`) |
 | `@granit/utils` | Shared utilities (`cn`, `formatDate`, `formatNumber`, …) |
 | `@granit/api-client` | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`PaginatedResponse`, `ProblemDetails`) |
-| `@granit/auth` | Keycloak hooks, auth context factory, mock provider, `KeycloakUserInfo` type |
+| `@granit/auth` | Keycloak hooks, auth context factory, mock provider, permission hooks (`usePermissions`, `usePermissionDefinitions`, `useRolePermissions`, `usePermissionGrant`) |
 | `@granit/timeline` | Unified activity feed: hooks (`useTimeline`, `useTimelineActions`, `useTimelineFollowers`), components (`TimelineStream`, `TimelineComposer`) |
 | `@granit/cookies` | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface |
 | `@granit/cookies-klaro` | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory |
@@ -40,6 +40,8 @@
 | `@granit/ui-back` | Shared Shadcn-compatible UI components for back-office apps — same interface as `@granit/ui`, separate package for independent evolution. guava-admin aliases `@granit/ui` → `@granit/ui-back` via Vite |
 | `@granit/querying` | Odoo-like data grid: hooks (`useQueryMeta`, `useQueryEndpoint`, `useSavedViews`, `useSmartFilter`), components (`SmartFilterBar`, `FilterPresets`, `QueryDataTable`, `QueryView`, `SavedViewSelector`, `GroupBySelector`, `DatePeriodPicker`, `ColumnVisibility`, `BulkActions`, `GroupByRows`), types mirroring `Granit.Querying` .NET contract |
 | `@granit/data-exchange` | Tabular data exchange: **export** — hooks (`useExportJob`, `useExportPresets`, `useExportDefinitions`, `useExportFields`), components (`ExportButton`, `ExportDialog`), provider (`ExportProvider`), types mirroring `Granit.DataExchange.Export` .NET contract; **import** — hooks (`useImportJob`, `useImportPreview`, `useImportReport`), components (`ImportButton`, `ImportDialog`, `FileDropZone`, `ColumnMappingTable`, `ImportReportSummary`, `ImportRowErrors`), provider (`ImportProvider`), types mirroring `Granit.DataExchange.Import` .NET contract |
+| `@granit/tracing` | Distributed tracing: `TracingProvider` (OpenTelemetry WebTracerProvider + OTLP exporter + auto-instrumentations), `useTracer`, `useSpan` (custom spans), `getTraceContext` (non-React, for logger-otlp integration) |
+| `@granit/error-boundary` | Structured error capture: `GranitErrorBoundary` (headless class component), `GlobalErrorCapture` (window error/rejection listeners), `ErrorContextProvider` (route, user, breadcrumbs), `useBreadcrumb` |
 
 ## Stack & versions
 
@@ -100,13 +102,15 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/auth` → `react`, `keycloak-js`, `@granit/api-client`
   - `@granit/cookies` → `react`
   - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
-  - `@granit/timeline` → `react`, `axios`
-  - `@granit/workflow` → `react`, `axios`
-  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`
+  - `@granit/timeline` → `react`, `axios`, `@granit/ui`, `lucide-react`
+  - `@granit/workflow` → `react`, `axios`, `@granit/ui`, `lucide-react`
+  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`, `@granit/ui`, `lucide-react`
   - `@granit/ui` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/ui-back` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@tanstack/react-table`, `cmdk`, `@granit/ui`, `@granit/utils`
   - `@granit/data-exchange` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `lucide-react`, `@granit/ui`, `@granit/utils`
+  - `@granit/tracing` → `react`, `@opentelemetry/api`, `@opentelemetry/sdk-trace-web`, `@opentelemetry/exporter-trace-otlp-http`, `@opentelemetry/instrumentation-fetch`, `@opentelemetry/instrumentation-xml-http-request`, `@opentelemetry/instrumentation-document-load`, `@opentelemetry/resources`, `@opentelemetry/semantic-conventions`, `@opentelemetry/context-zone`
+  - `@granit/error-boundary` → `react`, `@granit/logger`
 
 ## GitLab issues
 

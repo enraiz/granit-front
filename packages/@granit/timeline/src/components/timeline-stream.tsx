@@ -1,4 +1,6 @@
+import { Button, Spinner } from '@granit/ui';
 import { useCallback, useMemo } from 'react';
+
 
 import { TimelineEntry } from './timeline-entry.js';
 
@@ -79,7 +81,7 @@ export function TimelineStream({
   if (loading) {
     return (
       <output className={className} aria-label="Loading timeline">
-        <span data-testid="timeline-loading">Loading…</span>
+        <Spinner data-testid="timeline-loading" />
       </output>
     );
   }
@@ -112,14 +114,15 @@ export function TimelineStream({
 
       {hasMore && (
         <div data-testid="timeline-load-more">
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleLoadMore}
             disabled={loadingMore}
             data-testid="timeline-load-more-btn"
           >
             {loadingMore ? 'Loading…' : 'Load more'}
-          </button>
+          </Button>
         </div>
       )}
     </section>

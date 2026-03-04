@@ -1,9 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
+import { ColumnMappingTable } from '../../import/components/column-mapping-table.js';
 import { FileDropZone } from '../../import/components/file-drop-zone.js';
 import { ImportButton } from '../../import/components/import-button.js';
 import { ImportDialog } from '../../import/components/import-dialog.js';
@@ -13,6 +14,7 @@ import { MappingConfidenceBadge } from '../../import/components/mapping-confiden
 import { ImportProvider } from '../../import/providers/import-provider.js';
 
 import type { ImportConfig } from '../../import/providers/import-provider.js';
+import type { ColumnMapping, FieldMetadata } from '../../import/types/import-preview.js';
 import type { ImportReportResponse } from '../../import/types/import-report.js';
 import type { ReactNode } from 'react';
 
@@ -75,6 +77,65 @@ describe('FileDropZone', () => {
   it('renders as disabled', () => {
     render(<FileDropZone onFileSelect={() => {}} disabled />);
     expect(screen.getByRole('button')).toBeDisabled();
+  });
+
+  it('calls onFileSelect on drop', () => {
+    const onFileSelect = vi.fn();
+    render(<FileDropZone onFileSelect={onFileSelect} />);
+    const dropZone = screen.getByRole('button');
+
+    const file = new File(['data'], 'test.csv', { type: 'text/csv' });
+    const dataTransfer = { files: [file], items: [file], types: ['Files'] };
+
+    fireEvent.dragOver(dropZone, { dataTransfer });
+    fireEvent.drop(dropZone, { dataTransfer });
+
+    expect(onFileSelect).toHaveBeenCalledWith(file);
+  });
+
+  it('does not call onFileSelect on drop when disabled', () => {
+    const onFileSelect = vi.fn();
+    render(<FileDropZone onFileSelect={onFileSelect} disabled />);
+    const dropZone = screen.getByRole('button');
+
+    const file = new File(['data'], 'test.csv', { type: 'text/csv' });
+    const dataTransfer = { files: [file], items: [file], types: ['Files'] };
+
+    fireEvent.drop(dropZone, { dataTransfer });
+    expect(onFileSelect).not.toHaveBeenCalled();
+  });
+
+  it('handles drag over and drag leave', () => {
+    const onFileSelect = vi.fn();
+    const { container } = render(<FileDropZone onFileSelect={onFileSelect} />);
+    const dropZone = screen.getByRole('button');
+
+    fireEvent.dragOver(dropZone, { dataTransfer: { files: [], items: [], types: ['Files'] } });
+    fireEvent.dragLeave(dropZone);
+
+    expect(container.querySelector('[data-slot="file-drop-zone"]')).toBeInTheDocument();
+  });
+
+  it('opens file dialog on click', async () => {
+    const user = userEvent.setup();
+    const onFileSelect = vi.fn();
+    render(<FileDropZone onFileSelect={onFileSelect} />);
+    const dropZone = screen.getByRole('button');
+
+    // Click triggers the hidden input — just verify no crash
+    await user.click(dropZone);
+    expect(dropZone).toBeInTheDocument();
+  });
+
+  it('calls onFileSelect when file is selected via input', () => {
+    const onFileSelect = vi.fn();
+    render(<FileDropZone onFileSelect={onFileSelect} accept={['.csv']} />);
+
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = new File(['data'], 'test.csv', { type: 'text/csv' });
+
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(onFileSelect).toHaveBeenCalledWith(file);
   });
 });
 
@@ -159,6 +220,157 @@ describe('ImportRowErrors', () => {
     }));
     render(<ImportRowErrors errors={errors} maxDisplay={10} />);
     expect(screen.getByText('50 more errors not shown. Download the correction file for full details.')).toBeInTheDocument();
+  });
+});
+
+describe('ColumnMappingTable', () => {
+  const mappings: ColumnMapping[] = [
+    { sourceColumn: 'col_name', targetProperty: 'Name', confidence: 'Exact' },
+    { sourceColumn: 'col_email', targetProperty: null, confidence: 'Manual' },
+  ];
+  const fieldMetadata: FieldMetadata[] = [
+    { propertyPath: 'Name', displayName: 'Full Name', clrTypeName: 'System.String', description: null, isRequired: true },
+    { propertyPath: 'Email', displayName: 'Email Address', clrTypeName: 'System.String', description: null, isRequired: false },
+  ];
+  const previewRows = [['Alice', 'alice@example.com']];
+  const headers = ['col_name', 'col_email'];
+
+  it('renders source columns', () => {
+    render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={previewRows}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('col_name')).toBeInTheDocument();
+    expect(screen.getByText('col_email')).toBeInTheDocument();
+  });
+
+  it('renders preview data', () => {
+    render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={previewRows}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('alice@example.com')).toBeInTheDocument();
+  });
+
+  it('renders confidence badges', () => {
+    render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={previewRows}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('Exact match')).toBeInTheDocument();
+    expect(screen.getByText('Manual')).toBeInTheDocument();
+  });
+
+  it('renders required field indicator', () => {
+    render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={previewRows}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('*')).toBeInTheDocument();
+  });
+
+  it('has data-slot attribute', () => {
+    const { container } = render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={previewRows}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    expect(container.querySelector('[data-slot="column-mapping-table"]')).toBeInTheDocument();
+  });
+
+  it('shows dash for empty preview value', () => {
+    render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={[]}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    // Both rows should show "—" since previewRows is empty
+    const dashes = screen.getAllByText('—');
+    expect(dashes.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('renders table headers', () => {
+    render(
+      <ColumnMappingTable
+        mappings={mappings}
+        fieldMetadata={fieldMetadata}
+        previewRows={previewRows}
+        headers={headers}
+        onMappingChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('Source column')).toBeInTheDocument();
+    expect(screen.getByText('Preview')).toBeInTheDocument();
+    expect(screen.getByText('Target property')).toBeInTheDocument();
+    expect(screen.getByText('Confidence')).toBeInTheDocument();
+  });
+});
+
+describe('ImportReportSummary — additional', () => {
+  it('renders failed status with lowercase label', () => {
+    const report: ImportReportResponse = {
+      importJobId: 'job-1',
+      finalStatus: 'Failed',
+      totalRows: 100,
+      succeededRows: 0,
+      failedRows: 100,
+      skippedRows: 0,
+      insertedRows: 0,
+      updatedRows: 0,
+      duration: '00:00:01',
+      rowErrors: [],
+    };
+    render(<ImportReportSummary report={report} />);
+    expect(screen.getByText('Import failed')).toBeInTheDocument();
+  });
+
+  it('calls onDownloadCorrection when download button is clicked', async () => {
+    const user = userEvent.setup();
+    const onDownload = vi.fn();
+    const report: ImportReportResponse = {
+      importJobId: 'job-1',
+      finalStatus: 'PartiallyCompleted',
+      totalRows: 100,
+      succeededRows: 90,
+      failedRows: 10,
+      skippedRows: 0,
+      insertedRows: 90,
+      updatedRows: 0,
+      duration: '00:00:02',
+      rowErrors: [],
+    };
+    render(<ImportReportSummary report={report} onDownloadCorrection={onDownload} />);
+    await user.click(screen.getByText('Download correction file'));
+    expect(onDownload).toHaveBeenCalledOnce();
   });
 });
 

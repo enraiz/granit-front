@@ -12,6 +12,8 @@ export default defineConfig({
       '@granit/ui-back': path.resolve(__dirname, 'packages/@granit/ui-back/src/index.ts'),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
       '@granit/data-exchange': path.resolve(__dirname, 'packages/@granit/data-exchange/src/index.ts'),
+      '@granit/tracing': path.resolve(__dirname, 'packages/@granit/tracing/src/index.ts'),
+      '@granit/error-boundary': path.resolve(__dirname, 'packages/@granit/error-boundary/src/index.ts'),
     },
   },
   test: {

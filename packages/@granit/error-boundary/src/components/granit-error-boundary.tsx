@@ -1,0 +1,78 @@
+import * as React from 'react';
+
+import type { ErrorBoundaryProps } from '../types/index.js';
+import type { Logger } from '@granit/logger';
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+type ErrorBoundaryState = {
+  error: Error | null;
+};
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+/**
+ * Headless React error boundary that catches rendering errors,
+ * logs them via `@granit/logger`, and delegates UI to `renderFallback`.
+ *
+ * @example
+ * ```tsx
+ * <GranitErrorBoundary
+ *   logger={logger}
+ *   renderFallback={(error, reset) => (
+ *     <div>
+ *       <p>Something went wrong: {error.message}</p>
+ *       <button onClick={reset}>Try again</button>
+ *     </div>
+ *   )}
+ * >
+ *   <App />
+ * </GranitErrorBoundary>
+ * ```
+ */
+export class GranitErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  private logger: Logger;
+
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { error: null };
+    this.logger = props.logger;
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { error };
+  }
+
+  override componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    this.logger.error('Uncaught render error', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack ?? undefined,
+    });
+
+    this.props.onError?.(error, errorInfo);
+  }
+
+  private resetErrorBoundary = () => {
+    this.setState({ error: null });
+  };
+
+  override render(): React.ReactNode {
+    if (this.state.error) {
+      return (
+        <div data-testid="error-boundary-fallback">
+          {this.props.renderFallback(this.state.error, this.resetErrorBoundary)}
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}

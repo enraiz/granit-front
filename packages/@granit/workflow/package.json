@@ -16,7 +16,9 @@
     "@granit/api-client": "workspace:*"
   },
   "peerDependencies": {
+    "@granit/ui": "workspace:*",
     "axios": "*",
+    "lucide-react": ">=0.400.0",
     "react": "^19.0.0"
   },
   "publishConfig": {

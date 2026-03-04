@@ -1,7 +1,13 @@
 export type { BaseAuthContextType, KeycloakCoreConfig, KeycloakEvent, KeycloakUserInfo, LoginOptions, LogoutOptions } from './types/index.js';
 export type { PermissionsResponse, UsePermissionsOptions, UsePermissionsReturn } from './types/index.js';
+export type { PermissionDefinitionDto, PermissionGroupDto, PermissionGrantDto } from './types/index.js';
+export type { UsePermissionDefinitionsOptions, UseRolePermissionsOptions, UsePermissionGrantOptions } from './types/index.js';
 export { useKeycloakInit } from './hooks/keycloak-core.js';
 export type { KeycloakCoreResult } from './hooks/keycloak-core.js';
 export { usePermissions, permissionKeys } from './hooks/use-permissions.js';
+export { usePermissionDefinitions } from './hooks/use-permission-definitions.js';
+export { useRolePermissions } from './hooks/use-role-permissions.js';
+export { usePermissionGrant } from './hooks/use-permission-grant.js';
+export type { PermissionGrantParams, UsePermissionGrantReturn } from './hooks/use-permission-grant.js';
 export { createAuthContext } from './providers/use-auth-context.js';
 export { createMockProvider } from './providers/mock-provider.js';

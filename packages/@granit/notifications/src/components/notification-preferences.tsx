@@ -1,3 +1,14 @@
+import {
+  Checkbox,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@granit/ui';
+
 import type { NotificationChannel, NotificationPreferenceDto } from '../types/index.js';
 
 const CHANNEL_LABELS: Record<NotificationChannel, string> = {
@@ -19,7 +30,7 @@ export interface NotificationPreferencesProps {
 }
 
 /**
- * Headless notification preferences matrix — type x channel toggles.
+ * Notification preferences matrix — type x channel toggles.
  */
 export function NotificationPreferences({
   preferences,
@@ -33,48 +44,47 @@ export function NotificationPreferences({
   if (loading) {
     return (
       <div data-testid="preferences-loading" aria-busy="true" className={className}>
-        Chargement…
+        <Spinner />
       </div>
     );
   }
 
   return (
-    <table
+    <Table
       data-testid="notification-preferences"
       className={className}
       aria-label="Préférences de notification"
     >
-      <thead>
-        <tr>
-          <th data-testid="preferences-header-type">Type</th>
+      <TableHeader>
+        <TableRow>
+          <TableHead data-testid="preferences-header-type">Type</TableHead>
           {channels.map((ch) => (
-            <th key={ch} data-testid={`preferences-header-${ch}`}>
+            <TableHead key={ch} data-testid={`preferences-header-${ch}`}>
               {CHANNEL_LABELS[ch]}
-            </th>
+            </TableHead>
           ))}
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {preferences.map((pref) => (
-          <tr key={pref.notificationType} data-testid="preferences-row">
-            <td data-testid="preferences-label">{pref.label}</td>
+          <TableRow key={pref.notificationType} data-testid="preferences-row">
+            <TableCell data-testid="preferences-label">{pref.label}</TableCell>
             {channels.map((ch) => (
-              <td key={ch}>
-                <input
+              <TableCell key={ch}>
+                <Checkbox
                   data-testid={`pref-${pref.notificationType}-${ch}`}
-                  type="checkbox"
                   checked={pref.channels[ch]}
                   disabled={saving}
-                  onChange={(e) =>
-                    onToggle(pref.notificationType, ch, e.target.checked)
+                  onCheckedChange={(checked) =>
+                    onToggle(pref.notificationType, ch, checked === true)
                   }
                   aria-label={`${pref.label} — ${CHANNEL_LABELS[ch]}`}
                 />
-              </td>
+              </TableCell>
             ))}
-          </tr>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

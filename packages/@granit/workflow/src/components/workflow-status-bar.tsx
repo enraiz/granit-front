@@ -1,3 +1,5 @@
+import { Badge, Button } from '@granit/ui';
+
 import type { TransitionDto } from '../types/index.js';
 
 export interface WorkflowStatusBarProps {
@@ -10,11 +12,10 @@ export interface WorkflowStatusBarProps {
 }
 
 /**
- * Headless workflow status bar (Odoo-style).
+ * Workflow status bar (Odoo-style).
  *
- * Renders the workflow states as chips/steps with action buttons for
- * available transitions. Fully headless — uses `data-*` attributes
- * for custom styling.
+ * Renders the workflow states as badge chips with action buttons for
+ * available transitions.
  */
 export function WorkflowStatusBar({
   currentState,
@@ -32,10 +33,12 @@ export function WorkflowStatusBar({
         {states.map((state, index) => {
           const isCurrent = state === currentState;
           const isPast = index < currentIndex;
+          const variant = isCurrent ? 'default' : isPast ? 'secondary' : 'outline';
 
           return (
-            <span
+            <Badge
               key={state}
+              variant={variant}
               data-state={state}
               data-current={isCurrent}
               data-past={isPast}
@@ -43,7 +46,7 @@ export function WorkflowStatusBar({
               aria-current={isCurrent ? 'step' : undefined}
             >
               {state}
-            </span>
+            </Badge>
           );
         })}
       </div>
@@ -56,9 +59,9 @@ export function WorkflowStatusBar({
               : t.name;
 
             return (
-              <button
+              <Button
                 key={t.targetState}
-                type="button"
+                size="sm"
                 disabled={isLoading}
                 data-target={t.targetState}
                 data-requires-approval={t.requiresApproval}
@@ -66,7 +69,7 @@ export function WorkflowStatusBar({
                 onClick={() => onTransition?.(t.targetState)}
               >
                 {label}
-              </button>
+              </Button>
             );
           })}
         </fieldset>

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import axios from 'axios';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useImportReport } from '../../import/hooks/use-import-report.js';
 import { ImportProvider } from '../../import/providers/import-provider.js';
@@ -30,6 +30,10 @@ function createWrapper() {
 }
 
 describe('useImportReport', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('fetches report when jobId is provided', async () => {
     const report = {
       importJobId: 'job-1',
@@ -67,5 +71,58 @@ describe('useImportReport', () => {
     });
 
     expect(typeof result.current.downloadCorrection).toBe('function');
+  });
+
+  it('downloadCorrection creates a download link', async () => {
+    const blob = new Blob(['correction data']);
+    vi.spyOn(mockClient, 'get').mockImplementation((url: string) => {
+      if (typeof url === 'string' && url.includes('/correction-file')) {
+        return Promise.resolve({
+          data: blob,
+          headers: { 'content-disposition': 'attachment; filename="corrections.csv"' },
+        });
+      }
+      return Promise.resolve({
+        data: { importJobId: 'job-1', finalStatus: 'Completed', totalRows: 0, succeededRows: 0, failedRows: 0, skippedRows: 0, insertedRows: 0, updatedRows: 0, duration: '00:00:00', rowErrors: [] },
+      });
+    });
+
+    const mockCreateObjectURL = vi.fn(() => 'blob:test');
+    const mockRevokeObjectURL = vi.fn();
+    (globalThis as Record<string, unknown>).URL = {
+      ...URL,
+      createObjectURL: mockCreateObjectURL,
+      revokeObjectURL: mockRevokeObjectURL,
+    };
+
+    const mockClick = vi.fn();
+    const originalCreateElement = document.createElement.bind(document);
+    vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+      if (tag === 'a') {
+        return { href: '', download: '', click: mockClick } as unknown as HTMLAnchorElement;
+      }
+      return originalCreateElement(tag);
+    });
+
+    const { result } = renderHook(() => useImportReport('job-1'), {
+      wrapper: createWrapper(),
+    });
+
+    await result.current.downloadCorrection();
+
+    expect(mockCreateObjectURL).toHaveBeenCalledWith(blob);
+    expect(mockClick).toHaveBeenCalledOnce();
+    expect(mockRevokeObjectURL).toHaveBeenCalledWith('blob:test');
+  });
+
+  it('downloadCorrection does nothing when jobId is undefined', async () => {
+    const getSpy = vi.spyOn(mockClient, 'get');
+
+    const { result } = renderHook(() => useImportReport(undefined), {
+      wrapper: createWrapper(),
+    });
+
+    await result.current.downloadCorrection();
+    expect(getSpy).not.toHaveBeenCalled();
   });
 });

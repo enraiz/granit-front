@@ -1,4 +1,6 @@
+import { Button, Textarea } from '@granit/ui';
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 
 import { TimelineEntryType } from '../types/index.js';
 
@@ -179,7 +181,7 @@ export function TimelineComposer({
       )}
 
       <div style={{ position: 'relative' }}>
-        <textarea
+        <Textarea
           ref={textareaRef}
           value={body}
           onChange={handleBodyChange}
@@ -217,13 +219,13 @@ export function TimelineComposer({
         )}
       </div>
 
-      <button
+      <Button
         type="submit"
         disabled={!body.trim() || submitting}
         data-testid="timeline-composer-submit"
       >
         {submitting ? 'Sending…' : submitLabel}
-      </button>
+      </Button>
     </form>
   );
 }

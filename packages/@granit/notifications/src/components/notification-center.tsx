@@ -1,3 +1,4 @@
+import { Button, Spinner } from '@granit/ui';
 import { useCallback, useState } from 'react';
 
 
@@ -20,7 +21,7 @@ export interface NotificationCenterProps {
 }
 
 /**
- * Headless bell + dropdown inbox component.
+ * Bell + dropdown inbox component.
  */
 export function NotificationCenter({
   notifications,
@@ -40,15 +41,16 @@ export function NotificationCenter({
 
   return (
     <div data-testid="notification-center" className={className}>
-      <button
+      <Button
+        variant="ghost"
+        size="icon"
         data-testid="notification-bell"
-        type="button"
         onClick={toggle}
         aria-expanded={open}
         aria-label="Notifications"
       >
         <NotificationBadge count={unreadCount} />
-      </button>
+      </Button>
 
       {open && (
         <section
@@ -57,19 +59,20 @@ export function NotificationCenter({
         >
           <header data-testid="notification-inbox-header">
             {onMarkAllRead && unreadCount > 0 && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 data-testid="mark-all-read"
-                type="button"
                 onClick={onMarkAllRead}
               >
                 Tout marquer comme lu
-              </button>
+              </Button>
             )}
           </header>
 
           {loading && notifications.length === 0 && (
             <div data-testid="notification-loading" aria-busy="true">
-              Chargement…
+              <Spinner />
             </div>
           )}
 
@@ -97,13 +100,14 @@ export function NotificationCenter({
           )}
 
           {hasMore && (
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               data-testid="notification-load-more"
-              type="button"
               onClick={onLoadMore}
             >
               Charger plus
-            </button>
+            </Button>
           )}
         </section>
       )}

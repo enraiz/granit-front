@@ -1,3 +1,5 @@
+import { Button, Spinner } from '@granit/ui';
+
 import type { ActivityFeedEntryDto } from '../types/index.js';
 
 export interface EntityActivityFeedProps {
@@ -12,7 +14,7 @@ export interface EntityActivityFeedProps {
 }
 
 /**
- * Headless Odoo-style activity feed bound to a single entity.
+ * Odoo-style activity feed bound to a single entity.
  */
 export function EntityActivityFeed({
   entries,
@@ -32,7 +34,7 @@ export function EntityActivityFeed({
     >
       {loading && entries.length === 0 && (
         <div data-testid="activity-feed-loading" aria-busy="true">
-          Chargement…
+          <Spinner />
         </div>
       )}
 
@@ -68,14 +70,15 @@ export function EntityActivityFeed({
       )}
 
       {hasMore && (
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           data-testid="activity-feed-load-more"
-          type="button"
           onClick={onLoadMore}
           disabled={loadingMore}
         >
           {loadingMore ? 'Chargement…' : 'Charger plus'}
-        </button>
+        </Button>
       )}
     </section>
   );

@@ -121,6 +121,50 @@ export type UsePermissionsReturn = {
 };
 
 // ---------------------------------------------------------------------------
+// Admin permission management (mirrors .NET Authorization DTOs)
+// ---------------------------------------------------------------------------
+
+/** A single permission definition with optional display name. */
+export type PermissionDefinitionDto = {
+  name: string;
+  displayName: string | null;
+};
+
+/** A group of related permission definitions. */
+export type PermissionGroupDto = {
+  name: string;
+  displayName: string | null;
+  permissions: readonly PermissionDefinitionDto[];
+};
+
+/** Permissions granted to a specific role. */
+export type PermissionGrantDto = {
+  roleName: string;
+  permissions: readonly string[];
+};
+
+/** Options for the {@link usePermissionDefinitions} hook. */
+export type UsePermissionDefinitionsOptions = {
+  client: AxiosInstance;
+  basePath?: string;
+  enabled?: boolean;
+};
+
+/** Options for the {@link useRolePermissions} hook. */
+export type UseRolePermissionsOptions = {
+  client: AxiosInstance;
+  roleName: string;
+  basePath?: string;
+  enabled?: boolean;
+};
+
+/** Options for the {@link usePermissionGrant} hook. */
+export type UsePermissionGrantOptions = {
+  client: AxiosInstance;
+  basePath?: string;
+};
+
+// ---------------------------------------------------------------------------
 // Hook configuration
 // ---------------------------------------------------------------------------
 
