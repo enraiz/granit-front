@@ -2,11 +2,11 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useTimeline } from '../use-timeline.ts';
+import { useTimeline } from '../hooks/use-timeline.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { TimelineStreamEntry, TimelineStreamPage } from '../types.ts';
+import type { TimelineStreamEntry, TimelineStreamPage } from '../types/index.js';
 
 function makeEntry(overrides: Partial<TimelineStreamEntry> = {}): TimelineStreamEntry {
   return {

@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 
-import { useTimelineActions } from '../use-timeline-actions.ts';
+import { useTimelineActions } from '../hooks/use-timeline-actions.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 

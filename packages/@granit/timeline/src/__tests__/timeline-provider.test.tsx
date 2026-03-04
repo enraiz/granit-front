@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 
-import { useTimelineConfig } from '../timeline-provider.tsx';
+import { useTimelineConfig } from '../providers/timeline-provider.js';
 
 import { createMockClient, createWrapper } from './test-utils.tsx';
 

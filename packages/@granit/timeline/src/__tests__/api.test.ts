@@ -8,9 +8,9 @@ import {
   fetchStream,
   followEntity,
   unfollowEntity,
-} from '../api.ts';
+} from '../api/timeline-api.js';
 
-import type { CreateTimelineEntryRequest, TimelineStreamPage } from '../types.ts';
+import type { CreateTimelineEntryRequest, TimelineStreamPage } from '../types/index.js';
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 function createMockClient(): AxiosInstance {

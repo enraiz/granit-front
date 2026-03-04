@@ -1,7 +1,7 @@
 import { render, renderHook, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { useWorkflowConfig, WorkflowProvider } from '../workflow-provider.tsx';
+import { useWorkflowConfig, WorkflowProvider } from '../providers/workflow-provider.js';
 
 import { createMockClient } from './test-utils.tsx';
 

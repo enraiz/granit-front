@@ -32,6 +32,7 @@ const config: StorybookConfig = {
       '@granit/ui': pkg('ui'),
       '@granit/ui-back': pkg('ui-back'),
       '@granit/querying': pkg('querying'),
+      '@granit/data-exchange': pkg('data-exchange'),
     };
 
     return config;

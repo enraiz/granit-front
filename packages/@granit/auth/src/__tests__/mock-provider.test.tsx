@@ -2,10 +2,10 @@ import { render, renderHook, screen } from '@testing-library/react';
 import * as React from 'react';
 import { describe, expect, it } from 'vitest';
 
-import { createMockProvider } from '../mock-provider.tsx';
-import { createAuthContext } from '../use-auth-context.ts';
+import { createMockProvider } from '../providers/mock-provider.js';
+import { createAuthContext } from '../providers/use-auth-context.js';
 
-import type { BaseAuthContextType } from '../types.ts';
+import type { BaseAuthContextType } from '../types/index.js';
 
 const mockValue: BaseAuthContextType = {
   keycloak: null,

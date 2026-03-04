@@ -1,11 +1,11 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useWorkflowStatus } from '../use-workflow-status.ts';
+import { useWorkflowStatus } from '../hooks/use-workflow-status.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { WorkflowStatusDto } from '../types.ts';
+import type { WorkflowStatusDto } from '../types/index.js';
 
 describe('useWorkflowStatus', () => {
   it('should load status on mount', async () => {

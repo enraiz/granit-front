@@ -11,7 +11,7 @@ export default defineConfig({
       '@granit/ui': path.resolve(__dirname, 'packages/@granit/ui/src/index.ts'),
       '@granit/ui-back': path.resolve(__dirname, 'packages/@granit/ui-back/src/index.ts'),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
-      '@granit/data-export': path.resolve(__dirname, 'packages/@granit/data-export/src/index.ts'),
+      '@granit/data-exchange': path.resolve(__dirname, 'packages/@granit/data-exchange/src/index.ts'),
     },
   },
   test: {

@@ -1,0 +1,173 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
+
+import {
+  cancelImportJob,
+  confirmMappings,
+  executeImport,
+  fetchImportJob,
+  uploadImportFile,
+} from '../api/import-api.js';
+import { buildImportQueryKey, useImportConfig } from '../providers/import-provider.js';
+
+import type { ImportJobResponse, ImportJobStatus } from '../types/import-job.js';
+import type { ConfirmMappingsRequest } from '../types/import-preview.js';
+
+export interface UseImportJobReturn {
+  /** Upload a file to start a new import job. */
+  readonly upload: (file: File, definitionName: string) => void;
+  /** Confirm the column mappings. */
+  readonly confirmMap: (request: ConfirmMappingsRequest) => void;
+  /** Execute the import. */
+  readonly execute: () => void;
+  /** Cancel the import job. */
+  readonly cancel: () => void;
+  /** The current import job (if any). */
+  readonly job: ImportJobResponse | null;
+  /** Whether the job is in a terminal state. */
+  readonly isTerminal: boolean;
+  /** Whether an upload is pending. */
+  readonly isUploading: boolean;
+  /** Whether mapping confirmation is pending. */
+  readonly isConfirming: boolean;
+  /** Whether execution dispatch is pending. */
+  readonly isExecuting: boolean;
+  /** Whether the job status is being polled. */
+  readonly isPolling: boolean;
+  /** Error from any operation. */
+  readonly error: Error | null;
+  /** Reset state to start a new import. */
+  readonly reset: () => void;
+}
+
+const TERMINAL_STATUSES: readonly ImportJobStatus[] = [
+  'Completed',
+  'PartiallyCompleted',
+  'Failed',
+  'Cancelled',
+];
+
+const POLL_INTERVAL = 2000;
+
+/**
+ * Hook for managing the full import job lifecycle.
+ *
+ * Lifecycle: upload file -> preview -> confirm mappings -> execute -> poll until terminal.
+ */
+export function useImportJob(): UseImportJobReturn {
+  const config = useImportConfig();
+  const queryClient = useQueryClient();
+
+  const [activeJobId, setActiveJobId] = useState<string | null>(null);
+  const [job, setJob] = useState<ImportJobResponse | null>(null);
+  const [executionDispatched, setExecutionDispatched] = useState(false);
+
+  const uploadMutation = useMutation({
+    mutationFn: ({ file, definitionName }: { file: File; definitionName: string }) =>
+      uploadImportFile(config.client, config.basePath, file, definitionName),
+    onSuccess: (data) => {
+      setActiveJobId(data.id);
+      setJob(data);
+    },
+  });
+
+  const confirmMutation = useMutation({
+    mutationFn: (request: ConfirmMappingsRequest) =>
+      confirmMappings(config.client, config.basePath, activeJobId!, request),
+    onSuccess: () => {
+      if (activeJobId) {
+        void fetchImportJob(config.client, config.basePath, activeJobId).then(setJob);
+      }
+    },
+  });
+
+  const executeMutation = useMutation({
+    mutationFn: () => executeImport(config.client, config.basePath, activeJobId!),
+    onSuccess: () => {
+      setExecutionDispatched(true);
+    },
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: () => cancelImportJob(config.client, config.basePath, activeJobId!),
+    onSuccess: () => {
+      if (activeJobId) {
+        void fetchImportJob(config.client, config.basePath, activeJobId).then(setJob);
+      }
+    },
+  });
+
+  // Poll job status during execution
+  const statusQuery = useQuery({
+    queryKey: buildImportQueryKey(config, 'job', activeJobId ?? ''),
+    queryFn: () => fetchImportJob(config.client, config.basePath, activeJobId!),
+    enabled: !!activeJobId && executionDispatched,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+      if (status && TERMINAL_STATUSES.includes(status)) return false;
+      return POLL_INTERVAL;
+    },
+  });
+
+  const currentJob = statusQuery.data ?? job;
+  const isTerminal = !!currentJob && TERMINAL_STATUSES.includes(currentJob.status);
+  const isPolling = !!activeJobId && executionDispatched && !isTerminal;
+
+  const upload = useCallback(
+    (file: File, definitionName: string) => {
+      uploadMutation.mutate({ file, definitionName });
+    },
+    [uploadMutation],
+  );
+
+  const confirmMap = useCallback(
+    (request: ConfirmMappingsRequest) => {
+      confirmMutation.mutate(request);
+    },
+    [confirmMutation],
+  );
+
+  const execute = useCallback(() => {
+    executeMutation.mutate();
+  }, [executeMutation]);
+
+  const cancel = useCallback(() => {
+    cancelMutation.mutate();
+  }, [cancelMutation]);
+
+  const reset = useCallback(() => {
+    if (activeJobId) {
+      void queryClient.invalidateQueries({
+        queryKey: buildImportQueryKey(config, 'job', activeJobId),
+      });
+    }
+    setActiveJobId(null);
+    setJob(null);
+    setExecutionDispatched(false);
+    uploadMutation.reset();
+    confirmMutation.reset();
+    executeMutation.reset();
+    cancelMutation.reset();
+  }, [activeJobId, cancelMutation, config, confirmMutation, executeMutation, queryClient, uploadMutation]);
+
+  return {
+    upload,
+    confirmMap,
+    execute,
+    cancel,
+    job: currentJob,
+    isTerminal,
+    isUploading: uploadMutation.isPending,
+    isConfirming: confirmMutation.isPending,
+    isExecuting: executeMutation.isPending || isPolling,
+    isPolling,
+    error:
+      uploadMutation.error ??
+      confirmMutation.error ??
+      executeMutation.error ??
+      cancelMutation.error ??
+      statusQuery.error ??
+      null,
+    reset,
+  };
+}

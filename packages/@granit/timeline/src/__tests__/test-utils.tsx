@@ -1,4 +1,4 @@
-import { TimelineProvider } from '../timeline-provider.tsx';
+import { TimelineProvider } from '../providers/timeline-provider.js';
 
 import type { AxiosInstance } from 'axios';
 

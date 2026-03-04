@@ -1,11 +1,10 @@
-export { useWorkflowHistory } from './use-workflow-history.ts';
-export { useWorkflowStatus } from './use-workflow-status.ts';
-export { useWorkflowTransition } from './use-workflow-transition.ts';
-export { WorkflowHistory } from './workflow-history.tsx';
-export { WorkflowProvider } from './workflow-provider.tsx';
-export { WorkflowStatusBar } from './workflow-status-bar.tsx';
+// ---------------------------------------------------------------------------
+// @granit/workflow — public API
+// ---------------------------------------------------------------------------
 
-export { TransitionOutcome } from './types.ts';
+// Types
+export { TransitionOutcome } from './types/index.js';
+export { WorkflowLifecycleStatus } from './types/index.js';
 
 export type {
   TransitionDto,
@@ -14,12 +13,27 @@ export type {
   TransitionRequestDto,
   TransitionResultDto,
   WorkflowConfig,
+  WorkflowLifecycleStatusValue,
   WorkflowStatusDto,
-} from './types.ts';
+} from './types/index.js';
 
-export type { UseWorkflowHistoryOptions, UseWorkflowHistoryResult } from './use-workflow-history.ts';
-export type { UseWorkflowStatusOptions, UseWorkflowStatusResult } from './use-workflow-status.ts';
-export type { UseWorkflowTransitionOptions, UseWorkflowTransitionResult } from './use-workflow-transition.ts';
-export type { WorkflowHistoryProps } from './workflow-history.tsx';
-export type { WorkflowProviderProps } from './workflow-provider.tsx';
-export type { WorkflowStatusBarProps } from './workflow-status-bar.tsx';
+// Provider
+export { useWorkflowConfig, WorkflowProvider } from './providers/workflow-provider.js';
+export type { WorkflowProviderProps } from './providers/workflow-provider.js';
+
+// Hooks
+export { useWorkflowHistory } from './hooks/use-workflow-history.js';
+export type { UseWorkflowHistoryOptions, UseWorkflowHistoryResult } from './hooks/use-workflow-history.js';
+
+export { useWorkflowStatus } from './hooks/use-workflow-status.js';
+export type { UseWorkflowStatusOptions, UseWorkflowStatusResult } from './hooks/use-workflow-status.js';
+
+export { useWorkflowTransition } from './hooks/use-workflow-transition.js';
+export type { UseWorkflowTransitionOptions, UseWorkflowTransitionResult } from './hooks/use-workflow-transition.js';
+
+// Components
+export { WorkflowHistory } from './components/workflow-history.js';
+export type { WorkflowHistoryProps } from './components/workflow-history.js';
+
+export { WorkflowStatusBar } from './components/workflow-status-bar.js';
+export type { WorkflowStatusBarProps } from './components/workflow-status-bar.js';

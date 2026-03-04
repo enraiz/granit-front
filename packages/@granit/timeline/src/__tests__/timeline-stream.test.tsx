@@ -2,9 +2,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 
-import { TimelineStream } from '../timeline-stream.tsx';
+import { TimelineStream } from '../components/timeline-stream.js';
 
-import type { TimelineStreamEntry } from '../types.ts';
+import type { TimelineStreamEntry } from '../types/index.js';
 
 function makeEntry(overrides: Partial<TimelineStreamEntry> = {}): TimelineStreamEntry {
   return {

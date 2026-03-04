@@ -2,9 +2,9 @@ import { renderHook } from '@testing-library/react';
 import * as React from 'react';
 import { describe, expect, it } from 'vitest';
 
-import { createAuthContext } from '../use-auth-context.ts';
+import { createAuthContext } from '../providers/use-auth-context.js';
 
-import type { BaseAuthContextType } from '../types.ts';
+import type { BaseAuthContextType } from '../types/index.js';
 
 interface TestAuthContextType extends BaseAuthContextType {
   isAdmin: boolean;

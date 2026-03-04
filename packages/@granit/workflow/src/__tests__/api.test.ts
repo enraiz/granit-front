@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { executeTransition, fetchHistory, fetchStatus } from '../api.ts';
+import { executeTransition, fetchHistory, fetchStatus } from '../api/workflow-api.js';
 
 import { axiosResponse, createMockClient } from './test-utils.tsx';
 
-import type { TransitionHistoryDto, TransitionResultDto, WorkflowStatusDto } from '../types.ts';
+import type { TransitionHistoryDto, TransitionResultDto, WorkflowStatusDto } from '../types/index.js';
 
 describe('workflow api', () => {
   const basePath = '/api/workflow';
