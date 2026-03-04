@@ -5,7 +5,7 @@
 - **Type**: TypeScript/React framework library — packages `@granit/*`
 - **Purpose**: Shared framework for Digital Dynamics front-end applications (guava-front, guava-admin)
 - **Equivalent**: JavaScript/TypeScript counterpart of `granit-dotnet` (.NET framework)
-- **Location**: `/home/jf/dev/digital-dynamics/granit-front/`
+- **Location**: this repository root
 - **Consumers**: guava-front, guava-admin (via pnpm `link:` protocol + Vite aliases)
 
 ## GitLab repositories
@@ -70,11 +70,13 @@ pnpm --filter @granit/auth test
 
 ## Coding conventions
 
-Full frontend conventions: `granit-dotnet/docs/guide/conventions/frontend/`
+Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
 
-- [Style & naming](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/style-et-nommage.md) — TypeScript strict, naming, `type` vs `interface`, exports, imports, ESLint, feature-based organization
-- [Components](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/composants.md) — React, TS patterns, shadcn/ui, CVA, Storybook, WCAG, design tokens, performance, HDS security
-- [State & API](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/etat-et-api.md) — React Query, Query Factory, Orval, auth, routing, logging, i18n, Zod forms, tests
+**Read these files before any structural or convention question:**
+
+- `../granit-dotnet/docs/guide/conventions/frontend/style-et-nommage.md` — TypeScript strict, naming, `type` vs `interface`, exports, imports, ESLint, feature-based organization, **`@granit/*` package subdirectory structure**
+- `../granit-dotnet/docs/guide/conventions/frontend/composants.md` — React, TS patterns, shadcn/ui, CVA, Storybook, WCAG, design tokens, performance, HDS security
+- `../granit-dotnet/docs/guide/conventions/frontend/etat-et-api.md` — React Query, Query Factory, Orval, auth, routing, logging, i18n, Zod forms, tests
 
 ## Tech rules
 
@@ -163,7 +165,7 @@ requests it. When in doubt, ask before creating the MR.
 
 ## Security
 
-See `granit-dotnet/docs/guide/conventions/securite.md` for code-level security rules.
+See `../granit-dotnet/docs/guide/conventions/securite.md` for code-level security rules.
 
 **ALWAYS:**
 
@@ -196,7 +198,7 @@ Any change to a public API (`src/index.ts` exports) may break consumers.
 
 ## Language
 
-See `granit-dotnet/docs/guide/conventions/langues.md` for full language and localization rules.
+See `../granit-dotnet/docs/guide/conventions/langues.md` for full language and localization rules.
 
 - **Code** (identifiers, JSDoc, comments): **English**
 - **Docs, issues, commits**: **French** (with correct diacritics: é, è, ê, à, â, ù, û, ô, î, ï, ç, œ)
@@ -206,8 +208,8 @@ See `granit-dotnet/docs/guide/conventions/langues.md` for full language and loca
 
 Two persona registries:
 
-- **Infrastructure & governance (15 personas)**: `governance-compliance/docs/03-organization/ORG-05-PERSONAS.md`
-- **Application-level (5 personas)**: `granit-dotnet/docs/guide/personas-applicatifs.md`
+- **Infrastructure & governance (15 personas)**: `../governance-compliance/docs/03-organization/ORG-05-PERSONAS.md`
+- **Application-level (5 personas)**: `../granit-dotnet/docs/guide/personas-applicatifs.md`
 
 **STRICT RULES:**
 
