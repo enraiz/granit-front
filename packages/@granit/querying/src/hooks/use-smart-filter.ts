@@ -183,6 +183,58 @@ function smartFilterReducer(
 // Suggestion builder
 // ---------------------------------------------------------------------------
 
+function buildFieldSuggestions(metadata: QueryMetadata, input: string): FilterSuggestion[] {
+  const suggestions: FilterSuggestion[] = [];
+  for (const field of metadata.filterableFields) {
+    const col = metadata.columns.find((c) => c.name === field.name);
+    const label = col?.label ?? field.name;
+    if (input && !label.toLowerCase().includes(input) && !field.name.toLowerCase().includes(input)) {
+      continue;
+    }
+    suggestions.push({
+      id: `field-${field.name}`,
+      type: 'filter',
+      label,
+      description: `Filter by ${label}`,
+      field: field.name,
+      operators: field.operators,
+    });
+  }
+  return suggestions;
+}
+
+function buildPresetSuggestions(metadata: QueryMetadata, input: string): FilterSuggestion[] {
+  const suggestions: FilterSuggestion[] = [];
+  for (const group of metadata.presetFilterGroups) {
+    for (const preset of group.presets) {
+      if (input && !preset.label.toLowerCase().includes(input)) continue;
+      suggestions.push({
+        id: `preset-${group.name}-${preset.name}`,
+        type: 'preset',
+        label: preset.label,
+        description: group.label,
+        group: group.name,
+        name: preset.name,
+      });
+    }
+  }
+  return suggestions;
+}
+
+function buildQuickFilterSuggestions(metadata: QueryMetadata, input: string): FilterSuggestion[] {
+  const suggestions: FilterSuggestion[] = [];
+  for (const qf of metadata.quickFilters) {
+    if (input && !qf.label.toLowerCase().includes(input)) continue;
+    suggestions.push({
+      id: `qf-${qf.name}`,
+      type: 'quickFilter',
+      label: qf.label,
+      name: qf.name,
+    });
+  }
+  return suggestions;
+}
+
 function buildSuggestions(
   state: SmartFilterState,
   metadata: QueryMetadata | undefined,
@@ -192,54 +244,12 @@ function buildSuggestions(
 
   switch (state.phase) {
     case 'idle':
-    case 'selectField': {
-      const suggestions: FilterSuggestion[] = [];
-
-      // Filterable fields
-      for (const field of metadata.filterableFields) {
-        const col = metadata.columns.find((c) => c.name === field.name);
-        const label = col?.label ?? field.name;
-        if (input && !label.toLowerCase().includes(input) && !field.name.toLowerCase().includes(input)) {
-          continue;
-        }
-        suggestions.push({
-          id: `field-${field.name}`,
-          type: 'filter',
-          label,
-          description: `Filter by ${label}`,
-          field: field.name,
-          operators: field.operators,
-        });
-      }
-
-      // Presets
-      for (const group of metadata.presetFilterGroups) {
-        for (const preset of group.presets) {
-          if (input && !preset.label.toLowerCase().includes(input)) continue;
-          suggestions.push({
-            id: `preset-${group.name}-${preset.name}`,
-            type: 'preset',
-            label: preset.label,
-            description: group.label,
-            group: group.name,
-            name: preset.name,
-          });
-        }
-      }
-
-      // Quick filters
-      for (const qf of metadata.quickFilters) {
-        if (input && !qf.label.toLowerCase().includes(input)) continue;
-        suggestions.push({
-          id: `qf-${qf.name}`,
-          type: 'quickFilter',
-          label: qf.label,
-          name: qf.name,
-        });
-      }
-
-      return suggestions;
-    }
+    case 'selectField':
+      return [
+        ...buildFieldSuggestions(metadata, input),
+        ...buildPresetSuggestions(metadata, input),
+        ...buildQuickFilterSuggestions(metadata, input),
+      ];
 
     case 'selectOperator': {
       const field = metadata.filterableFields.find((f) => f.name === state.selectedField);
@@ -253,7 +263,6 @@ function buildSuggestions(
     }
 
     case 'enterValue':
-      // Value entry — no suggestions by default (could be extended with enum values)
       return [];
   }
 }

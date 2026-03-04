@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { calculatePercentage, cn, formatDateTime, formatNumber } from '../index.ts';
+import { calculatePercentage, cn, formatDate, formatDateTime, formatNumber, formatTimeAgo } from '../index.ts';
 
 describe('cn', () => {
   it('should merge class names', () => {
@@ -52,6 +52,34 @@ describe('formatDateTime', () => {
     const result = formatDateTime('2026-01-01T00:00:00');
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
+  });
+});
+
+describe('formatDate', () => {
+  it('should format a Date object', () => {
+    const result = formatDate(new Date('2026-02-27T00:00:00'));
+    expect(result).toContain('2026');
+    expect(result).toContain('27');
+  });
+
+  it('should format a string date', () => {
+    const result = formatDate('2026-06-15');
+    expect(typeof result).toBe('string');
+    expect(result).toContain('2026');
+  });
+});
+
+describe('formatTimeAgo', () => {
+  it('should return a relative time string', () => {
+    const recent = new Date(Date.now() - 60_000); // 1 minute ago
+    const result = formatTimeAgo(recent);
+    expect(result).toContain('ago');
+  });
+
+  it('should accept a string date', () => {
+    const result = formatTimeAgo('2020-01-01T00:00:00');
+    expect(typeof result).toBe('string');
+    expect(result).toContain('ago');
   });
 });
 

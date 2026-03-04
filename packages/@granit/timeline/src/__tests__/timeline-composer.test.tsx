@@ -2,8 +2,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 
-import { TimelineComposer } from '../timeline-composer.tsx';
-import { TimelineEntryType } from '../types.ts';
+import { TimelineComposer } from '../components/timeline-composer.js';
+import { TimelineEntryType } from '../types/index.js';
 
 describe('TimelineComposer', () => {
   it('should render textarea and submit button', () => {

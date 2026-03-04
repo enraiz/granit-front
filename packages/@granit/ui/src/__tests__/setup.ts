@@ -15,8 +15,8 @@ vi.stubGlobal(
 Element.prototype.scrollIntoView = vi.fn();
 
 // Sonner (toast) uses window.matchMedia for dark mode detection.
-if (typeof window !== 'undefined' && !window.matchMedia) {
-  Object.defineProperty(window, 'matchMedia', {
+if (globalThis.window !== undefined && !globalThis.matchMedia) {
+  Object.defineProperty(globalThis, 'matchMedia', {
     value: vi.fn().mockImplementation((query: string) => ({
       matches: false,
       media: query,

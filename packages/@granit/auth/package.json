@@ -14,8 +14,18 @@
   },
   "peerDependencies": {
     "@granit/api-client": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
     "keycloak-js": "*",
     "react": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
+    "axios": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "exports": {

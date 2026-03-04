@@ -1,4 +1,4 @@
-import { WorkflowProvider } from '../workflow-provider.tsx';
+import { WorkflowProvider } from '../providers/workflow-provider.js';
 
 import type { AxiosInstance } from 'axios';
 

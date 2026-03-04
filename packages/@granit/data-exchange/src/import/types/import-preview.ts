@@ -1,0 +1,46 @@
+/**
+ * Confidence level for an automatic column mapping suggestion.
+ * Mirrors `Granit.DataExchange.Import.MappingConfidence`.
+ */
+export type MappingConfidence = 'Manual' | 'Saved' | 'Exact' | 'Fuzzy' | 'Semantic';
+
+/**
+ * Mapping between a source file column and a target entity property.
+ * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.ColumnMappingDto`.
+ */
+export interface ColumnMapping {
+  readonly sourceColumn: string;
+  readonly targetProperty: string | null;
+  readonly confidence: MappingConfidence;
+}
+
+/**
+ * Metadata about a target field for import mapping.
+ * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.FieldMetadataDto`.
+ */
+export interface FieldMetadata {
+  readonly propertyPath: string;
+  readonly clrTypeName: string;
+  readonly displayName: string;
+  readonly description: string | null;
+  readonly isRequired: boolean;
+}
+
+/**
+ * Preview result after parsing the uploaded file.
+ * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.ImportPreviewResponse`.
+ */
+export interface ImportPreviewResponse {
+  readonly headers: readonly string[];
+  readonly previewRows: readonly (readonly string[])[];
+  readonly suggestions: readonly ColumnMapping[];
+  readonly fieldMetadata: readonly FieldMetadata[];
+}
+
+/**
+ * Request DTO for confirming column mappings.
+ * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.ConfirmMappingsRequest`.
+ */
+export interface ConfirmMappingsRequest {
+  readonly mappings: readonly ColumnMapping[];
+}

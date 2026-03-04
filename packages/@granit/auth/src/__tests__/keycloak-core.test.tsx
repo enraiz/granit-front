@@ -1,9 +1,9 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useKeycloakInit } from '../keycloak-core.ts';
+import { useKeycloakInit } from '../hooks/keycloak-core.js';
 
-import type { KeycloakCoreConfig } from '../types.ts';
+import type { KeycloakCoreConfig } from '../types/index.js';
 
 // ---------------------------------------------------------------------------
 // Hoisted mock references (declared before vi.mock hoisting)

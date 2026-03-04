@@ -5,7 +5,7 @@
 - **Type**: TypeScript/React framework library — packages `@granit/*`
 - **Purpose**: Shared framework for Digital Dynamics front-end applications (guava-front, guava-admin)
 - **Equivalent**: JavaScript/TypeScript counterpart of `granit-dotnet` (.NET framework)
-- **Location**: `/home/jf/dev/digital-dynamics/granit-front/`
+- **Location**: this repository root
 - **Consumers**: guava-front, guava-admin (via pnpm `link:` protocol + Vite aliases)
 
 ## GitLab repositories
@@ -39,6 +39,7 @@
 | `@granit/ui` | Shared Shadcn-compatible UI components for user-facing apps (Button, Badge, Table, Dialog, DropdownMenu, Select, etc.) — Radix UI + Tailwind CSS + CVA |
 | `@granit/ui-back` | Shared Shadcn-compatible UI components for back-office apps — same interface as `@granit/ui`, separate package for independent evolution. guava-admin aliases `@granit/ui` → `@granit/ui-back` via Vite |
 | `@granit/querying` | Odoo-like data grid: hooks (`useQueryMeta`, `useQueryEndpoint`, `useSavedViews`, `useSmartFilter`), components (`SmartFilterBar`, `FilterPresets`, `QueryDataTable`, `QueryView`, `SavedViewSelector`, `GroupBySelector`, `DatePeriodPicker`, `ColumnVisibility`, `BulkActions`, `GroupByRows`), types mirroring `Granit.Querying` .NET contract |
+| `@granit/data-exchange` | Tabular data exchange: **export** — hooks (`useExportJob`, `useExportPresets`, `useExportDefinitions`, `useExportFields`), components (`ExportButton`, `ExportDialog`), provider (`ExportProvider`), types mirroring `Granit.DataExchange.Export` .NET contract; **import** — hooks (`useImportJob`, `useImportPreview`, `useImportReport`), components (`ImportButton`, `ImportDialog`, `FileDropZone`, `ColumnMappingTable`, `ImportReportSummary`, `ImportRowErrors`), provider (`ImportProvider`), types mirroring `Granit.DataExchange.Import` .NET contract |
 
 ## Stack & versions
 
@@ -69,11 +70,13 @@ pnpm --filter @granit/auth test
 
 ## Coding conventions
 
-Full frontend conventions: `granit-dotnet/docs/guide/conventions/frontend/`
+Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
 
-- [Style & naming](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/style-et-nommage.md) — TypeScript strict, naming, `type` vs `interface`, exports, imports, ESLint, feature-based organization
-- [Components](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/composants.md) — React, TS patterns, shadcn/ui, CVA, Storybook, WCAG, design tokens, performance, HDS security
-- [State & API](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/guide/conventions/frontend/etat-et-api.md) — React Query, Query Factory, Orval, auth, routing, logging, i18n, Zod forms, tests
+**Read these files before any structural or convention question:**
+
+- `../granit-dotnet/docs/guide/conventions/frontend/style-et-nommage.md` — TypeScript strict, naming, `type` vs `interface`, exports, imports, ESLint, feature-based organization, **`@granit/*` package subdirectory structure**
+- `../granit-dotnet/docs/guide/conventions/frontend/composants.md` — React, TS patterns, shadcn/ui, CVA, Storybook, WCAG, design tokens, performance, HDS security
+- `../granit-dotnet/docs/guide/conventions/frontend/etat-et-api.md` — React Query, Query Factory, Orval, auth, routing, logging, i18n, Zod forms, tests
 
 ## Tech rules
 
@@ -103,6 +106,7 @@ Full frontend conventions: `granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/ui` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/ui-back` → `react`, `react-dom`, `radix-ui`, `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
   - `@granit/querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@tanstack/react-table`, `cmdk`, `@granit/ui`, `@granit/utils`
+  - `@granit/data-exchange` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `lucide-react`, `@granit/ui`, `@granit/utils`
 
 ## GitLab issues
 
@@ -161,7 +165,7 @@ requests it. When in doubt, ask before creating the MR.
 
 ## Security
 
-See `granit-dotnet/docs/guide/conventions/securite.md` for code-level security rules.
+See `../granit-dotnet/docs/guide/conventions/securite.md` for code-level security rules.
 
 **ALWAYS:**
 
@@ -194,7 +198,7 @@ Any change to a public API (`src/index.ts` exports) may break consumers.
 
 ## Language
 
-See `granit-dotnet/docs/guide/conventions/langues.md` for full language and localization rules.
+See `../granit-dotnet/docs/guide/conventions/langues.md` for full language and localization rules.
 
 - **Code** (identifiers, JSDoc, comments): **English**
 - **Docs, issues, commits**: **French** (with correct diacritics: é, è, ê, à, â, ù, û, ô, î, ï, ç, œ)
@@ -204,8 +208,8 @@ See `granit-dotnet/docs/guide/conventions/langues.md` for full language and loca
 
 Two persona registries:
 
-- **Infrastructure & governance (15 personas)**: `governance-compliance/docs/03-organization/ORG-05-PERSONAS.md`
-- **Application-level (5 personas)**: `granit-dotnet/docs/guide/personas-applicatifs.md`
+- **Infrastructure & governance (15 personas)**: `../governance-compliance/docs/03-organization/ORG-05-PERSONAS.md`
+- **Application-level (5 personas)**: `../granit-dotnet/docs/guide/personas-applicatifs.md`
 
 **STRICT RULES:**
 

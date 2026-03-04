@@ -7,6 +7,11 @@ import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from 'lucide-react';
 
 import type { SortDirection } from '../../types/query-params.js';
 
+const SORT_ICONS: Record<string, typeof ArrowUpIcon> = {
+  asc: ArrowUpIcon,
+  desc: ArrowDownIcon,
+};
+
 export interface SortableHeaderProps {
   /** Column label. */
   readonly label: string;
@@ -27,11 +32,7 @@ export function SortableHeader({
   onToggle,
   className,
 }: Readonly<SortableHeaderProps>) {
-  const Icon = direction === 'asc'
-    ? ArrowUpIcon
-    : direction === 'desc'
-      ? ArrowDownIcon
-      : ArrowUpDownIcon;
+  const Icon = (direction && SORT_ICONS[direction]) ?? ArrowUpDownIcon;
 
   return (
     <Button

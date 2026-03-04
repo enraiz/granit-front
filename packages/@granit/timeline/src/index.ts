@@ -8,28 +8,28 @@ export {
   type TimelineQueryParams,
   type TimelineConfig,
   type MentionSuggestion,
-} from './types.ts';
+} from './types/index.js';
 
 // Provider
-export { TimelineProvider, useTimelineConfig } from './timeline-provider.tsx';
-export type { TimelineProviderProps } from './timeline-provider.tsx';
+export { TimelineProvider, useTimelineConfig } from './providers/timeline-provider.js';
+export type { TimelineProviderProps } from './providers/timeline-provider.js';
 
 // Hooks
-export { useTimeline } from './use-timeline.ts';
-export type { UseTimelineOptions, UseTimelineResult } from './use-timeline.ts';
+export { useTimeline } from './hooks/use-timeline.js';
+export type { UseTimelineOptions, UseTimelineResult } from './hooks/use-timeline.js';
 
-export { useTimelineActions } from './use-timeline-actions.ts';
-export type { UseTimelineActionsOptions, UseTimelineActionsResult } from './use-timeline-actions.ts';
+export { useTimelineActions } from './hooks/use-timeline-actions.js';
+export type { UseTimelineActionsOptions, UseTimelineActionsResult } from './hooks/use-timeline-actions.js';
 
-export { useTimelineFollowers } from './use-timeline-followers.ts';
-export type { UseTimelineFollowersOptions, UseTimelineFollowersResult } from './use-timeline-followers.ts';
+export { useTimelineFollowers } from './hooks/use-timeline-followers.js';
+export type { UseTimelineFollowersOptions, UseTimelineFollowersResult } from './hooks/use-timeline-followers.js';
 
 // Components
-export { TimelineStream } from './timeline-stream.tsx';
-export type { TimelineStreamProps } from './timeline-stream.tsx';
+export { TimelineStream } from './components/timeline-stream.js';
+export type { TimelineStreamProps } from './components/timeline-stream.js';
 
-export { TimelineEntry } from './timeline-entry.tsx';
-export type { TimelineEntryProps } from './timeline-entry.tsx';
+export { TimelineEntry } from './components/timeline-entry.js';
+export type { TimelineEntryProps } from './components/timeline-entry.js';
 
-export { TimelineComposer } from './timeline-composer.tsx';
-export type { TimelineComposerProps } from './timeline-composer.tsx';
+export { TimelineComposer } from './components/timeline-composer.js';
+export type { TimelineComposerProps } from './components/timeline-composer.js';

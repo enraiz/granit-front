@@ -1,11 +1,11 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useWorkflowTransition } from '../use-workflow-transition.ts';
+import { useWorkflowTransition } from '../hooks/use-workflow-transition.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { TransitionResultDto } from '../types.ts';
+import type { TransitionResultDto } from '../types/index.js';
 
 describe('useWorkflowTransition', () => {
   it('should execute a transition successfully', async () => {

@@ -3,7 +3,7 @@ import importPlugin from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['**/node_modules/**', '**/coverage/**'] },
+  { ignores: ['**/node_modules/**', '**/coverage/**', 'storybook-static/**'] },
 
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -35,5 +35,14 @@ export default tseslint.config(
   {
     files: ['**/__tests__/**/*.{ts,tsx}', '**/*.test.{ts,tsx}'],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
+  },
+
+  // Story files — relax some rules
+  {
+    files: ['stories/**/*.stories.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off',
+    },
   }
 );

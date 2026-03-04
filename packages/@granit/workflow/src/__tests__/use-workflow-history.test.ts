@@ -1,11 +1,11 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useWorkflowHistory } from '../use-workflow-history.ts';
+import { useWorkflowHistory } from '../hooks/use-workflow-history.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { TransitionHistoryDto } from '../types.ts';
+import type { TransitionHistoryDto } from '../types/index.js';
 
 const sampleHistory: TransitionHistoryDto[] = [
   {

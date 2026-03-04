@@ -12,7 +12,7 @@ Dernière mise à jour : 2026-03-04
 
 | Licence | Nombre de packages |
 | ------- | ------------------ |
-| MIT | 28 |
+| MIT | 35 |
 | Apache-2.0 | 4 |
 | ISC | 1 |
 | BSD-3-Clause | 1 |
@@ -29,6 +29,11 @@ Dernière mise à jour : 2026-03-04
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
+| @storybook/addon-a11y | 10.2.15 | Copyright (c) Storybook Contributors |
+| @storybook/addon-docs | 10.2.15 | Copyright (c) Storybook Contributors |
+| @storybook/addon-themes | 10.2.15 | Copyright (c) Storybook Contributors |
+| @storybook/react-vite | 10.2.15 | Copyright (c) Storybook Contributors |
+| @tailwindcss/vite | 4.2.1 | Copyright (c) Tailwind Labs, Inc. |
 | @tanstack/react-query | 5.90.0 | Copyright (c) Tanner Linsley |
 | @tanstack/react-table | 8.21.0 | Copyright (c) Tanner Linsley |
 | @tanstack/react-virtual | 3.13.0 | Copyright (c) Tanner Linsley |
@@ -56,6 +61,8 @@ Dernière mise à jour : 2026-03-04
 | radix-ui | 1.4.3 | Copyright (c) WorkOS |
 | react-hook-form | 7.71.1 | Copyright (c) react-hook-form Contributors |
 | sonner | 2.0.0 | Copyright (c) Emil Kowalski |
+| storybook | 10.2.15 | Copyright (c) Storybook Contributors |
+| tw-animate-css | 1.4.0 | Copyright (c) tw-animate-css Contributors |
 | vitest | 4.0.18 | Vitest Contributors |
 
 ### Apache-2.0

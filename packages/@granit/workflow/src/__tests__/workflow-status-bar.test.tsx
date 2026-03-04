@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { WorkflowStatusBar } from '../workflow-status-bar.tsx';
+import { WorkflowStatusBar } from '../components/workflow-status-bar.js';
 
-import type { TransitionDto } from '../types.ts';
+import type { TransitionDto } from '../types/index.js';
 
 const STATES = ['Draft', 'PendingReview', 'Published', 'Archived'];
 

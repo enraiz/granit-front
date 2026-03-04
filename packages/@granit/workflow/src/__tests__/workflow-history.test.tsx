@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { WorkflowHistory } from '../workflow-history.tsx';
+import { WorkflowHistory } from '../components/workflow-history.js';
 
-import type { TransitionHistoryDto } from '../types.ts';
+import type { TransitionHistoryDto } from '../types/index.js';
 
 const sampleHistory: TransitionHistoryDto[] = [
   {
