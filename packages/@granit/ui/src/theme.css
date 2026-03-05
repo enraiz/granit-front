@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand palette - Teal/Cyan (only shades actually used) */
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-300: #5eead4;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --color-brand-900: #134e4a;
+  --color-brand-950: #042f2e;
+
+  /* Alert palette - Red (only shades actually used) */
+  --color-alert-50: #fef2f2;
+  --color-alert-100: #fee2e2;
+  --color-alert-500: #ef4444;
+  --color-alert-600: #dc2626;
+  --color-alert-700: #b91c1c;
+
+  /* Success palette - Emerald */
+  --color-success-50: #ecfdf5;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+
+  /* shadcn/ui semantic tokens (mapped to brand palette) */
+  --color-primary: #0d9488;           /* brand-600: Teal primary (darker, more saturated) */
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f1f5f9;         /* slate-100: Secondary background */
+  --color-secondary-foreground: #020617; /* slate-950: Secondary text */
+  --color-background: #ffffff;         /* white */
+  --color-foreground: #020617;         /* slate-950: Near black */
+  --color-card: #ffffff;               /* white: Card background */
+  --color-card-foreground: #020617;    /* slate-950: Card text */
+  --color-accent: #f1f5f9;            /* slate-100: Light accent */
+  --color-accent-foreground: #020617; /* slate-950 */
+  --color-destructive: #ef4444;       /* red-500: alert-500 */
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #94a3b8;             /* slate-400 */
+  --color-muted-foreground: #64748b;  /* slate-500 */
+  --color-border: #e2e8f0;            /* slate-200: Default border */
+  --color-input: #e2e8f0;             /* slate-200 */
+  --color-ring: #14b8a6;              /* brand-500: primary ring */
+
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  --shadow-card-hover:
+    0 4px 12px -1px rgb(20 184 166 / 0.12), 0 2px 4px -2px rgb(20 184 166 / 0.08);
+  --shadow-header: 0 1px 3px 0 rgb(0 0 0 / 0.03);
+
+  /* Border radius (used by shadcn/ui via var(--radius)) */
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  .dark {
+    --color-background: #0f172a;            /* slate-900 */
+    --color-foreground: #f8fafc;            /* slate-50 */
+    --color-card: #1e293b;                  /* slate-800 */
+    --color-card-foreground: #f8fafc;       /* slate-50 */
+    --color-primary: #14b8a6;               /* brand-500: brighter in dark */
+    --color-primary-foreground: #042f2e;    /* brand-950 */
+    --color-secondary: #1e293b;             /* slate-800 */
+    --color-secondary-foreground: #f1f5f9;  /* slate-100 */
+    --color-accent: #334155;                /* slate-700 */
+    --color-accent-foreground: #f8fafc;     /* slate-50 */
+    --color-destructive: #f87171;           /* red-400: brighter in dark */
+    --color-destructive-foreground: #450a0a; /* red-950 */
+    --color-muted: #475569;                 /* slate-600 */
+    --color-muted-foreground: #94a3b8;      /* slate-400 */
+    --color-input: #334155;                 /* slate-700 */
+    --color-border: #334155;                /* slate-700 */
+    --color-ring: #14b8a6;                  /* brand-500 */
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+    --shadow-card-hover:
+      0 4px 12px -1px rgb(20 184 166 / 0.2), 0 2px 4px -2px rgb(20 184 166 / 0.15);
+    --shadow-header: 0 1px 3px 0 rgb(0 0 0 / 0.2);
+  }
+}
+
+@layer utilities {
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-shadow-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .header-shadow {
+    box-shadow: var(--shadow-header);
+  }
+}
