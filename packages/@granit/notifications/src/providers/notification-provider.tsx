@@ -54,7 +54,7 @@ export function NotificationProvider({
   children,
   ...config
 }: Readonly<NotificationConfig & { children: React.ReactNode }>) {
-  const { apiClient, tokenGetter, hubUrl = DEFAULT_HUB_URL } = config;
+  const { apiClient, tokenGetter, hubUrl = DEFAULT_HUB_URL, enabled = true } = config;
   const basePath = config.basePath ?? DEFAULT_BASE_PATH;
 
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
@@ -63,6 +63,8 @@ export function NotificationProvider({
   const connectionRef = useRef<HubConnection | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
+
     const connection = new HubConnectionBuilder()
       .withUrl(hubUrl, {
         transport: HttpTransportType.WebSockets | HttpTransportType.LongPolling,
@@ -94,7 +96,7 @@ export function NotificationProvider({
     return () => {
       connection.stop();
     };
-  }, [hubUrl, tokenGetter]);
+  }, [enabled, hubUrl, tokenGetter]);
 
   const fullConfig = useMemo<NotificationConfig>(
     () => ({ apiClient, basePath, hubUrl, tokenGetter }),
