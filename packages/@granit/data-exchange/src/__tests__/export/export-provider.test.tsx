@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 function createConfig(overrides?: Partial<ExportConfig>): ExportConfig {
   return {
     client: axios.create(),
-    basePath: '/api/data-exchange/export',
+    basePath: '/api/data-exchange/metadata',
     ...overrides,
   };
 }
@@ -27,7 +27,7 @@ describe('ExportProvider', () => {
     const { result } = renderHook(() => useExportConfig(), {
       wrapper: wrapper(config),
     });
-    expect(result.current.basePath).toBe('/api/data-exchange/export');
+    expect(result.current.basePath).toBe('/api/data-exchange/metadata');
     expect(result.current.client).toBe(config.client);
   });
 
@@ -48,6 +48,6 @@ describe('buildExportQueryKey', () => {
   it('defaults to data-export when no prefix', () => {
     const config = createConfig();
     const key = buildExportQueryKey(config, 'jobs', '123');
-    expect(key).toEqual(['data-export', 'jobs', '123']);
+    expect(key).toEqual(['data-exchange', 'metadata', 'jobs', '123']);
   });
 });

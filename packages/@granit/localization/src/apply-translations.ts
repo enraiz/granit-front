@@ -20,6 +20,8 @@ export function applyTranslations(
   instance: i18n,
   data: ApplicationLocalizationDto,
 ): void {
+  if (!data.resources) return;
+
   const merged: Record<string, string> = {};
   for (const translations of Object.values(data.resources)) {
     Object.assign(merged, translations);

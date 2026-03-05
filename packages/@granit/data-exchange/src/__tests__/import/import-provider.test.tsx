@@ -48,6 +48,6 @@ describe('buildImportQueryKey', () => {
   it('defaults to data-import when no prefix', () => {
     const config = createConfig();
     const key = buildImportQueryKey(config, 'jobs', '123');
-    expect(key).toEqual(['data-import', 'jobs', '123']);
+    expect(key).toEqual(['data-exchange', 'import', 'jobs', '123']);
   });
 });

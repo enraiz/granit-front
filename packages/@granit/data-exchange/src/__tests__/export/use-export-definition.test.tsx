@@ -13,7 +13,7 @@ const mockClient = axios.create();
 
 const mockConfig: ExportConfig = {
   client: mockClient,
-  basePath: '/api/export',
+  basePath: '/api/data-exchange/metadata',
 };
 
 function createWrapper() {

@@ -2,7 +2,7 @@ import { withThemeByClassName } from '@storybook/addon-themes';
 
 import type { Preview } from '@storybook/react-vite';
 
-import './storybook.css';
+import '../packages/@granit/ui/src/theme.css';
 
 const preview: Preview = {
   parameters: {
@@ -16,9 +16,12 @@ const preview: Preview = {
     docs: {
       source: { state: 'open' as const },
     },
+    a11y: {
+      test: 'todo',
+    },
     options: {
       storySort: {
-        method: 'alphabetical' as const,
+        method: 'alphabetical',
         order: [
           'UI',
           [
@@ -33,6 +36,7 @@ const preview: Preview = {
             'Form',
           ],
           'Querying',
+          'Data Exchange',
           '*',
         ],
       },
@@ -41,12 +45,10 @@ const preview: Preview = {
   decorators: [
     withThemeByClassName({
       themes: {
-        'Front (light)': 'theme-front',
-        'Front (dark)': 'theme-front dark',
-        'Back-office (light)': 'theme-back',
-        'Back-office (dark)': 'theme-back dark',
+        light: '',
+        dark: 'dark',
       },
-      defaultTheme: 'Front (light)',
+      defaultTheme: 'light',
     }),
   ],
 };

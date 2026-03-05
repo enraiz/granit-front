@@ -13,7 +13,7 @@ const mockClient = axios.create();
 
 const mockConfig: ExportConfig = {
   client: mockClient,
-  basePath: '/api/export',
+  basePath: '/api/data-exchange/metadata',
 };
 
 function createWrapper() {
@@ -73,7 +73,7 @@ describe('useExportPresets', () => {
     });
 
     await waitFor(() => expect(result.current.save.isSuccess).toBe(true));
-    expect(mockClient.post).toHaveBeenCalledWith('/api/export/presets', expect.objectContaining({ presetName: 'New' }));
+    expect(mockClient.post).toHaveBeenCalledWith('/api/data-exchange/metadata/presets', expect.objectContaining({ presetName: 'New' }));
   });
 
   it('remove mutation calls DELETE /presets/{def}/{name}', async () => {
@@ -91,6 +91,6 @@ describe('useExportPresets', () => {
     });
 
     await waitFor(() => expect(result.current.remove.isSuccess).toBe(true));
-    expect(mockClient.delete).toHaveBeenCalledWith('/api/export/presets/Test/Monthly');
+    expect(mockClient.delete).toHaveBeenCalledWith('/api/data-exchange/metadata/presets/Test/Monthly');
   });
 });
