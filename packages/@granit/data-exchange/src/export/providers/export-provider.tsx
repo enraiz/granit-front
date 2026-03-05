@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 export interface ExportConfig {
   /** Axios instance used for API calls. */
   readonly client: AxiosInstance;
-  /** Base path for export endpoints (e.g. `/api/data-exchange/export`). */
+  /** Base path for export metadata endpoints (e.g. `/api/data-exchange/metadata`). */
   readonly basePath: string;
   /** Optional prefix for React Query keys. */
   readonly queryKeyPrefix?: readonly string[];
@@ -49,6 +49,6 @@ export function buildExportQueryKey(
   config: ExportConfig,
   ...segments: readonly string[]
 ): readonly unknown[] {
-  const prefix = config.queryKeyPrefix ?? ['data-export'];
+  const prefix = config.queryKeyPrefix ?? ['data-exchange', 'metadata'];
   return [...prefix, ...segments];
 }

@@ -6,6 +6,7 @@
       "@granit/ui": ["./packages/@granit/ui/src/index.ts"],
       "@granit/ui-back": ["./packages/@granit/ui-back/src/index.ts"],
       "@granit/querying": ["./packages/@granit/querying/src/index.ts"],
+      "@granit/data-exchange": ["./packages/@granit/data-exchange/src/index.ts"],
       "@granit/utils": ["./packages/@granit/utils/src/index.ts"],
       "@granit/logger": ["./packages/@granit/logger/src/index.ts"],
       "@granit/storage": ["./packages/@granit/storage/src/index.ts"],
@@ -15,6 +16,9 @@
   "include": [
     "stories/**/*.ts",
     "stories/**/*.tsx",
-    ".storybook/**/*.ts"
+    "stories-back/**/*.ts",
+    "stories-back/**/*.tsx",
+    ".storybook-front/**/*.ts",
+    ".storybook-back/**/*.ts"
   ]
 }

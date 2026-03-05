@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 export interface ImportConfig {
   /** Axios instance used for API calls. */
   readonly client: AxiosInstance;
-  /** Base path for import endpoints (e.g. `/api/data-exchange/import`). */
+  /** Base path for import endpoints (e.g. `/api/data-exchange`). */
   readonly basePath: string;
   /** Optional prefix for React Query keys. */
   readonly queryKeyPrefix?: readonly string[];
@@ -49,6 +49,6 @@ export function buildImportQueryKey(
   config: ImportConfig,
   ...segments: readonly string[]
 ): readonly unknown[] {
-  const prefix = config.queryKeyPrefix ?? ['data-import'];
+  const prefix = config.queryKeyPrefix ?? ['data-exchange', 'import'];
   return [...prefix, ...segments];
 }
