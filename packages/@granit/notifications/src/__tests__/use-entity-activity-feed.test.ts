@@ -7,7 +7,6 @@ import { axiosResponse, createMockClient, createWrapper } from './test-utils.js'
 
 import type { ActivityFeedPageDto } from '../types/index.js';
 
-
 const MOCK_FEED: ActivityFeedPageDto = {
   items: [
     {
@@ -34,7 +33,7 @@ describe('useEntityActivityFeed', () => {
           entityType: 'Patient',
           entityId: 'p-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -53,7 +52,7 @@ describe('useEntityActivityFeed', () => {
           entityType: 'Patient',
           entityId: 'p-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -77,7 +76,7 @@ describe('useEntityActivityFeed', () => {
           entityId: 'p-1',
           pageSize: 10,
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -108,7 +107,7 @@ describe('useEntityActivityFeed', () => {
           entityId: 'p-1',
           pageSize: 1,
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -133,7 +132,7 @@ describe('useEntityActivityFeed', () => {
           entityType: 'Patient',
           entityId: 'p-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));

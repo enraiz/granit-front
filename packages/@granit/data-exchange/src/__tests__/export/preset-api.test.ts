@@ -23,7 +23,13 @@ describe('preset-api', () => {
   it('fetchExportPresets calls GET /presets/{definitionName}', async () => {
     const client = createMockClient();
     const presets = [
-      { definitionName: 'Test', presetName: 'Monthly', selectedFields: ['Email'], format: 'xlsx', includeIdForImport: false },
+      {
+        definitionName: 'Test',
+        presetName: 'Monthly',
+        selectedFields: ['Email'],
+        format: 'xlsx',
+        includeIdForImport: false,
+      },
     ];
     vi.mocked(client.get).mockResolvedValueOnce({ data: presets });
     const result = await fetchExportPresets(client, BASE, 'Test');

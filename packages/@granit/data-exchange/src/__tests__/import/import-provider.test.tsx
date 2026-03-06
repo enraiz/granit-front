@@ -2,7 +2,11 @@ import { renderHook } from '@testing-library/react';
 import axios from 'axios';
 import { describe, expect, it } from 'vitest';
 
-import { ImportProvider, buildImportQueryKey, useImportConfig } from '../../import/providers/import-provider.js';
+import {
+  ImportProvider,
+  buildImportQueryKey,
+  useImportConfig,
+} from '../../import/providers/import-provider.js';
 
 import type { ImportConfig } from '../../import/providers/import-provider.js';
 import type { ReactNode } from 'react';

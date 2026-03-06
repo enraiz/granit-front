@@ -7,7 +7,6 @@ import { axiosResponse, createMockClient, createWrapper } from './test-utils.js'
 
 import type { NotificationDto, NotificationPageDto } from '../types/index.js';
 
-
 const MOCK_NOTIFICATION: NotificationDto = {
   id: 'n-1',
   title: 'Nouveau message',
@@ -46,7 +45,7 @@ describe('useNotifications', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
     vi.mocked(client.patch).mockResolvedValue(
-      axiosResponse({ ...MOCK_NOTIFICATION, isRead: true, readAt: '2026-01-15T10:05:00Z' }),
+      axiosResponse({ ...MOCK_NOTIFICATION, isRead: true, readAt: '2026-01-15T10:05:00Z' })
     );
 
     const { result } = renderHook(() => useNotifications(), {

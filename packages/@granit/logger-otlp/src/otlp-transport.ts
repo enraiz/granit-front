@@ -57,9 +57,7 @@ function toStringAttribute(key: string, value: string): OtlpAttribute {
 }
 
 function contextToAttributes(context: LogContext): OtlpAttribute[] {
-  return Object.entries(context).map(([key, val]) =>
-    toStringAttribute(key, String(val)),
-  );
+  return Object.entries(context).map(([key, val]) => toStringAttribute(key, String(val)));
 }
 
 function errorToAttributes(error: unknown): OtlpAttribute[] {
@@ -74,13 +72,8 @@ function errorToAttributes(error: unknown): OtlpAttribute[] {
   return attrs;
 }
 
-function buildLogRecord(
-  entry: LogEntry,
-  traceContext?: TraceContext,
-) {
-  const attributes: OtlpAttribute[] = [
-    toStringAttribute('logger.prefix', entry.prefix),
-  ];
+function buildLogRecord(entry: LogEntry, traceContext?: TraceContext) {
+  const attributes: OtlpAttribute[] = [toStringAttribute('logger.prefix', entry.prefix)];
   if (entry.context) {
     attributes.push(...contextToAttributes(entry.context));
   }
@@ -99,22 +92,15 @@ function buildLogRecord(
   };
 }
 
-function buildPayload(
-  entries: LogEntry[],
-  options: OtlpTransportOptions,
-) {
+function buildPayload(entries: LogEntry[], options: OtlpTransportOptions) {
   const resourceAttributes: OtlpAttribute[] = [
     toStringAttribute('service.name', options.serviceName),
   ];
   if (options.serviceVersion) {
-    resourceAttributes.push(
-      toStringAttribute('service.version', options.serviceVersion),
-    );
+    resourceAttributes.push(toStringAttribute('service.version', options.serviceVersion));
   }
   if (options.environment) {
-    resourceAttributes.push(
-      toStringAttribute('deployment.environment', options.environment),
-    );
+    resourceAttributes.push(toStringAttribute('deployment.environment', options.environment));
   }
 
   return {
@@ -124,9 +110,7 @@ function buildPayload(
         scopeLogs: [
           {
             scope: { name: '@granit/logger-otlp' },
-            logRecords: entries.map((entry) =>
-              buildLogRecord(entry, options.getTraceContext?.()),
-            ),
+            logRecords: entries.map((entry) => buildLogRecord(entry, options.getTraceContext?.())),
           },
         ],
       },
@@ -144,6 +128,7 @@ export function createOtlpTransport(options: OtlpTransportOptions): LogTransport
 
   let buffer: LogEntry[] = [];
   let timer: ReturnType<typeof setTimeout> | null = null;
+  let disabled = false;
 
   function scheduleFlush(): void {
     timer ??= setTimeout(() => {
@@ -160,7 +145,7 @@ export function createOtlpTransport(options: OtlpTransportOptions): LogTransport
   }
 
   async function flush(): Promise<void> {
-    if (buffer.length === 0) return;
+    if (disabled || buffer.length === 0) return;
     clearTimer();
 
     const batch = buffer;
@@ -169,7 +154,7 @@ export function createOtlpTransport(options: OtlpTransportOptions): LogTransport
     const payload = JSON.stringify(buildPayload(batch, options));
 
     try {
-      await fetch(options.endpoint, {
+      const response = await fetch(options.endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -178,14 +163,25 @@ export function createOtlpTransport(options: OtlpTransportOptions): LogTransport
         body: payload,
         keepalive: true,
       });
+      if (!response.ok) {
+        disabled = true;
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[@granit/logger-otlp] OTLP collector unavailable at ${options.endpoint} (HTTP ${String(response.status)}). Log export disabled for this session.`
+        );
+      }
     } catch {
-      // Fire-and-forget: a lost front-end log is not critical.
-      // Avoid logging to console to prevent infinite loops.
+      disabled = true;
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[@granit/logger-otlp] OTLP collector unreachable at ${options.endpoint}. Log export disabled for this session.`
+      );
     }
   }
 
   return {
     send(entry: LogEntry): void {
+      if (disabled) return;
       buffer.push(entry);
       if (buffer.length >= batchSize) {
         void flush();

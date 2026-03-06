@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 
-import type { PermissionsResponse, UsePermissionsOptions, UsePermissionsReturn } from '../types/index.js';
+import type {
+  PermissionsResponse,
+  UsePermissionsOptions,
+  UsePermissionsReturn,
+} from '../types/index.js';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -62,17 +66,17 @@ export function usePermissions(options: UsePermissionsOptions): UsePermissionsRe
 
   const hasPermission = React.useCallback(
     (permission: string): boolean => permissionSet.has(permission),
-    [permissionSet],
+    [permissionSet]
   );
 
   const hasAnyPermission = React.useCallback(
     (permissions: readonly string[]): boolean => permissions.some((p) => permissionSet.has(p)),
-    [permissionSet],
+    [permissionSet]
   );
 
   const hasAllPermissions = React.useCallback(
     (permissions: readonly string[]): boolean => permissions.every((p) => permissionSet.has(p)),
-    [permissionSet],
+    [permissionSet]
   );
 
   const refetch = React.useCallback(async () => {

@@ -34,10 +34,7 @@ type ErrorBoundaryState = {
  * </GranitErrorBoundary>
  * ```
  */
-export class GranitErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+export class GranitErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   private readonly logger: Logger;
 
   constructor(props: ErrorBoundaryProps) {

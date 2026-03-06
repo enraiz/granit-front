@@ -32,7 +32,13 @@ function createWrapper() {
 describe('useExportPresets', () => {
   it('fetches presets for a definition', async () => {
     const presets = [
-      { definitionName: 'Test', presetName: 'Monthly', selectedFields: ['Email'], format: 'xlsx', includeIdForImport: false },
+      {
+        definitionName: 'Test',
+        presetName: 'Monthly',
+        selectedFields: ['Email'],
+        format: 'xlsx',
+        includeIdForImport: false,
+      },
     ];
     vi.spyOn(mockClient, 'get').mockResolvedValueOnce({ data: presets });
 
@@ -73,7 +79,10 @@ describe('useExportPresets', () => {
     });
 
     await waitFor(() => expect(result.current.save.isSuccess).toBe(true));
-    expect(mockClient.post).toHaveBeenCalledWith('/api/data-exchange/metadata/presets', expect.objectContaining({ presetName: 'New' }));
+    expect(mockClient.post).toHaveBeenCalledWith(
+      '/api/data-exchange/metadata/presets',
+      expect.objectContaining({ presetName: 'New' })
+    );
   });
 
   it('remove mutation calls DELETE /presets/{def}/{name}', async () => {
@@ -91,6 +100,8 @@ describe('useExportPresets', () => {
     });
 
     await waitFor(() => expect(result.current.remove.isSuccess).toBe(true));
-    expect(mockClient.delete).toHaveBeenCalledWith('/api/data-exchange/metadata/presets/Test/Monthly');
+    expect(mockClient.delete).toHaveBeenCalledWith(
+      '/api/data-exchange/metadata/presets/Test/Monthly'
+    );
   });
 });

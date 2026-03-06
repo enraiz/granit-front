@@ -25,11 +25,13 @@ export { useNotifications } from './hooks/use-notifications.js';
 export type { UseNotificationsOptions, UseNotificationsResult } from './hooks/use-notifications.js';
 
 export { useEntityActivityFeed } from './hooks/use-entity-activity-feed.js';
-export type { UseEntityActivityFeedOptions, UseEntityActivityFeedResult } from './hooks/use-entity-activity-feed.js';
+export type {
+  UseEntityActivityFeedOptions,
+  UseEntityActivityFeedResult,
+} from './hooks/use-entity-activity-feed.js';
 
 export { useNotificationPreferences } from './hooks/use-notification-preferences.js';
 export type { UseNotificationPreferencesResult } from './hooks/use-notification-preferences.js';
-
 
 // API (for advanced usage)
 export {

@@ -1,18 +1,11 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import type {
   CookieCategory,
   CookieConsentContextValue,
   CookieConsentProvider as ICookieConsentProvider,
   ConsentState,
-} from "../types/index.js";
+} from '../types/index.js';
 
 const DEFAULT_CONSENTS: ConsentState = {
   strictly_necessary: true,
@@ -21,8 +14,7 @@ const DEFAULT_CONSENTS: ConsentState = {
   marketing: false,
 };
 
-export const CookieConsentContext =
-  createContext<CookieConsentContextValue | null>(null);
+export const CookieConsentContext = createContext<CookieConsentContextValue | null>(null);
 
 interface CookieConsentProviderProps {
   /** The CMP implementation (Klaro, Cookiebot, etc.). */
@@ -47,14 +39,19 @@ export function CookieConsentProvider({
 }: Readonly<CookieConsentProviderProps>) {
   const [consents, setConsents] = useState<ConsentState>(DEFAULT_CONSENTS);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasConsented, setHasConsented] = useState(false);
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
 
     provider.init().then(() => {
       setConsents(provider.getConsents());
+      setHasConsented(provider.hasConsented());
       setIsLoaded(true);
-      unsubscribe = provider.onConsentChange(setConsents);
+      unsubscribe = provider.onConsentChange((newConsents) => {
+        setConsents(newConsents);
+        setHasConsented(provider.hasConsented());
+      });
     });
 
     return () => unsubscribe?.();
@@ -62,49 +59,43 @@ export function CookieConsentProvider({
 
   const acceptCategory = useCallback(
     (category: CookieCategory) => {
-      setConsents((prev) => ({ ...prev, [category]: true }));
+      provider.setConsent(category, true);
+      setHasConsented(provider.hasConsented());
     },
-    []
+    [provider]
   );
 
   const revokeCategory = useCallback(
     (category: CookieCategory) => {
-      if (category === "strictly_necessary") return;
-      setConsents((prev) => ({ ...prev, [category]: false }));
+      if (category === 'strictly_necessary') return;
+      provider.setConsent(category, false);
+      setHasConsented(provider.hasConsented());
     },
-    []
+    [provider]
   );
 
   const acceptAll = useCallback(() => {
-    setConsents({
-      strictly_necessary: true,
-      preferences: true,
-      analytics: true,
-      marketing: true,
-    });
-  }, []);
+    provider.setAllConsents(true);
+    setHasConsented(provider.hasConsented());
+  }, [provider]);
 
   const revokeAll = useCallback(() => {
-    setConsents({
-      ...DEFAULT_CONSENTS,
-    });
-  }, []);
+    provider.setAllConsents(false);
+    setHasConsented(provider.hasConsented());
+  }, [provider]);
 
   const value = useMemo<CookieConsentContextValue>(
     () => ({
       consents,
       isLoaded,
+      hasConsented,
       acceptCategory,
       revokeCategory,
       acceptAll,
       revokeAll,
     }),
-    [consents, isLoaded, acceptCategory, revokeCategory, acceptAll, revokeAll]
+    [consents, isLoaded, hasConsented, acceptCategory, revokeCategory, acceptAll, revokeAll]
   );
 
-  return (
-    <CookieConsentContext.Provider value={value}>
-      {children}
-    </CookieConsentContext.Provider>
-  );
+  return <CookieConsentContext.Provider value={value}>{children}</CookieConsentContext.Provider>;
 }

@@ -18,9 +18,7 @@ export interface UseExportPresetsReturn {
 /**
  * Hook for CRUD operations on export presets for a given definition.
  */
-export function useExportPresets(
-  definitionName: string | undefined,
-): UseExportPresetsReturn {
+export function useExportPresets(definitionName: string | undefined): UseExportPresetsReturn {
   const config = useExportConfig();
   const queryClient = useQueryClient();
 

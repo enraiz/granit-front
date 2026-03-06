@@ -1,4 +1,4 @@
-import type { CookieCategory } from "@granit/cookies";
+import type { CookieCategory, CookieConsentConfig } from '@granit/cookies';
 
 /**
  * Maps a Klaro service name to a RGPD cookie category.
@@ -30,12 +30,26 @@ export interface KlaroConfig {
 
 /**
  * Options for creating the Klaro cookie consent provider.
+ *
+ * Two modes:
+ * - **Static**: provide `klaroConfig` + `serviceMappings` directly.
+ * - **Dynamic**: provide `loadConfig` to fetch `CookieConsentConfig` from the API.
+ *   The adapter builds the Klaro config and service mappings at `init()` time.
+ *
+ * When `loadConfig` is provided, `klaroConfig` and `serviceMappings` are ignored.
  */
 export interface CreateKlaroCookieConsentProviderOptions {
   /** Full Klaro configuration to pass to `klaro.getManager()`. */
-  readonly klaroConfig: KlaroConfig;
+  readonly klaroConfig?: KlaroConfig;
   /** Mapping of Klaro service names to RGPD categories. */
-  readonly serviceMappings: readonly KlaroServiceMapping[];
+  readonly serviceMappings?: readonly KlaroServiceMapping[];
+  /**
+   * Loads the CMP-agnostic cookie configuration from the backend API.
+   * When provided, `klaroConfig` and `serviceMappings` are built automatically.
+   */
+  readonly loadConfig?: () => Promise<CookieConsentConfig>;
+  /** Cookie name used by Klaro to store consent. Default: `"klaro"`. */
+  readonly cookieName?: string;
 }
 
 /**
@@ -43,6 +57,9 @@ export interface CreateKlaroCookieConsentProviderOptions {
  */
 export interface KlaroConsentManager {
   getConsent(name: string): boolean;
+  updateConsent(name: string, value: boolean): boolean;
+  changeAll(value: boolean): number;
+  saveAndApplyConsents(): void;
   watch(watcher: KlaroWatcher): void;
 }
 
@@ -50,9 +67,5 @@ export interface KlaroConsentManager {
  * Klaro watcher interface for consent changes.
  */
 export interface KlaroWatcher {
-  update(
-    obj: unknown,
-    name: string,
-    data: unknown,
-  ): void;
+  update(obj: unknown, name: string, data: unknown): void;
 }

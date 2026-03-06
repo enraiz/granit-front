@@ -1,10 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  LogLevel,
-  createConsoleTransport,
-  createLogger,
-} from '../index.ts';
+import { LogLevel, createConsoleTransport, createLogger } from '../index.ts';
 
 import type { LogEntry, LogTransport } from '../index.ts';
 
@@ -58,7 +54,7 @@ describe('createLogger', () => {
       expect.stringContaining('[Auth]'),
       expect.any(String),
       expect.any(String),
-      expect.any(String),
+      expect.any(String)
     );
   });
 
@@ -69,7 +65,7 @@ describe('createLogger', () => {
       expect.stringContaining('[Auth]'),
       expect.any(String),
       expect.any(String),
-      expect.any(String),
+      expect.any(String)
     );
   });
 
@@ -80,7 +76,7 @@ describe('createLogger', () => {
       expect.stringContaining('[MyApp]'),
       expect.any(String),
       expect.any(String),
-      expect.any(String),
+      expect.any(String)
     );
   });
 
@@ -92,7 +88,7 @@ describe('createLogger', () => {
       expect.any(String),
       expect.any(String),
       expect.any(String),
-      expect.any(Error),
+      expect.any(Error)
     );
   });
 
@@ -183,14 +179,14 @@ describe('createLogger', () => {
       expect.stringContaining('[App1]'),
       expect.any(String),
       expect.any(String),
-      expect.any(String),
+      expect.any(String)
     );
     expect(console.warn).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('[App2]'),
       expect.any(String),
       expect.any(String),
-      expect.any(String),
+      expect.any(String)
     );
   });
 });

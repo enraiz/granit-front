@@ -1,7 +1,9 @@
-import type { ExportDefinitionResponse, ExportFieldDescriptor } from '../types/export-definition.js';
+import type {
+  ExportDefinitionResponse,
+  ExportFieldDescriptor,
+} from '../types/export-definition.js';
 import type { CreateExportJobRequest, ExportJobResponse } from '../types/export-job.js';
 import type { AxiosInstance } from 'axios';
-
 
 /**
  * Fetches all registered export definitions.
@@ -10,11 +12,9 @@ import type { AxiosInstance } from 'axios';
  */
 export async function fetchExportDefinitions(
   client: AxiosInstance,
-  basePath: string,
+  basePath: string
 ): Promise<readonly ExportDefinitionResponse[]> {
-  const response = await client.get<ExportDefinitionResponse[]>(
-    `${basePath}/definitions`,
-  );
+  const response = await client.get<ExportDefinitionResponse[]>(`${basePath}/definitions`);
   return response.data;
 }
 
@@ -26,10 +26,10 @@ export async function fetchExportDefinitions(
 export async function fetchExportFields(
   client: AxiosInstance,
   basePath: string,
-  definitionName: string,
+  definitionName: string
 ): Promise<readonly ExportFieldDescriptor[]> {
   const response = await client.get<ExportFieldDescriptor[]>(
-    `${basePath}/definitions/${encodeURIComponent(definitionName)}/fields`,
+    `${basePath}/definitions/${encodeURIComponent(definitionName)}/fields`
   );
   return response.data;
 }
@@ -42,12 +42,9 @@ export async function fetchExportFields(
 export async function createExportJob(
   client: AxiosInstance,
   basePath: string,
-  request: CreateExportJobRequest,
+  request: CreateExportJobRequest
 ): Promise<ExportJobResponse> {
-  const response = await client.post<ExportJobResponse>(
-    `${basePath}/jobs`,
-    request,
-  );
+  const response = await client.post<ExportJobResponse>(`${basePath}/jobs`, request);
   return response.data;
 }
 
@@ -59,10 +56,10 @@ export async function createExportJob(
 export async function fetchExportJobStatus(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<ExportJobResponse> {
   const response = await client.get<ExportJobResponse>(
-    `${basePath}/jobs/${encodeURIComponent(jobId)}`,
+    `${basePath}/jobs/${encodeURIComponent(jobId)}`
   );
   return response.data;
 }
@@ -75,11 +72,11 @@ export async function fetchExportJobStatus(
 export async function downloadExportFile(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<{ blob: Blob; fileName: string }> {
   const response = await client.get<Blob>(
     `${basePath}/jobs/${encodeURIComponent(jobId)}/download`,
-    { responseType: 'blob' },
+    { responseType: 'blob' }
   );
 
   const contentDisposition = response.headers['content-disposition'] as string | undefined;

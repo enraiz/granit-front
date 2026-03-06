@@ -6,5 +6,4 @@ export const TimelineEntryType = {
   SystemLog: 2,
 } as const;
 
-export type TimelineEntryTypeValue =
-  (typeof TimelineEntryType)[keyof typeof TimelineEntryType];
+export type TimelineEntryTypeValue = (typeof TimelineEntryType)[keyof typeof TimelineEntryType];

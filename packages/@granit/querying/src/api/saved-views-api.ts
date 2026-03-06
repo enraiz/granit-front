@@ -9,13 +9,12 @@ import type {
 } from '../types/saved-views.js';
 import type { AxiosInstance } from 'axios';
 
-
 /**
  * List all saved views for the current entity type.
  */
 export async function fetchSavedViews(
   client: AxiosInstance,
-  basePath: string,
+  basePath: string
 ): Promise<SavedViewSummary[]> {
   const response = await client.get<SavedViewSummary[]>(`${basePath}/saved-views`);
   return response.data;
@@ -27,7 +26,7 @@ export async function fetchSavedViews(
 export async function createSavedView(
   client: AxiosInstance,
   basePath: string,
-  request: CreateSavedViewRequest,
+  request: CreateSavedViewRequest
 ): Promise<SavedViewSummary> {
   const response = await client.post<SavedViewSummary>(`${basePath}/saved-views`, request);
   return response.data;
@@ -40,7 +39,7 @@ export async function updateSavedView(
   client: AxiosInstance,
   basePath: string,
   id: string,
-  request: UpdateSavedViewRequest,
+  request: UpdateSavedViewRequest
 ): Promise<SavedViewSummary> {
   const response = await client.put<SavedViewSummary>(`${basePath}/saved-views/${id}`, request);
   return response.data;
@@ -52,7 +51,7 @@ export async function updateSavedView(
 export async function deleteSavedView(
   client: AxiosInstance,
   basePath: string,
-  id: string,
+  id: string
 ): Promise<void> {
   await client.delete(`${basePath}/saved-views/${id}`);
 }
@@ -63,10 +62,8 @@ export async function deleteSavedView(
 export async function setDefaultSavedView(
   client: AxiosInstance,
   basePath: string,
-  id: string,
+  id: string
 ): Promise<SavedViewSummary> {
-  const response = await client.post<SavedViewSummary>(
-    `${basePath}/saved-views/${id}/set-default`,
-  );
+  const response = await client.post<SavedViewSummary>(`${basePath}/saved-views/${id}/set-default`);
   return response.data;
 }

@@ -41,14 +41,7 @@ export const BOOLEAN_OPERATORS: readonly FilterOperator[] = ['Eq'];
 export const ENUM_OPERATORS: readonly FilterOperator[] = ['Eq', 'In'];
 
 /** CLR type names that map to numeric operators. */
-const NUMERIC_TYPES = new Set([
-  'Int32',
-  'Int64',
-  'Decimal',
-  'Double',
-  'Single',
-  'Float',
-]);
+const NUMERIC_TYPES = new Set(['Int32', 'Int64', 'Decimal', 'Double', 'Single', 'Float']);
 
 /** CLR type names that map to date operators. */
 const DATE_TYPES = new Set(['DateTime', 'DateTimeOffset', 'DateOnly']);

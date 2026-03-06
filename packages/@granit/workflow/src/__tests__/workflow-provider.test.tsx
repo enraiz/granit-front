@@ -25,11 +25,7 @@ describe('WorkflowProvider', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useWorkflowConfig(), {
-      wrapper: ({ children }) => (
-        <WorkflowProvider apiClient={client}>
-          {children}
-        </WorkflowProvider>
-      ),
+      wrapper: ({ children }) => <WorkflowProvider apiClient={client}>{children}</WorkflowProvider>,
     });
 
     expect(result.current.basePath).toBe('/api/workflow');
@@ -47,7 +43,7 @@ describe('WorkflowProvider', () => {
     render(
       <WorkflowProvider apiClient={client}>
         <div data-testid="child">Hello</div>
-      </WorkflowProvider>,
+      </WorkflowProvider>
     );
 
     expect(screen.getByTestId('child')).toBeTruthy();

@@ -35,10 +35,7 @@ function getBackend(type: 'local' | 'session'): Storage {
  * themeStorage.get();          // returns 'dark'
  * ```
  */
-export function createStorage<T>(
-  key: string,
-  options?: StorageOptions<T>,
-): TypedStorage<T> {
+export function createStorage<T>(key: string, options?: StorageOptions<T>): TypedStorage<T> {
   const prefixedKey = `${KEY_PREFIX}${key}`;
   const backend = getBackend(options?.storage ?? 'local');
   const serialize = options?.serialize ?? JSON.stringify;

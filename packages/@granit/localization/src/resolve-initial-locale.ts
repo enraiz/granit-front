@@ -16,10 +16,7 @@ import type { LanguageInfo } from './types.js';
  * This function is called **before** the first backend fetch. It returns
  * the locale to use for `GET /api/granit/localization?cultureName=...`.
  */
-export function resolveInitialLocale(
-  languages?: LanguageInfo[],
-  storageKey?: string,
-): string {
+export function resolveInitialLocale(languages?: LanguageInfo[], storageKey?: string): string {
   const storage = createStorage<string>(storageKey ?? LOCALE_STORAGE_KEY);
 
   // 1. localStorage

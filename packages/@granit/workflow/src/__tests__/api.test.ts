@@ -4,7 +4,11 @@ import { executeTransition, fetchHistory, fetchStatus } from '../api/workflow-ap
 
 import { axiosResponse, createMockClient } from './test-utils.tsx';
 
-import type { TransitionHistoryDto, TransitionResultDto, WorkflowStatusDto } from '../types/index.js';
+import type {
+  TransitionHistoryDto,
+  TransitionResultDto,
+  WorkflowStatusDto,
+} from '../types/index.js';
 
 describe('workflow api', () => {
   const basePath = '/api/workflow';
@@ -41,10 +45,10 @@ describe('workflow api', () => {
       comment: 'Ready to publish',
     });
 
-    expect(client.post).toHaveBeenCalledWith(
-      '/api/workflow/Document/doc-1/transition',
-      { targetState: 'Published', comment: 'Ready to publish' },
-    );
+    expect(client.post).toHaveBeenCalledWith('/api/workflow/Document/doc-1/transition', {
+      targetState: 'Published',
+      comment: 'Ready to publish',
+    });
     expect(result).toEqual(transitionResult);
   });
 

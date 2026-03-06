@@ -32,7 +32,16 @@ describe('export-api', () => {
 
   it('fetchExportFields calls GET /definitions/{name}/fields', async () => {
     const client = createMockClient();
-    const fields = [{ propertyPath: 'Email', clrTypeName: 'String', header: 'Email', format: null, order: 1, isNavigation: false }];
+    const fields = [
+      {
+        propertyPath: 'Email',
+        clrTypeName: 'String',
+        header: 'Email',
+        format: null,
+        order: 1,
+        isNavigation: false,
+      },
+    ];
     vi.mocked(client.get).mockResolvedValueOnce({ data: fields });
     const result = await fetchExportFields(client, BASE, 'Test');
     expect(client.get).toHaveBeenCalledWith(`${BASE}/definitions/Test/fields`);

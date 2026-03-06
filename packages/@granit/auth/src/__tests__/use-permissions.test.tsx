@@ -12,9 +12,7 @@ import type { ReactNode } from 'react';
 // Helpers
 // ---------------------------------------------------------------------------
 
-function createMockClient(
-  response: PermissionsResponse = { permissions: [] },
-): AxiosInstance {
+function createMockClient(response: PermissionsResponse = { permissions: [] }): AxiosInstance {
   return {
     get: vi.fn().mockResolvedValue({ data: response } as AxiosResponse<PermissionsResponse>),
   } as unknown as AxiosInstance;
@@ -37,11 +35,7 @@ function createWrapper() {
   });
 
   function Wrapper({ children }: Readonly<{ children: ReactNode }>) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    );
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
 
   return { Wrapper, queryClient };
@@ -62,10 +56,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['A'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     expect(result.current.isLoading).toBe(true);
     expect(result.current.permissions.size).toBe(0);
@@ -79,10 +70,7 @@ describe('usePermissions', () => {
     });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -94,10 +82,7 @@ describe('usePermissions', () => {
     const client = createMockClient();
     const { Wrapper } = createWrapper();
 
-    renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -108,10 +93,9 @@ describe('usePermissions', () => {
     const client = createMockClient();
     const { Wrapper } = createWrapper();
 
-    renderHook(
-      () => usePermissions({ client, basePath: '/api/v1/authorization' }),
-      { wrapper: Wrapper },
-    );
+    renderHook(() => usePermissions({ client, basePath: '/api/v1/authorization' }), {
+      wrapper: Wrapper,
+    });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -124,10 +108,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Invoices.Read'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -138,10 +119,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Invoices.Read'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -152,10 +130,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Invoices.Read'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     expect(result.current.hasPermission('Invoices.Read')).toBe(false);
   });
@@ -166,10 +141,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Invoices.Read'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -180,10 +152,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Reports.Export'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -198,10 +167,7 @@ describe('usePermissions', () => {
     });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -212,10 +178,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Invoices.Read'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -228,10 +191,7 @@ describe('usePermissions', () => {
     const client = createFailingClient(new Error('Network error'));
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.error).not.toBeNull(), { timeout: 5000 });
 
@@ -246,13 +206,14 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: ['Invoices.Read'] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client, enabled: false }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client, enabled: false }), {
+      wrapper: Wrapper,
+    });
 
     // Wait a tick to ensure no fetch is triggered.
-    await new Promise((resolve) => { setTimeout(resolve, 50); });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 50);
+    });
 
     expect(client.get).not.toHaveBeenCalled();
     expect(result.current.permissions.size).toBe(0);
@@ -264,10 +225,7 @@ describe('usePermissions', () => {
     const client = createMockClient({ permissions: [] });
     const { Wrapper } = createWrapper();
 
-    const { result } = renderHook(
-      () => usePermissions({ client }),
-      { wrapper: Wrapper },
-    );
+    const { result } = renderHook(() => usePermissions({ client }), { wrapper: Wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 

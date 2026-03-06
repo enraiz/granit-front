@@ -29,7 +29,7 @@ const DEFAULT_PAGE_SIZE = 20;
  * Generic paginated fetch hook with abort-on-refetch, load-more, and refresh.
  */
 export function usePaginatedFetch<T, P extends PaginatedPage<T>>(
-  options: UsePaginatedFetchOptions<T, P>,
+  options: UsePaginatedFetchOptions<T, P>
 ): UsePaginatedFetchResult<T> {
   const { fetcher, pageSize = DEFAULT_PAGE_SIZE, onSuccess } = options;
 
@@ -65,7 +65,7 @@ export function usePaginatedFetch<T, P extends PaginatedPage<T>>(
         }
       }
     },
-    [fetcher, pageSize, onSuccess],
+    [fetcher, pageSize, onSuccess]
   );
 
   useEffect(() => {

@@ -61,7 +61,10 @@ export type { QueryConfig, QueryProviderProps } from './providers/query-provider
 
 // Hooks
 export { useQueryEndpoint } from './hooks/use-query-endpoint.js';
-export type { UseQueryEndpointOptions, UseQueryEndpointReturn } from './hooks/use-query-endpoint.js';
+export type {
+  UseQueryEndpointOptions,
+  UseQueryEndpointReturn,
+} from './hooks/use-query-endpoint.js';
 export { useQueryMeta } from './hooks/use-query-meta.js';
 export { useSavedViews } from './hooks/use-saved-views.js';
 export type { UseSavedViewsReturn } from './hooks/use-saved-views.js';

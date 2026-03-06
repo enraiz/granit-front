@@ -24,11 +24,7 @@ export type {
   SortableField,
 } from './query-metadata.js';
 
-export type {
-  GroupEntry,
-  GroupedResult,
-  PagedResult,
-} from './query-results.js';
+export type { GroupEntry, GroupedResult, PagedResult } from './query-results.js';
 
 export type {
   CreateSavedViewRequest,

@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-
 import {
   createEntry,
   deleteEntry,
@@ -90,10 +89,7 @@ describe('timeline API', () => {
 
       const result = await createEntry(client, BASE_PATH, 'Patient', 'p-1', request);
 
-      expect(client.post).toHaveBeenCalledWith(
-        '/api/timeline/Patient/p-1/entries',
-        request,
-      );
+      expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries', request);
       expect(result).toEqual(entry);
     });
   });
@@ -104,9 +100,7 @@ describe('timeline API', () => {
 
       await deleteEntry(client, BASE_PATH, 'Patient', 'p-1', 'e-1');
 
-      expect(client.delete).toHaveBeenCalledWith(
-        '/api/timeline/Patient/p-1/entries/e-1',
-      );
+      expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries/e-1');
     });
   });
 

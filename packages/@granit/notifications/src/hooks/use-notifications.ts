@@ -29,22 +29,19 @@ const DEFAULT_PAGE_SIZE = 20;
 /**
  * Paginated inbox hook — fetches notifications with load-more support.
  */
-export function useNotifications(
-  options: UseNotificationsOptions = {},
-): UseNotificationsResult {
+export function useNotifications(options: UseNotificationsOptions = {}): UseNotificationsResult {
   const { pageSize = DEFAULT_PAGE_SIZE } = options;
   const { config, setUnreadCount } = useNotificationContext();
   const basePath = config.basePath ?? '/api';
 
   const fetcher = useCallback(
-    (skip: number, take: number) =>
-      fetchNotifications(config.apiClient, basePath, { skip, take }),
-    [config.apiClient, basePath],
+    (skip: number, take: number) => fetchNotifications(config.apiClient, basePath, { skip, take }),
+    [config.apiClient, basePath]
   );
 
   const onSuccess = useCallback(
     (page: NotificationPageDto) => setUnreadCount(page.unreadCount),
-    [setUnreadCount],
+    [setUnreadCount]
   );
 
   const {
@@ -66,18 +63,16 @@ export function useNotifications(
   const markRead = useCallback(
     async (id: string) => {
       const updated = await markAsRead(config.apiClient, basePath, id);
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? updated : n)),
-      );
+      setNotifications((prev) => prev.map((n) => (n.id === id ? updated : n)));
       setUnreadCount((prev: number) => Math.max(0, prev - 1));
     },
-    [config.apiClient, basePath, setUnreadCount, setNotifications],
+    [config.apiClient, basePath, setUnreadCount, setNotifications]
   );
 
   const markAllRead = useCallback(async () => {
     await markAllAsRead(config.apiClient, basePath);
     setNotifications((prev) =>
-      prev.map((n) => ({ ...n, isRead: true, readAt: new Date().toISOString() })),
+      prev.map((n) => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
     );
     setUnreadCount(0);
   }, [config.apiClient, basePath, setUnreadCount, setNotifications]);

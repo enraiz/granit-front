@@ -46,7 +46,14 @@ describe('useExportDefinitions', () => {
 describe('useExportFields', () => {
   it('fetches fields when definitionName is provided', async () => {
     const fields = [
-      { propertyPath: 'Email', clrTypeName: 'String', header: 'Email', format: null, order: 1, isNavigation: false },
+      {
+        propertyPath: 'Email',
+        clrTypeName: 'String',
+        header: 'Email',
+        format: null,
+        order: 1,
+        isNavigation: false,
+      },
     ];
     vi.spyOn(mockClient, 'get').mockResolvedValueOnce({ data: fields });
 

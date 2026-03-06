@@ -5,4 +5,7 @@ export type {
   ConsentState,
   CookieConsentProvider as CookieConsentProviderInterface,
   CookieConsentContextValue,
+  CookieConsentConfig,
+  CookieDefinitionDto,
+  ThirdPartyServiceDto,
 } from './types/index.js';

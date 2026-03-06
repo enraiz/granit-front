@@ -7,7 +7,6 @@ import { axiosResponse, createMockClient, createWrapper } from './test-utils.js'
 
 import type { NotificationPreferenceDto } from '../types/index.js';
 
-
 const MOCK_PREFS: NotificationPreferenceDto[] = [
   {
     notificationType: 'AppointmentReminder',

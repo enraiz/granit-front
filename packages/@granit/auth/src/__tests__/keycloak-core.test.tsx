@@ -9,9 +9,15 @@ import type { KeycloakCoreConfig } from '../types/index.js';
 // Hoisted mock references (declared before vi.mock hoisting)
 // ---------------------------------------------------------------------------
 const {
-  mockInit, mockLogin, mockLogout, mockRegister,
-  mockLoadUserInfo, mockUpdateToken,
-  mockHasRealmRole, mockHasResourceRole, mockIsTokenExpired,
+  mockInit,
+  mockLogin,
+  mockLogout,
+  mockRegister,
+  mockLoadUserInfo,
+  mockUpdateToken,
+  mockHasRealmRole,
+  mockHasResourceRole,
+  mockIsTokenExpired,
   mockSetTokenGetter,
 } = vi.hoisted(() => ({
   mockInit: vi.fn(),
@@ -50,7 +56,9 @@ const mockKeycloakInstance: Record<string, unknown> = {
 };
 
 vi.mock('keycloak-js', () => ({
-  default: vi.fn(function () { return mockKeycloakInstance; }),
+  default: vi.fn(function () {
+    return mockKeycloakInstance;
+  }),
 }));
 
 vi.mock('@granit/api-client', () => ({
@@ -206,9 +214,7 @@ describe('useKeycloakInit', () => {
 
   it('should omit silentCheckSso from init options when silentCheckSso=false', async () => {
     mockInit.mockResolvedValue(false);
-    const { result } = renderHook(() =>
-      useKeycloakInit({ ...config, silentCheckSso: false })
-    );
+    const { result } = renderHook(() => useKeycloakInit({ ...config, silentCheckSso: false }));
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
@@ -311,9 +317,7 @@ describe('useKeycloakInit', () => {
       mockInit.mockResolvedValue(true);
       mockKeycloakInstance.tokenParsed = tokenParsedFixture;
 
-      const { result } = renderHook(() =>
-        useKeycloakInit({ ...config, useTokenClaims: true })
-      );
+      const { result } = renderHook(() => useKeycloakInit({ ...config, useTokenClaims: true }));
 
       await waitFor(() => expect(result.current.loading).toBe(false));
 
@@ -339,9 +343,7 @@ describe('useKeycloakInit', () => {
       mockInit.mockResolvedValue(true);
       mockKeycloakInstance.tokenParsed = tokenParsedFixture;
 
-      const { result } = renderHook(() =>
-        useKeycloakInit({ ...config, useTokenClaims: true })
-      );
+      const { result } = renderHook(() => useKeycloakInit({ ...config, useTokenClaims: true }));
 
       await waitFor(() => expect(result.current.loading).toBe(false));
 

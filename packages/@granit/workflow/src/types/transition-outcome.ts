@@ -7,5 +7,4 @@ export const TransitionOutcome = {
   InvalidTransition: 'InvalidTransition',
 } as const;
 
-export type TransitionOutcomeValue =
-  (typeof TransitionOutcome)[keyof typeof TransitionOutcome];
+export type TransitionOutcomeValue = (typeof TransitionOutcome)[keyof typeof TransitionOutcome];

@@ -119,14 +119,14 @@ export function useImportJob(): UseImportJobReturn {
     (file: File, definitionName: string) => {
       uploadMutation.mutate({ file, definitionName });
     },
-    [uploadMutation],
+    [uploadMutation]
   );
 
   const confirmMap = useCallback(
     (request: ConfirmMappingsRequest) => {
       confirmMutation.mutate(request);
     },
-    [confirmMutation],
+    [confirmMutation]
   );
 
   const execute = useCallback(() => {
@@ -139,9 +139,13 @@ export function useImportJob(): UseImportJobReturn {
 
   const reset = useCallback(() => {
     if (activeJobId) {
-      queryClient.invalidateQueries({
-        queryKey: buildImportQueryKey(config, 'job', activeJobId),
-      }).catch(() => { /* best-effort invalidation */ });
+      queryClient
+        .invalidateQueries({
+          queryKey: buildImportQueryKey(config, 'job', activeJobId),
+        })
+        .catch(() => {
+          /* best-effort invalidation */
+        });
     }
     setActiveJobId(null);
     setJob(null);
@@ -150,7 +154,15 @@ export function useImportJob(): UseImportJobReturn {
     confirmMutation.reset();
     executeMutation.reset();
     cancelMutation.reset();
-  }, [activeJobId, cancelMutation, config, confirmMutation, executeMutation, queryClient, uploadMutation]);
+  }, [
+    activeJobId,
+    cancelMutation,
+    config,
+    confirmMutation,
+    executeMutation,
+    queryClient,
+    uploadMutation,
+  ]);
 
   return {
     upload,

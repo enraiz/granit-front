@@ -28,11 +28,7 @@ export function useImportReport(jobId: string | undefined): UseImportReportRetur
 
   async function downloadCorrection() {
     if (!jobId) return;
-    const { blob, fileName } = await downloadCorrectionFile(
-      config.client,
-      config.basePath,
-      jobId,
-    );
+    const { blob, fileName } = await downloadCorrectionFile(config.client, config.basePath, jobId);
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

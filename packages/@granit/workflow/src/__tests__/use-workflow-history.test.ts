@@ -31,7 +31,7 @@ describe('useWorkflowHistory', () => {
 
     const { result } = renderHook(
       () => useWorkflowHistory({ entityType: 'Document', entityId: 'doc-1' }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     expect(result.current.loading).toBe(true);
@@ -49,7 +49,7 @@ describe('useWorkflowHistory', () => {
 
     const { result } = renderHook(
       () => useWorkflowHistory({ entityType: 'Document', entityId: 'doc-1' }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -63,7 +63,7 @@ describe('useWorkflowHistory', () => {
 
     const { result } = renderHook(
       () => useWorkflowHistory({ entityType: 'Document', entityId: 'doc-1', enabled: false }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     // Give time for any async call
@@ -82,7 +82,7 @@ describe('useWorkflowHistory', () => {
 
     const { result } = renderHook(
       () => useWorkflowHistory({ entityType: 'Document', entityId: 'doc-1' }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));

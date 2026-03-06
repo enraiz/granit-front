@@ -26,9 +26,8 @@ export function GlobalErrorCapture({ logger, onError }: GlobalErrorCaptureProps)
     }
 
     function handleError(event: ErrorEvent) {
-      const error = event.error instanceof Error
-        ? event.error
-        : new Error(event.message || 'Unknown error');
+      const error =
+        event.error instanceof Error ? event.error : new Error(event.message || 'Unknown error');
 
       if (isDuplicate(error.message)) return;
 
@@ -44,9 +43,10 @@ export function GlobalErrorCapture({ logger, onError }: GlobalErrorCaptureProps)
     }
 
     function handleRejection(event: PromiseRejectionEvent) {
-      const error = event.reason instanceof Error
-        ? event.reason
-        : new Error(String(event.reason ?? 'Unhandled promise rejection'));
+      const error =
+        event.reason instanceof Error
+          ? event.reason
+          : new Error(String(event.reason ?? 'Unhandled promise rejection'));
 
       if (isDuplicate(error.message)) return;
 

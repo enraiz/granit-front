@@ -52,15 +52,21 @@ vi.mock('@opentelemetry/context-zone', () => ({
 }));
 
 vi.mock('@opentelemetry/instrumentation-fetch', () => ({
-  FetchInstrumentation: class { enable = vi.fn(); },
+  FetchInstrumentation: class {
+    enable = vi.fn();
+  },
 }));
 
 vi.mock('@opentelemetry/instrumentation-xml-http-request', () => ({
-  XMLHttpRequestInstrumentation: class { enable = vi.fn(); },
+  XMLHttpRequestInstrumentation: class {
+    enable = vi.fn();
+  },
 }));
 
 vi.mock('@opentelemetry/instrumentation-document-load', () => ({
-  DocumentLoadInstrumentation: class { enable = vi.fn(); },
+  DocumentLoadInstrumentation: class {
+    enable = vi.fn();
+  },
 }));
 
 // ---------------------------------------------------------------------------
@@ -111,7 +117,7 @@ describe('TracingProvider', () => {
 describe('useTracer', () => {
   it('should throw when used outside TracingProvider', () => {
     expect(() => renderHook(() => useTracer())).toThrowError(
-      'useTracer must be used within a TracingProvider',
+      'useTracer must be used within a TracingProvider'
     );
   });
 });

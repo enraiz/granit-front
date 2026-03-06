@@ -20,7 +20,7 @@ describe('useWorkflowStatus', () => {
 
     const { result } = renderHook(
       () => useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     expect(result.current.loading).toBe(true);
@@ -38,7 +38,7 @@ describe('useWorkflowStatus', () => {
 
     const { result } = renderHook(
       () => useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -64,7 +64,7 @@ describe('useWorkflowStatus', () => {
 
     const { result } = renderHook(
       () => useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));

@@ -16,10 +16,7 @@ import type { i18n } from 'i18next';
  * }, [data]);
  * ```
  */
-export function applyTranslations(
-  instance: i18n,
-  data: ApplicationLocalizationDto,
-): void {
+export function applyTranslations(instance: i18n, data: ApplicationLocalizationDto): void {
   if (!data.resources) return;
 
   const merged: Record<string, string> = {};
@@ -27,13 +24,7 @@ export function applyTranslations(
     Object.assign(merged, translations);
   }
 
-  instance.addResourceBundle(
-    data.cultureName,
-    'translation',
-    merged,
-    true,
-    true,
-  );
+  instance.addResourceBundle(data.cultureName, 'translation', merged, true, true);
 
   if (instance.language !== data.cultureName) {
     instance.changeLanguage(data.cultureName).catch(() => undefined);

@@ -1,8 +1,4 @@
-export {
-  LogLevel,
-  createConsoleTransport,
-  createLogger,
-} from './logger.js';
+export { LogLevel, createConsoleTransport, createLogger } from './logger.js';
 
 export type {
   LogContext,

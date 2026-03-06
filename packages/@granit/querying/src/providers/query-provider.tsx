@@ -38,10 +38,7 @@ export interface QueryProviderProps {
  * ```
  */
 export function QueryProvider({ config, children }: Readonly<QueryProviderProps>) {
-  const value = useMemo(
-    () => config,
-    [config],
-  );
+  const value = useMemo(() => config, [config]);
   return <QueryConfigContext value={value}>{children}</QueryConfigContext>;
 }
 
@@ -61,7 +58,10 @@ export function useQueryConfig(): QueryConfig {
 /**
  * Build a TanStack Query key from the provider config + extra segments.
  */
-export function buildQueryKey(config: QueryConfig, ...segments: readonly string[]): readonly unknown[] {
+export function buildQueryKey(
+  config: QueryConfig,
+  ...segments: readonly string[]
+): readonly unknown[] {
   const prefix = config.queryKeyPrefix ?? config.basePath.split('/').filter(Boolean);
   return [...prefix, ...segments];
 }

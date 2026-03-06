@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { calculatePercentage, cn, formatDate, formatDateTime, formatNumber, formatTimeAgo } from '../index.ts';
+import {
+  calculatePercentage,
+  cn,
+  formatDate,
+  formatDateTime,
+  formatNumber,
+  formatTimeAgo,
+} from '../index.ts';
 
 describe('cn', () => {
   it('should merge class names', () => {

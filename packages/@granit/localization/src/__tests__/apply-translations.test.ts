@@ -45,7 +45,7 @@ describe('applyTranslations', () => {
         'Dashboard.Welcome': 'Bienvenue',
       },
       true,
-      true,
+      true
     );
   });
 
@@ -72,13 +72,7 @@ describe('applyTranslations', () => {
     };
     applyTranslations(i18n as never, data);
 
-    expect(i18n.addResourceBundle).toHaveBeenCalledWith(
-      'en',
-      'translation',
-      {},
-      true,
-      true,
-    );
+    expect(i18n.addResourceBundle).toHaveBeenCalledWith('en', 'translation', {}, true, true);
   });
 
   it('should let later modules override earlier ones on key collision', () => {
@@ -98,7 +92,7 @@ describe('applyTranslations', () => {
       'translation',
       { 'App.Title': 'Override Title' },
       true,
-      true,
+      true
     );
   });
 });

@@ -6,11 +6,7 @@ import { useCallback, useMemo, useReducer } from 'react';
 
 import type { QueryMetadata } from '../types/query-metadata.js';
 import type { FilterEntry, FilterOperator } from '../types/query-params.js';
-import type {
-  FilterSuggestion,
-  FilterToken,
-  SmartFilterPhase,
-} from '../types/smart-filter.js';
+import type { FilterSuggestion, FilterToken, SmartFilterPhase } from '../types/smart-filter.js';
 
 // ---------------------------------------------------------------------------
 // State
@@ -41,10 +37,7 @@ type SmartFilterAction =
   | { type: 'CANCEL' }
   | { type: 'SYNC_TOKENS'; tokens: readonly FilterToken[] };
 
-function smartFilterReducer(
-  state: SmartFilterState,
-  action: SmartFilterAction,
-): SmartFilterState {
+function smartFilterReducer(state: SmartFilterState, action: SmartFilterAction): SmartFilterState {
   switch (action.type) {
     case 'SET_INPUT':
       return { ...state, inputValue: action.value };
@@ -88,7 +81,7 @@ function smartFilterReducer(
     case 'ADD_PRESET_TOKEN': {
       // Remove existing token for same group, then add
       const filtered = state.tokens.filter(
-        (t) => !(t.type === 'preset' && t.group === action.group),
+        (t) => !(t.type === 'preset' && t.group === action.group)
       );
       const token: FilterToken = {
         id: `preset-${state.nextId}`,
@@ -108,9 +101,7 @@ function smartFilterReducer(
 
     case 'ADD_QUICK_FILTER_TOKEN': {
       // Toggle: remove if exists, add if not
-      const existing = state.tokens.find(
-        (t) => t.type === 'quickFilter' && t.name === action.name,
-      );
+      const existing = state.tokens.find((t) => t.type === 'quickFilter' && t.name === action.name);
       if (existing) {
         return {
           ...state,
@@ -188,7 +179,11 @@ function buildFieldSuggestions(metadata: QueryMetadata, input: string): FilterSu
   for (const field of metadata.filterableFields) {
     const col = metadata.columns.find((c) => c.name === field.name);
     const label = col?.label ?? field.name;
-    if (input && !label.toLowerCase().includes(input) && !field.name.toLowerCase().includes(input)) {
+    if (
+      input &&
+      !label.toLowerCase().includes(input) &&
+      !field.name.toLowerCase().includes(input)
+    ) {
       continue;
     }
     suggestions.push({
@@ -237,7 +232,7 @@ function buildQuickFilterSuggestions(metadata: QueryMetadata, input: string): Fi
 
 function buildSuggestions(
   state: SmartFilterState,
-  metadata: QueryMetadata | undefined,
+  metadata: QueryMetadata | undefined
 ): readonly FilterSuggestion[] {
   if (!metadata) return [];
   const input = state.inputValue.toLowerCase();
@@ -325,7 +320,7 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
 
   const suggestions = useMemo(
     () => buildSuggestions(state, options?.metadata),
-    [state, options?.metadata],
+    [state, options?.metadata]
   );
 
   // Extract structured data from tokens
@@ -338,7 +333,7 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
           operator: t.operator!,
           value: t.value!,
         })),
-    [state.tokens],
+    [state.tokens]
   );
 
   const search = useMemo(() => {
@@ -358,29 +353,34 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
   }, [state.tokens]);
 
   const quickFilters = useMemo(
-    () =>
-      state.tokens
-        .filter((t) => t.type === 'quickFilter' && t.name)
-        .map((t) => t.name!),
-    [state.tokens],
+    () => state.tokens.filter((t) => t.type === 'quickFilter' && t.name).map((t) => t.name!),
+    [state.tokens]
   );
 
   // Memoized dispatchers
   const setInput = useCallback((value: string) => dispatch({ type: 'SET_INPUT', value }), []);
   const selectField = useCallback((field: string) => dispatch({ type: 'SELECT_FIELD', field }), []);
-  const selectOperator = useCallback((operator: FilterOperator) => dispatch({ type: 'SELECT_OPERATOR', operator }), []);
-  const confirmValue = useCallback((value: string) => dispatch({ type: 'CONFIRM_VALUE', value }), []);
+  const selectOperator = useCallback(
+    (operator: FilterOperator) => dispatch({ type: 'SELECT_OPERATOR', operator }),
+    []
+  );
+  const confirmValue = useCallback(
+    (value: string) => dispatch({ type: 'CONFIRM_VALUE', value }),
+    []
+  );
   const addPresetToken = useCallback(
     (group: string, name: string, label: string) =>
       dispatch({ type: 'ADD_PRESET_TOKEN', group, name, label }),
-    [],
+    []
   );
   const addQuickFilterToken = useCallback(
-    (name: string, label: string) =>
-      dispatch({ type: 'ADD_QUICK_FILTER_TOKEN', name, label }),
-    [],
+    (name: string, label: string) => dispatch({ type: 'ADD_QUICK_FILTER_TOKEN', name, label }),
+    []
   );
-  const addSearchToken = useCallback((value: string) => dispatch({ type: 'ADD_SEARCH_TOKEN', value }), []);
+  const addSearchToken = useCallback(
+    (value: string) => dispatch({ type: 'ADD_SEARCH_TOKEN', value }),
+    []
+  );
   const removeToken = useCallback((id: string) => dispatch({ type: 'REMOVE_TOKEN', id }), []);
   const clearAll = useCallback(() => dispatch({ type: 'CLEAR_ALL' }), []);
   const cancel = useCallback(() => dispatch({ type: 'CANCEL' }), []);

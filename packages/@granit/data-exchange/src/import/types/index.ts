@@ -6,8 +6,4 @@ export type {
   ImportPreviewResponse,
   MappingConfidence,
 } from './import-preview.js';
-export type {
-  ImportReportResponse,
-  ImportRowError,
-  ImportRowErrorKind,
-} from './import-report.js';
+export type { ImportReportResponse, ImportRowError, ImportRowErrorKind } from './import-report.js';

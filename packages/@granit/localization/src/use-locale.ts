@@ -30,7 +30,7 @@ export function useLocale(): {
       storage.set(nextLocale);
       i18n.changeLanguage(nextLocale).catch(() => undefined);
     },
-    [i18n, storage],
+    [i18n, storage]
   );
 
   return {
