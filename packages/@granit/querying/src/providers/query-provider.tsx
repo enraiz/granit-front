@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 export interface QueryConfig {
   /** Axios instance (from @granit/api-client). */
   readonly client: AxiosInstance;
-  /** API base path (e.g. "/api/patients"). */
+  /** API base path (e.g. "/api/v1/patients"). */
   readonly basePath: string;
   /**
    * TanStack Query key prefix.
@@ -32,7 +32,7 @@ export interface QueryProviderProps {
  *
  * @example
  * ```tsx
- * <QueryProvider config={{ client: api, basePath: '/api/patients' }}>
+ * <QueryProvider config={{ client: api, basePath: '/api/v1/patients' }}>
  *   <PatientList />
  * </QueryProvider>
  * ```

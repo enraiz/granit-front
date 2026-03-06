@@ -11,7 +11,7 @@ import type {
 } from '../types/index.js';
 
 describe('workflow api', () => {
-  const basePath = '/api/workflow';
+  const basePath = '/api/v1/workflow';
   const entityType = 'Document';
   const entityId = 'doc-1';
 
@@ -27,7 +27,7 @@ describe('workflow api', () => {
 
     const result = await fetchStatus(client, basePath, entityType, entityId);
 
-    expect(client.get).toHaveBeenCalledWith('/api/workflow/Document/doc-1/transitions');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/transitions');
     expect(result).toEqual(status);
   });
 
@@ -45,7 +45,7 @@ describe('workflow api', () => {
       comment: 'Ready to publish',
     });
 
-    expect(client.post).toHaveBeenCalledWith('/api/workflow/Document/doc-1/transition', {
+    expect(client.post).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/transition', {
       targetState: 'Published',
       comment: 'Ready to publish',
     });
@@ -67,7 +67,7 @@ describe('workflow api', () => {
 
     const result = await fetchHistory(client, basePath, entityType, entityId);
 
-    expect(client.get).toHaveBeenCalledWith('/api/workflow/Document/doc-1/history');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/history');
     expect(result).toEqual(history);
   });
 });

@@ -13,7 +13,7 @@ const mockClient = axios.create();
 
 const mockConfig: ImportConfig = {
   client: mockClient,
-  basePath: '/api/data-exchange',
+  basePath: '/api/v1/data-exchange',
 };
 
 function createWrapper() {

@@ -36,7 +36,7 @@ export interface CookieConsentProvider {
 }
 
 /**
- * API response from `GET /api/cookies/config`.
+ * API response from `GET /api/v1/cookies/config`.
  * CMP-agnostic contract between the backend and any CMP adapter.
  */
 export interface CookieConsentConfig {

@@ -24,7 +24,7 @@ describe('TimelineProvider', () => {
       wrapper: createWrapper(client),
     });
 
-    expect(result.current.basePath).toBe('/api/timeline');
+    expect(result.current.basePath).toBe('/api/v1/timeline');
   });
 
   it('should throw when used outside provider', () => {

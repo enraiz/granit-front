@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 export interface ExportConfig {
   /** Axios instance used for API calls. */
   readonly client: AxiosInstance;
-  /** Base path for export metadata endpoints (e.g. `/api/data-exchange/metadata`). */
+  /** Base path for export metadata endpoints (e.g. `/api/v1/data-exchange/metadata`). */
   readonly basePath: string;
   /** Optional prefix for React Query keys. */
   readonly queryKeyPrefix?: readonly string[];

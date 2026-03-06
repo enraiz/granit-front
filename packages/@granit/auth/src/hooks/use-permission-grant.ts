@@ -5,6 +5,8 @@ import { permissionKeys } from './use-permissions.js';
 import type { UsePermissionGrantOptions } from '../types/index.js';
 import type { UseMutationResult } from '@tanstack/react-query';
 
+const DEFAULT_BASE_PATH = '/api/v1/auth';
+
 /** Parameters for granting or revoking a permission. */
 export type PermissionGrantParams = {
   roleName: string;
@@ -39,7 +41,7 @@ export type UsePermissionGrantReturn = {
  * ```
  */
 export function usePermissionGrant(options: UsePermissionGrantOptions): UsePermissionGrantReturn {
-  const { client, basePath = '/auth' } = options;
+  const { client, basePath = DEFAULT_BASE_PATH } = options;
   const queryClient = useQueryClient();
 
   const buildUrl = ({ roleName, permissionName }: PermissionGrantParams) =>

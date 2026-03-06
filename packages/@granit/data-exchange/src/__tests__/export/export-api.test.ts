@@ -18,7 +18,7 @@ function createMockClient(): AxiosInstance {
   return client;
 }
 
-const BASE = '/api/data-exchange/export';
+const BASE = '/api/v1/data-exchange/export';
 
 describe('export-api', () => {
   it('fetchExportDefinitions calls GET /definitions', async () => {

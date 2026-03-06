@@ -24,7 +24,7 @@ function createMockClient(): AxiosInstance {
   return client;
 }
 
-const BASE = '/api/data-exchange/import';
+const BASE = '/api/v1/data-exchange/import';
 
 describe('import-api', () => {
   it('uploadImportFile sends POST with multipart/form-data', async () => {

@@ -57,10 +57,12 @@ import { ExportProvider } from '@granit/data-exchange';
 
 function App() {
   return (
-    <ExportProvider config={{
-      client: apiClient,
-      basePath: '/api/data-exchange/export',
-    }}>
+    <ExportProvider
+      config={{
+        client: apiClient,
+        basePath: '/api/v1/data-exchange/export',
+      }}
+    >
       <PatientList />
     </ExportProvider>
   );
@@ -76,10 +78,12 @@ import { ImportProvider } from '@granit/data-exchange';
 
 function App() {
   return (
-    <ImportProvider config={{
-      client: apiClient,
-      basePath: '/api/data-exchange/import',
-    }}>
+    <ImportProvider
+      config={{
+        client: apiClient,
+        basePath: '/api/v1/data-exchange/import',
+      }}
+    >
       <PatientImport />
     </ImportProvider>
   );
@@ -88,11 +92,11 @@ function App() {
 
 ### Props de configuration (communes aux deux providers)
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `config.client` | `AxiosInstance` | — | Instance Axios configuree (via `@granit/api-client`) |
-| `config.basePath` | `string` | — | Prefixe des endpoints REST |
-| `config.queryKeyPrefix` | `string[]` | `['data-export']` / `['data-import']` | Prefixe personnalise pour les query keys TanStack |
+| Prop                    | Type            | Defaut                                | Description                                          |
+| ----------------------- | --------------- | ------------------------------------- | ---------------------------------------------------- |
+| `config.client`         | `AxiosInstance` | —                                     | Instance Axios configuree (via `@granit/api-client`) |
+| `config.basePath`       | `string`        | —                                     | Prefixe des endpoints REST                           |
+| `config.queryKeyPrefix` | `string[]`      | `['data-export']` / `['data-import']` | Prefixe personnalise pour les query keys TanStack    |
 
 ---
 
@@ -142,14 +146,14 @@ startExport({
 // → polling automatique → telechargement automatique quand status === 'Completed'
 ```
 
-| Propriete | Type | Description |
-| --- | --- | --- |
-| `startExport` | `(request: CreateExportJobRequest) => void` | Lance un job d'export |
-| `job` | `ExportJobResponse \| null` | Job en cours |
-| `isExporting` | `boolean` | Job actif (polling en cours) |
-| `isCreating` | `boolean` | Creation du job en cours |
-| `error` | `Error \| null` | Erreur de creation ou de polling |
-| `reset` | `() => void` | Remet l'etat a zero |
+| Propriete     | Type                                        | Description                      |
+| ------------- | ------------------------------------------- | -------------------------------- |
+| `startExport` | `(request: CreateExportJobRequest) => void` | Lance un job d'export            |
+| `job`         | `ExportJobResponse \| null`                 | Job en cours                     |
+| `isExporting` | `boolean`                                   | Job actif (polling en cours)     |
+| `isCreating`  | `boolean`                                   | Creation du job en cours         |
+| `error`       | `Error \| null`                             | Erreur de creation ou de polling |
+| `reset`       | `() => void`                                | Remet l'etat a zero              |
 
 #### `useExportPresets(definitionName?): UseExportPresetsReturn`
 
@@ -174,11 +178,11 @@ save.mutate({
 remove.mutate('Monthly report');
 ```
 
-| Propriete | Type | Description |
-| --- | --- | --- |
-| `presets` | `UseQueryResult<ExportPresetResponse[]>` | Presets sauvegardes |
-| `save` | `UseMutationResult` | Mutation de sauvegarde |
-| `remove` | `UseMutationResult` | Mutation de suppression |
+| Propriete | Type                                     | Description             |
+| --------- | ---------------------------------------- | ----------------------- |
+| `presets` | `UseQueryResult<ExportPresetResponse[]>` | Presets sauvegardes     |
+| `save`    | `UseMutationResult`                      | Mutation de sauvegarde  |
+| `remove`  | `UseMutationResult`                      | Mutation de suppression |
 
 ### Composants
 
@@ -190,13 +194,13 @@ Bouton toolbar pour declencher l'ouverture du dialog d'export.
 <ExportButton onExport={() => setOpen(true)} label="Export" />
 ```
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `onExport` | `() => void` | — | Callback au clic |
-| `label` | `string` | `'Export'` | Texte du bouton |
-| `variant` | `ButtonVariant` | `'outline'` | Variante du bouton |
-| `size` | `ButtonSize` | `'default'` | Taille du bouton |
-| `disabled` | `boolean` | `false` | Desactive le bouton |
+| Prop       | Type            | Defaut      | Description         |
+| ---------- | --------------- | ----------- | ------------------- |
+| `onExport` | `() => void`    | —           | Callback au clic    |
+| `label`    | `string`        | `'Export'`  | Texte du bouton     |
+| `variant`  | `ButtonVariant` | `'outline'` | Variante du bouton  |
+| `size`     | `ButtonSize`    | `'default'` | Taille du bouton    |
+| `disabled` | `boolean`       | `false`     | Desactive le bouton |
 
 #### `<ExportDialog />`
 
@@ -213,27 +217,27 @@ Dialogue complet de configuration d'export : selection de colonnes, choix du for
 />
 ```
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `definitionName` | `string` | — | Nom de la definition d'export |
-| `open` | `boolean` | — | Etat d'ouverture du dialogue |
-| `onOpenChange` | `(open: boolean) => void` | — | Callback au changement d'etat |
-| `formats` | `string[]` | `['xlsx', 'csv']` | Formats disponibles |
-| `sort` | `string` | — | Tri courant a propager au job |
-| `filter` | `Record<string, string>` | — | Filtres courants a propager |
-| `presets` | `Record<string, string>` | — | Presets actifs a propager |
-| `search` | `string` | — | Recherche courante a propager |
+| Prop             | Type                      | Defaut            | Description                   |
+| ---------------- | ------------------------- | ----------------- | ----------------------------- |
+| `definitionName` | `string`                  | —                 | Nom de la definition d'export |
+| `open`           | `boolean`                 | —                 | Etat d'ouverture du dialogue  |
+| `onOpenChange`   | `(open: boolean) => void` | —                 | Callback au changement d'etat |
+| `formats`        | `string[]`                | `['xlsx', 'csv']` | Formats disponibles           |
+| `sort`           | `string`                  | —                 | Tri courant a propager au job |
+| `filter`         | `Record<string, string>`  | —                 | Filtres courants a propager   |
+| `presets`        | `Record<string, string>`  | —                 | Presets actifs a propager     |
+| `search`         | `string`                  | —                 | Recherche courante a propager |
 
 ##### Attributs `data-*`
 
-| Attribut | Description |
-| --- | --- |
-| `data-slot="export-dialog"` | Conteneur principal |
-| `data-slot="export-presets"` | Section presets |
-| `data-slot="export-format"` | Selection du format |
-| `data-slot="export-roundtrip"` | Toggle roundtrip |
-| `data-slot="export-fields"` | Selection des colonnes |
-| `data-slot="export-status"` | Statut du job |
+| Attribut                       | Description            |
+| ------------------------------ | ---------------------- |
+| `data-slot="export-dialog"`    | Conteneur principal    |
+| `data-slot="export-presets"`   | Section presets        |
+| `data-slot="export-format"`    | Selection du format    |
+| `data-slot="export-roundtrip"` | Toggle roundtrip       |
+| `data-slot="export-fields"`    | Selection des colonnes |
+| `data-slot="export-status"`    | Statut du job          |
 
 ---
 
@@ -260,8 +264,18 @@ Gere le cycle de vie complet d'un import : upload, confirmation des mappings, ex
 
 ```tsx
 const {
-  upload, confirmMap, execute, cancel, reset,
-  job, isTerminal, isUploading, isConfirming, isExecuting, isPolling, error,
+  upload,
+  confirmMap,
+  execute,
+  cancel,
+  reset,
+  job,
+  isTerminal,
+  isUploading,
+  isConfirming,
+  isExecuting,
+  isPolling,
+  error,
 } = useImportJob();
 
 // 1. Upload
@@ -278,20 +292,20 @@ execute();
 cancel();
 ```
 
-| Propriete | Type | Description |
-| --- | --- | --- |
-| `upload` | `(file: File, definitionName: string) => void` | Upload un fichier et cree un job |
-| `confirmMap` | `(request: ConfirmMappingsRequest) => void` | Confirme les mappings de colonnes |
-| `execute` | `() => void` | Lance l'execution du job |
-| `cancel` | `() => void` | Annule le job |
-| `job` | `ImportJobResponse \| null` | Job courant |
-| `isTerminal` | `boolean` | Le job est dans un etat terminal |
-| `isUploading` | `boolean` | Upload en cours |
-| `isConfirming` | `boolean` | Confirmation en cours |
-| `isExecuting` | `boolean` | Execution ou polling en cours |
-| `isPolling` | `boolean` | Polling actif |
-| `error` | `Error \| null` | Erreur de n'importe quelle operation |
-| `reset` | `() => void` | Remet l'etat a zero |
+| Propriete      | Type                                           | Description                          |
+| -------------- | ---------------------------------------------- | ------------------------------------ |
+| `upload`       | `(file: File, definitionName: string) => void` | Upload un fichier et cree un job     |
+| `confirmMap`   | `(request: ConfirmMappingsRequest) => void`    | Confirme les mappings de colonnes    |
+| `execute`      | `() => void`                                   | Lance l'execution du job             |
+| `cancel`       | `() => void`                                   | Annule le job                        |
+| `job`          | `ImportJobResponse \| null`                    | Job courant                          |
+| `isTerminal`   | `boolean`                                      | Le job est dans un etat terminal     |
+| `isUploading`  | `boolean`                                      | Upload en cours                      |
+| `isConfirming` | `boolean`                                      | Confirmation en cours                |
+| `isExecuting`  | `boolean`                                      | Execution ou polling en cours        |
+| `isPolling`    | `boolean`                                      | Polling actif                        |
+| `error`        | `Error \| null`                                | Erreur de n'importe quelle operation |
+| `reset`        | `() => void`                                   | Remet l'etat a zero                  |
 
 #### `useImportPreview(): UseImportPreviewReturn`
 
@@ -299,9 +313,19 @@ Gere la previsualisation, l'edition des mappings et le dry-run.
 
 ```tsx
 const {
-  preview, headers, previewRows, suggestions, fieldMetadata,
-  mappings, updateMapping, dryRun, dryRunReport,
-  isPreviewing, isDryRunning, error, reset,
+  preview,
+  headers,
+  previewRows,
+  suggestions,
+  fieldMetadata,
+  mappings,
+  updateMapping,
+  dryRun,
+  dryRunReport,
+  isPreviewing,
+  isDryRunning,
+  error,
+  reset,
 } = useImportPreview();
 
 // Declencher la previsualisation
@@ -314,21 +338,21 @@ updateMapping('Nom', 'LastName');
 dryRun(jobId);
 ```
 
-| Propriete | Type | Description |
-| --- | --- | --- |
-| `preview` | `(jobId: string) => void` | Declenche l'extraction |
-| `headers` | `string[]` | En-tetes du fichier |
-| `previewRows` | `string[][]` | Lignes echantillon |
-| `suggestions` | `ImportColumnMapping[]` | Suggestions du serveur |
-| `fieldMetadata` | `ImportFieldMetadata[]` | Metadonnees des champs cibles |
-| `mappings` | `ImportColumnMapping[]` | Mappings editables (initialises depuis suggestions) |
-| `updateMapping` | `(sourceColumn, targetProperty) => void` | Met a jour un mapping |
-| `dryRun` | `(jobId: string) => void` | Lance une validation dry-run |
-| `dryRunReport` | `ImportReportResponse \| null` | Resultat du dry-run |
-| `isPreviewing` | `boolean` | Previsualisation en cours |
-| `isDryRunning` | `boolean` | Dry-run en cours |
-| `error` | `Error \| null` | Erreur |
-| `reset` | `() => void` | Remet l'etat a zero |
+| Propriete       | Type                                     | Description                                         |
+| --------------- | ---------------------------------------- | --------------------------------------------------- |
+| `preview`       | `(jobId: string) => void`                | Declenche l'extraction                              |
+| `headers`       | `string[]`                               | En-tetes du fichier                                 |
+| `previewRows`   | `string[][]`                             | Lignes echantillon                                  |
+| `suggestions`   | `ImportColumnMapping[]`                  | Suggestions du serveur                              |
+| `fieldMetadata` | `ImportFieldMetadata[]`                  | Metadonnees des champs cibles                       |
+| `mappings`      | `ImportColumnMapping[]`                  | Mappings editables (initialises depuis suggestions) |
+| `updateMapping` | `(sourceColumn, targetProperty) => void` | Met a jour un mapping                               |
+| `dryRun`        | `(jobId: string) => void`                | Lance une validation dry-run                        |
+| `dryRunReport`  | `ImportReportResponse \| null`           | Resultat du dry-run                                 |
+| `isPreviewing`  | `boolean`                                | Previsualisation en cours                           |
+| `isDryRunning`  | `boolean`                                | Dry-run en cours                                    |
+| `error`         | `Error \| null`                          | Erreur                                              |
+| `reset`         | `() => void`                             | Remet l'etat a zero                                 |
 
 #### `useImportReport(jobId?): UseImportReportReturn`
 
@@ -338,21 +362,21 @@ Charge le rapport d'execution et permet le telechargement du fichier de correcti
 const { report, downloadCorrection } = useImportReport(completedJobId);
 
 if (report.data) {
-  console.log(report.data.totalRows);      // 1000
-  console.log(report.data.succeededRows);   // 980
-  console.log(report.data.failedRows);      // 15
-  console.log(report.data.skippedRows);     // 5
-  console.log(report.data.rowErrors);       // ImportRowError[]
+  console.log(report.data.totalRows); // 1000
+  console.log(report.data.succeededRows); // 980
+  console.log(report.data.failedRows); // 15
+  console.log(report.data.skippedRows); // 5
+  console.log(report.data.rowErrors); // ImportRowError[]
 }
 
 // Telecharger le fichier de correction
 await downloadCorrection();
 ```
 
-| Propriete | Type | Description |
-| --- | --- | --- |
-| `report` | `UseQueryResult<ImportReportResponse>` | Rapport d'execution |
-| `downloadCorrection` | `() => Promise<void>` | Telecharge le fichier de correction (blob + content-disposition) |
+| Propriete            | Type                                   | Description                                                      |
+| -------------------- | -------------------------------------- | ---------------------------------------------------------------- |
+| `report`             | `UseQueryResult<ImportReportResponse>` | Rapport d'execution                                              |
+| `downloadCorrection` | `() => Promise<void>`                  | Telecharge le fichier de correction (blob + content-disposition) |
 
 ### Composants
 
@@ -364,31 +388,28 @@ Bouton toolbar pour declencher l'ouverture du dialog d'import.
 <ImportButton onImport={() => setOpen(true)} label="Import" />
 ```
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `onImport` | `() => void` | — | Callback au clic |
-| `label` | `string` | `'Import'` | Texte du bouton |
-| `variant` | `ButtonVariant` | `'outline'` | Variante du bouton |
-| `size` | `ButtonSize` | `'default'` | Taille du bouton |
-| `disabled` | `boolean` | `false` | Desactive le bouton |
+| Prop       | Type            | Defaut      | Description         |
+| ---------- | --------------- | ----------- | ------------------- |
+| `onImport` | `() => void`    | —           | Callback au clic    |
+| `label`    | `string`        | `'Import'`  | Texte du bouton     |
+| `variant`  | `ButtonVariant` | `'outline'` | Variante du bouton  |
+| `size`     | `ButtonSize`    | `'default'` | Taille du bouton    |
+| `disabled` | `boolean`       | `false`     | Desactive le bouton |
 
 #### `<FileDropZone />`
 
 Zone de depot de fichier HTML5 native (drag & drop + clic). Aucune dependance externe.
 
 ```tsx
-<FileDropZone
-  onFile={(file) => upload(file, 'Guava.PatientImport')}
-  accept=".csv,.xlsx"
-/>
+<FileDropZone onFile={(file) => upload(file, 'Guava.PatientImport')} accept=".csv,.xlsx" />
 ```
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `onFile` | `(file: File) => void` | — | Callback a la selection d'un fichier |
-| `accept` | `string` | `'.csv,.xlsx,.xls'` | Types de fichier acceptes |
-| `disabled` | `boolean` | `false` | Desactive la zone |
-| `className` | `string` | — | Classe CSS optionnelle |
+| Prop        | Type                   | Defaut              | Description                          |
+| ----------- | ---------------------- | ------------------- | ------------------------------------ |
+| `onFile`    | `(file: File) => void` | —                   | Callback a la selection d'un fichier |
+| `accept`    | `string`               | `'.csv,.xlsx,.xls'` | Types de fichier acceptes            |
+| `disabled`  | `boolean`              | `false`             | Desactive la zone                    |
+| `className` | `string`               | —                   | Classe CSS optionnelle               |
 
 #### `<ColumnMappingTable />`
 
@@ -404,13 +425,13 @@ Table interactive d'edition des mappings de colonnes. Affiche les en-tetes sourc
 />
 ```
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `mappings` | `ImportColumnMapping[]` | Mappings editables |
-| `fieldMetadata` | `ImportFieldMetadata[]` | Champs cibles disponibles |
-| `previewRows` | `string[][]` | Echantillon de donnees |
-| `headers` | `string[]` | En-tetes du fichier source |
-| `onMappingChange` | `(sourceColumn, targetProperty) => void` | Callback a l'edition |
+| Prop              | Type                                     | Description                |
+| ----------------- | ---------------------------------------- | -------------------------- |
+| `mappings`        | `ImportColumnMapping[]`                  | Mappings editables         |
+| `fieldMetadata`   | `ImportFieldMetadata[]`                  | Champs cibles disponibles  |
+| `previewRows`     | `string[][]`                             | Echantillon de donnees     |
+| `headers`         | `string[]`                               | En-tetes du fichier source |
+| `onMappingChange` | `(sourceColumn, targetProperty) => void` | Callback a l'edition       |
 
 #### `<MappingConfidenceBadge />`
 
@@ -420,33 +441,30 @@ Badge colore affichant le niveau de confiance d'un mapping.
 <MappingConfidenceBadge confidence="Exact" />
 ```
 
-| Prop | Type | Description |
-| --- | --- | --- |
+| Prop         | Type                | Description         |
+| ------------ | ------------------- | ------------------- |
 | `confidence` | `MappingConfidence` | Niveau de confiance |
 
-| Niveau | Signification |
-| --- | --- |
-| `Exact` | Correspondance exacte nom-a-nom |
-| `Fuzzy` | Correspondance approximative (distance d'edition) |
-| `Semantic` | Correspondance semantique (IA) |
-| `Saved` | Mapping provenant d'un preset sauvegarde |
-| `Manual` | Assigne manuellement par l'utilisateur |
+| Niveau     | Signification                                     |
+| ---------- | ------------------------------------------------- |
+| `Exact`    | Correspondance exacte nom-a-nom                   |
+| `Fuzzy`    | Correspondance approximative (distance d'edition) |
+| `Semantic` | Correspondance semantique (IA)                    |
+| `Saved`    | Mapping provenant d'un preset sauvegarde          |
+| `Manual`   | Assigne manuellement par l'utilisateur            |
 
 #### `<ImportReportSummary />`
 
 Grille de statistiques du rapport d'import avec bouton de telechargement du fichier de correction.
 
 ```tsx
-<ImportReportSummary
-  report={report.data}
-  onDownloadCorrection={downloadCorrection}
-/>
+<ImportReportSummary report={report.data} onDownloadCorrection={downloadCorrection} />
 ```
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `report` | `ImportReportResponse` | Rapport d'execution |
-| `onDownloadCorrection` | `() => void` | Callback de telechargement |
+| Prop                   | Type                   | Description                |
+| ---------------------- | ---------------------- | -------------------------- |
+| `report`               | `ImportReportResponse` | Rapport d'execution        |
+| `onDownloadCorrection` | `() => void`           | Callback de telechargement |
 
 #### `<ImportRowErrors />`
 
@@ -456,29 +474,25 @@ Table des erreurs par ligne avec pagination (maxDisplay).
 <ImportRowErrors errors={report.data.rowErrors} maxDisplay={20} />
 ```
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `errors` | `ImportRowError[]` | — | Erreurs par ligne |
-| `maxDisplay` | `number` | `50` | Nombre max affiche (bouton "Show more") |
+| Prop         | Type               | Defaut | Description                             |
+| ------------ | ------------------ | ------ | --------------------------------------- |
+| `errors`     | `ImportRowError[]` | —      | Erreurs par ligne                       |
+| `maxDisplay` | `number`           | `50`   | Nombre max affiche (bouton "Show more") |
 
 #### `<ImportDialog />`
 
 Wizard 4 etapes (Upload, Map, Execute, Report) avec barre de progression.
 
 ```tsx
-<ImportDialog
-  definitionName="Guava.PatientImport"
-  open={open}
-  onOpenChange={setOpen}
-/>
+<ImportDialog definitionName="Guava.PatientImport" open={open} onOpenChange={setOpen} />
 ```
 
-| Prop | Type | Defaut | Description |
-| --- | --- | --- | --- |
-| `definitionName` | `string` | — | Nom de la definition d'import |
-| `open` | `boolean` | — | Etat d'ouverture |
-| `onOpenChange` | `(open: boolean) => void` | — | Callback au changement d'etat |
-| `accept` | `string` | `'.csv,.xlsx,.xls'` | Types de fichier acceptes |
+| Prop             | Type                      | Defaut              | Description                   |
+| ---------------- | ------------------------- | ------------------- | ----------------------------- |
+| `definitionName` | `string`                  | —                   | Nom de la definition d'import |
+| `open`           | `boolean`                 | —                   | Etat d'ouverture              |
+| `onOpenChange`   | `(open: boolean) => void` | —                   | Callback au changement d'etat |
+| `accept`         | `string`                  | `'.csv,.xlsx,.xls'` | Types de fichier acceptes     |
 
 ---
 
@@ -564,8 +578,14 @@ interface ExportPresetResponse {
 
 ```typescript
 type ImportJobStatus =
-  | 'Created' | 'Previewed' | 'Mapped' | 'Executing'
-  | 'Completed' | 'PartiallyCompleted' | 'Failed' | 'Cancelled';
+  | 'Created'
+  | 'Previewed'
+  | 'Mapped'
+  | 'Executing'
+  | 'Completed'
+  | 'PartiallyCompleted'
+  | 'Failed'
+  | 'Cancelled';
 ```
 
 #### `ImportJobResponse`
@@ -659,30 +679,30 @@ type ImportRowErrorKind = 'Conversion' | 'Validation' | 'Persistence' | 'Identit
 
 ### Export
 
-| Methode | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `{basePath}/definitions` | Liste des definitions d'export |
-| `GET` | `{basePath}/definitions/{name}/fields` | Champs disponibles d'une definition |
-| `POST` | `{basePath}/jobs` | Creer un job d'export |
-| `GET` | `{basePath}/jobs/{jobId}` | Statut d'un job |
-| `GET` | `{basePath}/jobs/{jobId}/download` | Telecharger le fichier genere |
-| `GET` | `{basePath}/presets/{definitionName}` | Presets sauvegardes |
-| `POST` | `{basePath}/presets` | Sauvegarder un preset |
-| `DELETE` | `{basePath}/presets/{definitionName}/{presetName}` | Supprimer un preset |
+| Methode  | Endpoint                                           | Description                         |
+| -------- | -------------------------------------------------- | ----------------------------------- |
+| `GET`    | `{basePath}/definitions`                           | Liste des definitions d'export      |
+| `GET`    | `{basePath}/definitions/{name}/fields`             | Champs disponibles d'une definition |
+| `POST`   | `{basePath}/jobs`                                  | Creer un job d'export               |
+| `GET`    | `{basePath}/jobs/{jobId}`                          | Statut d'un job                     |
+| `GET`    | `{basePath}/jobs/{jobId}/download`                 | Telecharger le fichier genere       |
+| `GET`    | `{basePath}/presets/{definitionName}`              | Presets sauvegardes                 |
+| `POST`   | `{basePath}/presets`                               | Sauvegarder un preset               |
+| `DELETE` | `{basePath}/presets/{definitionName}/{presetName}` | Supprimer un preset                 |
 
 ### Import
 
-| Methode | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `{basePath}/` | Upload fichier + creation du job (multipart) |
-| `POST` | `{basePath}/{jobId}/preview` | Previsualisation (headers, echantillon, suggestions) |
-| `PUT` | `{basePath}/{jobId}/mappings` | Confirmer les mappings |
-| `POST` | `{basePath}/{jobId}/execute` | Lancer l'execution asynchrone |
-| `POST` | `{basePath}/{jobId}/dry-run` | Validation dry-run (synchrone) |
-| `GET` | `{basePath}/{jobId}` | Statut du job |
-| `DELETE` | `{basePath}/{jobId}` | Annuler le job |
-| `GET` | `{basePath}/{jobId}/report` | Rapport d'execution |
-| `GET` | `{basePath}/{jobId}/correction-file` | Fichier de correction (blob) |
+| Methode  | Endpoint                             | Description                                          |
+| -------- | ------------------------------------ | ---------------------------------------------------- |
+| `POST`   | `{basePath}/`                        | Upload fichier + creation du job (multipart)         |
+| `POST`   | `{basePath}/{jobId}/preview`         | Previsualisation (headers, echantillon, suggestions) |
+| `PUT`    | `{basePath}/{jobId}/mappings`        | Confirmer les mappings                               |
+| `POST`   | `{basePath}/{jobId}/execute`         | Lancer l'execution asynchrone                        |
+| `POST`   | `{basePath}/{jobId}/dry-run`         | Validation dry-run (synchrone)                       |
+| `GET`    | `{basePath}/{jobId}`                 | Statut du job                                        |
+| `DELETE` | `{basePath}/{jobId}`                 | Annuler le job                                       |
+| `GET`    | `{basePath}/{jobId}/report`          | Rapport d'execution                                  |
+| `GET`    | `{basePath}/{jobId}/correction-file` | Fichier de correction (blob)                         |
 
 ---
 
@@ -714,10 +734,12 @@ function PatientToolbar({ sort, filter, search }) {
 
 function App() {
   return (
-    <ExportProvider config={{
-      client: apiClient,
-      basePath: '/api/data-exchange/export',
-    }}>
+    <ExportProvider
+      config={{
+        client: apiClient,
+        basePath: '/api/v1/data-exchange/export',
+      }}
+    >
       <PatientToolbar sort="-CreatedAt" filter={{}} search="" />
     </ExportProvider>
   );
@@ -736,21 +758,19 @@ function PatientImport() {
   return (
     <>
       <ImportButton onImport={() => setOpen(true)} />
-      <ImportDialog
-        definitionName="Guava.PatientImport"
-        open={open}
-        onOpenChange={setOpen}
-      />
+      <ImportDialog definitionName="Guava.PatientImport" open={open} onOpenChange={setOpen} />
     </>
   );
 }
 
 function App() {
   return (
-    <ImportProvider config={{
-      client: apiClient,
-      basePath: '/api/data-exchange/import',
-    }}>
+    <ImportProvider
+      config={{
+        client: apiClient,
+        basePath: '/api/v1/data-exchange/import',
+      }}
+    >
       <PatientImport />
     </ImportProvider>
   );
@@ -773,17 +793,11 @@ import {
 function CustomImport() {
   const importJob = useImportJob();
   const preview = useImportPreview();
-  const report = useImportReport(
-    importJob.isTerminal ? importJob.job?.id : undefined,
-  );
+  const report = useImportReport(importJob.isTerminal ? importJob.job?.id : undefined);
 
   // Step 1: Upload
   if (!importJob.job) {
-    return (
-      <FileDropZone
-        onFile={(file) => importJob.upload(file, 'Guava.PatientImport')}
-      />
-    );
+    return <FileDropZone onFile={(file) => importJob.upload(file, 'Guava.PatientImport')} />;
   }
 
   // Step 2: Map
@@ -802,9 +816,11 @@ function CustomImport() {
           headers={preview.headers}
           onMappingChange={preview.updateMapping}
         />
-        <button onClick={() => {
-          importJob.confirmMap({ mappings: preview.mappings });
-        }}>
+        <button
+          onClick={() => {
+            importJob.confirmMap({ mappings: preview.mappings });
+          }}
+        >
           Confirmer les mappings
         </button>
       </div>

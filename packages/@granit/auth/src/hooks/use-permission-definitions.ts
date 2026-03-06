@@ -5,10 +5,12 @@ import { permissionKeys } from './use-permissions.js';
 import type { PermissionGroupDto, UsePermissionDefinitionsOptions } from '../types/index.js';
 import type { UseQueryResult } from '@tanstack/react-query';
 
+const DEFAULT_BASE_PATH = '/api/v1/auth';
+
 /**
  * Fetches all permission definitions grouped by module.
  *
- * Calls `GET {basePath}/definitions` (default `/auth/definitions`) and returns
+ * Calls `GET {basePath}/definitions` (default `/api/v1/auth/definitions`) and returns
  * the full permission tree used for admin UIs (role-permission matrix).
  *
  * @param options - Axios client instance and optional configuration.
@@ -25,7 +27,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 export function usePermissionDefinitions(
   options: UsePermissionDefinitionsOptions
 ): UseQueryResult<PermissionGroupDto[]> {
-  const { client, basePath = '/auth', enabled } = options;
+  const { client, basePath = DEFAULT_BASE_PATH, enabled } = options;
 
   return useQuery({
     queryKey: permissionKeys.definitions(),

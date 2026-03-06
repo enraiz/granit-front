@@ -13,7 +13,7 @@ import type { AxiosInstance } from 'axios';
  * Fetch a paginated page of results.
  *
  * @param client - Axios instance (from @granit/api-client)
- * @param basePath - API base path (e.g. "/api/patients")
+ * @param basePath - API base path (e.g. "/api/v1/patients")
  * @param params - Query parameters
  */
 export async function fetchPage<T>(
@@ -31,7 +31,7 @@ export async function fetchPage<T>(
  * Fetch grouped results (when groupBy is specified).
  *
  * @param client - Axios instance (from @granit/api-client)
- * @param basePath - API base path (e.g. "/api/patients")
+ * @param basePath - API base path (e.g. "/api/v1/patients")
  * @param params - Query parameters (must include groupBy)
  */
 export async function fetchGrouped<T>(
@@ -49,7 +49,7 @@ export async function fetchGrouped<T>(
  * Fetch query metadata (columns, filterable fields, presets, etc.).
  *
  * @param client - Axios instance (from @granit/api-client)
- * @param basePath - API base path (e.g. "/api/patients")
+ * @param basePath - API base path (e.g. "/api/v1/patients")
  */
 export async function fetchQueryMeta(
   client: AxiosInstance,

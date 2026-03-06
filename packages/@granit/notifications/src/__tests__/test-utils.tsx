@@ -5,7 +5,7 @@ import { NotificationProvider } from '../providers/notification-provider.js';
 import type { NotificationConfig } from '../types/index.js';
 import type { AxiosInstance } from 'axios';
 
-export function createWrapper(client: AxiosInstance, basePath = '/api') {
+export function createWrapper(client: AxiosInstance, basePath = '/api/v1') {
   return function Wrapper({ children }: Readonly<{ children: React.ReactNode }>) {
     const config: NotificationConfig = {
       apiClient: client,

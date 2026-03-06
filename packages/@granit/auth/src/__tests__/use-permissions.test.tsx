@@ -78,7 +78,7 @@ describe('usePermissions', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should call GET /auth/me with default basePath', async () => {
+  it('should call GET /api/v1/auth/me with default basePath', async () => {
     const client = createMockClient();
     const { Wrapper } = createWrapper();
 
@@ -86,7 +86,7 @@ describe('usePermissions', () => {
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
-    expect(client.get).toHaveBeenCalledWith('/auth/me');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/auth/me');
   });
 
   it('should use custom basePath when provided', async () => {

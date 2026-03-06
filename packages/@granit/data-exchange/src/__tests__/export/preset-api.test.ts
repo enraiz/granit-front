@@ -17,7 +17,7 @@ function createMockClient(): AxiosInstance {
   return client;
 }
 
-const BASE = '/api/data-exchange/export';
+const BASE = '/api/v1/data-exchange/export';
 
 describe('preset-api', () => {
   it('fetchExportPresets calls GET /presets/{definitionName}', async () => {

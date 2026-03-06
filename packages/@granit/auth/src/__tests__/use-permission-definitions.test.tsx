@@ -45,7 +45,7 @@ describe('usePermissionDefinitions', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(MOCK_GROUPS);
-    expect(client.get).toHaveBeenCalledWith('/auth/definitions');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/auth/definitions');
   });
 
   it('should use custom basePath', async () => {
@@ -53,13 +53,13 @@ describe('usePermissionDefinitions', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { result } = renderHook(
-      () => usePermissionDefinitions({ client, basePath: '/api/auth' }),
+      () => usePermissionDefinitions({ client, basePath: '/api/v1/auth' }),
       { wrapper: createWrapper() }
     );
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.get).toHaveBeenCalledWith('/api/auth/definitions');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/auth/definitions');
   });
 
   it('should not fetch when disabled', () => {

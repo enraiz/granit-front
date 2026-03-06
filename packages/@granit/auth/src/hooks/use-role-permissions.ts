@@ -5,10 +5,12 @@ import { permissionKeys } from './use-permissions.js';
 import type { PermissionGrantDto, UseRolePermissionsOptions } from '../types/index.js';
 import type { UseQueryResult } from '@tanstack/react-query';
 
+const DEFAULT_BASE_PATH = '/api/v1/auth';
+
 /**
  * Fetches the permissions granted to a specific role.
  *
- * Calls `GET {basePath}/roles/{roleName}` (default `/auth/roles/{roleName}`)
+ * Calls `GET {basePath}/roles/{roleName}` (default `/api/v1/auth/roles/{roleName}`)
  * and returns the list of granted permission names.
  *
  * @param options - Axios client, role name, and optional configuration.
@@ -28,7 +30,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 export function useRolePermissions(
   options: UseRolePermissionsOptions
 ): UseQueryResult<PermissionGrantDto> {
-  const { client, roleName, basePath = '/auth', enabled } = options;
+  const { client, roleName, basePath = DEFAULT_BASE_PATH, enabled } = options;
 
   return useQuery({
     queryKey: permissionKeys.role(roleName),

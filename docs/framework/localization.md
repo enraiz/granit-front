@@ -5,24 +5,24 @@ Factory i18next avec traductions dynamiques depuis le backend Granit.
 ## Architecture
 
 Les traductions ne sont **pas embarquées** dans l'application. Elles proviennent du backend
-via l'API `GET /api/granit/localization?cultureName={locale}` et sont appliquées au runtime.
+via l'API `GET /api/v1/localization?cultureName={locale}` et sont appliquées au runtime.
 
 Les langues disponibles sont également dynamiques — pas de liste codée en dur.
 
 ### Flow de bootstrap
 
-```
+```text
 1. resolveInitialLocale()  → détecte la locale (localStorage → navigator → isDefault → 'fr')
-2. GET /api/granit/localization?cultureName=fr  → via hook orval
+2. GET /api/v1/localization?cultureName=fr  → via hook orval
 3. applyTranslations(i18n, response)  → merge les traductions dans i18next
 4. Rendu de l'application
 ```
 
 ### Changement de langue
 
-```
+```text
 1. setLocale('en')  → persiste dans localStorage (dd:locale)
-2. Re-fetch GET /api/granit/localization?cultureName=en
+2. Re-fetch GET /api/v1/localization?cultureName=en
 3. applyTranslations(i18n, response)
 4. L'UI se met à jour via react-i18next
 ```
@@ -45,16 +45,17 @@ export const i18n = createLocalization();
 
 #### Options
 
-| Option | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `storageKey` | `string` | `'locale'` | Clé localStorage (→ `dd:locale`) |
-| `defaultNS` | `string` | `'translation'` | Namespace i18next par défaut |
+| Option       | Type     | Défaut          | Description                      |
+| ------------ | -------- | --------------- | -------------------------------- |
+| `storageKey` | `string` | `'locale'`      | Clé localStorage (→ `dd:locale`) |
+| `defaultNS`  | `string` | `'translation'` | Namespace i18next par défaut     |
 
 ### `resolveInitialLocale(languages?, storageKey?): string`
 
 Détecte la locale initiale avant que les données backend ne soient disponibles.
 
 Cascade de détection :
+
 1. `localStorage` (`dd:locale`) → si présent, retourner
 2. `navigator.language` (ex: `"fr-FR"` → `"fr"`) → si dans les langues disponibles, retourner
 3. Si `languages` fourni → retourner celui avec `isDefault === true`
@@ -126,10 +127,10 @@ Correspond au backend `Granit.Localization.LanguageInfo`.
 
 ```typescript
 interface LanguageInfo {
-  cultureName: string;   // ex: 'fr', 'en'
-  displayName: string;   // ex: 'Français', 'English'
-  flagIcon?: string;     // ex: 'fr', 'gb'
-  isDefault: boolean;    // true pour la langue par défaut
+  cultureName: string; // ex: 'fr', 'en'
+  displayName: string; // ex: 'Français', 'English'
+  flagIcon?: string; // ex: 'fr', 'gb'
+  isDefault: boolean; // true pour la langue par défaut
 }
 ```
 
