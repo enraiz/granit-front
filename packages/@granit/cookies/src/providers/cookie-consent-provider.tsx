@@ -68,6 +68,7 @@ export function CookieConsentProvider({
   const acceptCategory = useCallback(
     (category: CookieCategory) => {
       provider.setConsent(category, true);
+      setHasConsented(provider.hasConsented());
     },
     [provider]
   );
@@ -76,16 +77,19 @@ export function CookieConsentProvider({
     (category: CookieCategory) => {
       if (category === "strictly_necessary") return;
       provider.setConsent(category, false);
+      setHasConsented(provider.hasConsented());
     },
     [provider]
   );
 
   const acceptAll = useCallback(() => {
     provider.setAllConsents(true);
+    setHasConsented(provider.hasConsented());
   }, [provider]);
 
   const revokeAll = useCallback(() => {
     provider.setAllConsents(false);
+    setHasConsented(provider.hasConsented());
   }, [provider]);
 
   const value = useMemo<CookieConsentContextValue>(
