@@ -50,6 +50,8 @@ function buildConsentState(
  * - `init()` dynamically imports Klaro (no CSS) and creates a consent manager.
  * - `getConsents()` maps Klaro per-service consent to per-category consent.
  * - `onConsentChange()` watches the Klaro manager for updates.
+ * - `setConsent()` / `setAllConsents()` persist consent changes through Klaro.
+ * - `hasConsented()` checks whether the user has already made a consent choice.
  *
  * @example
  * ```ts
@@ -70,7 +72,6 @@ export function createKlaroCookieConsentProvider(
 
   return {
     async init() {
-      // Dynamic import — Klaro is loaded only when the provider is initialized
       const klaro = await import("klaro/dist/klaro-no-css");
       manager = klaro.getManager(klaroConfig) as KlaroConsentManager;
     },
@@ -100,10 +101,38 @@ export function createKlaroCookieConsentProvider(
 
       manager.watch(watcher);
 
-      // Klaro has no unwatch API — replace update with no-op on cleanup
       return () => {
         watcher.update = () => {};
       };
+    },
+
+    setConsent(category, granted) {
+      if (!manager || category === "strictly_necessary") return;
+
+      const services = serviceMappings.filter((m) => m.category === category);
+      for (const service of services) {
+        manager.setConsent(service.name, granted);
+      }
+      manager.saveAndApplyConsents();
+    },
+
+    setAllConsents(granted) {
+      if (!manager) return;
+
+      for (const category of ALL_CATEGORIES) {
+        if (category === "strictly_necessary") continue;
+
+        const services = serviceMappings.filter((m) => m.category === category);
+        for (const service of services) {
+          manager.setConsent(service.name, granted);
+        }
+      }
+      manager.saveAndApplyConsents();
+    },
+
+    hasConsented() {
+      if (!manager) return false;
+      return manager.confirmed;
     },
   };
 }

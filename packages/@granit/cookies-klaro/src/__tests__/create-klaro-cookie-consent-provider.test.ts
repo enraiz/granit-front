@@ -4,9 +4,11 @@ import { createKlaroCookieConsentProvider } from "../adapters/create-klaro-cooki
 
 import type { KlaroConsentManager, KlaroConfig, KlaroWatcher } from "../types/index.js";
 
-// Mock the dynamic import of klaro
 const mockManager: KlaroConsentManager = {
   getConsent: vi.fn(),
+  setConsent: vi.fn(),
+  saveAndApplyConsents: vi.fn(),
+  confirmed: false,
   watch: vi.fn(),
 };
 
@@ -31,6 +33,7 @@ const serviceMappings = [
 describe("createKlaroCookieConsentProvider", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockManager.confirmed = false;
   });
 
   it("should return default consents before init", () => {
@@ -54,7 +57,6 @@ describe("createKlaroCookieConsentProvider", () => {
 
     await provider.init();
 
-    // After init, getConsents should use the manager
     vi.mocked(mockManager.getConsent).mockReturnValue(false);
     const consents = provider.getConsents();
     expect(consents.strictly_necessary).toBe(true);
@@ -85,7 +87,6 @@ describe("createKlaroCookieConsentProvider", () => {
     await provider.init();
 
     vi.mocked(mockManager.getConsent).mockImplementation((name: string) => {
-      // Only google-analytics consented, matomo not
       return name === "google-analytics";
     });
 
@@ -124,7 +125,6 @@ describe("createKlaroCookieConsentProvider", () => {
 
     expect(mockManager.watch).toHaveBeenCalledOnce();
 
-    // Simulate a consent change
     vi.mocked(mockManager.getConsent).mockReturnValue(true);
     capturedWatcher?.update({}, "consents", {});
 
@@ -155,7 +155,6 @@ describe("createKlaroCookieConsentProvider", () => {
 
     unsubscribe();
 
-    // After cleanup, calling update should be a no-op
     vi.mocked(mockManager.getConsent).mockReturnValue(true);
     capturedWatcher?.update({}, "consents", {});
 
@@ -172,7 +171,124 @@ describe("createKlaroCookieConsentProvider", () => {
     const unsubscribe = provider.onConsentChange(callback);
 
     expect(typeof unsubscribe).toBe("function");
-    // Should not throw
     unsubscribe();
+  });
+
+  describe("setConsent", () => {
+    it("should set consent for all services in a category and persist", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      provider.setConsent("analytics", true);
+
+      expect(mockManager.setConsent).toHaveBeenCalledWith("google-analytics", true);
+      expect(mockManager.setConsent).toHaveBeenCalledWith("matomo", true);
+      expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
+    });
+
+    it("should ignore strictly_necessary category", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      provider.setConsent("strictly_necessary", true);
+
+      expect(mockManager.setConsent).not.toHaveBeenCalled();
+      expect(mockManager.saveAndApplyConsents).not.toHaveBeenCalled();
+    });
+
+    it("should be a no-op when manager not initialized", () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+
+      provider.setConsent("analytics", true);
+
+      expect(mockManager.setConsent).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("setAllConsents", () => {
+    it("should set all non-essential services and persist", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      provider.setAllConsents(true);
+
+      expect(mockManager.setConsent).toHaveBeenCalledWith("google-analytics", true);
+      expect(mockManager.setConsent).toHaveBeenCalledWith("matomo", true);
+      expect(mockManager.setConsent).toHaveBeenCalledWith("youtube", true);
+      expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
+    });
+
+    it("should revoke all non-essential services", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      provider.setAllConsents(false);
+
+      expect(mockManager.setConsent).toHaveBeenCalledWith("google-analytics", false);
+      expect(mockManager.setConsent).toHaveBeenCalledWith("matomo", false);
+      expect(mockManager.setConsent).toHaveBeenCalledWith("youtube", false);
+      expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
+    });
+
+    it("should be a no-op when manager not initialized", () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+
+      provider.setAllConsents(true);
+
+      expect(mockManager.setConsent).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("hasConsented", () => {
+    it("should return false when manager not initialized", () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+
+      expect(provider.hasConsented()).toBe(false);
+    });
+
+    it("should return false when user has not consented yet", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      mockManager.confirmed = false;
+
+      expect(provider.hasConsented()).toBe(false);
+    });
+
+    it("should return true when user has already consented", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      mockManager.confirmed = true;
+
+      expect(provider.hasConsented()).toBe(true);
+    });
   });
 });

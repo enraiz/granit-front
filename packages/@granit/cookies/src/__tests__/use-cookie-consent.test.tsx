@@ -4,11 +4,12 @@ import { describe, it, expect, vi } from "vitest";
 import { useCookieConsent } from "../hooks/use-cookie-consent.js";
 import { CookieConsentProvider } from "../providers/cookie-consent-provider.js";
 
-import type { CookieConsentProvider as ICookieConsentProvider, ConsentState } from "../types/index.js";
+import type { CookieCategory, CookieConsentProvider as ICookieConsentProvider, ConsentState } from "../types/index.js";
 import type { ReactNode } from "react";
 
 function createMockProvider(
-  consents: Partial<ConsentState> = {}
+  consents: Partial<ConsentState> = {},
+  consented = false,
 ): ICookieConsentProvider {
   const state: ConsentState = {
     strictly_necessary: true,
@@ -18,10 +19,26 @@ function createMockProvider(
     ...consents,
   };
 
+  let changeCallback: ((consents: ConsentState) => void) | undefined;
+
   return {
     init: vi.fn().mockResolvedValue(undefined),
     getConsents: vi.fn().mockReturnValue(state),
-    onConsentChange: vi.fn().mockReturnValue(() => {}),
+    onConsentChange: vi.fn().mockImplementation((cb) => {
+      changeCallback = cb;
+      return () => { changeCallback = undefined; };
+    }),
+    setConsent: vi.fn().mockImplementation((category: CookieCategory, granted: boolean) => {
+      state[category] = granted;
+      changeCallback?.(structuredClone(state));
+    }),
+    setAllConsents: vi.fn().mockImplementation((granted) => {
+      state.preferences = granted;
+      state.analytics = granted;
+      state.marketing = granted;
+      changeCallback?.(structuredClone(state));
+    }),
+    hasConsented: vi.fn().mockReturnValue(consented),
   };
 }
 
@@ -52,6 +69,7 @@ describe("useCookieConsent", () => {
     expect(result.current.consents.strictly_necessary).toBe(true);
     expect(result.current.consents.analytics).toBe(false);
     expect(result.current.isLoaded).toBe(false);
+    expect(result.current.hasConsented).toBe(false);
   });
 
   it("should call provider.init on mount", () => {
@@ -65,7 +83,7 @@ describe("useCookieConsent", () => {
   });
 
   it("should load consents after initialization", async () => {
-    const provider = createMockProvider({ analytics: true });
+    const provider = createMockProvider({ analytics: true }, true);
 
     const { result } = renderHook(() => useCookieConsent(), {
       wrapper: createWrapper(provider),
@@ -76,11 +94,12 @@ describe("useCookieConsent", () => {
     });
 
     expect(result.current.consents.analytics).toBe(true);
+    expect(result.current.hasConsented).toBe(true);
     expect(provider.getConsents).toHaveBeenCalled();
     expect(provider.onConsentChange).toHaveBeenCalled();
   });
 
-  it("should update consent state on acceptCategory", async () => {
+  it("should delegate acceptCategory to provider.setConsent", async () => {
     const provider = createMockProvider();
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -95,10 +114,11 @@ describe("useCookieConsent", () => {
       result.current.acceptCategory("analytics");
     });
 
+    expect(provider.setConsent).toHaveBeenCalledWith("analytics", true);
     expect(result.current.consents.analytics).toBe(true);
   });
 
-  it("should update consent state on revokeCategory", async () => {
+  it("should delegate revokeCategory to provider.setConsent", async () => {
     const provider = createMockProvider({ preferences: true });
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -113,6 +133,7 @@ describe("useCookieConsent", () => {
       result.current.revokeCategory("preferences");
     });
 
+    expect(provider.setConsent).toHaveBeenCalledWith("preferences", false);
     expect(result.current.consents.preferences).toBe(false);
   });
 
@@ -131,10 +152,11 @@ describe("useCookieConsent", () => {
       result.current.revokeCategory("strictly_necessary");
     });
 
+    expect(provider.setConsent).not.toHaveBeenCalled();
     expect(result.current.consents.strictly_necessary).toBe(true);
   });
 
-  it("should grant all categories on acceptAll", async () => {
+  it("should delegate acceptAll to provider.setAllConsents", async () => {
     const provider = createMockProvider();
 
     const { result } = renderHook(() => useCookieConsent(), {
@@ -149,6 +171,7 @@ describe("useCookieConsent", () => {
       result.current.acceptAll();
     });
 
+    expect(provider.setAllConsents).toHaveBeenCalledWith(true);
     expect(result.current.consents).toEqual({
       strictly_necessary: true,
       preferences: true,
@@ -157,7 +180,7 @@ describe("useCookieConsent", () => {
     });
   });
 
-  it("should revoke non-essential categories on revokeAll", async () => {
+  it("should delegate revokeAll to provider.setAllConsents", async () => {
     const provider = createMockProvider({
       preferences: true,
       analytics: true,
@@ -176,11 +199,26 @@ describe("useCookieConsent", () => {
       result.current.revokeAll();
     });
 
+    expect(provider.setAllConsents).toHaveBeenCalledWith(false);
     expect(result.current.consents).toEqual({
       strictly_necessary: true,
       preferences: false,
       analytics: false,
       marketing: false,
     });
+  });
+
+  it("should expose hasConsented as false when user has not consented yet", async () => {
+    const provider = createMockProvider({}, false);
+
+    const { result } = renderHook(() => useCookieConsent(), {
+      wrapper: createWrapper(provider),
+    });
+
+    await vi.waitFor(() => {
+      expect(result.current.isLoaded).toBe(true);
+    });
+
+    expect(result.current.hasConsented).toBe(false);
   });
 });

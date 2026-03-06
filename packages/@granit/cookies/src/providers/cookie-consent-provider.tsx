@@ -47,14 +47,19 @@ export function CookieConsentProvider({
 }: Readonly<CookieConsentProviderProps>) {
   const [consents, setConsents] = useState<ConsentState>(DEFAULT_CONSENTS);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasConsented, setHasConsented] = useState(false);
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
 
     provider.init().then(() => {
       setConsents(provider.getConsents());
+      setHasConsented(provider.hasConsented());
       setIsLoaded(true);
-      unsubscribe = provider.onConsentChange(setConsents);
+      unsubscribe = provider.onConsentChange((newConsents) => {
+        setConsents(newConsents);
+        setHasConsented(provider.hasConsented());
+      });
     });
 
     return () => unsubscribe?.();
@@ -62,44 +67,38 @@ export function CookieConsentProvider({
 
   const acceptCategory = useCallback(
     (category: CookieCategory) => {
-      setConsents((prev) => ({ ...prev, [category]: true }));
+      provider.setConsent(category, true);
     },
-    []
+    [provider]
   );
 
   const revokeCategory = useCallback(
     (category: CookieCategory) => {
       if (category === "strictly_necessary") return;
-      setConsents((prev) => ({ ...prev, [category]: false }));
+      provider.setConsent(category, false);
     },
-    []
+    [provider]
   );
 
   const acceptAll = useCallback(() => {
-    setConsents({
-      strictly_necessary: true,
-      preferences: true,
-      analytics: true,
-      marketing: true,
-    });
-  }, []);
+    provider.setAllConsents(true);
+  }, [provider]);
 
   const revokeAll = useCallback(() => {
-    setConsents({
-      ...DEFAULT_CONSENTS,
-    });
-  }, []);
+    provider.setAllConsents(false);
+  }, [provider]);
 
   const value = useMemo<CookieConsentContextValue>(
     () => ({
       consents,
       isLoaded,
+      hasConsented,
       acceptCategory,
       revokeCategory,
       acceptAll,
       revokeAll,
     }),
-    [consents, isLoaded, acceptCategory, revokeCategory, acceptAll, revokeAll]
+    [consents, isLoaded, hasConsented, acceptCategory, revokeCategory, acceptAll, revokeAll]
   );
 
   return (

@@ -28,6 +28,15 @@ export interface CookieConsentProvider {
    * Called when the user updates their consent preferences.
    */
   onConsentChange(callback: (consents: ConsentState) => void): () => void;
+
+  /** Sets consent for a single category and persists it in the CMP. */
+  setConsent(category: CookieCategory, granted: boolean): void;
+
+  /** Sets consent for all non-essential categories and persists it in the CMP. */
+  setAllConsents(granted: boolean): void;
+
+  /** Returns true if the user has already made a consent choice. */
+  hasConsented(): boolean;
 }
 
 /**
@@ -39,6 +48,9 @@ export interface CookieConsentContextValue {
 
   /** Whether the CMP has been initialized and consent state is loaded. */
   isLoaded: boolean;
+
+  /** Whether the user has already made a consent choice. */
+  hasConsented: boolean;
 
   /** Grants consent for a specific category. */
   acceptCategory: (category: CookieCategory) => void;
