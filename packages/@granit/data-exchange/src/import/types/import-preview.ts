@@ -8,7 +8,7 @@ export type MappingConfidence = 'Manual' | 'Saved' | 'Exact' | 'Fuzzy' | 'Semant
  * Mapping between a source file column and a target entity property.
  * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.ColumnMappingDto`.
  */
-export interface ColumnMapping {
+export interface ImportColumnMapping {
   readonly sourceColumn: string;
   readonly targetProperty: string | null;
   readonly confidence: MappingConfidence;
@@ -18,7 +18,7 @@ export interface ColumnMapping {
  * Metadata about a target field for import mapping.
  * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.FieldMetadataDto`.
  */
-export interface FieldMetadata {
+export interface ImportFieldMetadata {
   readonly propertyPath: string;
   readonly clrTypeName: string;
   readonly displayName: string;
@@ -33,8 +33,8 @@ export interface FieldMetadata {
 export interface ImportPreviewResponse {
   readonly headers: readonly string[];
   readonly previewRows: readonly (readonly string[])[];
-  readonly suggestions: readonly ColumnMapping[];
-  readonly fieldMetadata: readonly FieldMetadata[];
+  readonly suggestions: readonly ImportColumnMapping[];
+  readonly fieldMetadata: readonly ImportFieldMetadata[];
 }
 
 /**
@@ -42,5 +42,5 @@ export interface ImportPreviewResponse {
  * Mirrors `Granit.DataExchange.Endpoints.Dtos.Import.ConfirmMappingsRequest`.
  */
 export interface ConfirmMappingsRequest {
-  readonly mappings: readonly ColumnMapping[];
+  readonly mappings: readonly ImportColumnMapping[];
 }

@@ -38,10 +38,10 @@ export {
 
 // Import
 export {
-  type ColumnMapping,
+  type ImportColumnMapping,
   type ColumnMappingTableProps,
   type ConfirmMappingsRequest,
-  type FieldMetadata,
+  type ImportFieldMetadata,
   type FileDropZoneProps,
   type ImportButtonProps,
   type ImportConfig,

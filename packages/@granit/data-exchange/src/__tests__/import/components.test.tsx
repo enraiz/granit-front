@@ -14,7 +14,7 @@ import { MappingConfidenceBadge } from '../../import/components/mapping-confiden
 import { ImportProvider } from '../../import/providers/import-provider.js';
 
 import type { ImportConfig } from '../../import/providers/import-provider.js';
-import type { ColumnMapping, FieldMetadata } from '../../import/types/import-preview.js';
+import type { ImportColumnMapping, ImportFieldMetadata } from '../../import/types/import-preview.js';
 import type { ImportReportResponse } from '../../import/types/import-report.js';
 import type { ReactNode } from 'react';
 
@@ -224,11 +224,11 @@ describe('ImportRowErrors', () => {
 });
 
 describe('ColumnMappingTable', () => {
-  const mappings: ColumnMapping[] = [
+  const mappings: ImportColumnMapping[] = [
     { sourceColumn: 'col_name', targetProperty: 'Name', confidence: 'Exact' },
     { sourceColumn: 'col_email', targetProperty: null, confidence: 'Manual' },
   ];
-  const fieldMetadata: FieldMetadata[] = [
+  const fieldMetadata: ImportFieldMetadata[] = [
     { propertyPath: 'Name', displayName: 'Full Name', clrTypeName: 'System.String', description: null, isRequired: true },
     { propertyPath: 'Email', displayName: 'Email Address', clrTypeName: 'System.String', description: null, isRequired: false },
   ];
