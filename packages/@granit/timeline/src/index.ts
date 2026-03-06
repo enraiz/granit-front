@@ -24,12 +24,3 @@ export type { UseTimelineActionsOptions, UseTimelineActionsResult } from './hook
 export { useTimelineFollowers } from './hooks/use-timeline-followers.js';
 export type { UseTimelineFollowersOptions, UseTimelineFollowersResult } from './hooks/use-timeline-followers.js';
 
-// Components
-export { TimelineStream } from './components/timeline-stream.js';
-export type { TimelineStreamProps } from './components/timeline-stream.js';
-
-export { TimelineEntry } from './components/timeline-entry.js';
-export type { TimelineEntryProps } from './components/timeline-entry.js';
-
-export { TimelineComposer } from './components/timeline-composer.js';
-export type { TimelineComposerProps } from './components/timeline-composer.js';

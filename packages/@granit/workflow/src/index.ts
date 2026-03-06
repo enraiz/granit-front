@@ -31,9 +31,3 @@ export type { UseWorkflowStatusOptions, UseWorkflowStatusResult } from './hooks/
 export { useWorkflowTransition } from './hooks/use-workflow-transition.js';
 export type { UseWorkflowTransitionOptions, UseWorkflowTransitionResult } from './hooks/use-workflow-transition.js';
 
-// Components
-export { WorkflowHistory } from './components/workflow-history.js';
-export type { WorkflowHistoryProps } from './components/workflow-history.js';
-
-export { WorkflowStatusBar } from './components/workflow-status-bar.js';
-export type { WorkflowStatusBarProps } from './components/workflow-status-bar.js';

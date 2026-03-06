@@ -30,21 +30,6 @@ export type { UseEntityActivityFeedOptions, UseEntityActivityFeedResult } from '
 export { useNotificationPreferences } from './hooks/use-notification-preferences.js';
 export type { UseNotificationPreferencesResult } from './hooks/use-notification-preferences.js';
 
-// Components
-export { NotificationBadge } from './components/notification-badge.js';
-export type { NotificationBadgeProps } from './components/notification-badge.js';
-
-export { NotificationItem } from './components/notification-item.js';
-export type { NotificationItemProps } from './components/notification-item.js';
-
-export { NotificationCenter } from './components/notification-center.js';
-export type { NotificationCenterProps } from './components/notification-center.js';
-
-export { EntityActivityFeed } from './components/entity-activity-feed.js';
-export type { EntityActivityFeedProps } from './components/entity-activity-feed.js';
-
-export { NotificationPreferences } from './components/notification-preferences.js';
-export type { NotificationPreferencesProps } from './components/notification-preferences.js';
 
 // API (for advanced usage)
 export {
