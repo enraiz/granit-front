@@ -131,8 +131,10 @@ export function createKlaroCookieConsentProvider(
     },
 
     hasConsented() {
-      if (!manager) return false;
-      return manager.confirmed;
+      const name = klaroConfig.cookieName ?? "klaro";
+      return document.cookie.split(";").some(
+        (c) => c.trim().startsWith(`${name}=`),
+      );
     },
   };
 }

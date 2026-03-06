@@ -45,7 +45,6 @@ export interface KlaroConsentManager {
   getConsent(name: string): boolean;
   setConsent(name: string, granted: boolean): void;
   saveAndApplyConsents(): void;
-  confirmed: boolean;
   watch(watcher: KlaroWatcher): void;
 }
 

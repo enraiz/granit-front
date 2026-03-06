@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { afterEach, describe, it, expect, vi, beforeEach } from "vitest";
 
 import { createKlaroCookieConsentProvider } from "../adapters/create-klaro-cookie-consent-provider.js";
 
@@ -8,7 +8,6 @@ const mockManager: KlaroConsentManager = {
   getConsent: vi.fn(),
   setConsent: vi.fn(),
   saveAndApplyConsents: vi.fn(),
-  confirmed: false,
   watch: vi.fn(),
 };
 
@@ -33,7 +32,6 @@ const serviceMappings = [
 describe("createKlaroCookieConsentProvider", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockManager.confirmed = false;
   });
 
   it("should return default consents before init", () => {
@@ -258,7 +256,12 @@ describe("createKlaroCookieConsentProvider", () => {
   });
 
   describe("hasConsented", () => {
-    it("should return false when manager not initialized", () => {
+    afterEach(() => {
+      // Clean up cookies
+      document.cookie = "klaro=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    });
+
+    it("should return false when no klaro cookie exists", () => {
       const provider = createKlaroCookieConsentProvider({
         klaroConfig,
         serviceMappings,
@@ -267,28 +270,28 @@ describe("createKlaroCookieConsentProvider", () => {
       expect(provider.hasConsented()).toBe(false);
     });
 
-    it("should return false when user has not consented yet", async () => {
+    it("should return true when klaro cookie exists", () => {
+      document.cookie = "klaro=%7B%7D";
+
       const provider = createKlaroCookieConsentProvider({
         klaroConfig,
         serviceMappings,
       });
-      await provider.init();
-
-      mockManager.confirmed = false;
-
-      expect(provider.hasConsented()).toBe(false);
-    });
-
-    it("should return true when user has already consented", async () => {
-      const provider = createKlaroCookieConsentProvider({
-        klaroConfig,
-        serviceMappings,
-      });
-      await provider.init();
-
-      mockManager.confirmed = true;
 
       expect(provider.hasConsented()).toBe(true);
+    });
+
+    it("should use custom cookieName from config", () => {
+      document.cookie = "my-consent=%7B%7D";
+
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig: { ...klaroConfig, cookieName: "my-consent" },
+        serviceMappings,
+      });
+
+      expect(provider.hasConsented()).toBe(true);
+
+      document.cookie = "my-consent=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     });
   });
 });
