@@ -4,7 +4,7 @@ Ce fichier répertorie les bibliothèques tierces utilisées par le projet
 **granit-front** ainsi que leurs licences respectives. Il est mis à jour
 à chaque ajout ou modification de dépendance externe.
 
-Dernière mise à jour : 2026-03-04
+Dernière mise à jour : 2026-03-06
 
 ---
 
@@ -12,8 +12,8 @@ Dernière mise à jour : 2026-03-04
 
 | Licence | Nombre de packages |
 | ------- | ------------------ |
-| MIT | 35 |
-| Apache-2.0 | 14 |
+| MIT | 27 |
+| Apache-2.0 | 13 |
 | ISC | 1 |
 | BSD-3-Clause | 1 |
 
@@ -29,13 +29,9 @@ Dernière mise à jour : 2026-03-04
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
-| @storybook/addon-a11y | 10.2.15 | Copyright (c) Storybook Contributors |
-| @storybook/addon-docs | 10.2.15 | Copyright (c) Storybook Contributors |
-| @storybook/addon-themes | 10.2.15 | Copyright (c) Storybook Contributors |
-| @storybook/react-vite | 10.2.15 | Copyright (c) Storybook Contributors |
 | @tailwindcss/vite | 4.2.1 | Copyright (c) Tailwind Labs, Inc. |
-| @tanstack/react-query | 5.90.0 | Copyright (c) Tanner Linsley |
-| @tanstack/react-table | 8.21.0 | Copyright (c) Tanner Linsley |
+| @tanstack/react-query | 5.90.21 | Copyright (c) Tanner Linsley |
+| @tanstack/react-table | 8.21.3 | Copyright (c) Tanner Linsley |
 | @tanstack/react-virtual | 3.13.0 | Copyright (c) Tanner Linsley |
 | @eslint/js | 10.0.1 | OpenJS Foundation |
 | @microsoft/signalr | 10.0.0 | Copyright (c) .NET Foundation |
@@ -45,12 +41,12 @@ Dernière mise à jour : 2026-03-04
 | @types/react | 19.2.14 | DefinitelyTyped Contributors |
 | @vitest/coverage-v8 | 4.0.18 | Vitest Contributors |
 | axios | 1.13.6 | Copyright (c) Matt Zabriskie |
-| cmdk | 1.1.0 | Copyright (c) Paco Coursey |
+| cmdk | 1.1.1 | Copyright (c) Paco Coursey |
 | clsx | 2.1.1 | Copyright (c) Luke Edwards |
 | date-fns | 4.1.0 | Copyright (c) Sasha Koss |
 | eslint | 10.0.2 | OpenJS Foundation |
 | eslint-plugin-import-x | 4.16.1 | eslint-plugin-import-x Contributors |
-| i18next | 25.8.13 | Copyright (c) i18next Contributors |
+| i18next | 25.8.14 | Copyright (c) i18next Contributors |
 | jsdom | 28.1.0 | Copyright (c) jsdom Contributors |
 | react | 19.2.4 | Copyright (c) Meta Platforms, Inc. |
 | react-dom | 19.2.4 | Copyright (c) Meta Platforms, Inc. |
@@ -58,11 +54,7 @@ Dernière mise à jour : 2026-03-04
 | tailwind-merge | 3.5.0 | Copyright (c) Dany Castillo |
 | tsup | 8.5.1 | Copyright (c) EGOIST |
 | typescript-eslint | 8.56.1 | typescript-eslint Contributors |
-| radix-ui | 1.4.3 | Copyright (c) WorkOS |
 | react-hook-form | 7.71.1 | Copyright (c) react-hook-form Contributors |
-| sonner | 2.0.0 | Copyright (c) Emil Kowalski |
-| storybook | 10.2.15 | Copyright (c) Storybook Contributors |
-| tw-animate-css | 1.4.0 | Copyright (c) tw-animate-css Contributors |
 | vitest | 4.0.18 | Vitest Contributors |
 
 ### Apache-2.0
@@ -79,15 +71,15 @@ Dernière mise à jour : 2026-03-04
 | @opentelemetry/resources | 2.6.0 | Copyright The OpenTelemetry Authors |
 | @opentelemetry/sdk-trace-web | 2.6.0 | Copyright The OpenTelemetry Authors |
 | @opentelemetry/semantic-conventions | 1.40.0 | Copyright The OpenTelemetry Authors |
-| class-variance-authority | 0.7.1 | Copyright (c) Joe Bell |
 | keycloak-js | 26.2.3 | Copyright Red Hat, Inc. |
+| tailwindcss | 4.2.1 | Copyright (c) Tailwind Labs, Inc. |
 | typescript | 5.9.3 | Copyright (c) Microsoft Corporation |
 
 ### ISC
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
-| lucide-react | 0.575.0 | Copyright (c) Lucide Contributors |
+| lucide-react | 0.577.0 | Copyright (c) Lucide Contributors |
 
 ### BSD-3-Clause
 

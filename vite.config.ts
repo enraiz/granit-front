@@ -20,8 +20,6 @@ export default defineConfig({
       '@granit/utils': pkg('utils'),
       '@granit/storage': pkg('storage'),
       '@granit/cookies': pkg('cookies'),
-      '@granit/ui': pkg('ui'),
-      '@granit/ui-back': pkg('ui-back'),
       '@granit/querying': pkg('querying'),
       '@granit/data-exchange': pkg('data-exchange'),
     },

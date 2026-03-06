@@ -37,12 +37,4 @@ export default tseslint.config(
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
 
-  // Story files — relax some rules
-  {
-    files: ['stories/**/*.stories.{ts,tsx}'],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      'no-console': 'off',
-    },
-  }
 );

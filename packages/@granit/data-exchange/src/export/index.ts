@@ -30,8 +30,3 @@ export type { UseExportJobReturn } from './hooks/use-export-job.js';
 export { useExportPresets } from './hooks/use-export-presets.js';
 export type { UseExportPresetsReturn } from './hooks/use-export-presets.js';
 
-// Components
-export { ExportButton } from './components/export-button.js';
-export type { ExportButtonProps } from './components/export-button.js';
-export { ExportDialog } from './components/export-dialog.js';
-export type { ExportDialogProps } from './components/export-dialog.js';
