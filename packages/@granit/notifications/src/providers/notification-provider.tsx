@@ -9,13 +9,8 @@ import {
   useState,
 } from 'react';
 
-import type {
-  ConnectionState,
-  NotificationConfig,
-  NotificationDto,
-} from '../types/index.js';
+import type { ConnectionState, NotificationConfig, NotificationDto } from '../types/index.js';
 import type { HubConnection } from '@microsoft/signalr';
-
 
 // ---------------------------------------------------------------------------
 // Context value
@@ -68,9 +63,7 @@ export function NotificationProvider({
     const connection = new HubConnectionBuilder()
       .withUrl(hubUrl, {
         transport: HttpTransportType.WebSockets | HttpTransportType.LongPolling,
-        accessTokenFactory: tokenGetter
-          ? async () => (await tokenGetter()) ?? ''
-          : undefined,
+        accessTokenFactory: tokenGetter ? async () => (await tokenGetter()) ?? '' : undefined,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
@@ -90,7 +83,7 @@ export function NotificationProvider({
     setConnectionState('connecting');
     connection.start().then(
       () => setConnectionState('connected'),
-      () => setConnectionState('disconnected'),
+      () => setConnectionState('disconnected')
     );
 
     return () => {
@@ -100,12 +93,12 @@ export function NotificationProvider({
 
   const fullConfig = useMemo<NotificationConfig>(
     () => ({ apiClient, basePath, hubUrl, tokenGetter }),
-    [apiClient, basePath, hubUrl, tokenGetter],
+    [apiClient, basePath, hubUrl, tokenGetter]
   );
 
   const setUnreadCountCb = useCallback(
     (update: number | ((prev: number) => number)) => setUnreadCount(update),
-    [],
+    []
   );
 
   const value = useMemo<NotificationContextValue>(
@@ -116,12 +109,8 @@ export function NotificationProvider({
       unreadCount,
       setUnreadCount: setUnreadCountCb,
     }),
-    [fullConfig, connectionState, lastNotification, unreadCount, setUnreadCountCb],
+    [fullConfig, connectionState, lastNotification, unreadCount, setUnreadCountCb]
   );
 
-  return (
-    <NotificationContext value={value}>
-      {children}
-    </NotificationContext>
-  );
+  return <NotificationContext value={value}>{children}</NotificationContext>;
 }

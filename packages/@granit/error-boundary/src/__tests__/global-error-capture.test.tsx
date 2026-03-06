@@ -69,7 +69,7 @@ describe('GlobalErrorCapture', () => {
         filename: 'app.js',
         lineno: 42,
         colno: 10,
-      }),
+      })
     );
   });
 
@@ -85,7 +85,7 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
-      expect.objectContaining({ error: 'Rejected!' }),
+      expect.objectContaining({ error: 'Rejected!' })
     );
   });
 
@@ -100,9 +100,7 @@ describe('GlobalErrorCapture', () => {
     });
     window.dispatchEvent(errorEvent);
 
-    expect(onError).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'Callback test' }),
-    );
+    expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: 'Callback test' }));
   });
 
   it('should deduplicate errors with the same message within 1 second', () => {
@@ -134,7 +132,7 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
-      expect.objectContaining({ error: 'string error' }),
+      expect.objectContaining({ error: 'string error' })
     );
   });
 });

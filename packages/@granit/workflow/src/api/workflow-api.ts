@@ -6,7 +6,12 @@ import type {
 } from '../types/index.js';
 import type { AxiosInstance } from 'axios';
 
-function buildUrl(basePath: string, entityType: string, entityId: string, ...segments: string[]): string {
+function buildUrl(
+  basePath: string,
+  entityType: string,
+  entityId: string,
+  ...segments: string[]
+): string {
   const base = `${basePath}/${entityType}/${entityId}`;
   return segments.length > 0 ? `${base}/${segments.join('/')}` : base;
 }
@@ -16,10 +21,10 @@ export async function fetchStatus(
   client: AxiosInstance,
   basePath: string,
   entityType: string,
-  entityId: string,
+  entityId: string
 ): Promise<WorkflowStatusDto> {
   const { data } = await client.get<WorkflowStatusDto>(
-    buildUrl(basePath, entityType, entityId, 'transitions'),
+    buildUrl(basePath, entityType, entityId, 'transitions')
   );
   return data;
 }
@@ -30,11 +35,11 @@ export async function executeTransition(
   basePath: string,
   entityType: string,
   entityId: string,
-  request: TransitionRequestDto,
+  request: TransitionRequestDto
 ): Promise<TransitionResultDto> {
   const { data } = await client.post<TransitionResultDto>(
     buildUrl(basePath, entityType, entityId, 'transition'),
-    request,
+    request
   );
   return data;
 }
@@ -44,10 +49,10 @@ export async function fetchHistory(
   client: AxiosInstance,
   basePath: string,
   entityType: string,
-  entityId: string,
+  entityId: string
 ): Promise<TransitionHistoryDto[]> {
   const { data } = await client.get<TransitionHistoryDto[]>(
-    buildUrl(basePath, entityType, entityId, 'history'),
+    buildUrl(basePath, entityType, entityId, 'history')
   );
   return data;
 }

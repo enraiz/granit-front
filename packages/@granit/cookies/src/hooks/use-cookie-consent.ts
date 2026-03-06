@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import { CookieConsentContext } from "../providers/cookie-consent-provider.js";
+import { CookieConsentContext } from '../providers/cookie-consent-provider.js';
 
-import type { CookieConsentContextValue } from "../types/index.js";
+import type { CookieConsentContextValue } from '../types/index.js';
 
 /**
  * Hook to access the cookie consent state and actions.
@@ -22,9 +22,7 @@ import type { CookieConsentContextValue } from "../types/index.js";
 export function useCookieConsent(): CookieConsentContextValue {
   const context = useContext(CookieConsentContext);
   if (!context) {
-    throw new Error(
-      "useCookieConsent must be used within a CookieConsentProvider"
-    );
+    throw new Error('useCookieConsent must be used within a CookieConsentProvider');
   }
   return context;
 }

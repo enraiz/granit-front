@@ -5,7 +5,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useReducer } from 'react';
 
-
 import { fetchGrouped, fetchPage } from '../api/query-api.js';
 import { buildQueryKey, useQueryConfig } from '../providers/query-provider.js';
 
@@ -58,7 +57,7 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
       const existing = params.filters ?? [];
       // Replace if same field+operator exists
       const filtered = existing.filter(
-        (f) => !(f.field === action.filter.field && f.operator === action.filter.operator),
+        (f) => !(f.field === action.filter.field && f.operator === action.filter.operator)
       );
       return {
         ...state,
@@ -69,9 +68,7 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
     case 'REMOVE_FILTER': {
       const existing = params.filters ?? [];
       const filtered = action.operator
-        ? existing.filter(
-            (f) => !(f.field === action.field && f.operator === action.operator),
-          )
+        ? existing.filter((f) => !(f.field === action.field && f.operator === action.operator))
         : existing.filter((f) => f.field !== action.field);
       return {
         ...state,
@@ -185,9 +182,7 @@ const DEFAULT_PARAMS: QueryParams = { page: 1, pageSize: 20 };
  * const { items, totalCount } = query.data!;
  * ```
  */
-export function useQueryEndpoint<T>(
-  options?: UseQueryEndpointOptions,
-): UseQueryEndpointReturn<T> {
+export function useQueryEndpoint<T>(options?: UseQueryEndpointOptions): UseQueryEndpointReturn<T> {
   const config = useQueryConfig();
   const initialParams = options?.initialParams ?? DEFAULT_PARAMS;
   const enabled = options?.enabled ?? true;
@@ -201,10 +196,7 @@ export function useQueryEndpoint<T>(
   const isGrouped = params.groupBy != null;
 
   // Flat (paged) query
-  const pagedQueryKey = useMemo(
-    () => [...buildQueryKey(config, 'list'), params],
-    [config, params],
-  );
+  const pagedQueryKey = useMemo(() => [...buildQueryKey(config, 'list'), params], [config, params]);
 
   const query = useQuery({
     queryKey: pagedQueryKey,
@@ -216,7 +208,7 @@ export function useQueryEndpoint<T>(
   // Grouped query
   const groupedQueryKey = useMemo(
     () => [...buildQueryKey(config, 'grouped'), params],
-    [config, params],
+    [config, params]
   );
 
   const groupedQuery = useQuery({
@@ -228,18 +220,48 @@ export function useQueryEndpoint<T>(
 
   // Memoized dispatchers
   const setPage = useCallback((page: number) => dispatch({ type: 'SET_PAGE', page }), []);
-  const setPageSize = useCallback((pageSize: number) => dispatch({ type: 'SET_PAGE_SIZE', pageSize }), []);
+  const setPageSize = useCallback(
+    (pageSize: number) => dispatch({ type: 'SET_PAGE_SIZE', pageSize }),
+    []
+  );
   const setSearch = useCallback((search: string) => dispatch({ type: 'SET_SEARCH', search }), []);
-  const setFilters = useCallback((filters: readonly FilterEntry[]) => dispatch({ type: 'SET_FILTERS', filters }), []);
-  const addFilter = useCallback((filter: FilterEntry) => dispatch({ type: 'ADD_FILTER', filter }), []);
-  const removeFilter = useCallback((field: string, operator?: string) => dispatch({ type: 'REMOVE_FILTER', field, operator }), []);
-  const setSort = useCallback((sort: readonly SortEntry[]) => dispatch({ type: 'SET_SORT', sort }), []);
+  const setFilters = useCallback(
+    (filters: readonly FilterEntry[]) => dispatch({ type: 'SET_FILTERS', filters }),
+    []
+  );
+  const addFilter = useCallback(
+    (filter: FilterEntry) => dispatch({ type: 'ADD_FILTER', filter }),
+    []
+  );
+  const removeFilter = useCallback(
+    (field: string, operator?: string) => dispatch({ type: 'REMOVE_FILTER', field, operator }),
+    []
+  );
+  const setSort = useCallback(
+    (sort: readonly SortEntry[]) => dispatch({ type: 'SET_SORT', sort }),
+    []
+  );
   const toggleSort = useCallback((field: string) => dispatch({ type: 'TOGGLE_SORT', field }), []);
-  const setPresets = useCallback((group: string, names: readonly string[]) => dispatch({ type: 'SET_PRESETS', group, names }), []);
-  const setQuickFilters = useCallback((quickFilters: readonly string[]) => dispatch({ type: 'SET_QUICK_FILTERS', quickFilters }), []);
-  const toggleQuickFilter = useCallback((name: string) => dispatch({ type: 'TOGGLE_QUICK_FILTER', name }), []);
-  const setGroupBy = useCallback((groupBy: string | undefined) => dispatch({ type: 'SET_GROUP_BY', groupBy }), []);
-  const setParams = useCallback((p: QueryParams) => dispatch({ type: 'SET_PARAMS', params: p }), []);
+  const setPresets = useCallback(
+    (group: string, names: readonly string[]) => dispatch({ type: 'SET_PRESETS', group, names }),
+    []
+  );
+  const setQuickFilters = useCallback(
+    (quickFilters: readonly string[]) => dispatch({ type: 'SET_QUICK_FILTERS', quickFilters }),
+    []
+  );
+  const toggleQuickFilter = useCallback(
+    (name: string) => dispatch({ type: 'TOGGLE_QUICK_FILTER', name }),
+    []
+  );
+  const setGroupBy = useCallback(
+    (groupBy: string | undefined) => dispatch({ type: 'SET_GROUP_BY', groupBy }),
+    []
+  );
+  const setParams = useCallback(
+    (p: QueryParams) => dispatch({ type: 'SET_PARAMS', params: p }),
+    []
+  );
   const reset = useCallback(() => dispatch({ type: 'RESET' }), []);
 
   return {

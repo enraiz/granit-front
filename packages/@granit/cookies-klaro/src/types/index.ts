@@ -1,4 +1,4 @@
-import type { CookieCategory, CookieConsentConfig } from "@granit/cookies";
+import type { CookieCategory, CookieConsentConfig } from '@granit/cookies';
 
 /**
  * Maps a Klaro service name to a RGPD cookie category.
@@ -67,9 +67,5 @@ export interface KlaroConsentManager {
  * Klaro watcher interface for consent changes.
  */
 export interface KlaroWatcher {
-  update(
-    obj: unknown,
-    name: string,
-    data: unknown,
-  ): void;
+  update(obj: unknown, name: string, data: unknown): void;
 }

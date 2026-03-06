@@ -9,7 +9,6 @@ import type { QueryParams } from '../types/query-params.js';
 import type { GroupedResult, PagedResult } from '../types/query-results.js';
 import type { AxiosInstance } from 'axios';
 
-
 /**
  * Fetch a paginated page of results.
  *
@@ -20,7 +19,7 @@ import type { AxiosInstance } from 'axios';
 export async function fetchPage<T>(
   client: AxiosInstance,
   basePath: string,
-  params: QueryParams,
+  params: QueryParams
 ): Promise<PagedResult<T>> {
   const qs = serializeQueryParams(params);
   const url = qs ? `${basePath}?${qs}` : basePath;
@@ -38,7 +37,7 @@ export async function fetchPage<T>(
 export async function fetchGrouped<T>(
   client: AxiosInstance,
   basePath: string,
-  params: QueryParams,
+  params: QueryParams
 ): Promise<GroupedResult<T>> {
   const qs = serializeQueryParams(params);
   const url = qs ? `${basePath}?${qs}` : basePath;
@@ -54,7 +53,7 @@ export async function fetchGrouped<T>(
  */
 export async function fetchQueryMeta(
   client: AxiosInstance,
-  basePath: string,
+  basePath: string
 ): Promise<QueryMetadata> {
   const response = await client.get<QueryMetadata>(`${basePath}/meta`);
   return response.data;

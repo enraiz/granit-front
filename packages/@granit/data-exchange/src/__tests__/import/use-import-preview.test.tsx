@@ -52,8 +52,20 @@ describe('useImportPreview', () => {
         { sourceColumn: 'Email', targetProperty: 'Email', confidence: 'Exact' as const },
       ],
       fieldMetadata: [
-        { propertyPath: 'FullName', clrTypeName: 'String', displayName: 'Full name', description: null, isRequired: true },
-        { propertyPath: 'Email', clrTypeName: 'String', displayName: 'Email', description: null, isRequired: true },
+        {
+          propertyPath: 'FullName',
+          clrTypeName: 'String',
+          displayName: 'Full name',
+          description: null,
+          isRequired: true,
+        },
+        {
+          propertyPath: 'Email',
+          clrTypeName: 'String',
+          displayName: 'Email',
+          description: null,
+          isRequired: true,
+        },
       ],
     };
     vi.spyOn(mockClient, 'post').mockResolvedValueOnce({ data: previewData });
@@ -81,8 +93,20 @@ describe('useImportPreview', () => {
         { sourceColumn: 'Name', targetProperty: 'FullName', confidence: 'Fuzzy' as const },
       ],
       fieldMetadata: [
-        { propertyPath: 'FullName', clrTypeName: 'String', displayName: 'Full name', description: null, isRequired: false },
-        { propertyPath: 'Email', clrTypeName: 'String', displayName: 'Email', description: null, isRequired: false },
+        {
+          propertyPath: 'FullName',
+          clrTypeName: 'String',
+          displayName: 'Full name',
+          description: null,
+          isRequired: false,
+        },
+        {
+          propertyPath: 'Email',
+          clrTypeName: 'String',
+          displayName: 'Email',
+          description: null,
+          isRequired: false,
+        },
       ],
     };
     vi.spyOn(mockClient, 'post').mockResolvedValueOnce({ data: previewData });
@@ -112,8 +136,18 @@ describe('useImportPreview', () => {
     const previewData = {
       headers: ['Name'],
       previewRows: [['John']],
-      suggestions: [{ sourceColumn: 'Name', targetProperty: 'FullName', confidence: 'Exact' as const }],
-      fieldMetadata: [{ propertyPath: 'FullName', clrTypeName: 'String', displayName: 'Full name', description: null, isRequired: false }],
+      suggestions: [
+        { sourceColumn: 'Name', targetProperty: 'FullName', confidence: 'Exact' as const },
+      ],
+      fieldMetadata: [
+        {
+          propertyPath: 'FullName',
+          clrTypeName: 'String',
+          displayName: 'Full name',
+          description: null,
+          isRequired: false,
+        },
+      ],
     };
     vi.spyOn(mockClient, 'post').mockResolvedValueOnce({ data: previewData });
 

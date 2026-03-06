@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-
 import { useTimelineActions } from '../hooks/use-timeline-actions.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
@@ -32,7 +31,7 @@ describe('useTimelineActions', () => {
           entityId: 'p-1',
           onEntryCreated,
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     expect(result.current.posting).toBe(false);
@@ -47,10 +46,10 @@ describe('useTimelineActions', () => {
 
     expect(returnedEntry).toEqual(createdEntry);
     expect(onEntryCreated).toHaveBeenCalledWith(createdEntry);
-    expect(client.post).toHaveBeenCalledWith(
-      '/api/timeline/Patient/p-1/entries',
-      { entryType: 0, body: 'Hello' },
-    );
+    expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries', {
+      entryType: 0,
+      body: 'Hello',
+    });
   });
 
   it('should delete an entry and call onEntryDeleted', async () => {
@@ -66,7 +65,7 @@ describe('useTimelineActions', () => {
           entityId: 'p-1',
           onEntryDeleted,
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(async () => {
@@ -74,9 +73,7 @@ describe('useTimelineActions', () => {
     });
 
     expect(onEntryDeleted).toHaveBeenCalledWith('e-1');
-    expect(client.delete).toHaveBeenCalledWith(
-      '/api/timeline/Patient/p-1/entries/e-1',
-    );
+    expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries/e-1');
   });
 
   it('should set error on post failure', async () => {
@@ -89,12 +86,12 @@ describe('useTimelineActions', () => {
           entityType: 'Patient',
           entityId: 'p-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
-    await expect(
-      result.current.postEntry({ entryType: 0, body: 'Hello' }),
-    ).rejects.toThrow('Server error');
+    await expect(result.current.postEntry({ entryType: 0, body: 'Hello' })).rejects.toThrow(
+      'Server error'
+    );
 
     await waitFor(() => expect(result.current.error?.message).toBe('Server error'));
   });
@@ -109,7 +106,7 @@ describe('useTimelineActions', () => {
           entityType: 'Patient',
           entityId: 'p-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await expect(result.current.removeEntry('e-1')).rejects.toThrow('Not found');

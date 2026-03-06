@@ -17,10 +17,7 @@ import type { QueryParams } from '../types/query-params.js';
  *   &groupBy=field
  * ```
  */
-function serializeScalarParams(
-  entries: [string, string][],
-  params: QueryParams,
-): void {
+function serializeScalarParams(entries: [string, string][], params: QueryParams): void {
   if (params.page != null) entries.push(['page', String(params.page)]);
   if (params.pageSize != null) entries.push(['pageSize', String(params.pageSize)]);
   if (params.cursor) entries.push(['cursor', params.cursor]);

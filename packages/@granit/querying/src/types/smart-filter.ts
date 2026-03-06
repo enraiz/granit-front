@@ -52,8 +52,4 @@ export interface FilterSuggestionValue {
 }
 
 /** State machine phases for the smart filter input flow. */
-export type SmartFilterPhase =
-  | 'idle'
-  | 'selectField'
-  | 'selectOperator'
-  | 'enterValue';
+export type SmartFilterPhase = 'idle' | 'selectField' | 'selectOperator' | 'enterValue';

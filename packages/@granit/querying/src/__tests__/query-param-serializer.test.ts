@@ -121,9 +121,7 @@ describe('parseQueryParams', () => {
   });
 
   it('parses filters', () => {
-    const result = parseQueryParams(
-      'filter[status.Eq]=active&filter[age.Gte]=18',
-    );
+    const result = parseQueryParams('filter[status.Eq]=active&filter[age.Gte]=18');
     expect(result.filters).toEqual([
       { field: 'status', operator: 'Eq', value: 'active' },
       { field: 'age', operator: 'Gte', value: '18' },

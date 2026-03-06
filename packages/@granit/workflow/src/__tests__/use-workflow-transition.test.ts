@@ -19,12 +19,13 @@ describe('useWorkflowTransition', () => {
     const onSuccess = vi.fn();
 
     const { result } = renderHook(
-      () => useWorkflowTransition({
-        entityType: 'Document',
-        entityId: 'doc-1',
-        onSuccess,
-      }),
-      { wrapper: createWrapper(client) },
+      () =>
+        useWorkflowTransition({
+          entityType: 'Document',
+          entityId: 'doc-1',
+          onSuccess,
+        }),
+      { wrapper: createWrapper(client) }
     );
 
     let returned: TransitionResultDto | null = null;
@@ -32,10 +33,10 @@ describe('useWorkflowTransition', () => {
       returned = await result.current.transition('Published', 'Validated');
     });
 
-    expect(client.post).toHaveBeenCalledWith(
-      '/api/workflow/Document/doc-1/transition',
-      { targetState: 'Published', comment: 'Validated' },
-    );
+    expect(client.post).toHaveBeenCalledWith('/api/workflow/Document/doc-1/transition', {
+      targetState: 'Published',
+      comment: 'Validated',
+    });
     expect(returned).toEqual(transitionResult);
     expect(result.current.result).toEqual(transitionResult);
     expect(onSuccess).toHaveBeenCalledWith(transitionResult);
@@ -48,12 +49,13 @@ describe('useWorkflowTransition', () => {
     const onError = vi.fn();
 
     const { result } = renderHook(
-      () => useWorkflowTransition({
-        entityType: 'Document',
-        entityId: 'doc-1',
-        onError,
-      }),
-      { wrapper: createWrapper(client) },
+      () =>
+        useWorkflowTransition({
+          entityType: 'Document',
+          entityId: 'doc-1',
+          onError,
+        }),
+      { wrapper: createWrapper(client) }
     );
 
     let returned: TransitionResultDto | null = null;
@@ -71,15 +73,18 @@ describe('useWorkflowTransition', () => {
     const client = createMockClient();
     let resolvePost!: (value: unknown) => void;
     vi.mocked(client.post).mockReturnValue(
-      new Promise((resolve) => { resolvePost = resolve; }),
+      new Promise((resolve) => {
+        resolvePost = resolve;
+      })
     );
 
     const { result } = renderHook(
-      () => useWorkflowTransition({
-        entityType: 'Document',
-        entityId: 'doc-1',
-      }),
-      { wrapper: createWrapper(client) },
+      () =>
+        useWorkflowTransition({
+          entityType: 'Document',
+          entityId: 'doc-1',
+        }),
+      { wrapper: createWrapper(client) }
     );
 
     expect(result.current.loading).toBe(false);
@@ -92,11 +97,13 @@ describe('useWorkflowTransition', () => {
     await waitFor(() => expect(result.current.loading).toBe(true));
 
     await act(async () => {
-      resolvePost(axiosResponse({
-        succeeded: true,
-        resultingState: 'Published',
-        outcome: 'Completed',
-      }));
+      resolvePost(
+        axiosResponse({
+          succeeded: true,
+          resultingState: 'Published',
+          outcome: 'Completed',
+        })
+      );
       await promise!;
     });
 
@@ -113,11 +120,12 @@ describe('useWorkflowTransition', () => {
     vi.mocked(client.post).mockResolvedValue(axiosResponse(transitionResult));
 
     const { result } = renderHook(
-      () => useWorkflowTransition({
-        entityType: 'Document',
-        entityId: 'doc-1',
-      }),
-      { wrapper: createWrapper(client) },
+      () =>
+        useWorkflowTransition({
+          entityType: 'Document',
+          entityId: 'doc-1',
+        }),
+      { wrapper: createWrapper(client) }
     );
 
     let returned: TransitionResultDto | null = null;

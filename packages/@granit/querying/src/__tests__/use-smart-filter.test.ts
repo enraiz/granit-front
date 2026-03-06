@@ -7,8 +7,24 @@ import type { QueryMetadata } from '../types/query-metadata.js';
 
 const MOCK_METADATA: QueryMetadata = {
   columns: [
-    { name: 'LastName', label: 'Last Name', type: 'String', order: 0, isSortable: true, isFilterable: true, isVisible: true },
-    { name: 'Age', label: 'Age', type: 'Int32', order: 1, isSortable: true, isFilterable: true, isVisible: true },
+    {
+      name: 'LastName',
+      label: 'Last Name',
+      type: 'String',
+      order: 0,
+      isSortable: true,
+      isFilterable: true,
+      isVisible: true,
+    },
+    {
+      name: 'Age',
+      label: 'Age',
+      type: 'Int32',
+      order: 1,
+      isSortable: true,
+      isFilterable: true,
+      isVisible: true,
+    },
   ],
   filterableFields: [
     { name: 'LastName', type: 'String', operators: ['Eq', 'Contains', 'StartsWith'] },
@@ -25,9 +41,7 @@ const MOCK_METADATA: QueryMetadata = {
       ],
     },
   ],
-  quickFilters: [
-    { name: 'MyItems', label: 'My Items', isDefault: false },
-  ],
+  quickFilters: [{ name: 'MyItems', label: 'My Items', isDefault: false }],
   dateFilters: [],
   groupByFields: [],
   pagination: { defaultPageSize: 20, maxPageSize: 100, supportsCursor: false },
@@ -46,7 +60,7 @@ describe('useSmartFilter', () => {
     const { result } = renderHook(() => useSmartFilter({ metadata: MOCK_METADATA }));
     // Should have field suggestions + preset suggestions + quick filter suggestions
     expect(result.current.suggestions.length).toBeGreaterThan(0);
-    const fieldSuggestion = result.current.suggestions.find(s => s.field === 'LastName');
+    const fieldSuggestion = result.current.suggestions.find((s) => s.field === 'LastName');
     expect(fieldSuggestion).toBeDefined();
     expect(fieldSuggestion!.type).toBe('filter');
   });
@@ -55,8 +69,8 @@ describe('useSmartFilter', () => {
     const { result } = renderHook(() => useSmartFilter({ metadata: MOCK_METADATA }));
     act(() => result.current.setInput('last'));
     const suggestions = result.current.suggestions;
-    expect(suggestions.some(s => s.field === 'LastName')).toBe(true);
-    expect(suggestions.some(s => s.field === 'Age')).toBe(false);
+    expect(suggestions.some((s) => s.field === 'LastName')).toBe(true);
+    expect(suggestions.some((s) => s.field === 'Age')).toBe(false);
   });
 
   it('transitions to selectOperator on field selection', () => {
@@ -64,8 +78,8 @@ describe('useSmartFilter', () => {
     act(() => result.current.selectField('LastName'));
     expect(result.current.phase).toBe('selectOperator');
     // Should show operator suggestions
-    expect(result.current.suggestions.some(s => s.label === 'Eq')).toBe(true);
-    expect(result.current.suggestions.some(s => s.label === 'Contains')).toBe(true);
+    expect(result.current.suggestions.some((s) => s.label === 'Eq')).toBe(true);
+    expect(result.current.suggestions.some((s) => s.label === 'Contains')).toBe(true);
   });
 
   it('transitions to enterValue on operator selection', () => {
@@ -93,9 +107,7 @@ describe('useSmartFilter', () => {
     act(() => result.current.selectField('Age'));
     act(() => result.current.selectOperator('Gte'));
     act(() => result.current.confirmValue('18'));
-    expect(result.current.filters).toEqual([
-      { field: 'Age', operator: 'Gte', value: '18' },
-    ]);
+    expect(result.current.filters).toEqual([{ field: 'Age', operator: 'Gte', value: '18' }]);
   });
 
   it('adds a preset token', () => {
@@ -172,11 +184,11 @@ describe('useSmartFilter', () => {
 
   it('includes preset and quick filter suggestions', () => {
     const { result } = renderHook(() => useSmartFilter({ metadata: MOCK_METADATA }));
-    const presetSuggestion = result.current.suggestions.find(s => s.type === 'preset');
+    const presetSuggestion = result.current.suggestions.find((s) => s.type === 'preset');
     expect(presetSuggestion).toBeDefined();
     expect(presetSuggestion!.label).toBe('Active');
 
-    const qfSuggestion = result.current.suggestions.find(s => s.type === 'quickFilter');
+    const qfSuggestion = result.current.suggestions.find((s) => s.type === 'quickFilter');
     expect(qfSuggestion).toBeDefined();
     expect(qfSuggestion!.label).toBe('My Items');
   });

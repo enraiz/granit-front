@@ -57,9 +57,7 @@ function toStringAttribute(key: string, value: string): OtlpAttribute {
 }
 
 function contextToAttributes(context: LogContext): OtlpAttribute[] {
-  return Object.entries(context).map(([key, val]) =>
-    toStringAttribute(key, String(val)),
-  );
+  return Object.entries(context).map(([key, val]) => toStringAttribute(key, String(val)));
 }
 
 function errorToAttributes(error: unknown): OtlpAttribute[] {
@@ -74,13 +72,8 @@ function errorToAttributes(error: unknown): OtlpAttribute[] {
   return attrs;
 }
 
-function buildLogRecord(
-  entry: LogEntry,
-  traceContext?: TraceContext,
-) {
-  const attributes: OtlpAttribute[] = [
-    toStringAttribute('logger.prefix', entry.prefix),
-  ];
+function buildLogRecord(entry: LogEntry, traceContext?: TraceContext) {
+  const attributes: OtlpAttribute[] = [toStringAttribute('logger.prefix', entry.prefix)];
   if (entry.context) {
     attributes.push(...contextToAttributes(entry.context));
   }
@@ -99,22 +92,15 @@ function buildLogRecord(
   };
 }
 
-function buildPayload(
-  entries: LogEntry[],
-  options: OtlpTransportOptions,
-) {
+function buildPayload(entries: LogEntry[], options: OtlpTransportOptions) {
   const resourceAttributes: OtlpAttribute[] = [
     toStringAttribute('service.name', options.serviceName),
   ];
   if (options.serviceVersion) {
-    resourceAttributes.push(
-      toStringAttribute('service.version', options.serviceVersion),
-    );
+    resourceAttributes.push(toStringAttribute('service.version', options.serviceVersion));
   }
   if (options.environment) {
-    resourceAttributes.push(
-      toStringAttribute('deployment.environment', options.environment),
-    );
+    resourceAttributes.push(toStringAttribute('deployment.environment', options.environment));
   }
 
   return {
@@ -124,9 +110,7 @@ function buildPayload(
         scopeLogs: [
           {
             scope: { name: '@granit/logger-otlp' },
-            logRecords: entries.map((entry) =>
-              buildLogRecord(entry, options.getTraceContext?.()),
-            ),
+            logRecords: entries.map((entry) => buildLogRecord(entry, options.getTraceContext?.())),
           },
         ],
       },
@@ -183,14 +167,14 @@ export function createOtlpTransport(options: OtlpTransportOptions): LogTransport
         disabled = true;
         // eslint-disable-next-line no-console
         console.warn(
-          `[@granit/logger-otlp] OTLP collector unavailable at ${options.endpoint} (HTTP ${String(response.status)}). Log export disabled for this session.`,
+          `[@granit/logger-otlp] OTLP collector unavailable at ${options.endpoint} (HTTP ${String(response.status)}). Log export disabled for this session.`
         );
       }
     } catch {
       disabled = true;
       // eslint-disable-next-line no-console
       console.warn(
-        `[@granit/logger-otlp] OTLP collector unreachable at ${options.endpoint}. Log export disabled for this session.`,
+        `[@granit/logger-otlp] OTLP collector unreachable at ${options.endpoint}. Log export disabled for this session.`
       );
     }
   }

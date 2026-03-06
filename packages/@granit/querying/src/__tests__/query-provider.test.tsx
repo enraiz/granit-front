@@ -21,7 +21,7 @@ describe('QueryProvider', () => {
     render(
       <QueryProvider config={mockConfig}>
         <div>Test child</div>
-      </QueryProvider>,
+      </QueryProvider>
     );
     expect(screen.getByText('Test child')).toBeInTheDocument();
   });

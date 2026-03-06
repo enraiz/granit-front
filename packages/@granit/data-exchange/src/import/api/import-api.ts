@@ -1,4 +1,3 @@
-
 import type { ImportJobResponse } from '../types/import-job.js';
 import type { ConfirmMappingsRequest, ImportPreviewResponse } from '../types/import-preview.js';
 import type { ImportReportResponse } from '../types/import-report.js';
@@ -13,7 +12,7 @@ export async function uploadImportFile(
   client: AxiosInstance,
   basePath: string,
   file: File,
-  definitionName: string,
+  definitionName: string
 ): Promise<ImportJobResponse> {
   const formData = new FormData();
   formData.append('file', file);
@@ -32,10 +31,10 @@ export async function uploadImportFile(
 export async function previewImport(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<ImportPreviewResponse> {
   const response = await client.post<ImportPreviewResponse>(
-    `${basePath}/${encodeURIComponent(jobId)}/preview`,
+    `${basePath}/${encodeURIComponent(jobId)}/preview`
   );
   return response.data;
 }
@@ -49,12 +48,9 @@ export async function confirmMappings(
   client: AxiosInstance,
   basePath: string,
   jobId: string,
-  request: ConfirmMappingsRequest,
+  request: ConfirmMappingsRequest
 ): Promise<void> {
-  await client.put(
-    `${basePath}/${encodeURIComponent(jobId)}/mappings`,
-    request,
-  );
+  await client.put(`${basePath}/${encodeURIComponent(jobId)}/mappings`, request);
 }
 
 /**
@@ -65,7 +61,7 @@ export async function confirmMappings(
 export async function executeImport(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<void> {
   await client.post(`${basePath}/${encodeURIComponent(jobId)}/execute`);
 }
@@ -78,10 +74,10 @@ export async function executeImport(
 export async function dryRunImport(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<ImportReportResponse> {
   const response = await client.post<ImportReportResponse>(
-    `${basePath}/${encodeURIComponent(jobId)}/dry-run`,
+    `${basePath}/${encodeURIComponent(jobId)}/dry-run`
   );
   return response.data;
 }
@@ -94,11 +90,9 @@ export async function dryRunImport(
 export async function fetchImportJob(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<ImportJobResponse> {
-  const response = await client.get<ImportJobResponse>(
-    `${basePath}/${encodeURIComponent(jobId)}`,
-  );
+  const response = await client.get<ImportJobResponse>(`${basePath}/${encodeURIComponent(jobId)}`);
   return response.data;
 }
 
@@ -110,7 +104,7 @@ export async function fetchImportJob(
 export async function cancelImportJob(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<void> {
   await client.delete(`${basePath}/${encodeURIComponent(jobId)}`);
 }
@@ -123,10 +117,10 @@ export async function cancelImportJob(
 export async function fetchImportReport(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<ImportReportResponse> {
   const response = await client.get<ImportReportResponse>(
-    `${basePath}/${encodeURIComponent(jobId)}/report`,
+    `${basePath}/${encodeURIComponent(jobId)}/report`
   );
   return response.data;
 }
@@ -139,11 +133,11 @@ export async function fetchImportReport(
 export async function downloadCorrectionFile(
   client: AxiosInstance,
   basePath: string,
-  jobId: string,
+  jobId: string
 ): Promise<{ blob: Blob; fileName: string }> {
   const response = await client.get<Blob>(
     `${basePath}/${encodeURIComponent(jobId)}/correction-file`,
-    { responseType: 'blob' },
+    { responseType: 'blob' }
   );
 
   const contentDisposition = response.headers['content-disposition'] as string | undefined;

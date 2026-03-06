@@ -83,7 +83,18 @@ describe('useImportReport', () => {
         });
       }
       return Promise.resolve({
-        data: { importJobId: 'job-1', finalStatus: 'Completed', totalRows: 0, succeededRows: 0, failedRows: 0, skippedRows: 0, insertedRows: 0, updatedRows: 0, duration: '00:00:00', rowErrors: [] },
+        data: {
+          importJobId: 'job-1',
+          finalStatus: 'Completed',
+          totalRows: 0,
+          succeededRows: 0,
+          failedRows: 0,
+          skippedRows: 0,
+          insertedRows: 0,
+          updatedRows: 0,
+          duration: '00:00:00',
+          rowErrors: [],
+        },
       });
     });
 

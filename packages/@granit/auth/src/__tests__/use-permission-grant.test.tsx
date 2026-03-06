@@ -10,9 +10,12 @@ function createWrapper() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
-  return { wrapper: ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  ), queryClient };
+  return {
+    wrapper: ({ children }: { children: React.ReactNode }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    ),
+    queryClient,
+  };
 }
 
 describe('usePermissionGrant', () => {
@@ -21,10 +24,7 @@ describe('usePermissionGrant', () => {
     vi.mocked(client.put).mockResolvedValueOnce({ data: undefined });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(
-      () => usePermissionGrant({ client }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client }), { wrapper });
 
     result.current.grant.mutate({
       roleName: 'editor',
@@ -33,9 +33,7 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.grant.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith(
-      '/auth/roles/editor/permissions/Invoices.Create',
-    );
+    expect(client.put).toHaveBeenCalledWith('/auth/roles/editor/permissions/Invoices.Create');
   });
 
   it('should revoke a permission via DELETE', async () => {
@@ -43,10 +41,7 @@ describe('usePermissionGrant', () => {
     vi.mocked(client.delete).mockResolvedValueOnce({ data: undefined });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(
-      () => usePermissionGrant({ client }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client }), { wrapper });
 
     result.current.revoke.mutate({
       roleName: 'editor',
@@ -55,9 +50,7 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.revoke.isSuccess).toBe(true));
 
-    expect(client.delete).toHaveBeenCalledWith(
-      '/auth/roles/editor/permissions/Invoices.Delete',
-    );
+    expect(client.delete).toHaveBeenCalledWith('/auth/roles/editor/permissions/Invoices.Delete');
   });
 
   it('should use custom basePath', async () => {
@@ -65,10 +58,9 @@ describe('usePermissionGrant', () => {
     vi.mocked(client.put).mockResolvedValueOnce({ data: undefined });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(
-      () => usePermissionGrant({ client, basePath: '/api/auth' }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client, basePath: '/api/auth' }), {
+      wrapper,
+    });
 
     result.current.grant.mutate({
       roleName: 'admin',
@@ -77,9 +69,7 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.grant.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith(
-      '/api/auth/roles/admin/permissions/Users.View',
-    );
+    expect(client.put).toHaveBeenCalledWith('/api/auth/roles/admin/permissions/Users.View');
   });
 
   it('should invalidate role query on successful grant', async () => {
@@ -89,10 +79,7 @@ describe('usePermissionGrant', () => {
     const { wrapper, queryClient } = createWrapper();
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
 
-    const { result } = renderHook(
-      () => usePermissionGrant({ client }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client }), { wrapper });
 
     result.current.grant.mutate({
       roleName: 'editor',
@@ -113,10 +100,7 @@ describe('usePermissionGrant', () => {
     const { wrapper, queryClient } = createWrapper();
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
 
-    const { result } = renderHook(
-      () => usePermissionGrant({ client }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client }), { wrapper });
 
     result.current.revoke.mutate({
       roleName: 'admin',
@@ -135,10 +119,7 @@ describe('usePermissionGrant', () => {
     vi.mocked(client.put).mockRejectedValueOnce(new Error('Forbidden'));
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(
-      () => usePermissionGrant({ client }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client }), { wrapper });
 
     result.current.grant.mutate({
       roleName: 'viewer',
@@ -155,10 +136,7 @@ describe('usePermissionGrant', () => {
     vi.mocked(client.put).mockResolvedValueOnce({ data: undefined });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(
-      () => usePermissionGrant({ client }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => usePermissionGrant({ client }), { wrapper });
 
     result.current.grant.mutate({
       roleName: 'rôle',
@@ -167,8 +145,6 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.grant.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith(
-      '/auth/roles/r%C3%B4le/permissions/Perm.Sp%C3%A9cial',
-    );
+    expect(client.put).toHaveBeenCalledWith('/auth/roles/r%C3%B4le/permissions/Perm.Sp%C3%A9cial');
   });
 });

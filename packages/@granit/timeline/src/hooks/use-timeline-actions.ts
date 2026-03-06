@@ -53,7 +53,7 @@ export function useTimelineActions({
         setPosting(false);
       }
     },
-    [apiClient, basePath, entityType, entityId, onEntryCreated],
+    [apiClient, basePath, entityType, entityId, onEntryCreated]
   );
 
   const removeEntry = useCallback(
@@ -73,7 +73,7 @@ export function useTimelineActions({
         setDeleting(false);
       }
     },
-    [apiClient, basePath, entityType, entityId, onEntryDeleted],
+    [apiClient, basePath, entityType, entityId, onEntryDeleted]
   );
 
   return { postEntry, removeEntry, posting, deleting, error };

@@ -10,10 +10,9 @@ describe('useUnreadCount', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 7 }));
 
-    const { result } = renderHook(
-      () => useUnreadCount({ pollingInterval: 0 }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useUnreadCount({ pollingInterval: 0 }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(result.current.count).toBe(7));
   });
@@ -22,10 +21,9 @@ describe('useUnreadCount', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('fail'));
 
-    const { result } = renderHook(
-      () => useUnreadCount({ pollingInterval: 0 }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useUnreadCount({ pollingInterval: 0 }), {
+      wrapper: createWrapper(client),
+    });
 
     // Should not throw, count stays at initial (0)
     await waitFor(() => expect(result.current.count).toBe(0));
@@ -36,10 +34,9 @@ describe('useUnreadCount', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 3 }));
 
-    const { unmount } = renderHook(
-      () => useUnreadCount({ pollingInterval: 30_000 }),
-      { wrapper: createWrapper(client) },
-    );
+    const { unmount } = renderHook(() => useUnreadCount({ pollingInterval: 30_000 }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(client.get).toHaveBeenCalled());
 
@@ -54,10 +51,9 @@ describe('useUnreadCount', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 0 }));
 
-    const { unmount } = renderHook(
-      () => useUnreadCount({ pollingInterval: 5000 }),
-      { wrapper: createWrapper(client) },
-    );
+    const { unmount } = renderHook(() => useUnreadCount({ pollingInterval: 5000 }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(client.get).toHaveBeenCalled());
 
@@ -72,10 +68,9 @@ describe('useUnreadCount', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 2 }));
 
-    const { result } = renderHook(
-      () => useUnreadCount({ pollingInterval: 0 }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useUnreadCount({ pollingInterval: 0 }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(result.current.count).toBe(2));
 

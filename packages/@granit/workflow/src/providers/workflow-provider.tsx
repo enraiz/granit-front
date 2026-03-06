@@ -18,16 +18,9 @@ export function WorkflowProvider({
   basePath = DEFAULT_BASE_PATH,
   children,
 }: Readonly<WorkflowProviderProps>) {
-  const config = useMemo<WorkflowConfig>(
-    () => ({ apiClient, basePath }),
-    [apiClient, basePath],
-  );
+  const config = useMemo<WorkflowConfig>(() => ({ apiClient, basePath }), [apiClient, basePath]);
 
-  return (
-    <WorkflowConfigContext.Provider value={config}>
-      {children}
-    </WorkflowConfigContext.Provider>
-  );
+  return <WorkflowConfigContext.Provider value={config}>{children}</WorkflowConfigContext.Provider>;
 }
 
 export function useWorkflowConfig(): WorkflowConfig {

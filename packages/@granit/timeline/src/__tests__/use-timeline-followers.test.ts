@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-
 import { useTimelineFollowers } from '../hooks/use-timeline-followers.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
@@ -18,7 +17,7 @@ describe('useTimelineFollowers', () => {
           entityId: 'p-1',
           currentUserId: 'u-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     expect(result.current.loading).toBe(true);
@@ -40,7 +39,7 @@ describe('useTimelineFollowers', () => {
           entityId: 'p-1',
           currentUserId: 'u-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -60,7 +59,7 @@ describe('useTimelineFollowers', () => {
           entityId: 'p-1',
           currentUserId: 'u-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -85,7 +84,7 @@ describe('useTimelineFollowers', () => {
           entityId: 'p-1',
           currentUserId: 'u-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -110,7 +109,7 @@ describe('useTimelineFollowers', () => {
           entityId: 'p-1',
           currentUserId: 'u-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -130,7 +129,7 @@ describe('useTimelineFollowers', () => {
           entityType: 'Patient',
           entityId: 'p-1',
         }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));

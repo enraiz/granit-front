@@ -3,7 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchExportDefinitions, fetchExportFields } from '../api/export-api.js';
 import { buildExportQueryKey, useExportConfig } from '../providers/export-provider.js';
 
-import type { ExportDefinitionResponse, ExportFieldDescriptor } from '../types/export-definition.js';
+import type {
+  ExportDefinitionResponse,
+  ExportFieldDescriptor,
+} from '../types/export-definition.js';
 import type { UseQueryResult } from '@tanstack/react-query';
 
 /**
@@ -23,7 +26,7 @@ export function useExportDefinitions(): UseQueryResult<readonly ExportDefinition
  * Fetches the available fields for a given export definition.
  */
 export function useExportFields(
-  definitionName: string | undefined,
+  definitionName: string | undefined
 ): UseQueryResult<readonly ExportFieldDescriptor[]> {
   const config = useExportConfig();
 

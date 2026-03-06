@@ -87,7 +87,7 @@ describe('useSpan', () => {
       await expect(
         result.current.withSpan('failing-op', () => {
           throw error;
-        }),
+        })
       ).rejects.toThrow('test failure');
 
       expect(mockSpan.setStatus).toHaveBeenCalledWith({ code: SpanStatusCode.ERROR });

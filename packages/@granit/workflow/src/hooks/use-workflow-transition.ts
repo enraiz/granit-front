@@ -40,10 +40,10 @@ export function useWorkflowTransition({
       setError(null);
 
       try {
-        const data = await executeTransition(
-          apiClient, basePath, entityType, entityId,
-          { targetState, comment },
-        );
+        const data = await executeTransition(apiClient, basePath, entityType, entityId, {
+          targetState,
+          comment,
+        });
         setResult(data);
         onSuccess?.(data);
         return data;
@@ -57,7 +57,7 @@ export function useWorkflowTransition({
         setLoading(false);
       }
     },
-    [apiClient, basePath, entityType, entityId, onSuccess, onError],
+    [apiClient, basePath, entityType, entityId, onSuccess, onError]
   );
 
   return { transition, loading, result, error };

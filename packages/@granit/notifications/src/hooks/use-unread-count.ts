@@ -21,19 +21,14 @@ export interface UseUnreadCountResult {
  * 2. Periodic polling as a fallback (default 60 s)
  * 3. Manual `refresh()` call
  */
-export function useUnreadCount(
-  options: UseUnreadCountOptions = {},
-): UseUnreadCountResult {
+export function useUnreadCount(options: UseUnreadCountOptions = {}): UseUnreadCountResult {
   const { pollingInterval = 60_000 } = options;
   const { config, unreadCount, setUnreadCount } = useNotificationContext();
   const mountedRef = useRef(true);
 
   const refresh = useCallback(async () => {
     try {
-      const count = await fetchUnreadCount(
-        config.apiClient,
-        config.basePath ?? '/api',
-      );
+      const count = await fetchUnreadCount(config.apiClient, config.basePath ?? '/api');
       if (mountedRef.current) {
         setUnreadCount(count);
       }
@@ -49,7 +44,9 @@ export function useUnreadCount(
 
     if (pollingInterval <= 0) return;
 
-    const id = setInterval(() => { refresh(); }, pollingInterval);
+    const id = setInterval(() => {
+      refresh();
+    }, pollingInterval);
     return () => {
       mountedRef.current = false;
       clearInterval(id);

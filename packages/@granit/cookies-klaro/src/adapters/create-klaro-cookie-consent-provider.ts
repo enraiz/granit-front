@@ -4,19 +4,19 @@ import type {
   KlaroConsentManager,
   KlaroServiceMapping,
   KlaroWatcher,
-} from "../types/index.js";
+} from '../types/index.js';
 import type {
   CookieCategory,
   CookieConsentConfig,
   CookieConsentProviderInterface,
   ConsentState,
-} from "@granit/cookies";
+} from '@granit/cookies';
 
 const ALL_CATEGORIES: readonly CookieCategory[] = [
-  "strictly_necessary",
-  "preferences",
-  "analytics",
-  "marketing",
+  'strictly_necessary',
+  'preferences',
+  'analytics',
+  'marketing',
 ];
 
 /**
@@ -25,7 +25,7 @@ const ALL_CATEGORIES: readonly CookieCategory[] = [
  */
 function buildConsentState(
   manager: KlaroConsentManager,
-  serviceMappings: readonly KlaroServiceMapping[],
+  serviceMappings: readonly KlaroServiceMapping[]
 ): ConsentState {
   const state: ConsentState = {
     strictly_necessary: true,
@@ -35,7 +35,7 @@ function buildConsentState(
   };
 
   for (const category of ALL_CATEGORIES) {
-    if (category === "strictly_necessary") continue;
+    if (category === 'strictly_necessary') continue;
 
     const services = serviceMappings.filter((m) => m.category === category);
     if (services.length === 0) continue;
@@ -51,7 +51,7 @@ function buildConsentState(
  */
 function buildKlaroConfigFromApi(
   config: CookieConsentConfig,
-  cookieName: string,
+  cookieName: string
 ): { klaroConfig: KlaroConfig; serviceMappings: KlaroServiceMapping[] } {
   const serviceMappings: KlaroServiceMapping[] = config.services.map((s) => ({
     name: s.name,
@@ -93,9 +93,9 @@ function buildKlaroConfigFromApi(
  * ```
  */
 export function createKlaroCookieConsentProvider(
-  options: CreateKlaroCookieConsentProviderOptions,
+  options: CreateKlaroCookieConsentProviderOptions
 ): CookieConsentProviderInterface {
-  const cookieName = options.cookieName ?? options.klaroConfig?.cookieName ?? "klaro";
+  const cookieName = options.cookieName ?? options.klaroConfig?.cookieName ?? 'klaro';
   let manager: KlaroConsentManager | null = null;
   let resolvedMappings: readonly KlaroServiceMapping[] = options.serviceMappings ?? [];
 
@@ -112,11 +112,11 @@ export function createKlaroCookieConsentProvider(
         klaroConfig = options.klaroConfig;
       } else {
         throw new Error(
-          "createKlaroCookieConsentProvider: provide either loadConfig or klaroConfig",
+          'createKlaroCookieConsentProvider: provide either loadConfig or klaroConfig'
         );
       }
 
-      const klaro = await import("klaro/dist/klaro-no-css");
+      const klaro = await import('klaro/dist/klaro-no-css');
       manager = klaro.getManager(klaroConfig) as KlaroConsentManager;
     },
 
@@ -151,7 +151,7 @@ export function createKlaroCookieConsentProvider(
     },
 
     setConsent(category, granted) {
-      if (!manager || category === "strictly_necessary") return;
+      if (!manager || category === 'strictly_necessary') return;
 
       const services = resolvedMappings.filter((m) => m.category === category);
       for (const service of services) {
@@ -168,9 +168,7 @@ export function createKlaroCookieConsentProvider(
     },
 
     hasConsented() {
-      return document.cookie
-        .split(";")
-        .some((c) => c.trim().startsWith(`${cookieName}=`));
+      return document.cookie.split(';').some((c) => c.trim().startsWith(`${cookieName}=`));
     },
   };
 }

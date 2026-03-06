@@ -34,12 +34,9 @@ describe('GranitErrorBoundary', () => {
     const logger = createMockLogger();
 
     render(
-      <GranitErrorBoundary
-        logger={logger}
-        renderFallback={(error) => <p>{error.message}</p>}
-      >
+      <GranitErrorBoundary logger={logger} renderFallback={(error) => <p>{error.message}</p>}>
         <div>child content</div>
-      </GranitErrorBoundary>,
+      </GranitErrorBoundary>
     );
 
     expect(screen.getByText('child content')).toBeInTheDocument();
@@ -55,7 +52,7 @@ describe('GranitErrorBoundary', () => {
         renderFallback={(error) => <p>Fallback: {error.message}</p>}
       >
         <ThrowingComponent shouldThrow />
-      </GranitErrorBoundary>,
+      </GranitErrorBoundary>
     );
 
     expect(screen.getByTestId('error-boundary-fallback')).toBeInTheDocument();
@@ -66,19 +63,16 @@ describe('GranitErrorBoundary', () => {
     const logger = createMockLogger();
 
     render(
-      <GranitErrorBoundary
-        logger={logger}
-        renderFallback={(error) => <p>{error.message}</p>}
-      >
+      <GranitErrorBoundary logger={logger} renderFallback={(error) => <p>{error.message}</p>}>
         <ThrowingComponent shouldThrow />
-      </GranitErrorBoundary>,
+      </GranitErrorBoundary>
     );
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught render error',
       expect.objectContaining({
         error: 'Test render error',
-      }),
+      })
     );
   });
 
@@ -93,12 +87,12 @@ describe('GranitErrorBoundary', () => {
         onError={onError}
       >
         <ThrowingComponent shouldThrow />
-      </GranitErrorBoundary>,
+      </GranitErrorBoundary>
     );
 
     expect(onError).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'Test render error' }),
-      expect.objectContaining({ componentStack: expect.any(String) }),
+      expect.objectContaining({ componentStack: expect.any(String) })
     );
   });
 
@@ -117,11 +111,13 @@ describe('GranitErrorBoundary', () => {
       <GranitErrorBoundary
         logger={logger}
         renderFallback={(_error, reset) => (
-          <button type="button" onClick={reset}>Reset</button>
+          <button type="button" onClick={reset}>
+            Reset
+          </button>
         )}
       >
         <ConditionalThrow />
-      </GranitErrorBoundary>,
+      </GranitErrorBoundary>
     );
 
     expect(screen.getByText('Reset')).toBeInTheDocument();

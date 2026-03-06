@@ -7,9 +7,13 @@
     "tsc": "pnpm -r exec -- tsc --noEmit",
     "build": "pnpm -r run build",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write \"packages/@granit/*/src/**/*.{ts,tsx}\"",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.3",
+    "@commitlint/config-conventional": "^20.4.3",
     "@eslint/js": "^10.0.1",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/context-zone": "^2.6.0",
@@ -21,7 +25,7 @@
     "@opentelemetry/resources": "^2.6.0",
     "@opentelemetry/sdk-trace-web": "^2.6.0",
     "@opentelemetry/semantic-conventions": "^1.40.0",
-"@tailwindcss/vite": "^4.2.1",
+    "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.0",
@@ -37,11 +41,15 @@
     "date-fns": "^4.1.0",
     "eslint": "^10.0.2",
     "eslint-plugin-import-x": "^4.16.1",
+    "husky": "^9.1.7",
     "i18next": "^25.8.14",
     "jsdom": "^28.1.0",
     "keycloak-js": "^26.2.3",
+    "lint-staged": "^16.3.2",
     "lucide-react": "^0.577.0",
+    "markdownlint-cli2": "^0.21.0",
     "msw": "^2.12.10",
+    "prettier": "^3.8.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.1",
@@ -58,6 +66,14 @@
     "overrides": {
       "immutable": ">=5.1.5"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,json}": "prettier --write",
+    "*.md": [
+      "prettier --write",
+      "markdownlint-cli2"
+    ],
+    "*.{ts,tsx}": "eslint --max-warnings 0 --no-warn-ignored"
   },
   "engines": {
     "node": ">=24"

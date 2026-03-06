@@ -55,9 +55,7 @@ export function useTimelineFollowers({
     try {
       await followEntity(apiClient, basePath, entityType, entityId);
       if (currentUserId) {
-        setFollowers((prev) =>
-          prev.includes(currentUserId) ? prev : [...prev, currentUserId],
-        );
+        setFollowers((prev) => (prev.includes(currentUserId) ? prev : [...prev, currentUserId]));
       }
     } catch (err) {
       const wrapped = err instanceof Error ? err : new Error(String(err));

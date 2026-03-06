@@ -102,7 +102,7 @@ describe('ErrorContextProvider', () => {
 
   it('should throw when useErrorContext is used outside provider', () => {
     expect(() => renderHook(() => useErrorContext())).toThrowError(
-      'useErrorContext must be used within an ErrorContextProvider',
+      'useErrorContext must be used within an ErrorContextProvider'
     );
   });
 });

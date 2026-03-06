@@ -2,7 +2,13 @@ import { setTokenGetter, setOnUnauthorized } from '@granit/api-client';
 import Keycloak from 'keycloak-js';
 import * as React from 'react';
 
-import type { BaseAuthContextType, KeycloakCoreConfig, KeycloakUserInfo, LoginOptions, LogoutOptions } from '../types/index.js';
+import type {
+  BaseAuthContextType,
+  KeycloakCoreConfig,
+  KeycloakUserInfo,
+  LoginOptions,
+  LogoutOptions,
+} from '../types/index.js';
 
 export interface KeycloakCoreResult extends BaseAuthContextType {
   /**
@@ -185,9 +191,18 @@ export function useKeycloakInit(config: KeycloakCoreConfig): KeycloakCoreResult 
     return () => {
       if (refreshInterval) clearInterval(refreshInterval);
     };
-  }, [config.url, config.realm, config.clientId, config.silentCheckSso,
-    config.silentCheckSsoFallback, config.useTokenClaims,
-    config.onTokenExpired, config.onAuthRefreshError, config.onAuthLogout, config.onEvent]);
+  }, [
+    config.url,
+    config.realm,
+    config.clientId,
+    config.silentCheckSso,
+    config.silentCheckSsoFallback,
+    config.useTokenClaims,
+    config.onTokenExpired,
+    config.onAuthRefreshError,
+    config.onAuthLogout,
+    config.onEvent,
+  ]);
 
   // ----- Actions (Story #4) ------------------------------------------------
   const login = React.useCallback(async (options?: LoginOptions) => {

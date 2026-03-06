@@ -38,10 +38,9 @@ describe('usePermissionDefinitions', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValueOnce({ data: MOCK_GROUPS });
 
-    const { result } = renderHook(
-      () => usePermissionDefinitions({ client }),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => usePermissionDefinitions({ client }), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -55,7 +54,7 @@ describe('usePermissionDefinitions', () => {
 
     const { result } = renderHook(
       () => usePermissionDefinitions({ client, basePath: '/api/auth' }),
-      { wrapper: createWrapper() },
+      { wrapper: createWrapper() }
     );
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -66,10 +65,9 @@ describe('usePermissionDefinitions', () => {
   it('should not fetch when disabled', () => {
     const client = createMockClient();
 
-    const { result } = renderHook(
-      () => usePermissionDefinitions({ client, enabled: false }),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => usePermissionDefinitions({ client, enabled: false }), {
+      wrapper: createWrapper(),
+    });
 
     expect(result.current.fetchStatus).toBe('idle');
     expect(client.get).not.toHaveBeenCalled();
@@ -79,10 +77,9 @@ describe('usePermissionDefinitions', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValueOnce(new Error('Forbidden'));
 
-    const { result } = renderHook(
-      () => usePermissionDefinitions({ client }),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => usePermissionDefinitions({ client }), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
 

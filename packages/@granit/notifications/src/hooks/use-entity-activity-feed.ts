@@ -30,7 +30,7 @@ const DEFAULT_PAGE_SIZE = 20;
  * Odoo-style activity feed scoped to a single entity.
  */
 export function useEntityActivityFeed(
-  options: UseEntityActivityFeedOptions,
+  options: UseEntityActivityFeedOptions
 ): UseEntityActivityFeedResult {
   const { entityType, entityId, pageSize = DEFAULT_PAGE_SIZE } = options;
   const { config } = useNotificationContext();
@@ -39,14 +39,22 @@ export function useEntityActivityFeed(
   const fetcher = useCallback(
     (skip: number, take: number) =>
       fetchEntityActivityFeed(config.apiClient, basePath, entityType, entityId, { skip, take }),
-    [config.apiClient, basePath, entityType, entityId],
+    [config.apiClient, basePath, entityType, entityId]
   );
 
-  const { items: entries, totalCount, loading, loadingMore, error, hasMore, loadMore, refresh } =
-    usePaginatedFetch<ActivityFeedEntryDto, ActivityFeedPageDto>({
-      fetcher,
-      pageSize,
-    });
+  const {
+    items: entries,
+    totalCount,
+    loading,
+    loadingMore,
+    error,
+    hasMore,
+    loadMore,
+    refresh,
+  } = usePaginatedFetch<ActivityFeedEntryDto, ActivityFeedPageDto>({
+    fetcher,
+    pageSize,
+  });
 
   return {
     entries,

@@ -53,7 +53,7 @@ function createGatedExporter(exporterConfig: TracingExporterConfig): SpanExporte
               disabled = true;
               // eslint-disable-next-line no-console
               console.warn(
-                `[@granit/tracing] OTLP collector unavailable at ${exporterConfig.url} (HTTP ${String(res.status)}). Trace export disabled for this session.`,
+                `[@granit/tracing] OTLP collector unavailable at ${exporterConfig.url} (HTTP ${String(res.status)}). Trace export disabled for this session.`
               );
               resultCallback(EXPORT_SUCCESS);
             }
@@ -62,7 +62,7 @@ function createGatedExporter(exporterConfig: TracingExporterConfig): SpanExporte
             disabled = true;
             // eslint-disable-next-line no-console
             console.warn(
-              `[@granit/tracing] OTLP collector unreachable at ${exporterConfig.url}. Trace export disabled for this session.`,
+              `[@granit/tracing] OTLP collector unreachable at ${exporterConfig.url}. Trace export disabled for this session.`
             );
             resultCallback(EXPORT_SUCCESS);
           });
@@ -154,9 +154,7 @@ export function TracingProvider({ config, children }: Readonly<TracingProviderPr
     const spanProcessor = new BatchSpanProcessor(gatedExporter);
 
     // --- Instrumentations ---
-    const instrumentations: Instrumentation[] = [
-      ...additionalInstrumentations,
-    ];
+    const instrumentations: Instrumentation[] = [...additionalInstrumentations];
     if (instrumentFetch) {
       instrumentations.push(new FetchInstrumentation());
     }
@@ -195,9 +193,5 @@ export function TracingProvider({ config, children }: Readonly<TracingProviderPr
     };
   }, []);
 
-  return (
-    <TracerContext.Provider value={tracerRef.current}>
-      {children}
-    </TracerContext.Provider>
-  );
+  return <TracerContext.Provider value={tracerRef.current}>{children}</TracerContext.Provider>;
 }

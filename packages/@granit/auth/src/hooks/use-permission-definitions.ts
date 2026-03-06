@@ -23,7 +23,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
  * ```
  */
 export function usePermissionDefinitions(
-  options: UsePermissionDefinitionsOptions,
+  options: UsePermissionDefinitionsOptions
 ): UseQueryResult<PermissionGroupDto[]> {
   const { client, basePath = '/auth', enabled } = options;
 

@@ -26,7 +26,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
  * ```
  */
 export function useRolePermissions(
-  options: UseRolePermissionsOptions,
+  options: UseRolePermissionsOptions
 ): UseQueryResult<PermissionGrantDto> {
   const { client, roleName, basePath = '/auth', enabled } = options;
 
@@ -34,7 +34,7 @@ export function useRolePermissions(
     queryKey: permissionKeys.role(roleName),
     queryFn: async () => {
       const response = await client.get<PermissionGrantDto>(
-        `${basePath}/roles/${encodeURIComponent(roleName)}`,
+        `${basePath}/roles/${encodeURIComponent(roleName)}`
       );
       return response.data;
     },

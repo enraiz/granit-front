@@ -3,7 +3,6 @@ import { createContext, useContext, useMemo } from 'react';
 import type { TimelineConfig } from '../types/index.js';
 import type { AxiosInstance } from 'axios';
 
-
 const TimelineConfigContext = createContext<TimelineConfig | null>(null);
 
 const DEFAULT_BASE_PATH = '/api/timeline';
@@ -19,16 +18,9 @@ export function TimelineProvider({
   basePath = DEFAULT_BASE_PATH,
   children,
 }: Readonly<TimelineProviderProps>) {
-  const config = useMemo<TimelineConfig>(
-    () => ({ apiClient, basePath }),
-    [apiClient, basePath],
-  );
+  const config = useMemo<TimelineConfig>(() => ({ apiClient, basePath }), [apiClient, basePath]);
 
-  return (
-    <TimelineConfigContext.Provider value={config}>
-      {children}
-    </TimelineConfigContext.Provider>
-  );
+  return <TimelineConfigContext.Provider value={config}>{children}</TimelineConfigContext.Provider>;
 }
 
 export function useTimelineConfig(): TimelineConfig {

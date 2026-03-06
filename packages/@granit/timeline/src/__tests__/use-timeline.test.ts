@@ -1,4 +1,3 @@
-
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -33,10 +32,9 @@ describe('useTimeline', () => {
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const { result } = renderHook(
-      () => useTimeline({ entityType: 'Patient', entityId: 'p-1' }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useTimeline({ entityType: 'Patient', entityId: 'p-1' }), {
+      wrapper: createWrapper(client),
+    });
 
     expect(result.current.loading).toBe(true);
 
@@ -52,10 +50,9 @@ describe('useTimeline', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Network error'));
 
-    const { result } = renderHook(
-      () => useTimeline({ entityType: 'Patient', entityId: 'p-1' }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useTimeline({ entityType: 'Patient', entityId: 'p-1' }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
@@ -65,15 +62,13 @@ describe('useTimeline', () => {
 
   it('should detect hasMore when totalCount > loaded entries', async () => {
     const client = createMockClient();
-    const items = Array.from({ length: 20 }, (_, i) =>
-      makeEntry({ id: `e-${i}` }),
-    );
+    const items = Array.from({ length: 20 }, (_, i) => makeEntry({ id: `e-${i}` }));
     const page: TimelineStreamPage = { items, totalCount: 50 };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
     const { result } = renderHook(
       () => useTimeline({ entityType: 'Patient', entityId: 'p-1', pageSize: 20 }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -99,7 +94,7 @@ describe('useTimeline', () => {
 
     const { result } = renderHook(
       () => useTimeline({ entityType: 'Patient', entityId: 'p-1', pageSize: 1 }),
-      { wrapper: createWrapper(client) },
+      { wrapper: createWrapper(client) }
     );
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -121,10 +116,9 @@ describe('useTimeline', () => {
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const { result } = renderHook(
-      () => useTimeline({ entityType: 'Patient', entityId: 'p-1' }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useTimeline({ entityType: 'Patient', entityId: 'p-1' }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
@@ -144,10 +138,9 @@ describe('useTimeline', () => {
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const { result } = renderHook(
-      () => useTimeline({ entityType: 'Patient', entityId: 'p-1' }),
-      { wrapper: createWrapper(client) },
-    );
+    const { result } = renderHook(() => useTimeline({ entityType: 'Patient', entityId: 'p-1' }), {
+      wrapper: createWrapper(client),
+    });
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 

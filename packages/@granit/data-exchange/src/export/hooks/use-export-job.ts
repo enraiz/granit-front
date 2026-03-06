@@ -1,11 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-
 import { createExportJob, downloadExportFile, fetchExportJobStatus } from '../api/export-api.js';
 import { buildExportQueryKey, useExportConfig } from '../providers/export-provider.js';
 
-import type { CreateExportJobRequest, ExportJobResponse, ExportJobStatus } from '../types/export-job.js';
+import type {
+  CreateExportJobRequest,
+  ExportJobResponse,
+  ExportJobStatus,
+} from '../types/export-job.js';
 
 export interface UseExportJobReturn {
   /** Start a new export job. */
@@ -63,25 +66,31 @@ export function useExportJob(): UseExportJobReturn {
     if (job?.status !== 'Completed' || downloadTriggered.current) return;
     downloadTriggered.current = true;
 
-    downloadExportFile(config.client, config.basePath, job.id).then(
-      ({ blob, fileName }) => {
+    downloadExportFile(config.client, config.basePath, job.id)
+      .then(({ blob, fileName }) => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
         link.click();
         URL.revokeObjectURL(url);
-      },
-    ).catch(() => { /* download errors surfaced via UI */ });
+      })
+      .catch(() => {
+        /* download errors surfaced via UI */
+      });
   }, [job, config.client, config.basePath]);
 
   const isExporting = !!activeJobId && (!job || !TERMINAL_STATUSES.has(job.status));
 
   const reset = useCallback(() => {
     if (activeJobId) {
-      queryClient.invalidateQueries({
-        queryKey: buildExportQueryKey(config, 'job', activeJobId),
-      }).catch(() => { /* best-effort invalidation */ });
+      queryClient
+        .invalidateQueries({
+          queryKey: buildExportQueryKey(config, 'job', activeJobId),
+        })
+        .catch(() => {
+          /* best-effort invalidation */
+        });
     }
     setActiveJobId(null);
     downloadTriggered.current = false;
@@ -92,7 +101,7 @@ export function useExportJob(): UseExportJobReturn {
     (request: CreateExportJobRequest) => {
       createMutation.mutate(request);
     },
-    [createMutation],
+    [createMutation]
   );
 
   return {

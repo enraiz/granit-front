@@ -15,7 +15,7 @@ interface ApiClientModule {
   setTenantGetter: (getter: () => string | undefined) => void;
   setOnUnauthorized: (callback: () => void) => void;
   createMutator: (
-    instance: AxiosInstance,
+    instance: AxiosInstance
   ) => <T>(config: AxiosRequestConfig, options?: AxiosRequestConfig) => Promise<T>;
 }
 

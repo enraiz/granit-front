@@ -25,7 +25,10 @@ function makeEntry(overrides: Partial<LogEntry> = {}): LogEntry {
 describe('createOtlpTransport', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(new Response())));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response()))
+    );
   });
 
   afterEach(() => {
@@ -117,9 +120,7 @@ describe('createOtlpTransport', () => {
     transport.send(makeEntry({ level: 'WARN', context: { userId: '42' } }));
     await transport.flush!();
 
-    const body = JSON.parse(
-      vi.mocked(fetch).mock.calls[0][1]!.body as string,
-    );
+    const body = JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string);
     // Resource attributes
     const resourceAttrs = body.resourceLogs[0].resource.attributes;
     expect(resourceAttrs).toContainEqual({
@@ -155,12 +156,10 @@ describe('createOtlpTransport', () => {
     transport.send(makeEntry({ level: 'ERROR' }));
     await transport.flush!();
 
-    const body = JSON.parse(
-      vi.mocked(fetch).mock.calls[0][1]!.body as string,
-    );
+    const body = JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string);
     const records = body.resourceLogs[0].scopeLogs[0].logRecords;
-    expect(records[0].severityNumber).toBe(5);  // DEBUG
-    expect(records[1].severityNumber).toBe(9);  // INFO
+    expect(records[0].severityNumber).toBe(5); // DEBUG
+    expect(records[1].severityNumber).toBe(9); // INFO
     expect(records[2].severityNumber).toBe(13); // WARN
     expect(records[3].severityNumber).toBe(17); // ERROR
   });
@@ -174,9 +173,7 @@ describe('createOtlpTransport', () => {
     transport.send(makeEntry({ context: { userId: 'abc', requestId: '123' } }));
     await transport.flush!();
 
-    const body = JSON.parse(
-      vi.mocked(fetch).mock.calls[0][1]!.body as string,
-    );
+    const body = JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string);
     const attrs = body.resourceLogs[0].scopeLogs[0].logRecords[0].attributes;
     expect(attrs).toContainEqual({
       key: 'userId',
@@ -199,9 +196,7 @@ describe('createOtlpTransport', () => {
     transport.send(makeEntry({ level: 'ERROR', error }));
     await transport.flush!();
 
-    const body = JSON.parse(
-      vi.mocked(fetch).mock.calls[0][1]!.body as string,
-    );
+    const body = JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string);
     const attrs = body.resourceLogs[0].scopeLogs[0].logRecords[0].attributes;
     expect(attrs).toContainEqual({
       key: 'exception.type',
@@ -211,9 +206,7 @@ describe('createOtlpTransport', () => {
       key: 'exception.message',
       value: { stringValue: 'boom' },
     });
-    expect(attrs).toContainEqual(
-      expect.objectContaining({ key: 'exception.stacktrace' }),
-    );
+    expect(attrs).toContainEqual(expect.objectContaining({ key: 'exception.stacktrace' }));
   });
 
   it('should include traceId and spanId when getTraceContext is provided', async () => {
@@ -226,9 +219,7 @@ describe('createOtlpTransport', () => {
     transport.send(makeEntry());
     await transport.flush!();
 
-    const body = JSON.parse(
-      vi.mocked(fetch).mock.calls[0][1]!.body as string,
-    );
+    const body = JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string);
     const record = body.resourceLogs[0].scopeLogs[0].logRecords[0];
     expect(record.traceId).toBe('trace-abc');
     expect(record.spanId).toBe('span-def');
@@ -243,9 +234,7 @@ describe('createOtlpTransport', () => {
     transport.send(makeEntry());
     await transport.flush!();
 
-    const body = JSON.parse(
-      vi.mocked(fetch).mock.calls[0][1]!.body as string,
-    );
+    const body = JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string);
     const record = body.resourceLogs[0].scopeLogs[0].logRecords[0];
     expect(record.traceId).toBe('');
     expect(record.spanId).toBe('');

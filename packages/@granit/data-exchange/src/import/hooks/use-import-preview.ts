@@ -49,8 +49,7 @@ export function useImportPreview(): UseImportPreviewReturn {
   const [mappings, setMappings] = useState<ImportColumnMapping[]>([]);
 
   const previewMutation = useMutation({
-    mutationFn: (jobId: string) =>
-      previewImport(config.client, config.basePath, jobId),
+    mutationFn: (jobId: string) => previewImport(config.client, config.basePath, jobId),
     onSuccess: (data) => {
       setHeaders(data.headers);
       setPreviewRows(data.previewRows);
@@ -61,35 +60,31 @@ export function useImportPreview(): UseImportPreviewReturn {
   });
 
   const dryRunMutation = useMutation({
-    mutationFn: (jobId: string) =>
-      dryRunImport(config.client, config.basePath, jobId),
+    mutationFn: (jobId: string) => dryRunImport(config.client, config.basePath, jobId),
   });
 
-  const updateMapping = useCallback(
-    (sourceColumn: string, targetProperty: string | null) => {
-      setMappings((prev) =>
-        prev.map((m) =>
-          m.sourceColumn === sourceColumn
-            ? { ...m, targetProperty, confidence: 'Manual' as const }
-            : m,
-        ),
-      );
-    },
-    [],
-  );
+  const updateMapping = useCallback((sourceColumn: string, targetProperty: string | null) => {
+    setMappings((prev) =>
+      prev.map((m) =>
+        m.sourceColumn === sourceColumn
+          ? { ...m, targetProperty, confidence: 'Manual' as const }
+          : m
+      )
+    );
+  }, []);
 
   const preview = useCallback(
     (jobId: string) => {
       previewMutation.mutate(jobId);
     },
-    [previewMutation],
+    [previewMutation]
   );
 
   const dryRun = useCallback(
     (jobId: string) => {
       dryRunMutation.mutate(jobId);
     },
-    [dryRunMutation],
+    [dryRunMutation]
   );
 
   const reset = useCallback(() => {

@@ -21,7 +21,7 @@ import type { StorageOptions } from './create-storage.js';
 export function useStorage<T>(
   key: string,
   defaultValue: T,
-  options?: StorageOptions<T>,
+  options?: StorageOptions<T>
 ): [T, (value: T) => void] {
   const storage = createStorage<T>(key, options);
 
@@ -41,7 +41,7 @@ export function useStorage<T>(
       globalThis.addEventListener('storage', handler);
       return () => globalThis.removeEventListener('storage', handler);
     },
-    [storage.key],
+    [storage.key]
   );
 
   const getSnapshot = useCallback((): T => {
@@ -62,11 +62,9 @@ export function useStorage<T>(
   const setValue = useCallback(
     (next: T) => {
       storage.set(next);
-      globalThis.dispatchEvent(
-        new StorageEvent('storage', { key: storage.key }),
-      );
+      globalThis.dispatchEvent(new StorageEvent('storage', { key: storage.key }));
     },
-    [storage],
+    [storage]
   );
 
   return [value, setValue];

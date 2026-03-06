@@ -35,17 +35,20 @@ describe('import-api', () => {
     const file = new File(['content'], 'test.csv', { type: 'text/csv' });
     const result = await uploadImportFile(client, BASE, file, 'Test');
 
-    expect(client.post).toHaveBeenCalledWith(
-      BASE,
-      expect.any(FormData),
-      { headers: { 'Content-Type': 'multipart/form-data' } },
-    );
+    expect(client.post).toHaveBeenCalledWith(BASE, expect.any(FormData), {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     expect(result).toEqual(job);
   });
 
   it('previewImport calls POST /{jobId}/preview', async () => {
     const client = createMockClient();
-    const preview = { headers: ['Col1'], previewRows: [['val']], suggestions: [], fieldMetadata: [] };
+    const preview = {
+      headers: ['Col1'],
+      previewRows: [['val']],
+      suggestions: [],
+      fieldMetadata: [],
+    };
     vi.mocked(client.post).mockResolvedValueOnce({ data: preview });
 
     const result = await previewImport(client, BASE, 'job-1');
@@ -55,7 +58,9 @@ describe('import-api', () => {
 
   it('confirmMappings calls PUT /{jobId}/mappings', async () => {
     const client = createMockClient();
-    const request = { mappings: [{ sourceColumn: 'Col1', targetProperty: 'Email', confidence: 'Manual' as const }] };
+    const request = {
+      mappings: [{ sourceColumn: 'Col1', targetProperty: 'Email', confidence: 'Manual' as const }],
+    };
 
     await confirmMappings(client, BASE, 'job-1', request);
     expect(client.put).toHaveBeenCalledWith(`${BASE}/job-1/mappings`, request);
@@ -112,7 +117,9 @@ describe('import-api', () => {
     });
 
     const result = await downloadCorrectionFile(client, BASE, 'job-1');
-    expect(client.get).toHaveBeenCalledWith(`${BASE}/job-1/correction-file`, { responseType: 'blob' });
+    expect(client.get).toHaveBeenCalledWith(`${BASE}/job-1/correction-file`, {
+      responseType: 'blob',
+    });
     expect(result.blob).toBe(blob);
     expect(result.fileName).toBe('correction.csv');
   });

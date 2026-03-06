@@ -6,7 +6,6 @@ import type {
 } from '../types/index.js';
 import type { AxiosInstance } from 'axios';
 
-
 function buildUrl(basePath: string, ...segments: string[]): string {
   return [basePath, ...segments].join('/');
 }
@@ -18,30 +17,26 @@ function buildUrl(basePath: string, ...segments: string[]): string {
 export async function fetchNotifications(
   client: AxiosInstance,
   basePath: string,
-  params: { skip?: number; take?: number } = {},
+  params: { skip?: number; take?: number } = {}
 ): Promise<NotificationPageDto> {
-  const { data } = await client.get<NotificationPageDto>(
-    buildUrl(basePath, 'notifications'),
-    { params },
-  );
+  const { data } = await client.get<NotificationPageDto>(buildUrl(basePath, 'notifications'), {
+    params,
+  });
   return data;
 }
 
 export async function markAsRead(
   client: AxiosInstance,
   basePath: string,
-  notificationId: string,
+  notificationId: string
 ): Promise<NotificationDto> {
   const { data } = await client.patch<NotificationDto>(
-    buildUrl(basePath, 'notifications', notificationId, 'read'),
+    buildUrl(basePath, 'notifications', notificationId, 'read')
   );
   return data;
 }
 
-export async function markAllAsRead(
-  client: AxiosInstance,
-  basePath: string,
-): Promise<void> {
+export async function markAllAsRead(client: AxiosInstance, basePath: string): Promise<void> {
   await client.post(buildUrl(basePath, 'notifications', 'read-all'));
 }
 
@@ -49,12 +44,9 @@ export async function markAllAsRead(
 // Unread count
 // ---------------------------------------------------------------------------
 
-export async function fetchUnreadCount(
-  client: AxiosInstance,
-  basePath: string,
-): Promise<number> {
+export async function fetchUnreadCount(client: AxiosInstance, basePath: string): Promise<number> {
   const { data } = await client.get<{ count: number }>(
-    buildUrl(basePath, 'notifications', 'unread-count'),
+    buildUrl(basePath, 'notifications', 'unread-count')
   );
   return data.count;
 }
@@ -68,11 +60,11 @@ export async function fetchEntityActivityFeed(
   basePath: string,
   entityType: string,
   entityId: string,
-  params: { skip?: number; take?: number } = {},
+  params: { skip?: number; take?: number } = {}
 ): Promise<ActivityFeedPageDto> {
   const { data } = await client.get<ActivityFeedPageDto>(
     buildUrl(basePath, 'activity-feed', entityType, entityId),
-    { params },
+    { params }
   );
   return data;
 }
@@ -83,10 +75,10 @@ export async function fetchEntityActivityFeed(
 
 export async function fetchPreferences(
   client: AxiosInstance,
-  basePath: string,
+  basePath: string
 ): Promise<NotificationPreferenceDto[]> {
   const { data } = await client.get<NotificationPreferenceDto[]>(
-    buildUrl(basePath, 'notification-preferences'),
+    buildUrl(basePath, 'notification-preferences')
   );
   return data;
 }
@@ -94,11 +86,11 @@ export async function fetchPreferences(
 export async function updatePreference(
   client: AxiosInstance,
   basePath: string,
-  preference: NotificationPreferenceDto,
+  preference: NotificationPreferenceDto
 ): Promise<NotificationPreferenceDto> {
   const { data } = await client.put<NotificationPreferenceDto>(
     buildUrl(basePath, 'notification-preferences', preference.notificationType),
-    preference,
+    preference
   );
   return data;
 }

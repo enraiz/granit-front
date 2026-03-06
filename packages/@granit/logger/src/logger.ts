@@ -37,10 +37,7 @@ export interface LogTransport {
 
 type ConsoleMethod = 'log' | 'info' | 'warn' | 'error';
 
-const LEVEL_STYLES: Record<
-  LogLevelName,
-  { bg: string; label: string; method: ConsoleMethod }
-> = {
+const LEVEL_STYLES: Record<LogLevelName, { bg: string; label: string; method: ConsoleMethod }> = {
   DEBUG: { bg: '#71717a', label: 'debug', method: 'log' },
   INFO: { bg: '#0ea5e9', label: 'info ', method: 'info' },
   WARN: { bg: '#f59e0b', label: 'warn ', method: 'warn' },

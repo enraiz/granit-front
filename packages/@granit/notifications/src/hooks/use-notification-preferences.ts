@@ -13,7 +13,7 @@ export interface UseNotificationPreferencesResult {
   toggleChannel: (
     notificationType: string,
     channel: NotificationChannel,
-    enabled: boolean,
+    enabled: boolean
   ) => Promise<void>;
   refresh: () => void;
 }
@@ -56,11 +56,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesResult {
   }, [load]);
 
   const toggleChannel = useCallback(
-    async (
-      notificationType: string,
-      channel: NotificationChannel,
-      enabled: boolean,
-    ) => {
+    async (notificationType: string, channel: NotificationChannel, enabled: boolean) => {
       const pref = preferences.find((p) => p.notificationType === notificationType);
       if (!pref) return;
 
@@ -71,7 +67,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesResult {
 
       // Optimistic update
       setPreferences((prev) =>
-        prev.map((p) => (p.notificationType === notificationType ? updated : p)),
+        prev.map((p) => (p.notificationType === notificationType ? updated : p))
       );
 
       setSaving(true);
@@ -79,14 +75,14 @@ export function useNotificationPreferences(): UseNotificationPreferencesResult {
         const saved = await updatePreference(config.apiClient, basePath, updated);
         if (mountedRef.current) {
           setPreferences((prev) =>
-            prev.map((p) => (p.notificationType === notificationType ? saved : p)),
+            prev.map((p) => (p.notificationType === notificationType ? saved : p))
           );
         }
       } catch (err) {
         // Rollback on failure
         if (mountedRef.current) {
           setPreferences((prev) =>
-            prev.map((p) => (p.notificationType === notificationType ? pref : p)),
+            prev.map((p) => (p.notificationType === notificationType ? pref : p))
           );
           setError(err instanceof Error ? err : new Error(String(err)));
         }
@@ -94,7 +90,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesResult {
         if (mountedRef.current) setSaving(false);
       }
     },
-    [config.apiClient, basePath, preferences],
+    [config.apiClient, basePath, preferences]
   );
 
   const refresh = useCallback(() => {

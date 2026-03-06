@@ -1,18 +1,11 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import type {
   CookieCategory,
   CookieConsentContextValue,
   CookieConsentProvider as ICookieConsentProvider,
   ConsentState,
-} from "../types/index.js";
+} from '../types/index.js';
 
 const DEFAULT_CONSENTS: ConsentState = {
   strictly_necessary: true,
@@ -21,8 +14,7 @@ const DEFAULT_CONSENTS: ConsentState = {
   marketing: false,
 };
 
-export const CookieConsentContext =
-  createContext<CookieConsentContextValue | null>(null);
+export const CookieConsentContext = createContext<CookieConsentContextValue | null>(null);
 
 interface CookieConsentProviderProps {
   /** The CMP implementation (Klaro, Cookiebot, etc.). */
@@ -75,7 +67,7 @@ export function CookieConsentProvider({
 
   const revokeCategory = useCallback(
     (category: CookieCategory) => {
-      if (category === "strictly_necessary") return;
+      if (category === 'strictly_necessary') return;
       provider.setConsent(category, false);
       setHasConsented(provider.hasConsented());
     },
@@ -105,9 +97,5 @@ export function CookieConsentProvider({
     [consents, isLoaded, hasConsented, acceptCategory, revokeCategory, acceptAll, revokeAll]
   );
 
-  return (
-    <CookieConsentContext.Provider value={value}>
-      {children}
-    </CookieConsentContext.Provider>
-  );
+  return <CookieConsentContext.Provider value={value}>{children}</CookieConsentContext.Provider>;
 }

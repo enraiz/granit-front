@@ -1,11 +1,7 @@
 /**
  * RGPD cookie consent categories — mirrors the C# CookieCategory enum.
  */
-export type CookieCategory =
-  | "strictly_necessary"
-  | "preferences"
-  | "analytics"
-  | "marketing";
+export type CookieCategory = 'strictly_necessary' | 'preferences' | 'analytics' | 'marketing';
 
 /**
  * Current consent state for each category.

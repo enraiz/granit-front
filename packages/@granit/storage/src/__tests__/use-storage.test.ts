@@ -43,15 +43,13 @@ describe('useStorage', () => {
 
   it('should return defaultValue for corrupted JSON', () => {
     localStorage.setItem('dd:broken', '{bad-json');
-    const { result } = renderHook(() =>
-      useStorage<Record<string, unknown>>('broken', {}),
-    );
+    const { result } = renderHook(() => useStorage<Record<string, unknown>>('broken', {}));
     expect(result.current[0]).toEqual({});
   });
 
   it('should work with sessionStorage option', () => {
     const { result } = renderHook(() =>
-      useStorage('session-key', 'default', { storage: 'session' }),
+      useStorage('session-key', 'default', { storage: 'session' })
     );
 
     act(() => {
@@ -64,9 +62,7 @@ describe('useStorage', () => {
   });
 
   it('should work with object values', () => {
-    const { result } = renderHook(() =>
-      useStorage('sidebar', { open: false }),
-    );
+    const { result } = renderHook(() => useStorage('sidebar', { open: false }));
 
     act(() => {
       result.current[1]({ open: true });
@@ -80,9 +76,7 @@ describe('useStorage', () => {
 
     act(() => {
       localStorage.setItem('dd:theme', '"dark"');
-      window.dispatchEvent(
-        new StorageEvent('storage', { key: 'dd:theme' }),
-      );
+      window.dispatchEvent(new StorageEvent('storage', { key: 'dd:theme' }));
     });
 
     expect(result.current[0]).toBe('dark');
@@ -93,9 +87,7 @@ describe('useStorage', () => {
 
     act(() => {
       localStorage.setItem('dd:other', '"value"');
-      window.dispatchEvent(
-        new StorageEvent('storage', { key: 'dd:other' }),
-      );
+      window.dispatchEvent(new StorageEvent('storage', { key: 'dd:other' }));
     });
 
     expect(result.current[0]).toBe('light');
@@ -106,7 +98,7 @@ describe('useStorage', () => {
       useStorage<Date>('date', new Date('2026-01-01T00:00:00Z'), {
         serialize: (d) => d.toISOString(),
         deserialize: (raw) => new Date(raw),
-      }),
+      })
     );
 
     const newDate = new Date('2026-06-15T12:00:00Z');

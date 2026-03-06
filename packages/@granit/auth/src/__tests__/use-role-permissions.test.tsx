@@ -27,10 +27,9 @@ describe('useRolePermissions', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValueOnce({ data: MOCK_GRANT });
 
-    const { result } = renderHook(
-      () => useRolePermissions({ client, roleName: 'admin' }),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => useRolePermissions({ client, roleName: 'admin' }), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -44,7 +43,7 @@ describe('useRolePermissions', () => {
 
     const { result } = renderHook(
       () => useRolePermissions({ client, roleName: 'editor', basePath: '/api/auth' }),
-      { wrapper: createWrapper() },
+      { wrapper: createWrapper() }
     );
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -58,10 +57,9 @@ describe('useRolePermissions', () => {
       data: { roleName: 'rôle spécial', permissions: [] },
     });
 
-    const { result } = renderHook(
-      () => useRolePermissions({ client, roleName: 'rôle spécial' }),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => useRolePermissions({ client, roleName: 'rôle spécial' }), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -73,7 +71,7 @@ describe('useRolePermissions', () => {
 
     const { result } = renderHook(
       () => useRolePermissions({ client, roleName: 'admin', enabled: false }),
-      { wrapper: createWrapper() },
+      { wrapper: createWrapper() }
     );
 
     expect(result.current.fetchStatus).toBe('idle');
@@ -84,10 +82,9 @@ describe('useRolePermissions', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValueOnce(new Error('Not Found'));
 
-    const { result } = renderHook(
-      () => useRolePermissions({ client, roleName: 'unknown' }),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => useRolePermissions({ client, roleName: 'unknown' }), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
 

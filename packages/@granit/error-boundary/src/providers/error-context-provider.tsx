@@ -61,27 +61,17 @@ export function ErrorContextProvider({
         return next.length > maxBreadcrumbs ? next.slice(-maxBreadcrumbs) : next;
       });
     },
-    [maxBreadcrumbs],
+    [maxBreadcrumbs]
   );
 
-  const getRouteInfo = React.useCallback(
-    () => config?.getRouteInfo?.(),
-    [config?.getRouteInfo],
-  );
+  const getRouteInfo = React.useCallback(() => config?.getRouteInfo?.(), [config?.getRouteInfo]);
 
-  const getUserInfo = React.useCallback(
-    () => config?.getUserInfo?.(),
-    [config?.getUserInfo],
-  );
+  const getUserInfo = React.useCallback(() => config?.getUserInfo?.(), [config?.getUserInfo]);
 
   const value = React.useMemo<ErrorContextValue>(
     () => ({ breadcrumbs, addBreadcrumb, getRouteInfo, getUserInfo }),
-    [breadcrumbs, addBreadcrumb, getRouteInfo, getUserInfo],
+    [breadcrumbs, addBreadcrumb, getRouteInfo, getUserInfo]
   );
 
-  return (
-    <ErrorContext.Provider value={value}>
-      {children}
-    </ErrorContext.Provider>
-  );
+  return <ErrorContext.Provider value={value}>{children}</ErrorContext.Provider>;
 }

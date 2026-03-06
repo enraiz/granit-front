@@ -48,7 +48,7 @@ export function useSpan(): UseSpanReturn {
   const tracer = useTracer();
 
   const withSpan = React.useCallback(
-    async <T,>(name: string, fn: (span: Span) => T | Promise<T>): Promise<T> => {
+    async <T>(name: string, fn: (span: Span) => T | Promise<T>): Promise<T> => {
       const span = tracer.startSpan(name);
       const ctx = trace.setSpan(context.active(), span);
 
@@ -66,12 +66,12 @@ export function useSpan(): UseSpanReturn {
         span.end();
       }
     },
-    [tracer],
+    [tracer]
   );
 
   const createSpan = React.useCallback(
     (name: string, options?: SpanOptions): Span => tracer.startSpan(name, options),
-    [tracer],
+    [tracer]
   );
 
   return { withSpan, createSpan };

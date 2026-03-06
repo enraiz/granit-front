@@ -40,7 +40,7 @@ describe('useQueryEndpoint', () => {
   it('initializes with custom params', () => {
     const { result } = renderHook(
       () => useQueryEndpoint({ initialParams: { page: 2, pageSize: 50 } }),
-      { wrapper: createWrapper() },
+      { wrapper: createWrapper() }
     );
     expect(result.current.params.page).toBe(2);
     expect(result.current.params.pageSize).toBe(50);

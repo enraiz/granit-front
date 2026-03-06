@@ -19,7 +19,6 @@ import type {
   NotificationPreferenceDto,
 } from '../types/index.js';
 
-
 describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // fetchNotifications
@@ -98,13 +97,10 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const result = await fetchEntityActivityFeed(
-      client,
-      '/api',
-      'Patient',
-      'p-1',
-      { skip: 0, take: 5 },
-    );
+    const result = await fetchEntityActivityFeed(client, '/api', 'Patient', 'p-1', {
+      skip: 0,
+      take: 5,
+    });
 
     expect(client.get).toHaveBeenCalledWith('/api/activity-feed/Patient/p-1', {
       params: { skip: 0, take: 5 },
@@ -142,7 +138,7 @@ describe('notification-api', () => {
 
     expect(client.put).toHaveBeenCalledWith(
       '/api/notification-preferences/AppointmentReminder',
-      pref,
+      pref
     );
     expect(result).toEqual(pref);
   });
