@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { dryRunImport, previewImport } from '../api/import-api.js';
 import { useImportConfig } from '../providers/import-provider.js';
 
-import type { ColumnMapping, FieldMetadata } from '../types/import-preview.js';
+import type { ImportColumnMapping, ImportFieldMetadata } from '../types/import-preview.js';
 import type { ImportReportResponse } from '../types/import-report.js';
 
 export interface UseImportPreviewReturn {
@@ -15,11 +15,11 @@ export interface UseImportPreviewReturn {
   /** Preview rows from the file. */
   readonly previewRows: readonly (readonly string[])[];
   /** Suggested column mappings. */
-  readonly suggestions: readonly ColumnMapping[];
+  readonly suggestions: readonly ImportColumnMapping[];
   /** Available target fields metadata. */
-  readonly fieldMetadata: readonly FieldMetadata[];
+  readonly fieldMetadata: readonly ImportFieldMetadata[];
   /** Editable mappings (initialized from suggestions). */
-  readonly mappings: ColumnMapping[];
+  readonly mappings: ImportColumnMapping[];
   /** Update a single mapping. */
   readonly updateMapping: (sourceColumn: string, targetProperty: string | null) => void;
   /** Run a dry-run validation. */
@@ -44,9 +44,9 @@ export function useImportPreview(): UseImportPreviewReturn {
 
   const [headers, setHeaders] = useState<readonly string[]>([]);
   const [previewRows, setPreviewRows] = useState<readonly (readonly string[])[]>([]);
-  const [suggestions, setSuggestions] = useState<readonly ColumnMapping[]>([]);
-  const [fieldMetadata, setFieldMetadata] = useState<readonly FieldMetadata[]>([]);
-  const [mappings, setMappings] = useState<ColumnMapping[]>([]);
+  const [suggestions, setSuggestions] = useState<readonly ImportColumnMapping[]>([]);
+  const [fieldMetadata, setFieldMetadata] = useState<readonly ImportFieldMetadata[]>([]);
+  const [mappings, setMappings] = useState<ImportColumnMapping[]>([]);
 
   const previewMutation = useMutation({
     mutationFn: (jobId: string) =>

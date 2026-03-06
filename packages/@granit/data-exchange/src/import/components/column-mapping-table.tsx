@@ -14,13 +14,13 @@ import {
 
 import { MappingConfidenceBadge } from './mapping-confidence-badge.js';
 
-import type { ColumnMapping, FieldMetadata } from '../types/import-preview.js';
+import type { ImportColumnMapping, ImportFieldMetadata } from '../types/import-preview.js';
 
 export interface ColumnMappingTableProps {
   /** Current column mappings. */
-  readonly mappings: readonly ColumnMapping[];
+  readonly mappings: readonly ImportColumnMapping[];
   /** Available target fields. */
-  readonly fieldMetadata: readonly FieldMetadata[];
+  readonly fieldMetadata: readonly ImportFieldMetadata[];
   /** Preview rows (first few rows from the file). */
   readonly previewRows: readonly (readonly string[])[];
   /** Headers from the file. */

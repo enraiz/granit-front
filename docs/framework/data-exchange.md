@@ -319,9 +319,9 @@ dryRun(jobId);
 | `preview` | `(jobId: string) => void` | Declenche l'extraction |
 | `headers` | `string[]` | En-tetes du fichier |
 | `previewRows` | `string[][]` | Lignes echantillon |
-| `suggestions` | `ColumnMapping[]` | Suggestions du serveur |
-| `fieldMetadata` | `FieldMetadata[]` | Metadonnees des champs cibles |
-| `mappings` | `ColumnMapping[]` | Mappings editables (initialises depuis suggestions) |
+| `suggestions` | `ImportColumnMapping[]` | Suggestions du serveur |
+| `fieldMetadata` | `ImportFieldMetadata[]` | Metadonnees des champs cibles |
+| `mappings` | `ImportColumnMapping[]` | Mappings editables (initialises depuis suggestions) |
 | `updateMapping` | `(sourceColumn, targetProperty) => void` | Met a jour un mapping |
 | `dryRun` | `(jobId: string) => void` | Lance une validation dry-run |
 | `dryRunReport` | `ImportReportResponse \| null` | Resultat du dry-run |
@@ -406,8 +406,8 @@ Table interactive d'edition des mappings de colonnes. Affiche les en-tetes sourc
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `mappings` | `ColumnMapping[]` | Mappings editables |
-| `fieldMetadata` | `FieldMetadata[]` | Champs cibles disponibles |
+| `mappings` | `ImportColumnMapping[]` | Mappings editables |
+| `fieldMetadata` | `ImportFieldMetadata[]` | Champs cibles disponibles |
 | `previewRows` | `string[][]` | Echantillon de donnees |
 | `headers` | `string[]` | En-tetes du fichier source |
 | `onMappingChange` | `(sourceColumn, targetProperty) => void` | Callback a l'edition |
@@ -589,20 +589,20 @@ interface ImportJobResponse {
 type MappingConfidence = 'Manual' | 'Saved' | 'Exact' | 'Fuzzy' | 'Semantic';
 ```
 
-#### `ColumnMapping`
+#### `ImportColumnMapping`
 
 ```typescript
-interface ColumnMapping {
+interface ImportColumnMapping {
   readonly sourceColumn: string;
   readonly targetProperty: string | null;
   readonly confidence: MappingConfidence;
 }
 ```
 
-#### `FieldMetadata`
+#### `ImportFieldMetadata`
 
 ```typescript
-interface FieldMetadata {
+interface ImportFieldMetadata {
   readonly propertyPath: string;
   readonly clrTypeName: string;
   readonly displayName: string;
@@ -615,7 +615,7 @@ interface FieldMetadata {
 
 ```typescript
 interface ConfirmMappingsRequest {
-  readonly mappings: readonly ColumnMapping[];
+  readonly mappings: readonly ImportColumnMapping[];
 }
 ```
 

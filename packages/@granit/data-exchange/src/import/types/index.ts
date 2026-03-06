@@ -1,8 +1,8 @@
 export type { ImportJobResponse, ImportJobStatus } from './import-job.js';
 export type {
-  ColumnMapping,
+  ImportColumnMapping,
   ConfirmMappingsRequest,
-  FieldMetadata,
+  ImportFieldMetadata,
   ImportPreviewResponse,
   MappingConfidence,
 } from './import-preview.js';
