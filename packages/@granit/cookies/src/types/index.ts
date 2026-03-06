@@ -40,6 +40,36 @@ export interface CookieConsentProvider {
 }
 
 /**
+ * API response from `GET /api/cookies/config`.
+ * CMP-agnostic contract between the backend and any CMP adapter.
+ */
+export interface CookieConsentConfig {
+  /** Internal cookies registered by the application. */
+  readonly cookies: readonly CookieDefinitionDto[];
+  /** Third-party services that set cookies on the client. */
+  readonly services: readonly ThirdPartyServiceDto[];
+}
+
+/**
+ * Internal cookie definition (from backend registry).
+ */
+export interface CookieDefinitionDto {
+  readonly name: string;
+  readonly category: CookieCategory;
+  readonly retentionDays: number;
+  readonly purpose: string;
+}
+
+/**
+ * Third-party service that sets cookies (from backend config).
+ */
+export interface ThirdPartyServiceDto {
+  readonly name: string;
+  readonly category: CookieCategory;
+  readonly cookiePatterns: readonly string[];
+}
+
+/**
  * Value exposed by the CookieConsentContext to React components.
  */
 export interface CookieConsentContextValue {

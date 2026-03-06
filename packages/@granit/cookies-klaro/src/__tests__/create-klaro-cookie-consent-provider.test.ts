@@ -6,7 +6,8 @@ import type { KlaroConsentManager, KlaroConfig, KlaroWatcher } from "../types/in
 
 const mockManager: KlaroConsentManager = {
   getConsent: vi.fn(),
-  setConsent: vi.fn(),
+  updateConsent: vi.fn(),
+  changeAll: vi.fn(),
   saveAndApplyConsents: vi.fn(),
   watch: vi.fn(),
 };
@@ -182,8 +183,8 @@ describe("createKlaroCookieConsentProvider", () => {
 
       provider.setConsent("analytics", true);
 
-      expect(mockManager.setConsent).toHaveBeenCalledWith("google-analytics", true);
-      expect(mockManager.setConsent).toHaveBeenCalledWith("matomo", true);
+      expect(mockManager.updateConsent).toHaveBeenCalledWith("google-analytics", true);
+      expect(mockManager.updateConsent).toHaveBeenCalledWith("matomo", true);
       expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
     });
 
@@ -196,7 +197,7 @@ describe("createKlaroCookieConsentProvider", () => {
 
       provider.setConsent("strictly_necessary", true);
 
-      expect(mockManager.setConsent).not.toHaveBeenCalled();
+      expect(mockManager.updateConsent).not.toHaveBeenCalled();
       expect(mockManager.saveAndApplyConsents).not.toHaveBeenCalled();
     });
 
@@ -208,12 +209,12 @@ describe("createKlaroCookieConsentProvider", () => {
 
       provider.setConsent("analytics", true);
 
-      expect(mockManager.setConsent).not.toHaveBeenCalled();
+      expect(mockManager.updateConsent).not.toHaveBeenCalled();
     });
   });
 
   describe("setAllConsents", () => {
-    it("should set all non-essential services and persist", async () => {
+    it("should accept all services via changeAll and persist", async () => {
       const provider = createKlaroCookieConsentProvider({
         klaroConfig,
         serviceMappings,
@@ -222,13 +223,11 @@ describe("createKlaroCookieConsentProvider", () => {
 
       provider.setAllConsents(true);
 
-      expect(mockManager.setConsent).toHaveBeenCalledWith("google-analytics", true);
-      expect(mockManager.setConsent).toHaveBeenCalledWith("matomo", true);
-      expect(mockManager.setConsent).toHaveBeenCalledWith("youtube", true);
+      expect(mockManager.changeAll).toHaveBeenCalledWith(true);
       expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
     });
 
-    it("should revoke all non-essential services", async () => {
+    it("should revoke all services via changeAll", async () => {
       const provider = createKlaroCookieConsentProvider({
         klaroConfig,
         serviceMappings,
@@ -237,9 +236,7 @@ describe("createKlaroCookieConsentProvider", () => {
 
       provider.setAllConsents(false);
 
-      expect(mockManager.setConsent).toHaveBeenCalledWith("google-analytics", false);
-      expect(mockManager.setConsent).toHaveBeenCalledWith("matomo", false);
-      expect(mockManager.setConsent).toHaveBeenCalledWith("youtube", false);
+      expect(mockManager.changeAll).toHaveBeenCalledWith(false);
       expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
     });
 
@@ -251,25 +248,103 @@ describe("createKlaroCookieConsentProvider", () => {
 
       provider.setAllConsents(true);
 
-      expect(mockManager.setConsent).not.toHaveBeenCalled();
+      expect(mockManager.changeAll).not.toHaveBeenCalled();
     });
 
-    it("should write cookie as fallback if Klaro does not persist it", async () => {
+    it("should call saveAndApplyConsents which persists the cookie", async () => {
       const provider = createKlaroCookieConsentProvider({
         klaroConfig,
         serviceMappings,
       });
       await provider.init();
 
-      vi.mocked(mockManager.getConsent).mockReturnValue(true);
-
       provider.setAllConsents(true);
 
-      expect(provider.hasConsented()).toBe(true);
-      expect(document.cookie).toContain("klaro=");
+      expect(mockManager.changeAll).toHaveBeenCalledWith(true);
+      expect(mockManager.saveAndApplyConsents).toHaveBeenCalledOnce();
+    });
+  });
 
-      // Cleanup
-      document.cookie = "klaro=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  describe("loadConfig (dynamic mode)", () => {
+    it("should build KlaroConfig and serviceMappings from API response", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        loadConfig: async () => ({
+          cookies: [],
+          services: [
+            { name: "google-analytics", category: "analytics", cookiePatterns: ["^_ga", "^_gid"] },
+            { name: "youtube", category: "marketing", cookiePatterns: ["^YSC"] },
+          ],
+        }),
+      });
+
+      await provider.init();
+
+      vi.mocked(mockManager.getConsent).mockImplementation((name: string) => {
+        return name === "google-analytics";
+      });
+
+      const consents = provider.getConsents();
+      expect(consents.analytics).toBe(true); // only GA in analytics, and it's consented
+      expect(consents.marketing).toBe(false); // youtube not consented
+    });
+
+    it("should resolve all services in category from dynamic config", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        loadConfig: async () => ({
+          cookies: [],
+          services: [
+            { name: "ga", category: "analytics", cookiePatterns: [] },
+          ],
+        }),
+      });
+
+      await provider.init();
+
+      vi.mocked(mockManager.getConsent).mockReturnValue(true);
+      const consents = provider.getConsents();
+      expect(consents.analytics).toBe(true);
+    });
+
+    it("should use cookieName option in dynamic mode", async () => {
+      document.cookie = "my-cmp=%7B%7D";
+
+      const provider = createKlaroCookieConsentProvider({
+        cookieName: "my-cmp",
+        loadConfig: async () => ({ cookies: [], services: [] }),
+      });
+
+      expect(provider.hasConsented()).toBe(true);
+
+      document.cookie = "my-cmp=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    });
+
+    it("should throw when neither loadConfig nor klaroConfig is provided", async () => {
+      const provider = createKlaroCookieConsentProvider({});
+
+      await expect(provider.init()).rejects.toThrow(
+        "createKlaroCookieConsentProvider: provide either loadConfig or klaroConfig",
+      );
+    });
+
+    it("should ignore static klaroConfig when loadConfig is provided", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig, // static config with 3 services
+        serviceMappings, // static mappings
+        loadConfig: async () => ({
+          cookies: [],
+          services: [
+            { name: "only-service", category: "marketing", cookiePatterns: [] },
+          ],
+        }),
+      });
+
+      await provider.init();
+
+      vi.mocked(mockManager.getConsent).mockReturnValue(true);
+      const consents = provider.getConsents();
+      // analytics should be false because dynamic config has no analytics services
+      expect(consents.analytics).toBe(false);
+      expect(consents.marketing).toBe(true);
     });
   });
 
