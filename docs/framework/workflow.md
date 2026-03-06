@@ -34,17 +34,17 @@ import { WorkflowProvider } from '@granit/workflow';
 
 function App() {
   return (
-    <WorkflowProvider apiClient={apiClient} basePath="/api/workflow">
+    <WorkflowProvider apiClient={apiClient} basePath="/api/v1/workflow">
       <DocumentPage />
     </WorkflowProvider>
   );
 }
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `apiClient` | `AxiosInstance` | — | Instance Axios configurée (via `@granit/api-client`) |
-| `basePath` | `string` | `'/api/workflow'` | Préfixe des endpoints REST |
+| Prop        | Type            | Défaut               | Description                                          |
+| ----------- | --------------- | -------------------- | ---------------------------------------------------- |
+| `apiClient` | `AxiosInstance` | —                    | Instance Axios configurée (via `@granit/api-client`) |
+| `basePath`  | `string`        | `'/api/v1/workflow'` | Préfixe des endpoints REST                           |
 
 ## Hooks
 
@@ -53,26 +53,28 @@ function App() {
 Charge l'état courant et les transitions disponibles pour une entité.
 
 ```tsx
-const { currentState, transitions, loading, error, refetch } =
-  useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' });
+const { currentState, transitions, loading, error, refetch } = useWorkflowStatus({
+  entityType: 'Document',
+  entityId: 'doc-1',
+});
 ```
 
 #### Options
 
-| Option | Type | Description |
-| --- | --- | --- |
+| Option       | Type     | Description                          |
+| ------------ | -------- | ------------------------------------ |
 | `entityType` | `string` | Type de l'entité (ex : `'Document'`) |
-| `entityId` | `string` | Identifiant de l'entité |
+| `entityId`   | `string` | Identifiant de l'entité              |
 
 #### Résultat
 
-| Propriété | Type | Description |
-| --- | --- | --- |
-| `currentState` | `string \| null` | État courant de l'entité |
-| `transitions` | `TransitionDto[]` | Transitions disponibles pour l'utilisateur courant |
-| `loading` | `boolean` | `true` pendant le chargement |
-| `error` | `Error \| null` | Erreur éventuelle |
-| `refetch` | `() => Promise<void>` | Recharge les données |
+| Propriété      | Type                  | Description                                        |
+| -------------- | --------------------- | -------------------------------------------------- |
+| `currentState` | `string \| null`      | État courant de l'entité                           |
+| `transitions`  | `TransitionDto[]`     | Transitions disponibles pour l'utilisateur courant |
+| `loading`      | `boolean`             | `true` pendant le chargement                       |
+| `error`        | `Error \| null`       | Erreur éventuelle                                  |
+| `refetch`      | `() => Promise<void>` | Recharge les données                               |
 
 ### `useWorkflowTransition(options): UseWorkflowTransitionResult`
 
@@ -95,21 +97,21 @@ await transition('Published', 'Validé par Dr. Martin');
 
 #### Options
 
-| Option | Type | Description |
-| --- | --- | --- |
-| `entityType` | `string` | Type de l'entité |
-| `entityId` | `string` | Identifiant de l'entité |
-| `onSuccess` | `(result) => void` | Callback après transition réussie |
-| `onError` | `(error) => void` | Callback en cas d'erreur |
+| Option       | Type               | Description                       |
+| ------------ | ------------------ | --------------------------------- |
+| `entityType` | `string`           | Type de l'entité                  |
+| `entityId`   | `string`           | Identifiant de l'entité           |
+| `onSuccess`  | `(result) => void` | Callback après transition réussie |
+| `onError`    | `(error) => void`  | Callback en cas d'erreur          |
 
 #### Résultat
 
-| Propriété | Type | Description |
-| --- | --- | --- |
-| `transition` | `(targetState, comment?) => Promise<TransitionResultDto \| null>` | Déclenche la transition |
-| `loading` | `boolean` | `true` pendant la transition |
-| `result` | `TransitionResultDto \| null` | Dernier résultat de transition |
-| `error` | `Error \| null` | Erreur éventuelle |
+| Propriété    | Type                                                              | Description                    |
+| ------------ | ----------------------------------------------------------------- | ------------------------------ |
+| `transition` | `(targetState, comment?) => Promise<TransitionResultDto \| null>` | Déclenche la transition        |
+| `loading`    | `boolean`                                                         | `true` pendant la transition   |
+| `result`     | `TransitionResultDto \| null`                                     | Dernier résultat de transition |
+| `error`      | `Error \| null`                                                   | Erreur éventuelle              |
 
 ### `useWorkflowHistory(options): UseWorkflowHistoryResult`
 
@@ -124,11 +126,11 @@ const { history, loading, error, refetch } = useWorkflowHistory({
 
 #### Options
 
-| Option | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `entityType` | `string` | — | Type de l'entité |
-| `entityId` | `string` | — | Identifiant de l'entité |
-| `enabled` | `boolean` | `true` | Active/désactive le chargement automatique |
+| Option       | Type      | Défaut | Description                                |
+| ------------ | --------- | ------ | ------------------------------------------ |
+| `entityType` | `string`  | —      | Type de l'entité                           |
+| `entityId`   | `string`  | —      | Identifiant de l'entité                    |
+| `enabled`    | `boolean` | `true` | Active/désactive le chargement automatique |
 
 ## Composants
 
@@ -146,24 +148,24 @@ Barre de statut headless (style Odoo). Affiche les états comme des chips et les
 />
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `currentState` | `string` | — | État courant de l'entité |
-| `states` | `string[]` | — | Tous les états possibles (dans l'ordre d'affichage) |
-| `transitions` | `TransitionDto[]` | — | Transitions disponibles |
-| `onTransition` | `(targetState, comment?) => void` | — | Callback de transition |
-| `isLoading` | `boolean` | `false` | Désactive les boutons pendant le chargement |
-| `className` | `string` | — | Classe CSS optionnelle |
+| Prop           | Type                              | Défaut  | Description                                         |
+| -------------- | --------------------------------- | ------- | --------------------------------------------------- |
+| `currentState` | `string`                          | —       | État courant de l'entité                            |
+| `states`       | `string[]`                        | —       | Tous les états possibles (dans l'ordre d'affichage) |
+| `transitions`  | `TransitionDto[]`                 | —       | Transitions disponibles                             |
+| `onTransition` | `(targetState, comment?) => void` | —       | Callback de transition                              |
+| `isLoading`    | `boolean`                         | `false` | Désactive les boutons pendant le chargement         |
+| `className`    | `string`                          | —       | Classe CSS optionnelle                              |
 
 #### Attributs `data-*` pour le styling
 
-| Attribut | Élément | Valeurs | Description |
-| --- | --- | --- | --- |
-| `data-state` | `<span>` | nom de l'état | Identifiant de l'état |
-| `data-current` | `<span>` | `true`/`false` | L'état est l'état courant |
-| `data-past` | `<span>` | `true`/`false` | L'état a déjà été franchi |
-| `data-target` | `<button>` | nom de l'état cible | État cible de la transition |
-| `data-requires-approval` | `<button>` | `true`/`false` | La transition nécessite une approbation |
+| Attribut                 | Élément    | Valeurs             | Description                             |
+| ------------------------ | ---------- | ------------------- | --------------------------------------- |
+| `data-state`             | `<span>`   | nom de l'état       | Identifiant de l'état                   |
+| `data-current`           | `<span>`   | `true`/`false`      | L'état est l'état courant               |
+| `data-past`              | `<span>`   | `true`/`false`      | L'état a déjà été franchi               |
+| `data-target`            | `<button>` | nom de l'état cible | État cible de la transition             |
+| `data-requires-approval` | `<button>` | `true`/`false`      | La transition nécessite une approbation |
 
 #### Label d'approbation
 
@@ -174,19 +176,15 @@ Quand `requiresApproval === true` et `allowed === false`, le bouton affiche auto
 Affiche l'historique des transitions (piste d'audit).
 
 ```tsx
-<WorkflowHistory
-  history={history}
-  loading={loading}
-  emptyMessage="Aucune transition."
-/>
+<WorkflowHistory history={history} loading={loading} emptyMessage="Aucune transition." />
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `history` | `TransitionHistoryDto[]` | — | Liste des transitions |
-| `loading` | `boolean` | `false` | Affiche un indicateur de chargement |
-| `emptyMessage` | `string` | `'No transitions yet.'` | Message si l'historique est vide |
-| `className` | `string` | — | Classe CSS optionnelle |
+| Prop           | Type                     | Défaut                  | Description                         |
+| -------------- | ------------------------ | ----------------------- | ----------------------------------- |
+| `history`      | `TransitionHistoryDto[]` | —                       | Liste des transitions               |
+| `loading`      | `boolean`                | `false`                 | Affiche un indicateur de chargement |
+| `emptyMessage` | `string`                 | `'No transitions yet.'` | Message si l'historique est vide    |
+| `className`    | `string`                 | —                       | Classe CSS optionnelle              |
 
 ## Types
 
@@ -194,9 +192,9 @@ Affiche l'historique des transitions (piste d'audit).
 
 ```typescript
 const TransitionOutcome = {
-  Completed: 'Completed',           // Transition directe réussie
+  Completed: 'Completed', // Transition directe réussie
   ApprovalRequested: 'ApprovalRequested', // Routé vers approbation
-  Denied: 'Denied',                 // Permission refusée, pas de chemin d'approbation
+  Denied: 'Denied', // Permission refusée, pas de chemin d'approbation
   InvalidTransition: 'InvalidTransition', // Transition non définie
 } as const;
 ```
@@ -205,9 +203,9 @@ const TransitionOutcome = {
 
 ```typescript
 interface TransitionDto {
-  targetState: string;      // État cible
-  name: string;             // Nom affiché (ex : "Publier")
-  allowed: boolean;         // L'utilisateur a la permission directe
+  targetState: string; // État cible
+  name: string; // Nom affiché (ex : "Publier")
+  allowed: boolean; // L'utilisateur a la permission directe
   requiresApproval: boolean; // Nécessite une approbation
 }
 ```
@@ -226,7 +224,7 @@ interface WorkflowStatusDto {
 ```typescript
 interface TransitionResultDto {
   succeeded: boolean;
-  resultingState: string;     // Peut différer du targetState si routé
+  resultingState: string; // Peut différer du targetState si routé
   outcome: TransitionOutcomeValue;
 }
 ```
@@ -236,7 +234,7 @@ interface TransitionResultDto {
 ```typescript
 interface TransitionRequestDto {
   targetState: string;
-  comment?: string;           // Commentaire/justification (piste d'audit HDS)
+  comment?: string; // Commentaire/justification (piste d'audit HDS)
 }
 ```
 
@@ -246,7 +244,7 @@ interface TransitionRequestDto {
 interface TransitionHistoryDto {
   previousState: string;
   newState: string;
-  transitionedAt: string;     // ISO 8601
+  transitionedAt: string; // ISO 8601
   transitionedBy: string;
   comment: string | null;
 }
@@ -254,13 +252,13 @@ interface TransitionHistoryDto {
 
 ## API REST consommée
 
-| Méthode | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/{entityType}/{entityId}/transitions` | État courant + transitions disponibles |
-| `POST` | `/{entityType}/{entityId}/transition` | Déclencher une transition |
-| `GET` | `/{entityType}/{entityId}/history` | Historique des transitions (piste d'audit) |
+| Méthode | Endpoint                               | Description                                |
+| ------- | -------------------------------------- | ------------------------------------------ |
+| `GET`   | `/{entityType}/{entityId}/transitions` | État courant + transitions disponibles     |
+| `POST`  | `/{entityType}/{entityId}/transition`  | Déclencher une transition                  |
+| `GET`   | `/{entityType}/{entityId}/history`     | Historique des transitions (piste d'audit) |
 
-Tous les chemins sont relatifs au `basePath` configuré (défaut : `/api/workflow`).
+Tous les chemins sont relatifs au `basePath` configuré (défaut : `/api/v1/workflow`).
 
 ## Exemple complet
 

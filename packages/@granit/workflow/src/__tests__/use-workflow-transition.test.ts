@@ -33,7 +33,7 @@ describe('useWorkflowTransition', () => {
       returned = await result.current.transition('Published', 'Validated');
     });
 
-    expect(client.post).toHaveBeenCalledWith('/api/workflow/Document/doc-1/transition', {
+    expect(client.post).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/transition', {
       targetState: 'Published',
       comment: 'Validated',
     });

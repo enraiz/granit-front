@@ -5,7 +5,7 @@ import type { AxiosInstance } from 'axios';
 
 const TimelineConfigContext = createContext<TimelineConfig | null>(null);
 
-const DEFAULT_BASE_PATH = '/api/timeline';
+const DEFAULT_BASE_PATH = '/api/v1/timeline';
 
 export interface TimelineProviderProps {
   apiClient: AxiosInstance;

@@ -11,6 +11,7 @@ import type {
 // Constants
 // ---------------------------------------------------------------------------
 
+const DEFAULT_BASE_PATH = '/api/v1/auth';
 const EMPTY_SET: ReadonlySet<string> = new Set<string>();
 
 /** Query key factory for permission queries. */
@@ -28,7 +29,7 @@ export const permissionKeys = {
 /**
  * Fetches and caches the current user's granted permissions from the backend.
  *
- * Calls `GET {basePath}/me` (default `/auth/me`) and returns a `Set<string>`
+ * Calls `GET {basePath}/me` (default `/api/v1/auth/me`) and returns a `Set<string>`
  * of granted permission names with O(1) lookup helpers.
  *
  * Permissions are cached for the lifetime of the Keycloak session
@@ -47,7 +48,7 @@ export const permissionKeys = {
  * ```
  */
 export function usePermissions(options: UsePermissionsOptions): UsePermissionsReturn {
-  const { client, basePath = '/auth', enabled } = options;
+  const { client, basePath = DEFAULT_BASE_PATH, enabled } = options;
 
   const query = useQuery<PermissionsResponse>({
     queryKey: permissionKeys.me(),

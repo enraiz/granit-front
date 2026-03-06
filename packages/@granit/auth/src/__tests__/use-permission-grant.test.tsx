@@ -33,7 +33,9 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.grant.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith('/auth/roles/editor/permissions/Invoices.Create');
+    expect(client.put).toHaveBeenCalledWith(
+      '/api/v1/auth/roles/editor/permissions/Invoices.Create'
+    );
   });
 
   it('should revoke a permission via DELETE', async () => {
@@ -50,7 +52,9 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.revoke.isSuccess).toBe(true));
 
-    expect(client.delete).toHaveBeenCalledWith('/auth/roles/editor/permissions/Invoices.Delete');
+    expect(client.delete).toHaveBeenCalledWith(
+      '/api/v1/auth/roles/editor/permissions/Invoices.Delete'
+    );
   });
 
   it('should use custom basePath', async () => {
@@ -58,7 +62,7 @@ describe('usePermissionGrant', () => {
     vi.mocked(client.put).mockResolvedValueOnce({ data: undefined });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(() => usePermissionGrant({ client, basePath: '/api/auth' }), {
+    const { result } = renderHook(() => usePermissionGrant({ client, basePath: '/api/v1/auth' }), {
       wrapper,
     });
 
@@ -69,7 +73,7 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.grant.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith('/api/auth/roles/admin/permissions/Users.View');
+    expect(client.put).toHaveBeenCalledWith('/api/v1/auth/roles/admin/permissions/Users.View');
   });
 
   it('should invalidate role query on successful grant', async () => {
@@ -145,6 +149,8 @@ describe('usePermissionGrant', () => {
 
     await waitFor(() => expect(result.current.grant.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith('/auth/roles/r%C3%B4le/permissions/Perm.Sp%C3%A9cial');
+    expect(client.put).toHaveBeenCalledWith(
+      '/api/v1/auth/roles/r%C3%B4le/permissions/Perm.Sp%C3%A9cial'
+    );
   });
 });

@@ -13,7 +13,7 @@ const mockClient = axios.create();
 
 const mockConfig: ExportConfig = {
   client: mockClient,
-  basePath: '/api/data-exchange/metadata',
+  basePath: '/api/v1/data-exchange/metadata',
 };
 
 function createWrapper() {
@@ -80,7 +80,7 @@ describe('useExportPresets', () => {
 
     await waitFor(() => expect(result.current.save.isSuccess).toBe(true));
     expect(mockClient.post).toHaveBeenCalledWith(
-      '/api/data-exchange/metadata/presets',
+      '/api/v1/data-exchange/metadata/presets',
       expect.objectContaining({ presetName: 'New' })
     );
   });
@@ -101,7 +101,7 @@ describe('useExportPresets', () => {
 
     await waitFor(() => expect(result.current.remove.isSuccess).toBe(true));
     expect(mockClient.delete).toHaveBeenCalledWith(
-      '/api/data-exchange/metadata/presets/Test/Monthly'
+      '/api/v1/data-exchange/metadata/presets/Test/Monthly'
     );
   });
 });

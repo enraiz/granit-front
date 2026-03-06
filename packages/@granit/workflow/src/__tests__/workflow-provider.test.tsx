@@ -28,7 +28,7 @@ describe('WorkflowProvider', () => {
       wrapper: ({ children }) => <WorkflowProvider apiClient={client}>{children}</WorkflowProvider>,
     });
 
-    expect(result.current.basePath).toBe('/api/workflow');
+    expect(result.current.basePath).toBe('/api/v1/workflow');
   });
 
   it('should throw when used outside provider', () => {

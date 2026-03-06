@@ -46,7 +46,7 @@ describe('useTimelineActions', () => {
 
     expect(returnedEntry).toEqual(createdEntry);
     expect(onEntryCreated).toHaveBeenCalledWith(createdEntry);
-    expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries', {
+    expect(client.post).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/entries', {
       entryType: 0,
       body: 'Hello',
     });
@@ -73,7 +73,7 @@ describe('useTimelineActions', () => {
     });
 
     expect(onEntryDeleted).toHaveBeenCalledWith('e-1');
-    expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries/e-1');
+    expect(client.delete).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/entries/e-1');
   });
 
   it('should set error on post failure', async () => {

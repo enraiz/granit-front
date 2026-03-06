@@ -41,7 +41,7 @@ function axiosResponse<T>(data: T): AxiosResponse<T> {
   };
 }
 
-const BASE_PATH = '/api/timeline';
+const BASE_PATH = '/api/v1/timeline';
 
 describe('timeline API', () => {
   let client: AxiosInstance;
@@ -60,7 +60,7 @@ describe('timeline API', () => {
         take: 20,
       });
 
-      expect(client.get).toHaveBeenCalledWith('/api/timeline/Patient/p-1', {
+      expect(client.get).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1', {
         params: { skip: 0, take: 20 },
       });
       expect(result).toEqual(page);
@@ -89,7 +89,7 @@ describe('timeline API', () => {
 
       const result = await createEntry(client, BASE_PATH, 'Patient', 'p-1', request);
 
-      expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries', request);
+      expect(client.post).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/entries', request);
       expect(result).toEqual(entry);
     });
   });
@@ -100,7 +100,7 @@ describe('timeline API', () => {
 
       await deleteEntry(client, BASE_PATH, 'Patient', 'p-1', 'e-1');
 
-      expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/entries/e-1');
+      expect(client.delete).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/entries/e-1');
     });
   });
 
@@ -110,7 +110,7 @@ describe('timeline API', () => {
 
       await followEntity(client, BASE_PATH, 'Patient', 'p-1');
 
-      expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
+      expect(client.post).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/follow');
     });
   });
 
@@ -120,7 +120,7 @@ describe('timeline API', () => {
 
       await unfollowEntity(client, BASE_PATH, 'Patient', 'p-1');
 
-      expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
+      expect(client.delete).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/follow');
     });
   });
 
@@ -131,7 +131,7 @@ describe('timeline API', () => {
 
       const result = await fetchFollowers(client, BASE_PATH, 'Patient', 'p-1');
 
-      expect(client.get).toHaveBeenCalledWith('/api/timeline/Patient/p-1/followers');
+      expect(client.get).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/followers');
       expect(result).toEqual(followers);
     });
   });

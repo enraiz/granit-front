@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 
 const mockConfig: QueryConfig = {
   client: axios.create(),
-  basePath: '/api/patients',
+  basePath: '/api/v1/patients',
 };
 
 function createWrapper() {

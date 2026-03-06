@@ -32,9 +32,9 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const result = await fetchNotifications(client, '/api', { skip: 0, take: 10 });
+    const result = await fetchNotifications(client, '/api/v1', { skip: 0, take: 10 });
 
-    expect(client.get).toHaveBeenCalledWith('/api/notifications', {
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications', {
       params: { skip: 0, take: 10 },
     });
     expect(result).toEqual(page);
@@ -58,9 +58,9 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.patch).mockResolvedValue(axiosResponse(notification));
 
-    const result = await markAsRead(client, '/api', 'n-1');
+    const result = await markAsRead(client, '/api/v1', 'n-1');
 
-    expect(client.patch).toHaveBeenCalledWith('/api/notifications/n-1/read');
+    expect(client.patch).toHaveBeenCalledWith('/api/v1/notifications/n-1/read');
     expect(result.isRead).toBe(true);
   });
 
@@ -71,9 +71,9 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
 
-    await markAllAsRead(client, '/api');
+    await markAllAsRead(client, '/api/v1');
 
-    expect(client.post).toHaveBeenCalledWith('/api/notifications/read-all');
+    expect(client.post).toHaveBeenCalledWith('/api/v1/notifications/read-all');
   });
 
   // -----------------------------------------------------------------------
@@ -83,9 +83,9 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 42 }));
 
-    const result = await fetchUnreadCount(client, '/api');
+    const result = await fetchUnreadCount(client, '/api/v1');
 
-    expect(client.get).toHaveBeenCalledWith('/api/notifications/unread-count');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications/unread-count');
     expect(result).toBe(42);
   });
 
@@ -97,12 +97,12 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const result = await fetchEntityActivityFeed(client, '/api', 'Patient', 'p-1', {
+    const result = await fetchEntityActivityFeed(client, '/api/v1', 'Patient', 'p-1', {
       skip: 0,
       take: 5,
     });
 
-    expect(client.get).toHaveBeenCalledWith('/api/activity-feed/Patient/p-1', {
+    expect(client.get).toHaveBeenCalledWith('/api/v1/activity-feed/Patient/p-1', {
       params: { skip: 0, take: 5 },
     });
     expect(result).toEqual(page);
@@ -116,9 +116,9 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(prefs));
 
-    const result = await fetchPreferences(client, '/api');
+    const result = await fetchPreferences(client, '/api/v1');
 
-    expect(client.get).toHaveBeenCalledWith('/api/notification-preferences');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notification-preferences');
     expect(result).toEqual([]);
   });
 
@@ -134,10 +134,10 @@ describe('notification-api', () => {
     const client = createMockClient();
     vi.mocked(client.put).mockResolvedValue(axiosResponse(pref));
 
-    const result = await updatePreference(client, '/api', pref);
+    const result = await updatePreference(client, '/api/v1', pref);
 
     expect(client.put).toHaveBeenCalledWith(
-      '/api/notification-preferences/AppointmentReminder',
+      '/api/v1/notification-preferences/AppointmentReminder',
       pref
     );
     expect(result).toEqual(pref);

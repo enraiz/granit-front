@@ -69,7 +69,7 @@ describe('useTimelineFollowers', () => {
 
     await waitFor(() => expect(result.current.isFollowing).toBe(true));
     expect(result.current.followers).toContain('u-1');
-    expect(client.post).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
+    expect(client.post).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/follow');
   });
 
   it('should unfollow an entity and update local state', async () => {
@@ -94,7 +94,7 @@ describe('useTimelineFollowers', () => {
 
     await waitFor(() => expect(result.current.isFollowing).toBe(false));
     expect(result.current.followers).not.toContain('u-1');
-    expect(client.delete).toHaveBeenCalledWith('/api/timeline/Patient/p-1/follow');
+    expect(client.delete).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1/follow');
   });
 
   it('should set error state on follow failure', async () => {
