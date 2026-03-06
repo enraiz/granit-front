@@ -253,6 +253,24 @@ describe("createKlaroCookieConsentProvider", () => {
 
       expect(mockManager.setConsent).not.toHaveBeenCalled();
     });
+
+    it("should write cookie as fallback if Klaro does not persist it", async () => {
+      const provider = createKlaroCookieConsentProvider({
+        klaroConfig,
+        serviceMappings,
+      });
+      await provider.init();
+
+      vi.mocked(mockManager.getConsent).mockReturnValue(true);
+
+      provider.setAllConsents(true);
+
+      expect(provider.hasConsented()).toBe(true);
+      expect(document.cookie).toContain("klaro=");
+
+      // Cleanup
+      document.cookie = "klaro=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    });
   });
 
   describe("hasConsented", () => {

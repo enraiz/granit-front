@@ -45,6 +45,37 @@ function buildConsentState(
 }
 
 /**
+ * Checks whether the consent cookie exists in document.cookie.
+ */
+function hasCookie(cookieName: string): boolean {
+  return document.cookie.split(";").some(
+    (c) => c.trim().startsWith(`${cookieName}=`),
+  );
+}
+
+/**
+ * Ensures the consent cookie is written.
+ * Klaro's `saveAndApplyConsents()` may not persist the cookie when using
+ * `getManager()` without the full UI setup. This function writes the cookie
+ * directly as a fallback.
+ */
+function ensureCookiePersisted(
+  manager: KlaroConsentManager,
+  cookieName: string,
+  serviceMappings: readonly KlaroServiceMapping[],
+): void {
+  manager.saveAndApplyConsents();
+  if (!hasCookie(cookieName)) {
+    const state: Record<string, boolean> = {};
+    for (const mapping of serviceMappings) {
+      state[mapping.name] = manager.getConsent(mapping.name);
+    }
+    document.cookie =
+      `${cookieName}=${encodeURIComponent(JSON.stringify(state))};path=/;max-age=31536000;SameSite=Lax`;
+  }
+}
+
+/**
  * Creates a `CookieConsentProvider` backed by Klaro CMP.
  *
  * - `init()` dynamically imports Klaro (no CSS) and creates a consent manager.
@@ -68,6 +99,7 @@ export function createKlaroCookieConsentProvider(
   options: CreateKlaroCookieConsentProviderOptions,
 ): CookieConsentProviderInterface {
   const { klaroConfig, serviceMappings } = options;
+  const cookieName = klaroConfig.cookieName ?? "klaro";
   let manager: KlaroConsentManager | null = null;
 
   return {
@@ -113,7 +145,7 @@ export function createKlaroCookieConsentProvider(
       for (const service of services) {
         manager.setConsent(service.name, granted);
       }
-      manager.saveAndApplyConsents();
+      ensureCookiePersisted(manager, cookieName, serviceMappings);
     },
 
     setAllConsents(granted) {
@@ -127,14 +159,11 @@ export function createKlaroCookieConsentProvider(
           manager.setConsent(service.name, granted);
         }
       }
-      manager.saveAndApplyConsents();
+      ensureCookiePersisted(manager, cookieName, serviceMappings);
     },
 
     hasConsented() {
-      const name = klaroConfig.cookieName ?? "klaro";
-      return document.cookie.split(";").some(
-        (c) => c.trim().startsWith(`${name}=`),
-      );
+      return hasCookie(cookieName);
     },
   };
 }
