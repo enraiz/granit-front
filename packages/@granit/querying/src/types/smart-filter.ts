@@ -31,6 +31,8 @@ export interface FilterSuggestion {
   readonly type: FilterTokenType;
   /** Display label. */
   readonly label: string;
+  /** Technical value (when different from label, e.g. boolean "true" vs "Yes"). */
+  readonly value?: string;
   /** Secondary description. */
   readonly description?: string;
   /** For field suggestions: field name. */
@@ -43,6 +45,12 @@ export interface FilterSuggestion {
   readonly group?: string;
   /** For preset/quickFilter suggestions: name. */
   readonly name?: string;
+  /** Whether this value is currently selected (for multi-select like In operator). */
+  readonly selected?: boolean;
+  /** For field-search suggestions: the operator to apply directly. */
+  readonly operator?: FilterOperator;
+  /** For field-search suggestions: the raw search text typed by the user. */
+  readonly searchValue?: string;
 }
 
 /** A suggested value (e.g. enum values, recent values). */

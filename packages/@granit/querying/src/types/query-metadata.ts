@@ -28,6 +28,8 @@ export interface FilterableField {
   readonly type: string;
   /** Operators available for this field (whitelist). */
   readonly operators: readonly FilterOperator[];
+  /** Known values for enum-like fields (shown as suggestions in enterValue phase). */
+  readonly enumValues?: readonly string[];
 }
 
 /** Sortable field declaration. */
