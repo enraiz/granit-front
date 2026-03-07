@@ -28,7 +28,12 @@ type SmartFilterAction =
   | { type: 'SET_INPUT'; value: string }
   | { type: 'SELECT_FIELD'; field: string }
   | { type: 'SELECT_OPERATOR'; operator: FilterOperator }
-  | { type: 'CONFIRM_VALUE'; value: string; label?: string }
+  | {
+      type: 'CONFIRM_VALUE';
+      value: string;
+      label?: string;
+      labelParts?: { field: string; operator: string; value: string };
+    }
   | { type: 'ADD_PRESET_TOKEN'; group: string; name: string; label: string }
   | { type: 'ADD_QUICK_FILTER_TOKEN'; name: string; label: string }
   | { type: 'ADD_SEARCH_TOKEN'; value: string }
@@ -38,6 +43,7 @@ type SmartFilterAction =
       operator: FilterOperator;
       value: string;
       label: string;
+      labelParts?: { field: string; operator: string; value: string };
     }
   | { type: 'REMOVE_TOKEN'; id: string }
   | { type: 'CLEAR_ALL' }
@@ -70,6 +76,7 @@ function smartFilterReducer(state: SmartFilterState, action: SmartFilterAction):
         id: `filter-${state.nextId}`,
         type: 'filter',
         label: action.label ?? `${state.selectedField} ${state.selectedOperator} ${action.value}`,
+        labelParts: action.labelParts,
         field: state.selectedField,
         operator: state.selectedOperator,
         value: action.value,
@@ -152,6 +159,7 @@ function smartFilterReducer(state: SmartFilterState, action: SmartFilterAction):
         id: `filter-${state.nextId}`,
         type: 'filter',
         label: action.label,
+        labelParts: action.labelParts,
         field: action.field,
         operator: action.operator,
         value: action.value,
@@ -431,6 +439,8 @@ export interface UseSmartFilterReturn {
   readonly suggestions: readonly FilterSuggestion[];
   /** Currently selected operator (during enterValue phase). */
   readonly selectedOperator?: FilterOperator;
+  /** Type of the currently selected field (during selectOperator / enterValue phases). */
+  readonly selectedFieldType?: string;
   /** Extracted FilterEntry array from current tokens (for useQueryEndpoint). */
   readonly filters: readonly FilterEntry[];
   /** Extracted search string from tokens. */
@@ -542,7 +552,12 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
       if (isBool && options?.booleanLabels) {
         valLabel = value === 'true' ? options.booleanLabels.true : options.booleanLabels.false;
       }
-      dispatch({ type: 'CONFIRM_VALUE', value, label: `${fieldLabel} ${opLabel} ${valLabel}` });
+      dispatch({
+        type: 'CONFIRM_VALUE',
+        value,
+        label: `${fieldLabel} ${opLabel} ${valLabel}`,
+        labelParts: { field: fieldLabel, operator: opLabel, value: valLabel },
+      });
     },
     [
       state.selectedField,
@@ -574,12 +589,18 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
   const clearAll = useCallback(() => dispatch({ type: 'CLEAR_ALL' }), []);
   const cancel = useCallback(() => dispatch({ type: 'CANCEL' }), []);
 
+  const selectedFieldType = useMemo(() => {
+    if (!state.selectedField || !options?.metadata) return undefined;
+    return options.metadata.filterableFields.find((f) => f.name === state.selectedField)?.type;
+  }, [state.selectedField, options?.metadata]);
+
   return {
     phase: state.phase,
     inputValue: state.inputValue,
     tokens: state.tokens,
     suggestions,
     selectedOperator: state.selectedOperator,
+    selectedFieldType,
     filters,
     search,
     presets,

@@ -19,6 +19,12 @@ export interface FilterToken {
   readonly operator?: FilterOperator;
   /** For filter tokens: value(s). */
   readonly value?: string;
+  /** For filter tokens: segmented label parts for styled display. */
+  readonly labelParts?: {
+    readonly field: string;
+    readonly operator: string;
+    readonly value: string;
+  };
   /** For preset tokens: group name. */
   readonly group?: string;
   /** For preset/quickFilter tokens: preset/quick filter name. */
