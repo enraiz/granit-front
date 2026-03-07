@@ -28,10 +28,17 @@ type SmartFilterAction =
   | { type: 'SET_INPUT'; value: string }
   | { type: 'SELECT_FIELD'; field: string }
   | { type: 'SELECT_OPERATOR'; operator: FilterOperator }
-  | { type: 'CONFIRM_VALUE'; value: string }
+  | { type: 'CONFIRM_VALUE'; value: string; label?: string }
   | { type: 'ADD_PRESET_TOKEN'; group: string; name: string; label: string }
   | { type: 'ADD_QUICK_FILTER_TOKEN'; name: string; label: string }
   | { type: 'ADD_SEARCH_TOKEN'; value: string }
+  | {
+      type: 'ADD_FILTER_TOKEN';
+      field: string;
+      operator: FilterOperator;
+      value: string;
+      label: string;
+    }
   | { type: 'REMOVE_TOKEN'; id: string }
   | { type: 'CLEAR_ALL' }
   | { type: 'CANCEL' }
@@ -62,7 +69,7 @@ function smartFilterReducer(state: SmartFilterState, action: SmartFilterAction):
       const token: FilterToken = {
         id: `filter-${state.nextId}`,
         type: 'filter',
-        label: `${state.selectedField} ${state.selectedOperator} ${action.value}`,
+        label: action.label ?? `${state.selectedField} ${state.selectedOperator} ${action.value}`,
         field: state.selectedField,
         operator: state.selectedOperator,
         value: action.value,
@@ -140,6 +147,26 @@ function smartFilterReducer(state: SmartFilterState, action: SmartFilterAction):
       };
     }
 
+    case 'ADD_FILTER_TOKEN': {
+      const token: FilterToken = {
+        id: `filter-${state.nextId}`,
+        type: 'filter',
+        label: action.label,
+        field: action.field,
+        operator: action.operator,
+        value: action.value,
+      };
+      return {
+        ...state,
+        phase: 'idle',
+        inputValue: '',
+        selectedField: undefined,
+        selectedOperator: undefined,
+        tokens: [...state.tokens, token],
+        nextId: state.nextId + 1,
+      };
+    }
+
     case 'REMOVE_TOKEN':
       return {
         ...state,
@@ -167,6 +194,9 @@ function smartFilterReducer(state: SmartFilterState, action: SmartFilterAction):
 
     case 'SYNC_TOKENS':
       return { ...state, tokens: action.tokens };
+
+    default:
+      return state;
   }
 }
 
@@ -190,7 +220,6 @@ function buildFieldSuggestions(metadata: QueryMetadata, input: string): FilterSu
       id: `field-${field.name}`,
       type: 'filter',
       label,
-      description: `Filter by ${label}`,
       field: field.name,
       operators: field.operators,
     });
@@ -230,9 +259,50 @@ function buildQuickFilterSuggestions(metadata: QueryMetadata, input: string): Fi
   return suggestions;
 }
 
+/** Text-type fields for which we generate "Search X for: Y" suggestions. */
+const SEARCHABLE_FIELD_TYPES = new Set(['String', 'Text']);
+
+function buildFieldSearchSuggestions(
+  metadata: QueryMetadata,
+  input: string,
+  options?: BuildSuggestionsOptions
+): FilterSuggestion[] {
+  if (!input) return [];
+  const suggestions: FilterSuggestion[] = [];
+  for (const field of metadata.filterableFields) {
+    if (!SEARCHABLE_FIELD_TYPES.has(field.type)) continue;
+    // Pick the best operator: Contains if available, else Eq
+    const operator: FilterOperator | undefined = field.operators.includes('Contains')
+      ? 'Contains'
+      : field.operators.includes('Eq')
+        ? 'Eq'
+        : undefined;
+    if (!operator) continue;
+    const col = metadata.columns.find((c) => c.name === field.name);
+    const fieldLabel = col?.label ?? field.name;
+    const operatorLabel = options?.operatorLabels?.[operator] ?? operator;
+    suggestions.push({
+      id: `fsearch-${field.name}`,
+      type: 'filter',
+      label: fieldLabel,
+      description: operatorLabel,
+      field: field.name,
+      operator,
+      searchValue: input,
+    });
+  }
+  return suggestions;
+}
+
+interface BuildSuggestionsOptions {
+  readonly booleanLabels?: { readonly true: string; readonly false: string };
+  readonly operatorLabels?: Partial<Record<FilterOperator, string>>;
+}
+
 function buildSuggestions(
   state: SmartFilterState,
-  metadata: QueryMetadata | undefined
+  metadata: QueryMetadata | undefined,
+  options?: BuildSuggestionsOptions
 ): readonly FilterSuggestion[] {
   if (!metadata) return [];
   const input = state.inputValue.toLowerCase();
@@ -241,6 +311,7 @@ function buildSuggestions(
     case 'idle':
     case 'selectField':
       return [
+        ...buildFieldSearchSuggestions(metadata, input, options),
         ...buildFieldSuggestions(metadata, input),
         ...buildPresetSuggestions(metadata, input),
         ...buildQuickFilterSuggestions(metadata, input),
@@ -252,13 +323,72 @@ function buildSuggestions(
       return field.operators.map((op) => ({
         id: `op-${op}`,
         type: 'filter' as const,
-        label: op,
+        label: options?.operatorLabels?.[op] ?? op,
+        value: op,
         field: field.name,
       }));
     }
 
-    case 'enterValue':
+    case 'enterValue': {
+      const field = metadata.filterableFields.find((f) => f.name === state.selectedField);
+      if (!field) return [];
+      if (field.type === 'Boolean') {
+        const labels = options?.booleanLabels;
+        return [
+          {
+            id: 'val-true',
+            type: 'filter',
+            label: labels?.true ?? 'true',
+            value: 'true',
+            field: field.name,
+          },
+          {
+            id: 'val-false',
+            type: 'filter',
+            label: labels?.false ?? 'false',
+            value: 'false',
+            field: field.name,
+          },
+        ];
+      }
+      if (field.enumValues && field.enumValues.length > 0) {
+        const isIn = state.selectedOperator === 'In';
+        const parts = isIn
+          ? state.inputValue
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean)
+          : [];
+        // Only consider parts that exactly match a known enum value as "selected"
+        const enumSet = new Set(field.enumValues.map((v) => v.toLowerCase()));
+        const selectedValues = parts.filter((p) => enumSet.has(p.toLowerCase()));
+        // For In operator, filter by text typed after last comma; otherwise filter by full input.
+        // If the last segment exactly matches an already-selected value, clear filterText
+        // so all options remain visible (user just clicked a value, hasn't typed new text).
+        const rawLastPart = isIn
+          ? (state.inputValue.split(',').pop()?.trim().toLowerCase() ?? '')
+          : input;
+        const filterText =
+          isIn && selectedValues.some((v) => v.toLowerCase() === rawLastPart) ? '' : rawLastPart;
+        const selectedSet = new Set(selectedValues.map((v) => v.toLowerCase()));
+        return field.enumValues
+          .filter(
+            (v) =>
+              !filterText ||
+              v.toLowerCase().includes(filterText) ||
+              selectedSet.has(v.toLowerCase())
+          )
+          .map((v) => ({
+            id: `val-${v}`,
+            type: 'filter' as const,
+            label: v,
+            value: v,
+            field: field.name,
+            selected: selectedSet.has(v.toLowerCase()),
+          }));
+      }
       return [];
+    }
   }
 }
 
@@ -269,6 +399,10 @@ function buildSuggestions(
 export interface UseSmartFilterOptions {
   /** Query metadata for building suggestions. */
   readonly metadata?: QueryMetadata;
+  /** Localized labels for boolean value suggestions (defaults to "true"/"false"). */
+  readonly booleanLabels?: { readonly true: string; readonly false: string };
+  /** Localized labels for filter operators (defaults to technical names). */
+  readonly operatorLabels?: Partial<Record<FilterOperator, string>>;
 }
 
 export interface UseSmartFilterReturn {
@@ -276,6 +410,8 @@ export interface UseSmartFilterReturn {
   readonly inputValue: string;
   readonly tokens: readonly FilterToken[];
   readonly suggestions: readonly FilterSuggestion[];
+  /** Currently selected operator (during enterValue phase). */
+  readonly selectedOperator?: FilterOperator;
   /** Extracted FilterEntry array from current tokens (for useQueryEndpoint). */
   readonly filters: readonly FilterEntry[];
   /** Extracted search string from tokens. */
@@ -292,6 +428,12 @@ export interface UseSmartFilterReturn {
   readonly addPresetToken: (group: string, name: string, label: string) => void;
   readonly addQuickFilterToken: (name: string, label: string) => void;
   readonly addSearchToken: (value: string) => void;
+  readonly addFilterToken: (
+    field: string,
+    operator: FilterOperator,
+    value: string,
+    label: string
+  ) => void;
   readonly removeToken: (id: string) => void;
   readonly clearAll: () => void;
   readonly cancel: () => void;
@@ -319,8 +461,12 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
   });
 
   const suggestions = useMemo(
-    () => buildSuggestions(state, options?.metadata),
-    [state, options?.metadata]
+    () =>
+      buildSuggestions(state, options?.metadata, {
+        booleanLabels: options?.booleanLabels,
+        operatorLabels: options?.operatorLabels,
+      }),
+    [state, options?.metadata, options?.booleanLabels, options?.operatorLabels]
   );
 
   // Extract structured data from tokens
@@ -365,8 +511,29 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
     []
   );
   const confirmValue = useCallback(
-    (value: string) => dispatch({ type: 'CONFIRM_VALUE', value }),
-    []
+    (value: string) => {
+      const field = state.selectedField;
+      const operator = state.selectedOperator;
+      const col = options?.metadata?.columns.find((c) => c.name === field);
+      const fieldLabel = col?.label ?? field ?? '';
+      const opLabel = (operator && options?.operatorLabels?.[operator]) ?? operator ?? '';
+      const isBool =
+        options?.metadata?.filterableFields.find((f) => f.name === field)?.type === 'Boolean';
+      const valLabel =
+        isBool && options?.booleanLabels
+          ? value === 'true'
+            ? options.booleanLabels.true
+            : options.booleanLabels.false
+          : value;
+      dispatch({ type: 'CONFIRM_VALUE', value, label: `${fieldLabel} ${opLabel} ${valLabel}` });
+    },
+    [
+      state.selectedField,
+      state.selectedOperator,
+      options?.metadata,
+      options?.operatorLabels,
+      options?.booleanLabels,
+    ]
   );
   const addPresetToken = useCallback(
     (group: string, name: string, label: string) =>
@@ -381,6 +548,11 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
     (value: string) => dispatch({ type: 'ADD_SEARCH_TOKEN', value }),
     []
   );
+  const addFilterToken = useCallback(
+    (field: string, operator: FilterOperator, value: string, label: string) =>
+      dispatch({ type: 'ADD_FILTER_TOKEN', field, operator, value, label }),
+    []
+  );
   const removeToken = useCallback((id: string) => dispatch({ type: 'REMOVE_TOKEN', id }), []);
   const clearAll = useCallback(() => dispatch({ type: 'CLEAR_ALL' }), []);
   const cancel = useCallback(() => dispatch({ type: 'CANCEL' }), []);
@@ -390,6 +562,7 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
     inputValue: state.inputValue,
     tokens: state.tokens,
     suggestions,
+    selectedOperator: state.selectedOperator,
     filters,
     search,
     presets,
@@ -401,6 +574,7 @@ export function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterR
     addPresetToken,
     addQuickFilterToken,
     addSearchToken,
+    addFilterToken,
     removeToken,
     clearAll,
     cancel,
