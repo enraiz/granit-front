@@ -49,7 +49,7 @@ function App() {
 
 ## Hooks
 
-### `useTimeline(options): UseTimelineResult`
+### `useTimeline(options): UseTimelineReturn`
 
 Charge le flux paginé d'une entité avec support d'infinite scroll.
 
@@ -76,7 +76,7 @@ const {
 | `entityId`   | `string` | —      | Identifiant de l'entité             |
 | `pageSize`   | `number` | `20`   | Nombre d'entrées par page           |
 
-### `useTimelineActions(options): UseTimelineActionsResult`
+### `useTimelineActions(options): UseTimelineActionsReturn`
 
 Publie ou supprime des entrées dans le flux.
 
@@ -101,7 +101,7 @@ await removeEntry('entry-uuid');
 | `onEntryCreated` | `(entry) => void` | Callback après création réussie    |
 | `onEntryDeleted` | `(id) => void`    | Callback après suppression réussie |
 
-### `useTimelineFollowers(options): UseTimelineFollowersResult`
+### `useTimelineFollowers(options): UseTimelineFollowersReturn`
 
 Gère les abonnements (follow/unfollow) sur une entité.
 
