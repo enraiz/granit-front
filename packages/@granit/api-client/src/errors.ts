@@ -21,14 +21,15 @@
 export class HttpError extends Error {
   override readonly name = 'HttpError';
 
-  constructor(
-    message: string,
-    /** HTTP status code (e.g. 400, 404, 500). */
-    readonly status: number,
-    /** RFC 7807 problem details payload, if available. */
-    readonly problemDetails?: ProblemDetailsPayload
-  ) {
+  /** HTTP status code (e.g. 400, 404, 500). */
+  readonly status: number;
+  /** RFC 7807 problem details payload, if available. */
+  readonly problemDetails?: ProblemDetailsPayload;
+
+  constructor(message: string, status: number, problemDetails?: ProblemDetailsPayload) {
     super(message);
+    this.status = status;
+    this.problemDetails = problemDetails;
   }
 }
 
@@ -48,12 +49,12 @@ export class HttpError extends Error {
 export class ValidationError extends Error {
   override readonly name = 'ValidationError';
 
-  constructor(
-    message: string,
-    /** Structured details about what failed validation. */
-    readonly details?: ValidationDetails
-  ) {
+  /** Structured details about what failed validation. */
+  readonly details?: ValidationDetails;
+
+  constructor(message: string, details?: ValidationDetails) {
     super(message);
+    this.details = details;
   }
 }
 
@@ -63,12 +64,12 @@ export class ValidationError extends Error {
 export class TimeoutError extends Error {
   override readonly name = 'TimeoutError';
 
-  constructor(
-    message: string,
-    /** Timeout duration in milliseconds. */
-    readonly timeoutMs: number
-  ) {
+  /** Timeout duration in milliseconds. */
+  readonly timeoutMs: number;
+
+  constructor(message: string, timeoutMs: number) {
     super(message);
+    this.timeoutMs = timeoutMs;
   }
 }
 
