@@ -110,6 +110,33 @@ describe('useWorkflowTransition', () => {
     expect(result.current.loading).toBe(false);
   });
 
+  it('should wrap non-Error thrown values', async () => {
+    const client = createMockClient();
+    vi.mocked(client.post).mockRejectedValue('string error');
+    const onError = vi.fn();
+
+    const { result } = renderHook(
+      () =>
+        useWorkflowTransition({
+          entityType: 'Document',
+          entityId: 'doc-1',
+          onError,
+        }),
+      { wrapper: createWrapper(client) }
+    );
+
+    let returned: TransitionResultDto | null = null;
+    await act(async () => {
+      returned = await result.current.transition('Published');
+    });
+
+    expect(returned).toBeNull();
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('string error');
+    expect(onError).toHaveBeenCalledWith(expect.any(Error));
+    expect(result.current.loading).toBe(false);
+  });
+
   it('should handle approval-requested outcome', async () => {
     const client = createMockClient();
     const transitionResult: TransitionResultDto = {

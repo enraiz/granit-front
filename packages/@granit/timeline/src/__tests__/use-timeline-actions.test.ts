@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useTimelineActions } from '../hooks/use-timeline-actions.js';
@@ -37,7 +37,7 @@ describe('useTimelineActions', () => {
     expect(result.current.posting).toBe(false);
 
     let returnedEntry;
-    await waitFor(async () => {
+    await act(async () => {
       returnedEntry = await result.current.postEntry({
         entryType: 0,
         body: 'Hello',
@@ -68,7 +68,7 @@ describe('useTimelineActions', () => {
       { wrapper: createWrapper(client) }
     );
 
-    await waitFor(async () => {
+    await act(async () => {
       await result.current.removeEntry('e-1');
     });
 
@@ -112,5 +112,43 @@ describe('useTimelineActions', () => {
     await expect(result.current.removeEntry('e-1')).rejects.toThrow('Not found');
 
     await waitFor(() => expect(result.current.error?.message).toBe('Not found'));
+  });
+
+  it('should wrap non-Error thrown value on post failure', async () => {
+    const client = createMockClient();
+    vi.mocked(client.post).mockRejectedValue('string error');
+
+    const { result } = renderHook(
+      () =>
+        useTimelineActions({
+          entityType: 'Patient',
+          entityId: 'p-1',
+        }),
+      { wrapper: createWrapper(client) }
+    );
+
+    await expect(result.current.postEntry({ entryType: 0, body: 'Hello' })).rejects.toThrow(
+      'string error'
+    );
+
+    await waitFor(() => expect(result.current.error?.message).toBe('string error'));
+  });
+
+  it('should wrap non-Error thrown value on delete failure', async () => {
+    const client = createMockClient();
+    vi.mocked(client.delete).mockRejectedValue('delete failed');
+
+    const { result } = renderHook(
+      () =>
+        useTimelineActions({
+          entityType: 'Patient',
+          entityId: 'p-1',
+        }),
+      { wrapper: createWrapper(client) }
+    );
+
+    await expect(result.current.removeEntry('e-1')).rejects.toThrow('delete failed');
+
+    await waitFor(() => expect(result.current.error?.message).toBe('delete failed'));
   });
 });

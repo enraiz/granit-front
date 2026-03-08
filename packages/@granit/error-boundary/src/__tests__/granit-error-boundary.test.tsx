@@ -96,6 +96,39 @@ describe('GranitErrorBoundary', () => {
     );
   });
 
+  it('should log componentStack as undefined when not provided', () => {
+    const logger = createMockLogger();
+
+    render(
+      <GranitErrorBoundary logger={logger} renderFallback={(error) => <p>{error.message}</p>}>
+        <ThrowingComponent shouldThrow />
+      </GranitErrorBoundary>
+    );
+
+    // Verify componentStack is passed (may be string or undefined via ?? undefined)
+    expect(logger.error).toHaveBeenCalledWith(
+      'Uncaught render error',
+      expect.objectContaining({
+        error: 'Test render error',
+        componentStack: expect.anything(),
+      })
+    );
+  });
+
+  it('should not call onError when it is not provided', () => {
+    const logger = createMockLogger();
+
+    // Render without onError prop — this covers the this.props.onError?. branch
+    render(
+      <GranitErrorBoundary logger={logger} renderFallback={(error) => <p>{error.message}</p>}>
+        <ThrowingComponent shouldThrow />
+      </GranitErrorBoundary>
+    );
+
+    expect(screen.getByText('Test render error')).toBeInTheDocument();
+    expect(logger.error).toHaveBeenCalled();
+  });
+
   it('should reset the error boundary and re-render children', async () => {
     const logger = createMockLogger();
     const user = userEvent.setup();

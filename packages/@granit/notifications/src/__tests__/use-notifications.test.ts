@@ -154,6 +154,23 @@ describe('useNotifications', () => {
     expect(result.current.notifications[1].title).toBe('Deuxième notification');
   });
 
+  it('should use custom pageSize option', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
+
+    const { result } = renderHook(() => useNotifications({ pageSize: 5 }), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.notifications).toHaveLength(1);
+    expect(client.get).toHaveBeenCalledWith(
+      expect.stringContaining('notifications'),
+      expect.objectContaining({ params: expect.objectContaining({ pageSize: 5 }) })
+    );
+  });
+
   it('should refresh the notification list', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));

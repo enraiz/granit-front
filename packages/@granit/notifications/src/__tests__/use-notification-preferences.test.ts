@@ -93,6 +93,61 @@ describe('useNotificationPreferences', () => {
     expect(result.current.preferences).toHaveLength(0);
   });
 
+  it('should wrap non-Error throws in Error on initial fetch', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockRejectedValue('string error');
+
+    const { result } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('string error');
+  });
+
+  it('should no-op when toggling a non-existent notification type', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
+
+    const { result } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    await act(async () => {
+      await result.current.toggleChannel('NonExistentType', 'email', false);
+    });
+
+    // No put call should have been made
+    expect(client.put).not.toHaveBeenCalled();
+    // Preferences unchanged
+    expect(result.current.preferences).toEqual(MOCK_PREFS);
+  });
+
+  it('should wrap non-Error throws in Error on toggle failure', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
+    vi.mocked(client.put).mockRejectedValue(42);
+
+    const { result } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    await act(async () => {
+      await result.current.toggleChannel('AppointmentReminder', 'email', false);
+    });
+
+    // Should roll back to original value
+    expect(result.current.preferences[0].channels.email).toBe(true);
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('42');
+  });
+
   it('should refresh preferences', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));

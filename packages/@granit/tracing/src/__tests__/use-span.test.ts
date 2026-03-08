@@ -1,6 +1,6 @@
 import { SpanStatusCode, context, trace } from '@opentelemetry/api';
 import { renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useSpan } from '../hooks/use-span.js';
 
@@ -57,6 +57,10 @@ vi.mock('../providers/tracing-provider.js', () => ({
 // ---------------------------------------------------------------------------
 
 describe('useSpan', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('withSpan', () => {
     it('should create, execute, and end a span', async () => {
       const { result } = renderHook(() => useSpan());
@@ -102,6 +106,20 @@ describe('useSpan', () => {
 
       expect(trace.setSpan).toHaveBeenCalledWith(context.active(), mockSpan);
       expect(context.with).toHaveBeenCalled();
+    });
+
+    it('should handle non-Error thrown values without calling recordException', async () => {
+      const { result } = renderHook(() => useSpan());
+
+      await expect(
+        result.current.withSpan('non-error-op', () => {
+          throw 'string-error';
+        })
+      ).rejects.toBe('string-error');
+
+      expect(mockSpan.setStatus).toHaveBeenCalledWith({ code: SpanStatusCode.ERROR });
+      expect(mockSpan.recordException).not.toHaveBeenCalled();
+      expect(mockSpan.end).toHaveBeenCalled();
     });
   });
 

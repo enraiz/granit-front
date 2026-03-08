@@ -183,4 +183,58 @@ describe('useInfiniteScroll', () => {
     expect(result.current.error).toBeNull();
     expect(result.current.items).toEqual(['ok']);
   });
+
+  it('should ignore results from aborted fetch on success path', async () => {
+    let resolveFirst!: (value: InfiniteScrollPage<string>) => void;
+    const firstCall = new Promise<InfiniteScrollPage<string>>((resolve) => {
+      resolveFirst = resolve;
+    });
+
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(firstCall)
+      .mockResolvedValue(makePage(['second'], 1));
+
+    const { result } = renderHook(() => useInfiniteScroll({ fetcher, pageSize: 10 }));
+
+    // Trigger refresh which aborts the first in-flight request
+    act(() => result.current.refresh());
+
+    // Wait for the second (non-aborted) fetch to complete
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    // Resolve the first (now aborted) fetch — its results should be ignored
+    resolveFirst(makePage(['first-stale'], 99));
+    await waitFor(() => expect(result.current.items).toEqual(['second']));
+
+    // The stale result should not overwrite
+    expect(result.current.totalCount).toBe(1);
+  });
+
+  it('should ignore errors from aborted fetch on error path', async () => {
+    let rejectFirst!: (reason: Error) => void;
+    const firstCall = new Promise<InfiniteScrollPage<string>>((_resolve, reject) => {
+      rejectFirst = reject;
+    });
+
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(firstCall)
+      .mockResolvedValue(makePage(['ok'], 1));
+
+    const { result } = renderHook(() => useInfiniteScroll({ fetcher, pageSize: 10 }));
+
+    // Trigger refresh which aborts the first in-flight request
+    act(() => result.current.refresh());
+
+    // Wait for the second (non-aborted) fetch to complete
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    // Reject the first (now aborted) fetch — its error should be ignored
+    rejectFirst(new Error('stale error'));
+
+    // The error from the aborted request should not propagate
+    expect(result.current.error).toBeNull();
+    expect(result.current.items).toEqual(['ok']);
+  });
 });
