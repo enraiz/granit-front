@@ -44,15 +44,24 @@ export async function executeTransition(
   return data;
 }
 
+/** Response shape for the paginated workflow history endpoint. */
+export interface WorkflowHistoryPage {
+  items: TransitionHistoryDto[];
+  totalCount: number;
+  nextCursor: string | null;
+}
+
 /** Fetch the transition history (HDS audit trail) for an entity. */
 export async function fetchHistory(
   client: AxiosInstance,
   basePath: string,
   entityType: string,
-  entityId: string
-): Promise<TransitionHistoryDto[]> {
-  const { data } = await client.get<TransitionHistoryDto[]>(
-    buildUrl(basePath, entityType, entityId, 'history')
+  entityId: string,
+  params: { page?: number; pageSize?: number } = {}
+): Promise<WorkflowHistoryPage> {
+  const { data } = await client.get<WorkflowHistoryPage>(
+    buildUrl(basePath, entityType, entityId, 'history'),
+    { params }
   );
   return data;
 }

@@ -6,7 +6,7 @@ interface PaginatedPage<T> {
 }
 
 export interface UsePaginatedFetchOptions<T, P extends PaginatedPage<T>> {
-  fetcher: (skip: number, take: number) => Promise<P>;
+  fetcher: (page: number, pageSize: number) => Promise<P>;
   pageSize: number;
   onSuccess?: (page: P) => void;
 }
@@ -41,13 +41,13 @@ export function usePaginatedFetch<T, P extends PaginatedPage<T>>(
   const abortRef = useRef<AbortController | null>(null);
 
   const fetchPage = useCallback(
-    async (skip: number, append: boolean) => {
+    async (pageNumber: number, append: boolean) => {
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
 
       try {
-        const page = await fetcher(skip, pageSize);
+        const page = await fetcher(pageNumber, pageSize);
 
         if (controller.signal.aborted) return;
 
@@ -70,18 +70,19 @@ export function usePaginatedFetch<T, P extends PaginatedPage<T>>(
 
   useEffect(() => {
     setLoading(true);
-    fetchPage(0, false);
+    fetchPage(1, false);
     return () => abortRef.current?.abort();
   }, [fetchPage]);
 
   const loadMore = useCallback(() => {
+    const nextPage = Math.floor(items.length / pageSize) + 1;
     setLoadingMore(true);
-    fetchPage(items.length, true);
-  }, [fetchPage, items.length]);
+    fetchPage(nextPage, true);
+  }, [fetchPage, items.length, pageSize]);
 
   const refresh = useCallback(() => {
     setLoading(true);
-    fetchPage(0, false);
+    fetchPage(1, false);
   }, [fetchPage]);
 
   const hasMore = items.length < totalCount;

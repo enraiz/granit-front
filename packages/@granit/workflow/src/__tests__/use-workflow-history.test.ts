@@ -27,7 +27,9 @@ const sampleHistory: TransitionHistoryDto[] = [
 describe('useWorkflowHistory', () => {
   it('should load history on mount', async () => {
     const client = createMockClient();
-    vi.mocked(client.get).mockResolvedValue(axiosResponse(sampleHistory));
+    vi.mocked(client.get).mockResolvedValue(
+      axiosResponse({ items: sampleHistory, totalCount: sampleHistory.length, nextCursor: null })
+    );
 
     const { result } = renderHook(
       () => useWorkflowHistory({ entityType: 'Document', entityId: 'doc-1' }),
@@ -77,8 +79,16 @@ describe('useWorkflowHistory', () => {
   it('should refetch when refetch is called', async () => {
     const client = createMockClient();
     vi.mocked(client.get)
-      .mockResolvedValueOnce(axiosResponse([sampleHistory[0]]))
-      .mockResolvedValueOnce(axiosResponse(sampleHistory));
+      .mockResolvedValueOnce(
+        axiosResponse({ items: [sampleHistory[0]], totalCount: 1, nextCursor: null })
+      )
+      .mockResolvedValueOnce(
+        axiosResponse({
+          items: sampleHistory,
+          totalCount: sampleHistory.length,
+          nextCursor: null,
+        })
+      );
 
     const { result } = renderHook(
       () => useWorkflowHistory({ entityType: 'Document', entityId: 'doc-1' }),

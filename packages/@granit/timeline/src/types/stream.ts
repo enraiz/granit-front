@@ -18,4 +18,6 @@ export interface TimelineStreamEntry {
 export interface TimelineStreamPage {
   items: TimelineStreamEntry[];
   totalCount: number;
+  /** Opaque cursor for next page (always null for offset pagination). */
+  nextCursor: string | null;
 }

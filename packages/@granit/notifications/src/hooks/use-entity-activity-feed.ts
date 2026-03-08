@@ -37,8 +37,11 @@ export function useEntityActivityFeed(
   const basePath = config.basePath ?? '/api';
 
   const fetcher = useCallback(
-    (skip: number, take: number) =>
-      fetchEntityActivityFeed(config.apiClient, basePath, entityType, entityId, { skip, take }),
+    (page: number, ps: number) =>
+      fetchEntityActivityFeed(config.apiClient, basePath, entityType, entityId, {
+        page,
+        pageSize: ps,
+      }),
     [config.apiClient, basePath, entityType, entityId]
   );
 

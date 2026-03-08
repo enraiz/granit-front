@@ -56,8 +56,8 @@ export function useTimeline({
 
     try {
       const page = await fetchStream(apiClient, basePath, entityType, entityId, {
-        skip: 0,
-        take: pageSize,
+        page: 1,
+        pageSize,
       });
 
       if (!controller.signal.aborted) {
@@ -84,9 +84,10 @@ export function useTimeline({
     setError(null);
 
     try {
+      const nextPage = Math.floor(entries.length / pageSize) + 1;
       const page = await fetchStream(apiClient, basePath, entityType, entityId, {
-        skip: entries.length,
-        take: pageSize,
+        page: nextPage,
+        pageSize,
       });
 
       setEntries((prev) => [...prev, ...page.items]);
