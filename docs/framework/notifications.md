@@ -29,6 +29,7 @@ graph TD
 ```
 
 Le `NotificationProvider` :
+
 1. Injecte la configuration (instance Axios + basePath) dans tous les hooks enfants via un contexte React
 2. Établit une connexion SignalR vers le hub (`/hubs/notifications`) avec reconnexion automatique
 3. Écoute l'événement `ReceiveNotification` et met à jour le compteur non-lus en temps-réel
@@ -56,12 +57,12 @@ function App() {
 }
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `apiClient` | `AxiosInstance` | — | Instance Axios configurée (via `@granit/api-client`) |
-| `basePath` | `string` | `'/api'` | Préfixe des endpoints REST |
-| `hubUrl` | `string` | `'/hubs/notifications'` | URL du hub SignalR |
-| `tokenGetter` | `() => Promise<string \| null>` | — | Fournit le JWT pour l'authentification SignalR |
+| Prop          | Type                            | Défaut                  | Description                                          |
+| ------------- | ------------------------------- | ----------------------- | ---------------------------------------------------- |
+| `apiClient`   | `AxiosInstance`                 | —                       | Instance Axios configurée (via `@granit/api-client`) |
+| `basePath`    | `string`                        | `'/api'`                | Préfixe des endpoints REST                           |
+| `hubUrl`      | `string`                        | `'/hubs/notifications'` | URL du hub SignalR                                   |
+| `tokenGetter` | `() => Promise<string \| null>` | —                       | Fournit le JWT pour l'authentification SignalR       |
 
 ## Hooks
 
@@ -71,24 +72,24 @@ Boîte de réception paginée avec support de chargement progressif.
 
 ```tsx
 const {
-  notifications,  // NotificationDto[]
-  totalCount,     // nombre total
-  loading,        // true au chargement initial
-  loadingMore,    // true pendant le chargement de la page suivante
-  error,          // Error | null
-  hasMore,        // true s'il reste des pages à charger
-  loadMore,       // charge la page suivante
-  refresh,        // recharge depuis le début
-  markRead,       // marque une notification comme lue
-  markAllRead,    // marque toutes les notifications comme lues
+  notifications, // NotificationDto[]
+  totalCount, // nombre total
+  loading, // true au chargement initial
+  loadingMore, // true pendant le chargement de la page suivante
+  error, // Error | null
+  hasMore, // true s'il reste des pages à charger
+  loadMore, // charge la page suivante
+  refresh, // recharge depuis le début
+  markRead, // marque une notification comme lue
+  markAllRead, // marque toutes les notifications comme lues
 } = useNotifications({ pageSize: 20 });
 ```
 
 #### Options
 
-| Option | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `pageSize` | `number` | `20` | Nombre de notifications par page |
+| Option     | Type     | Défaut | Description                      |
+| ---------- | -------- | ------ | -------------------------------- |
+| `pageSize` | `number` | `20`   | Nombre de notifications par page |
 
 ### `useUnreadCount(options?): UseUnreadCountResult`
 
@@ -100,16 +101,16 @@ const { count, refresh } = useUnreadCount({ pollingInterval: 60_000 });
 
 #### Options
 
-| Option | Type | Défaut | Description |
-| --- | --- | --- | --- |
+| Option            | Type     | Défaut  | Description                                     |
+| ----------------- | -------- | ------- | ----------------------------------------------- |
 | `pollingInterval` | `number` | `60000` | Intervalle de polling en ms (0 pour désactiver) |
 
 #### Résultat
 
-| Propriété | Type | Description |
-| --- | --- | --- |
-| `count` | `number` | Nombre de notifications non lues |
-| `refresh` | `() => void` | Force un rechargement immédiat |
+| Propriété | Type         | Description                      |
+| --------- | ------------ | -------------------------------- |
+| `count`   | `number`     | Nombre de notifications non lues |
+| `refresh` | `() => void` | Force un rechargement immédiat   |
 
 ### `useRealTimeNotifications(): UseRealTimeNotificationsResult`
 
@@ -127,10 +128,10 @@ useEffect(() => {
 
 #### Résultat
 
-| Propriété | Type | Description |
-| --- | --- | --- |
-| `lastNotification` | `NotificationDto \| null` | Dernière notification reçue via SignalR |
-| `connectionState` | `ConnectionState` | `'disconnected'` \| `'connecting'` \| `'connected'` \| `'reconnecting'` |
+| Propriété          | Type                      | Description                                                             |
+| ------------------ | ------------------------- | ----------------------------------------------------------------------- |
+| `lastNotification` | `NotificationDto \| null` | Dernière notification reçue via SignalR                                 |
+| `connectionState`  | `ConnectionState`         | `'disconnected'` \| `'connecting'` \| `'connected'` \| `'reconnecting'` |
 
 ### `useEntityActivityFeed(options): UseEntityActivityFeedResult`
 
@@ -138,14 +139,14 @@ Fil d'activité paginé lié à une entité (style Odoo).
 
 ```tsx
 const {
-  entries,      // ActivityFeedEntryDto[]
-  totalCount,   // nombre total d'entrées
-  loading,      // true au chargement initial
-  loadingMore,  // true pendant le chargement de la page suivante
-  error,        // Error | null
-  hasMore,      // true s'il reste des pages à charger
-  loadMore,     // charge la page suivante
-  refresh,      // recharge depuis le début
+  entries, // ActivityFeedEntryDto[]
+  totalCount, // nombre total d'entrées
+  loading, // true au chargement initial
+  loadingMore, // true pendant le chargement de la page suivante
+  error, // Error | null
+  hasMore, // true s'il reste des pages à charger
+  loadMore, // charge la page suivante
+  refresh, // recharge depuis le début
 } = useEntityActivityFeed({
   entityType: 'Patient',
   entityId: 'p-1',
@@ -155,11 +156,11 @@ const {
 
 #### Options
 
-| Option | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `entityType` | `string` | — | Type de l'entité (ex : `'Patient'`) |
-| `entityId` | `string` | — | Identifiant de l'entité |
-| `pageSize` | `number` | `20` | Nombre d'entrées par page |
+| Option       | Type     | Défaut | Description                         |
+| ------------ | -------- | ------ | ----------------------------------- |
+| `entityType` | `string` | —      | Type de l'entité (ex : `'Patient'`) |
+| `entityId`   | `string` | —      | Identifiant de l'entité             |
+| `pageSize`   | `number` | `20`   | Nombre d'entrées par page           |
 
 ### `useNotificationPreferences(): UseNotificationPreferencesResult`
 
@@ -174,14 +175,14 @@ await toggleChannel('AppointmentReminder', 'email', false);
 
 #### Résultat
 
-| Propriété | Type | Description |
-| --- | --- | --- |
-| `preferences` | `NotificationPreferenceDto[]` | Liste des préférences |
-| `loading` | `boolean` | `true` pendant le chargement initial |
-| `saving` | `boolean` | `true` pendant la sauvegarde |
-| `error` | `Error \| null` | Dernière erreur |
+| Propriété       | Type                                        | Description                            |
+| --------------- | ------------------------------------------- | -------------------------------------- |
+| `preferences`   | `NotificationPreferenceDto[]`               | Liste des préférences                  |
+| `loading`       | `boolean`                                   | `true` pendant le chargement initial   |
+| `saving`        | `boolean`                                   | `true` pendant la sauvegarde           |
+| `error`         | `Error \| null`                             | Dernière erreur                        |
 | `toggleChannel` | `(type, channel, enabled) => Promise<void>` | Active/désactive un canal pour un type |
-| `refresh` | `() => void` | Recharge les préférences |
+| `refresh`       | `() => void`                                | Recharge les préférences               |
 
 ## Composants
 
@@ -195,16 +196,16 @@ Badge affichant le nombre de notifications non lues. Ne rend rien quand le compt
 <NotificationBadge count={unreadCount} max={99} />
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | — | Nombre de notifications non lues |
-| `max` | `number` | `99` | Valeur maximale affichée (au-delà : `99+`) |
-| `className` | `string` | — | Classe CSS optionnelle |
+| Prop        | Type     | Défaut | Description                                |
+| ----------- | -------- | ------ | ------------------------------------------ |
+| `count`     | `number` | —      | Nombre de notifications non lues           |
+| `max`       | `number` | `99`   | Valeur maximale affichée (au-delà : `99+`) |
+| `className` | `string` | —      | Classe CSS optionnelle                     |
 
 #### Attributs `data-*`
 
-| Attribut | Valeur | Description |
-| --- | --- | --- |
+| Attribut     | Valeur      | Description                                  |
+| ------------ | ----------- | -------------------------------------------- |
 | `data-count` | nombre réel | Compteur réel (même si l'affichage est capé) |
 
 ### `<NotificationItem />`
@@ -218,18 +219,18 @@ Ligne de notification individuelle — titre, sévérité, date, état de lectur
 />
 ```
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `notification` | `NotificationDto` | La notification à afficher |
-| `onClick` | `(notification) => void` | Callback au clic / Enter / Espace |
-| `className` | `string` | Classe CSS optionnelle |
+| Prop           | Type                     | Description                       |
+| -------------- | ------------------------ | --------------------------------- |
+| `notification` | `NotificationDto`        | La notification à afficher        |
+| `onClick`      | `(notification) => void` | Callback au clic / Enter / Espace |
+| `className`    | `string`                 | Classe CSS optionnelle            |
 
 #### Attributs `data-*`
 
-| Attribut | Valeur | Description |
-| --- | --- | --- |
+| Attribut        | Valeur                                      | Description                 |
+| --------------- | ------------------------------------------- | --------------------------- |
 | `data-severity` | `info` \| `success` \| `warning` \| `error` | Sévérité de la notification |
-| `data-read` | `true` \| `false` | État de lecture |
+| `data-read`     | `true` \| `false`                           | État de lecture             |
 
 ### `<NotificationCenter />`
 
@@ -247,18 +248,18 @@ Bouton cloche + dropdown inbox. Gère l'ouverture/fermeture, le marquage global 
 />
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `notifications` | `NotificationDto[]` | — | Liste des notifications |
-| `unreadCount` | `number` | — | Compteur non-lus (pour le badge) |
-| `loading` | `boolean` | — | Affiche un indicateur de chargement |
-| `hasMore` | `boolean` | — | Affiche le bouton « Charger plus » |
-| `onLoadMore` | `() => void` | — | Callback pour charger la page suivante |
-| `onNotificationClick` | `(notification) => void` | — | Callback au clic sur une notification |
-| `onMarkAllRead` | `() => void` | — | Callback pour marquer tout comme lu |
-| `renderItem` | `(notification) => ReactNode` | — | Rendu personnalisé par notification |
-| `emptyMessage` | `string` | `'Aucune notification'` | Message si la boîte est vide |
-| `className` | `string` | — | Classe CSS optionnelle |
+| Prop                  | Type                          | Défaut                  | Description                            |
+| --------------------- | ----------------------------- | ----------------------- | -------------------------------------- |
+| `notifications`       | `NotificationDto[]`           | —                       | Liste des notifications                |
+| `unreadCount`         | `number`                      | —                       | Compteur non-lus (pour le badge)       |
+| `loading`             | `boolean`                     | —                       | Affiche un indicateur de chargement    |
+| `hasMore`             | `boolean`                     | —                       | Affiche le bouton « Charger plus »     |
+| `onLoadMore`          | `() => void`                  | —                       | Callback pour charger la page suivante |
+| `onNotificationClick` | `(notification) => void`      | —                       | Callback au clic sur une notification  |
+| `onMarkAllRead`       | `() => void`                  | —                       | Callback pour marquer tout comme lu    |
+| `renderItem`          | `(notification) => ReactNode` | —                       | Rendu personnalisé par notification    |
+| `emptyMessage`        | `string`                      | `'Aucune notification'` | Message si la boîte est vide           |
+| `className`           | `string`                      | —                       | Classe CSS optionnelle                 |
 
 ### `<EntityActivityFeed />`
 
@@ -274,16 +275,16 @@ Fil d'activité lié à une entité avec pagination.
 />
 ```
 
-| Prop | Type | Défaut | Description |
-| --- | --- | --- | --- |
-| `entries` | `ActivityFeedEntryDto[]` | — | Liste des entrées |
-| `loading` | `boolean` | — | Affiche un indicateur de chargement |
-| `loadingMore` | `boolean` | — | Désactive le bouton « Charger plus » |
-| `hasMore` | `boolean` | — | Affiche le bouton « Charger plus » |
-| `onLoadMore` | `() => void` | — | Callback pour charger la page suivante |
-| `renderEntry` | `(entry) => ReactNode` | — | Rendu personnalisé par entrée |
-| `emptyMessage` | `string` | `'Aucune activité'` | Message si le fil est vide |
-| `className` | `string` | — | Classe CSS optionnelle |
+| Prop           | Type                     | Défaut              | Description                            |
+| -------------- | ------------------------ | ------------------- | -------------------------------------- |
+| `entries`      | `ActivityFeedEntryDto[]` | —                   | Liste des entrées                      |
+| `loading`      | `boolean`                | —                   | Affiche un indicateur de chargement    |
+| `loadingMore`  | `boolean`                | —                   | Désactive le bouton « Charger plus »   |
+| `hasMore`      | `boolean`                | —                   | Affiche le bouton « Charger plus »     |
+| `onLoadMore`   | `() => void`             | —                   | Callback pour charger la page suivante |
+| `renderEntry`  | `(entry) => ReactNode`   | —                   | Rendu personnalisé par entrée          |
+| `emptyMessage` | `string`                 | `'Aucune activité'` | Message si le fil est vide             |
+| `className`    | `string`                 | —                   | Classe CSS optionnelle                 |
 
 ### `<NotificationPreferences />`
 
@@ -298,13 +299,13 @@ Matrice type × canal avec des checkboxes. Désactive les toggles pendant la sau
 />
 ```
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `preferences` | `NotificationPreferenceDto[]` | Liste des préférences |
-| `loading` | `boolean` | Affiche un indicateur de chargement |
-| `saving` | `boolean` | Désactive les checkboxes pendant la sauvegarde |
-| `onToggle` | `(type, channel, enabled) => void` | Callback lors du changement d'un toggle |
-| `className` | `string` | Classe CSS optionnelle |
+| Prop          | Type                               | Description                                    |
+| ------------- | ---------------------------------- | ---------------------------------------------- |
+| `preferences` | `NotificationPreferenceDto[]`      | Liste des préférences                          |
+| `loading`     | `boolean`                          | Affiche un indicateur de chargement            |
+| `saving`      | `boolean`                          | Désactive les checkboxes pendant la sauvegarde |
+| `onToggle`    | `(type, channel, enabled) => void` | Callback lors du changement d'un toggle        |
+| `className`   | `string`                           | Classe CSS optionnelle                         |
 
 ## Types
 
@@ -325,7 +326,7 @@ interface NotificationDto {
   entityType: string | null;
   entityId: string | null;
   isRead: boolean;
-  createdAt: string;            // ISO 8601
+  createdAt: string; // ISO 8601
   readAt: string | null;
 }
 ```
@@ -348,7 +349,7 @@ interface ActivityFeedEntryDto {
   title: string;
   body: string | null;
   severity: NotificationSeverity;
-  createdAt: string;            // ISO 8601
+  createdAt: string; // ISO 8601
   userId: string | null;
   userDisplayName: string | null;
 }
@@ -390,30 +391,30 @@ type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'reconnecti
 ```typescript
 interface NotificationConfig {
   apiClient: AxiosInstance;
-  basePath?: string;            // défaut: '/api'
-  hubUrl?: string;              // défaut: '/hubs/notifications'
+  basePath?: string; // défaut: '/api'
+  hubUrl?: string; // défaut: '/hubs/notifications'
   tokenGetter?: () => Promise<string | null>;
 }
 ```
 
 ## API REST consommée
 
-| Méthode | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/notifications?skip=0&take=20` | Boîte de réception paginée |
-| `PATCH` | `/notifications/{id}/read` | Marquer une notification comme lue |
-| `POST` | `/notifications/read-all` | Marquer toutes les notifications comme lues |
-| `GET` | `/notifications/unread-count` | Nombre de notifications non lues |
-| `GET` | `/activity-feed/{entityType}/{entityId}?skip=0&take=20` | Fil d'activité par entité |
-| `GET` | `/notification-preferences` | Liste des préférences |
-| `PUT` | `/notification-preferences/{notificationType}` | Mettre à jour une préférence |
+| Méthode | Endpoint                                                    | Description                                 |
+| ------- | ----------------------------------------------------------- | ------------------------------------------- |
+| `GET`   | `/notifications?page=1&pageSize=20`                         | Boîte de réception paginée                  |
+| `PATCH` | `/notifications/{id}/read`                                  | Marquer une notification comme lue          |
+| `POST`  | `/notifications/read-all`                                   | Marquer toutes les notifications comme lues |
+| `GET`   | `/notifications/unread-count`                               | Nombre de notifications non lues            |
+| `GET`   | `/activity-feed/{entityType}/{entityId}?page=1&pageSize=20` | Fil d'activité par entité                   |
+| `GET`   | `/notification-preferences`                                 | Liste des préférences                       |
+| `PUT`   | `/notification-preferences/{notificationType}`              | Mettre à jour une préférence                |
 
 Tous les chemins sont relatifs au `basePath` configuré (défaut : `/api`).
 
 ### Hub SignalR
 
-| URL | Événement | Direction | Payload |
-| --- | --- | --- | --- |
+| URL                   | Événement             | Direction        | Payload           |
+| --------------------- | --------------------- | ---------------- | ----------------- |
 | `/hubs/notifications` | `ReceiveNotification` | Serveur → Client | `NotificationDto` |
 
 Transport : WebSockets (prioritaire) avec fallback LongPolling. Reconnexion automatique intégrée.
@@ -432,8 +433,7 @@ import {
 } from '@granit/notifications';
 
 function NotificationBell() {
-  const { notifications, loading, hasMore, loadMore, markRead, markAllRead } =
-    useNotifications();
+  const { notifications, loading, hasMore, loadMore, markRead, markAllRead } = useNotifications();
   const { count } = useUnreadCount();
   const { lastNotification } = useRealTimeNotifications();
 
@@ -458,8 +458,7 @@ function NotificationBell() {
 }
 
 function SettingsPage() {
-  const { preferences, loading, saving, toggleChannel } =
-    useNotificationPreferences();
+  const { preferences, loading, saving, toggleChannel } = useNotificationPreferences();
 
   return (
     <NotificationPreferences
