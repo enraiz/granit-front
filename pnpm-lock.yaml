@@ -294,6 +294,22 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
 
+  packages/@granit/templating:
+    dependencies:
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+    devDependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+
   packages/@granit/timeline:
     dependencies:
       '@granit/querying':

@@ -1,0 +1,81 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import {
+  deleteDraft,
+  publishTemplate,
+  saveDraft,
+  unpublishTemplate,
+  updateDraft,
+} from '../api/templates-api.js';
+import { useTemplatingConfig } from '../providers/templating-provider.js';
+
+import { templateKeys } from './query-keys.js';
+
+import type { SaveTemplateRequest } from '../types/index.js';
+
+export function useTemplateMutations() {
+  const { client, basePath, queryKeyPrefix } = useTemplatingConfig();
+  const queryClient = useQueryClient();
+
+  const invalidateAll = () =>
+    queryClient.invalidateQueries({ queryKey: templateKeys.all(queryKeyPrefix) });
+
+  const invalidateDetail = (name: string) =>
+    queryClient.invalidateQueries({ queryKey: templateKeys.detail(queryKeyPrefix, name) });
+
+  const invalidateLifecycle = (name: string) => {
+    queryClient.invalidateQueries({ queryKey: templateKeys.history(queryKeyPrefix, name) });
+    queryClient.invalidateQueries({ queryKey: templateKeys.lifecycle(queryKeyPrefix, name) });
+  };
+
+  const saveDraftMutation = useMutation({
+    mutationFn: (request: SaveTemplateRequest) => saveDraft(client, basePath, request),
+    onSuccess: (_data, vars) => {
+      invalidateAll();
+      invalidateDetail(vars.name);
+    },
+  });
+
+  const updateDraftMutation = useMutation({
+    mutationFn: ({ name, request }: { name: string; request: SaveTemplateRequest }) =>
+      updateDraft(client, basePath, name, request),
+    onSuccess: (_data, vars) => {
+      invalidateAll();
+      invalidateDetail(vars.name);
+    },
+  });
+
+  const deleteDraftMutation = useMutation({
+    mutationFn: ({ name, culture }: { name: string; culture?: string }) =>
+      deleteDraft(client, basePath, name, culture),
+    onSuccess: () => invalidateAll(),
+  });
+
+  const publishMutation = useMutation({
+    mutationFn: ({ name, culture }: { name: string; culture?: string }) =>
+      publishTemplate(client, basePath, name, culture),
+    onSuccess: (_data, vars) => {
+      invalidateAll();
+      invalidateDetail(vars.name);
+      invalidateLifecycle(vars.name);
+    },
+  });
+
+  const unpublishMutation = useMutation({
+    mutationFn: ({ name, culture }: { name: string; culture?: string }) =>
+      unpublishTemplate(client, basePath, name, culture),
+    onSuccess: (_data, vars) => {
+      invalidateAll();
+      invalidateDetail(vars.name);
+      invalidateLifecycle(vars.name);
+    },
+  });
+
+  return {
+    saveDraft: saveDraftMutation,
+    updateDraft: updateDraftMutation,
+    deleteDraft: deleteDraftMutation,
+    publish: publishMutation,
+    unpublish: unpublishMutation,
+  };
+}
