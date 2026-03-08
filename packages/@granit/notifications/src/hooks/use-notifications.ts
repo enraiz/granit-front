@@ -64,7 +64,9 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   const markRead = useCallback(
     async (id: string) => {
       const updated = await markAsRead(config.apiClient, basePath, id);
-      setNotifications((prev) => prev.map((n) => (n.id === id ? updated : n)));
+      setNotifications((prev: readonly NotificationDto[]) =>
+        prev.map((n: NotificationDto) => (n.id === id ? updated : n))
+      );
       setUnreadCount((prev: number) => Math.max(0, prev - 1));
     },
     [config.apiClient, basePath, setUnreadCount, setNotifications]
@@ -72,8 +74,8 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
 
   const markAllRead = useCallback(async () => {
     await markAllAsRead(config.apiClient, basePath);
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
+    setNotifications((prev: readonly NotificationDto[]) =>
+      prev.map((n: NotificationDto) => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
     );
     setUnreadCount(0);
   }, [config.apiClient, basePath, setUnreadCount, setNotifications]);
