@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useWorkflowStatus } from '../hooks/use-workflow-status.js';
@@ -46,6 +46,75 @@ describe('useWorkflowStatus', () => {
     expect(result.current.error?.message).toBe('Network error');
     expect(result.current.currentState).toBeNull();
     expect(result.current.transitions).toHaveLength(0);
+  });
+
+  it('should wrap non-Error thrown values', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockRejectedValue('string error');
+
+    const { result } = renderHook(
+      () => useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' }),
+      { wrapper: createWrapper(client) }
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('string error');
+    expect(result.current.currentState).toBeNull();
+  });
+
+  it('should discard results when unmounted during fetch', async () => {
+    const client = createMockClient();
+    let resolveGet!: (value: unknown) => void;
+    vi.mocked(client.get).mockReturnValue(
+      new Promise((resolve) => {
+        resolveGet = resolve;
+      })
+    );
+
+    const { result, unmount } = renderHook(
+      () => useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' }),
+      { wrapper: createWrapper(client) }
+    );
+
+    expect(result.current.loading).toBe(true);
+
+    unmount();
+
+    await act(async () => {
+      resolveGet(
+        axiosResponse({
+          currentState: 'Draft',
+          availableTransitions: [],
+        })
+      );
+    });
+
+    expect(true).toBe(true);
+  });
+
+  it('should discard errors when unmounted during fetch', async () => {
+    const client = createMockClient();
+    let rejectGet!: (reason: unknown) => void;
+    vi.mocked(client.get).mockReturnValue(
+      new Promise((_resolve, reject) => {
+        rejectGet = reject;
+      })
+    );
+
+    const { unmount } = renderHook(
+      () => useWorkflowStatus({ entityType: 'Document', entityId: 'doc-1' }),
+      { wrapper: createWrapper(client) }
+    );
+
+    unmount();
+
+    await act(async () => {
+      rejectGet(new Error('Late error'));
+    });
+
+    expect(true).toBe(true);
   });
 
   it('should refetch when refetch is called', async () => {

@@ -64,6 +64,23 @@ describe('useUnreadCount', () => {
     clearIntervalSpy.mockRestore();
   });
 
+  it('should use default pollingInterval when none is specified', async () => {
+    const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 0 }));
+
+    const { unmount } = renderHook(() => useUnreadCount(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalled());
+
+    expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 60_000);
+
+    unmount();
+    setIntervalSpy.mockRestore();
+  });
+
   it('should allow manual refresh', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 2 }));

@@ -197,4 +197,60 @@ describe('usePagination', () => {
     expect(result.current.items).toHaveLength(10);
     expect(result.current.items[0]).toBe('user-10');
   });
+
+  it('should ignore results from aborted fetch on success path', async () => {
+    let resolveFirst!: (value: PaginationPage<string>) => void;
+    const firstCall = new Promise<PaginationPage<string>>((resolve) => {
+      resolveFirst = resolve;
+    });
+
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(firstCall)
+      .mockResolvedValue(makePage(['refreshed'], 20));
+
+    const { result } = renderHook(() => usePagination({ fetcher, pageSize: 10 }));
+
+    // refresh() aborts the first in-flight request and starts a new fetch
+    act(() => result.current.refresh());
+
+    // Wait for the second fetch to complete
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    // Resolve the first (now aborted) fetch — its results should be ignored
+    resolveFirst(makePage(['stale-page1'], 50));
+
+    // Wait a tick to ensure the stale resolution is processed (and ignored)
+    await waitFor(() => expect(result.current.items).toEqual(['refreshed']));
+
+    // The stale result should not overwrite
+    expect(result.current.totalCount).toBe(20);
+  });
+
+  it('should ignore errors from aborted fetch on error path', async () => {
+    let rejectFirst!: (reason: Error) => void;
+    const firstCall = new Promise<PaginationPage<string>>((_resolve, reject) => {
+      rejectFirst = reject;
+    });
+
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(firstCall)
+      .mockResolvedValue(makePage(['ok'], 10));
+
+    const { result } = renderHook(() => usePagination({ fetcher, pageSize: 10 }));
+
+    // refresh() aborts the first in-flight request and starts a new fetch
+    act(() => result.current.refresh());
+
+    // Wait for the second fetch to complete
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    // Reject the first (now aborted) fetch — its error should be ignored
+    rejectFirst(new Error('stale error'));
+
+    // The error from the aborted request should not propagate
+    expect(result.current.error).toBeNull();
+    expect(result.current.items).toEqual(['ok']);
+  });
 });

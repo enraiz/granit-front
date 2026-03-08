@@ -135,4 +135,68 @@ describe('GlobalErrorCapture', () => {
       expect.objectContaining({ error: 'string error' })
     );
   });
+
+  it('should wrap non-Error event.error in handleError', () => {
+    const logger = createMockLogger();
+    render(<GlobalErrorCapture logger={logger} />);
+
+    const errorEvent = new ErrorEvent('error', {
+      error: 'not-an-error-object',
+      message: 'fallback message',
+    });
+    window.dispatchEvent(errorEvent);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      'Uncaught error',
+      expect.objectContaining({ error: 'fallback message' })
+    );
+  });
+
+  it('should use default message when event.error is not Error and message is empty', () => {
+    const logger = createMockLogger();
+    render(<GlobalErrorCapture logger={logger} />);
+
+    const errorEvent = new ErrorEvent('error', {
+      error: null,
+      message: '',
+    });
+    window.dispatchEvent(errorEvent);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      'Uncaught error',
+      expect.objectContaining({ error: 'Unknown error' })
+    );
+  });
+
+  it('should use default message for nullish rejection reason', () => {
+    const logger = createMockLogger();
+    render(<GlobalErrorCapture logger={logger} />);
+
+    const event = new PromiseRejectionEvent('unhandledrejection', {
+      promise: Promise.resolve(),
+      reason: null,
+    });
+    window.dispatchEvent(event);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      'Unhandled promise rejection',
+      expect.objectContaining({ error: 'Unhandled promise rejection' })
+    );
+  });
+
+  it('should use default message for undefined rejection reason', () => {
+    const logger = createMockLogger();
+    render(<GlobalErrorCapture logger={logger} />);
+
+    const event = new PromiseRejectionEvent('unhandledrejection', {
+      promise: Promise.resolve(),
+      reason: undefined,
+    });
+    window.dispatchEvent(event);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      'Unhandled promise rejection',
+      expect.objectContaining({ error: 'Unhandled promise rejection' })
+    );
+  });
 });

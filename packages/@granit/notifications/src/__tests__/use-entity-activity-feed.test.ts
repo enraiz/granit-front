@@ -126,6 +126,28 @@ describe('useEntityActivityFeed', () => {
     expect(result.current.entries[1].title).toBe('Deuxième entrée');
   });
 
+  it('should use default pageSize when none is specified', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_FEED));
+
+    const { result } = renderHook(
+      () =>
+        useEntityActivityFeed({
+          entityType: 'Patient',
+          entityId: 'p-1',
+        }),
+      { wrapper: createWrapper(client) }
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    // Should call with default pageSize (20)
+    expect(client.get).toHaveBeenCalledWith(
+      expect.stringContaining('activity-feed/Patient/p-1'),
+      expect.objectContaining({ params: expect.objectContaining({ pageSize: 20 }) })
+    );
+  });
+
   it('should refresh the feed', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_FEED));
