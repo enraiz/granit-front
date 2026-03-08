@@ -100,6 +100,7 @@ test:
     - pnpm test:coverage --run
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
+    when: always
     reports:
       coverage_report:
         coverage_format: cobertura
