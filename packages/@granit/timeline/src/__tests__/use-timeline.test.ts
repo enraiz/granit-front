@@ -29,6 +29,7 @@ describe('useTimeline', () => {
     const page: TimelineStreamPage = {
       items: [makeEntry()],
       totalCount: 1,
+      nextCursor: null,
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
@@ -63,7 +64,7 @@ describe('useTimeline', () => {
   it('should detect hasMore when totalCount > loaded entries', async () => {
     const client = createMockClient();
     const items = Array.from({ length: 20 }, (_, i) => makeEntry({ id: `e-${i}` }));
-    const page: TimelineStreamPage = { items, totalCount: 50 };
+    const page: TimelineStreamPage = { items, totalCount: 50, nextCursor: null };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
     const { result } = renderHook(
@@ -83,10 +84,12 @@ describe('useTimeline', () => {
     const firstPage: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-1' })],
       totalCount: 2,
+      nextCursor: null,
     };
     const secondPage: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-2', body: 'Second' })],
       totalCount: 2,
+      nextCursor: null,
     };
     vi.mocked(client.get)
       .mockResolvedValueOnce(axiosResponse(firstPage))
@@ -113,6 +116,7 @@ describe('useTimeline', () => {
     const page: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-1' })],
       totalCount: 1,
+      nextCursor: null,
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
@@ -135,6 +139,7 @@ describe('useTimeline', () => {
     const page: TimelineStreamPage = {
       items: [makeEntry({ id: 'e-1' }), makeEntry({ id: 'e-2' })],
       totalCount: 2,
+      nextCursor: null,
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 

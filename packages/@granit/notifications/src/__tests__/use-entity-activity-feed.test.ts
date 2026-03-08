@@ -20,6 +20,7 @@ const MOCK_FEED: ActivityFeedPageDto = {
     },
   ],
   totalCount: 1,
+  nextCursor: null,
 };
 
 describe('useEntityActivityFeed', () => {
@@ -65,6 +66,7 @@ describe('useEntityActivityFeed', () => {
     const page: ActivityFeedPageDto = {
       items: [MOCK_FEED.items[0]],
       totalCount: 25,
+      nextCursor: null,
     };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
@@ -88,11 +90,13 @@ describe('useEntityActivityFeed', () => {
     const page1: ActivityFeedPageDto = {
       items: [MOCK_FEED.items[0]],
       totalCount: 2,
+      nextCursor: null,
     };
     const entry2 = { ...MOCK_FEED.items[0], id: 'a-2', title: 'Deuxième entrée' };
     const page2: ActivityFeedPageDto = {
       items: [entry2],
       totalCount: 2,
+      nextCursor: null,
     };
 
     const client = createMockClient();
@@ -140,6 +144,7 @@ describe('useEntityActivityFeed', () => {
     const updatedFeed: ActivityFeedPageDto = {
       items: [{ ...MOCK_FEED.items[0], title: 'Mis à jour' }],
       totalCount: 1,
+      nextCursor: null,
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(updatedFeed));
 

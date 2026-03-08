@@ -223,6 +223,7 @@ interface TimelineStreamEntry {
 interface TimelineStreamPage {
   items: TimelineStreamEntry[];
   totalCount: number;
+  nextCursor: string | null;
 }
 ```
 
@@ -237,14 +238,14 @@ interface MentionSuggestion {
 
 ## API REST consommée
 
-| Méthode  | Endpoint                                | Description                     |
-| -------- | --------------------------------------- | ------------------------------- |
-| `GET`    | `/{entityType}/{entityId}`              | Flux paginé (`?skip=0&take=20`) |
-| `POST`   | `/{entityType}/{entityId}/entries`      | Créer une entrée                |
-| `DELETE` | `/{entityType}/{entityId}/entries/{id}` | Supprimer une entrée            |
-| `POST`   | `/{entityType}/{entityId}/follow`       | S'abonner aux notifications     |
-| `DELETE` | `/{entityType}/{entityId}/follow`       | Se désabonner                   |
-| `GET`    | `/{entityType}/{entityId}/followers`    | Liste des abonnés               |
+| Méthode  | Endpoint                                | Description                         |
+| -------- | --------------------------------------- | ----------------------------------- |
+| `GET`    | `/{entityType}/{entityId}`              | Flux paginé (`?page=1&pageSize=20`) |
+| `POST`   | `/{entityType}/{entityId}/entries`      | Créer une entrée                    |
+| `DELETE` | `/{entityType}/{entityId}/entries/{id}` | Supprimer une entrée                |
+| `POST`   | `/{entityType}/{entityId}/follow`       | S'abonner aux notifications         |
+| `DELETE` | `/{entityType}/{entityId}/follow`       | Se désabonner                       |
+| `GET`    | `/{entityType}/{entityId}/followers`    | Liste des abonnés                   |
 
 Tous les chemins sont relatifs au `basePath` configuré (défaut : `/api/v1/timeline`).
 

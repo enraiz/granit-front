@@ -17,7 +17,7 @@ function buildUrl(basePath: string, ...segments: string[]): string {
 export async function fetchNotifications(
   client: AxiosInstance,
   basePath: string,
-  params: { skip?: number; take?: number } = {}
+  params: { page?: number; pageSize?: number } = {}
 ): Promise<NotificationPageDto> {
   const { data } = await client.get<NotificationPageDto>(buildUrl(basePath, 'notifications'), {
     params,
@@ -60,7 +60,7 @@ export async function fetchEntityActivityFeed(
   basePath: string,
   entityType: string,
   entityId: string,
-  params: { skip?: number; take?: number } = {}
+  params: { page?: number; pageSize?: number } = {}
 ): Promise<ActivityFeedPageDto> {
   const { data } = await client.get<ActivityFeedPageDto>(
     buildUrl(basePath, 'activity-feed', entityType, entityId),

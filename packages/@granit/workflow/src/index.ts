@@ -17,6 +17,8 @@ export type {
   WorkflowStatusDto,
 } from './types/index.js';
 
+export type { WorkflowHistoryPage } from './api/workflow-api.js';
+
 // Provider
 export { useWorkflowConfig, WorkflowProvider } from './providers/workflow-provider.js';
 export type { WorkflowProviderProps } from './providers/workflow-provider.js';

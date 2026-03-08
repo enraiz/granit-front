@@ -54,7 +54,7 @@ describe('workflow api', () => {
 
   it('should call GET with correct URL for fetchHistory', async () => {
     const client = createMockClient();
-    const history: TransitionHistoryDto[] = [
+    const historyItems: TransitionHistoryDto[] = [
       {
         previousState: 'Draft',
         newState: 'Published',
@@ -63,11 +63,15 @@ describe('workflow api', () => {
         comment: null,
       },
     ];
-    vi.mocked(client.get).mockResolvedValue(axiosResponse(history));
+    vi.mocked(client.get).mockResolvedValue(
+      axiosResponse({ items: historyItems, totalCount: 1, nextCursor: null })
+    );
 
     const result = await fetchHistory(client, basePath, entityType, entityId);
 
-    expect(client.get).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/history');
-    expect(result).toEqual(history);
+    expect(client.get).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/history', {
+      params: {},
+    });
+    expect(result).toEqual({ items: historyItems, totalCount: 1, nextCursor: null });
   });
 });

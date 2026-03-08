@@ -22,6 +22,7 @@ const MOCK_NOTIFICATION: NotificationDto = {
 const MOCK_PAGE: NotificationPageDto = {
   items: [MOCK_NOTIFICATION],
   totalCount: 1,
+  nextCursor: null,
   unreadCount: 1,
 };
 
@@ -83,6 +84,7 @@ describe('useNotifications', () => {
     const page: NotificationPageDto = {
       items: [MOCK_NOTIFICATION],
       totalCount: 50,
+      nextCursor: null,
       unreadCount: 10,
     };
     const client = createMockClient();
@@ -115,6 +117,7 @@ describe('useNotifications', () => {
     const page1: NotificationPageDto = {
       items: [MOCK_NOTIFICATION],
       totalCount: 2,
+      nextCursor: null,
       unreadCount: 2,
     };
     const n2: NotificationDto = {
@@ -125,6 +128,7 @@ describe('useNotifications', () => {
     const page2: NotificationPageDto = {
       items: [n2],
       totalCount: 2,
+      nextCursor: null,
       unreadCount: 2,
     };
 
@@ -163,6 +167,7 @@ describe('useNotifications', () => {
     const updatedPage: NotificationPageDto = {
       items: [{ ...MOCK_NOTIFICATION, title: 'Mis à jour' }],
       totalCount: 1,
+      nextCursor: null,
       unreadCount: 0,
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(updatedPage));

@@ -21,6 +21,8 @@ export interface NotificationDto {
 export interface NotificationPageDto {
   items: NotificationDto[];
   totalCount: number;
+  /** Opaque cursor for next page (always null for offset pagination). */
+  nextCursor: string | null;
   unreadCount: number;
 }
 
@@ -41,6 +43,8 @@ export interface ActivityFeedEntryDto {
 export interface ActivityFeedPageDto {
   items: ActivityFeedEntryDto[];
   totalCount: number;
+  /** Opaque cursor for next page (always null for offset pagination). */
+  nextCursor: string | null;
 }
 
 // ---------------------------------------------------------------------------

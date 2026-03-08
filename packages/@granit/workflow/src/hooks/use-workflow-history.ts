@@ -43,10 +43,10 @@ export function useWorkflowHistory({
     setError(null);
 
     try {
-      const data = await fetchHistory(apiClient, basePath, entityType, entityId);
+      const result = await fetchHistory(apiClient, basePath, entityType, entityId);
 
       if (!controller.signal.aborted) {
-        setHistory(data);
+        setHistory(result.items);
       }
     } catch (err) {
       if (!controller.signal.aborted) {

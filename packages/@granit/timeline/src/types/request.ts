@@ -12,6 +12,6 @@ export interface CreateTimelineEntryRequest {
 // --- Pagination ---
 
 export interface TimelineQueryParams {
-  skip?: number;
-  take?: number;
+  page?: number;
+  pageSize?: number;
 }

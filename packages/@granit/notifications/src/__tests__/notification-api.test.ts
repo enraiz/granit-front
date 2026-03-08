@@ -27,15 +27,16 @@ describe('notification-api', () => {
     const page: NotificationPageDto = {
       items: [],
       totalCount: 0,
+      nextCursor: null,
       unreadCount: 0,
     };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
-    const result = await fetchNotifications(client, '/api/v1', { skip: 0, take: 10 });
+    const result = await fetchNotifications(client, '/api/v1', { page: 1, pageSize: 10 });
 
     expect(client.get).toHaveBeenCalledWith('/api/v1/notifications', {
-      params: { skip: 0, take: 10 },
+      params: { page: 1, pageSize: 10 },
     });
     expect(result).toEqual(page);
   });
@@ -93,17 +94,17 @@ describe('notification-api', () => {
   // fetchEntityActivityFeed
   // -----------------------------------------------------------------------
   it('should send GET with entity path (fetchEntityActivityFeed)', async () => {
-    const page: ActivityFeedPageDto = { items: [], totalCount: 0 };
+    const page: ActivityFeedPageDto = { items: [], totalCount: 0, nextCursor: null };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
     const result = await fetchEntityActivityFeed(client, '/api/v1', 'Patient', 'p-1', {
-      skip: 0,
-      take: 5,
+      page: 1,
+      pageSize: 5,
     });
 
     expect(client.get).toHaveBeenCalledWith('/api/v1/activity-feed/Patient/p-1', {
-      params: { skip: 0, take: 5 },
+      params: { page: 1, pageSize: 5 },
     });
     expect(result).toEqual(page);
   });

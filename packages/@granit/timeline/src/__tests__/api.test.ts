@@ -52,16 +52,16 @@ describe('timeline API', () => {
 
   describe('fetchStream', () => {
     it('should call GET /{entityType}/{entityId} with query params', async () => {
-      const page: TimelineStreamPage = { items: [], totalCount: 0 };
+      const page: TimelineStreamPage = { items: [], totalCount: 0, nextCursor: null };
       vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
       const result = await fetchStream(client, BASE_PATH, 'Patient', 'p-1', {
-        skip: 0,
-        take: 20,
+        page: 1,
+        pageSize: 20,
       });
 
       expect(client.get).toHaveBeenCalledWith('/api/v1/timeline/Patient/p-1', {
-        params: { skip: 0, take: 20 },
+        params: { page: 1, pageSize: 20 },
       });
       expect(result).toEqual(page);
     });

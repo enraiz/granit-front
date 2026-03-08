@@ -35,7 +35,8 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   const basePath = config.basePath ?? '/api';
 
   const fetcher = useCallback(
-    (skip: number, take: number) => fetchNotifications(config.apiClient, basePath, { skip, take }),
+    (p: number, ps: number) =>
+      fetchNotifications(config.apiClient, basePath, { page: p, pageSize: ps }),
     [config.apiClient, basePath]
   );
 
