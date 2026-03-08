@@ -15,7 +15,7 @@ export interface UseWorkflowTransitionOptions {
   onError?: (error: Error) => void;
 }
 
-export interface UseWorkflowTransitionResult {
+export interface UseWorkflowTransitionReturn {
   transition: (targetState: string, comment?: string) => Promise<TransitionResultDto | null>;
   loading: boolean;
   result: TransitionResultDto | null;
@@ -27,7 +27,7 @@ export function useWorkflowTransition({
   entityId,
   onSuccess,
   onError,
-}: UseWorkflowTransitionOptions): UseWorkflowTransitionResult {
+}: UseWorkflowTransitionOptions): UseWorkflowTransitionReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
   const [loading, setLoading] = useState(false);

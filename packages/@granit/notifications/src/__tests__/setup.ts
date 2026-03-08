@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Test setup for @granit/notifications
+// Mocks @microsoft/signalr to prevent real WebSocket connections during tests.
+// This file is referenced in vitest.config.ts setupFiles ONLY because
+// notification tests need SignalR mocked globally.
+// Other packages should NOT depend on this file.
+// ---------------------------------------------------------------------------
+
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 

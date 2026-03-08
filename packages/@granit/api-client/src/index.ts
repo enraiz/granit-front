@@ -138,3 +138,10 @@ export function createMutator(instance: AxiosInstance) {
     return instance({ ...config, ...options }).then(({ data }) => data as T);
   };
 }
+
+// ---------------------------------------------------------------------------
+// Domain error classes
+// ---------------------------------------------------------------------------
+
+export { HttpError, TimeoutError, ValidationError } from './errors.js';
+export type { ProblemDetailsPayload, ValidationDetails } from './errors.js';

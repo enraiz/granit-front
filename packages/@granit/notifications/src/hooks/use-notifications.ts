@@ -11,8 +11,8 @@ export interface UseNotificationsOptions {
   pageSize?: number;
 }
 
-export interface UseNotificationsResult {
-  notifications: NotificationDto[];
+export interface UseNotificationsReturn {
+  notifications: readonly NotificationDto[];
   totalCount: number;
   loading: boolean;
   loadingMore: boolean;
@@ -29,7 +29,7 @@ const DEFAULT_PAGE_SIZE = 20;
 /**
  * Paginated inbox hook — fetches notifications with load-more support.
  */
-export function useNotifications(options: UseNotificationsOptions = {}): UseNotificationsResult {
+export function useNotifications(options: UseNotificationsOptions = {}): UseNotificationsReturn {
   const { pageSize = DEFAULT_PAGE_SIZE } = options;
   const { config, setUnreadCount } = useNotificationContext();
   const basePath = config.basePath ?? '/api';

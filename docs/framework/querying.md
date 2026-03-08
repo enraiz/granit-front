@@ -60,6 +60,118 @@ function App() {
 | `config.basePath`       | `string`        | —                    | Préfixe des endpoints REST (ex : `'/api/v1/patients'`) |
 | `config.queryKeyPrefix` | `string[]`      | segments de basePath | Préfixe personnalisé pour les query keys TanStack      |
 
+## Primitives de pagination
+
+Deux hooks standalone pour la pagination, utilisables indépendamment du système de querying complet. Ils consomment tout endpoint retournant un `PagedResult<T>` (contrat `{ items, totalCount }`).
+
+### `useInfiniteScroll<T>(options): UseInfiniteScrollReturn<T>`
+
+Pagination par chargement progressif (infinite scroll / load-more). Accumule les items des pages successives avec support d'abort-on-refetch.
+
+```tsx
+import { useInfiniteScroll } from '@granit/querying';
+
+const { items, hasMore, loadMore, loading, loadingMore } = useInfiniteScroll({
+  fetcher: (page, pageSize) =>
+    apiClient.get(`/notifications?page=${page}&pageSize=${pageSize}`).then((r) => r.data),
+  pageSize: 20,
+});
+
+return (
+  <>
+    {items.map(renderItem)}
+    {hasMore && (
+      <button onClick={loadMore} disabled={loadingMore}>
+        Charger plus
+      </button>
+    )}
+  </>
+);
+```
+
+#### Options (`UseInfiniteScrollOptions<T>`)
+
+| Option      | Type                                          | Défaut | Description                               |
+| ----------- | --------------------------------------------- | ------ | ----------------------------------------- |
+| `fetcher`   | `(page: number, pageSize: number) => Promise` | —      | Fonction qui charge une page de données   |
+| `pageSize`  | `number`                                      | `20`   | Nombre d'items par page                   |
+| `onSuccess` | `(page) => void`                              | —      | Callback après chaque chargement réussi   |
+| `enabled`   | `boolean`                                     | `true` | Active/désactive le chargement au montage |
+
+#### Retour (`UseInfiniteScrollReturn<T>`)
+
+| Propriété     | Type                       | Description                                          |
+| ------------- | -------------------------- | ---------------------------------------------------- |
+| `items`       | `readonly T[]`             | Tous les items chargés (accumulés page par page)     |
+| `setItems`    | `Dispatch<SetStateAction>` | Setter direct pour mises à jour optimistes           |
+| `totalCount`  | `number`                   | Nombre total d'items côté serveur                    |
+| `loading`     | `boolean`                  | `true` pendant le chargement initial (première page) |
+| `loadingMore` | `boolean`                  | `true` pendant le chargement des pages suivantes     |
+| `error`       | `Error \| null`            | Dernière erreur de chargement                        |
+| `hasMore`     | `boolean`                  | `true` s'il reste des pages à charger                |
+| `loadMore`    | `() => void`               | Charge la page suivante et l'ajoute aux items        |
+| `refresh`     | `() => void`               | Recharge depuis la page 1                            |
+
+### `usePagination<T>(options): UsePaginationReturn<T>`
+
+Pagination classique par pages avec navigation (précédent/suivant/aller à). Charge une seule page à la fois et annule les requêtes en vol lors d'un changement de page.
+
+```tsx
+import { usePagination } from '@granit/querying';
+
+const { items, page, totalPages, nextPage, previousPage, hasPreviousPage, hasNextPage } =
+  usePagination({
+    fetcher: (page, pageSize) =>
+      apiClient.get(`/users?page=${page}&pageSize=${pageSize}`).then((r) => r.data),
+    pageSize: 25,
+  });
+
+return (
+  <>
+    <UserTable data={items} />
+    <div>
+      <button onClick={previousPage} disabled={!hasPreviousPage}>
+        Précédent
+      </button>
+      <span>
+        Page {page} / {totalPages}
+      </span>
+      <button onClick={nextPage} disabled={!hasNextPage}>
+        Suivant
+      </button>
+    </div>
+  </>
+);
+```
+
+#### Options (`UsePaginationOptions<T>`)
+
+| Option      | Type                                          | Défaut | Description                               |
+| ----------- | --------------------------------------------- | ------ | ----------------------------------------- |
+| `fetcher`   | `(page: number, pageSize: number) => Promise` | —      | Fonction qui charge une page de données   |
+| `pageSize`  | `number`                                      | `20`   | Nombre d'items par page                   |
+| `onSuccess` | `(page) => void`                              | —      | Callback après chaque chargement réussi   |
+| `enabled`   | `boolean`                                     | `true` | Active/désactive le chargement au montage |
+
+#### Retour (`UsePaginationReturn<T>`)
+
+| Propriété         | Type                       | Description                                         |
+| ----------------- | -------------------------- | --------------------------------------------------- |
+| `items`           | `readonly T[]`             | Items de la page courante                           |
+| `setItems`        | `Dispatch<SetStateAction>` | Setter direct pour mises à jour optimistes          |
+| `totalCount`      | `number`                   | Nombre total d'items côté serveur                   |
+| `loading`         | `boolean`                  | `true` pendant le chargement                        |
+| `error`           | `Error \| null`            | Dernière erreur de chargement                       |
+| `page`            | `number`                   | Numéro de page courant (1-based)                    |
+| `pageSize`        | `number`                   | Taille de page courante                             |
+| `totalPages`      | `number`                   | Nombre total de pages                               |
+| `hasPreviousPage` | `boolean`                  | `true` s'il existe une page précédente              |
+| `hasNextPage`     | `boolean`                  | `true` s'il existe une page suivante                |
+| `goToPage`        | `(page: number) => void`   | Navigue vers une page spécifique (clamped)          |
+| `nextPage`        | `() => void`               | Navigue vers la page suivante (no-op si dernière)   |
+| `previousPage`    | `() => void`               | Navigue vers la page précédente (no-op si première) |
+| `refresh`         | `() => void`               | Recharge la page courante                           |
+
 ## Hooks
 
 ### `useQueryMeta(): UseQueryResult<QueryMetadata>`

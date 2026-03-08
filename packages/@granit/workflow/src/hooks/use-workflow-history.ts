@@ -14,7 +14,7 @@ export interface UseWorkflowHistoryOptions {
   enabled?: boolean;
 }
 
-export interface UseWorkflowHistoryResult {
+export interface UseWorkflowHistoryReturn {
   history: TransitionHistoryDto[];
   loading: boolean;
   error: Error | null;
@@ -25,7 +25,7 @@ export function useWorkflowHistory({
   entityType,
   entityId,
   enabled = true,
-}: UseWorkflowHistoryOptions): UseWorkflowHistoryResult {
+}: UseWorkflowHistoryOptions): UseWorkflowHistoryReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
   const [history, setHistory] = useState<TransitionHistoryDto[]>([]);
@@ -63,7 +63,7 @@ export function useWorkflowHistory({
 
   useEffect(() => {
     if (enabled) {
-      refetch().catch(() => {});
+      refetch().catch(() => {}); // Effect cleanup handles abort; error state set inside refetch
     }
     return () => {
       abortRef.current?.abort();

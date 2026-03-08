@@ -12,7 +12,7 @@ export interface UseTimelineFollowersOptions {
   currentUserId?: string;
 }
 
-export interface UseTimelineFollowersResult {
+export interface UseTimelineFollowersReturn {
   followers: string[];
   isFollowing: boolean;
   loading: boolean;
@@ -25,7 +25,7 @@ export function useTimelineFollowers({
   entityType,
   entityId,
   currentUserId,
-}: UseTimelineFollowersOptions): UseTimelineFollowersResult {
+}: UseTimelineFollowersOptions): UseTimelineFollowersReturn {
   const { apiClient, basePath } = useTimelineConfig();
 
   const [followers, setFollowers] = useState<string[]>([]);
@@ -81,7 +81,7 @@ export function useTimelineFollowers({
   }, [apiClient, basePath, entityType, entityId, currentUserId]);
 
   useEffect(() => {
-    loadFollowers().catch(() => {});
+    loadFollowers().catch(() => {}); // Error state set inside loadFollowers
   }, [loadFollowers]);
 
   return { followers, isFollowing, loading, error, follow, unfollow };

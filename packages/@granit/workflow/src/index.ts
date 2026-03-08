@@ -27,17 +27,17 @@ export type { WorkflowProviderProps } from './providers/workflow-provider.js';
 export { useWorkflowHistory } from './hooks/use-workflow-history.js';
 export type {
   UseWorkflowHistoryOptions,
-  UseWorkflowHistoryResult,
+  UseWorkflowHistoryReturn,
 } from './hooks/use-workflow-history.js';
 
 export { useWorkflowStatus } from './hooks/use-workflow-status.js';
 export type {
   UseWorkflowStatusOptions,
-  UseWorkflowStatusResult,
+  UseWorkflowStatusReturn,
 } from './hooks/use-workflow-status.js';
 
 export { useWorkflowTransition } from './hooks/use-workflow-transition.js';
 export type {
   UseWorkflowTransitionOptions,
-  UseWorkflowTransitionResult,
+  UseWorkflowTransitionReturn,
 } from './hooks/use-workflow-transition.js';

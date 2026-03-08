@@ -37,6 +37,13 @@ interface QueryState {
   readonly initialParams: QueryParams;
 }
 
+/**
+ * Pure reducer managing query state transitions.
+ *
+ * All filter/search/preset/quick-filter changes reset page to 1 so the user
+ * always sees the first page of matching results after changing criteria.
+ * Sort and groupBy changes keep the current page (intentional).
+ */
 function queryReducer(state: QueryState, action: QueryAction): QueryState {
   const { params } = state;
 
@@ -53,9 +60,9 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
     case 'SET_FILTERS':
       return { ...state, params: { ...params, filters: action.filters, page: 1 } };
 
+    /** Upsert: replaces existing filter with same field+operator, otherwise appends. */
     case 'ADD_FILTER': {
       const existing = params.filters ?? [];
-      // Replace if same field+operator exists
       const filtered = existing.filter(
         (f) => !(f.field === action.filter.field && f.operator === action.filter.operator)
       );
@@ -65,6 +72,7 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
       };
     }
 
+    /** Removes by field+operator pair, or all filters for a field if operator is omitted. */
     case 'REMOVE_FILTER': {
       const existing = params.filters ?? [];
       const filtered = action.operator
@@ -79,6 +87,7 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
     case 'SET_SORT':
       return { ...state, params: { ...params, sort: action.sort } };
 
+    /** Three-state cycle: none → asc → desc → none (removes from sort list). */
     case 'TOGGLE_SORT': {
       const current = params.sort ?? [];
       const existing = current.find((s) => s.field === action.field);
@@ -93,6 +102,7 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
       return { ...state, params: { ...params, sort: newSort } };
     }
 
+    /** Merges preset names into existing presets map by group key. */
     case 'SET_PRESETS': {
       const presets = { ...params.presets, [action.group]: action.names };
       return { ...state, params: { ...params, presets, page: 1 } };
@@ -101,6 +111,7 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
     case 'SET_QUICK_FILTERS':
       return { ...state, params: { ...params, quickFilters: action.quickFilters, page: 1 } };
 
+    /** Toggles a quick filter on/off by name. */
     case 'TOGGLE_QUICK_FILTER': {
       const current = params.quickFilters ?? [];
       const isActive = current.includes(action.name);

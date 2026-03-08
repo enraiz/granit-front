@@ -5,7 +5,7 @@ import { useNotificationContext } from '../providers/notification-provider.js';
 
 import type { NotificationChannel, NotificationPreferenceDto } from '../types/index.js';
 
-export interface UseNotificationPreferencesResult {
+export interface UseNotificationPreferencesReturn {
   preferences: NotificationPreferenceDto[];
   loading: boolean;
   error: Error | null;
@@ -21,7 +21,7 @@ export interface UseNotificationPreferencesResult {
 /**
  * CRUD hook for notification preferences (type x channel matrix).
  */
-export function useNotificationPreferences(): UseNotificationPreferencesResult {
+export function useNotificationPreferences(): UseNotificationPreferencesReturn {
   const { config } = useNotificationContext();
   const basePath = config.basePath ?? '/api';
 

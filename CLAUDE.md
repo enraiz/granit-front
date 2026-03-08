@@ -10,36 +10,36 @@
 
 ## GitLab repositories
 
-| ID | Repo | Path |
-| -- | ---- | ---- |
-| 5 | governance-compliance | `digital-dynamics/governance-compliance` |
-| 6 | granit-dotnet | `digital-dynamics/granit-dotnet` |
-| 9 | **granit-front** | `digital-dynamics/granit-front` |
-| 10 | guava-admin | `digital-dynamics/guava-platform/applications/guava-admin` |
-| 4 | guava-app-template | `digital-dynamics/guava-platform/applications/guava-app-template` |
-| 7 | guava-backend | `digital-dynamics/guava-platform/applications/guava-backend` |
-| 1 | guava-front | `digital-dynamics/guava-platform/applications/guava-front` |
-| 3 | gitops | `digital-dynamics/guava-platform/infrastructure/gitops` |
-| 2 | iac | `digital-dynamics/guava-platform/infrastructure/iac` |
-| 8 | project-governance | `digital-dynamics/guava-platform/project-governance` |
+| ID  | Repo                  | Path                                                              |
+| --- | --------------------- | ----------------------------------------------------------------- |
+| 5   | governance-compliance | `digital-dynamics/governance-compliance`                          |
+| 6   | granit-dotnet         | `digital-dynamics/granit-dotnet`                                  |
+| 9   | **granit-front**      | `digital-dynamics/granit-front`                                   |
+| 10  | guava-admin           | `digital-dynamics/guava-platform/applications/guava-admin`        |
+| 4   | guava-app-template    | `digital-dynamics/guava-platform/applications/guava-app-template` |
+| 7   | guava-backend         | `digital-dynamics/guava-platform/applications/guava-backend`      |
+| 1   | guava-front           | `digital-dynamics/guava-platform/applications/guava-front`        |
+| 3   | gitops                | `digital-dynamics/guava-platform/infrastructure/gitops`           |
+| 2   | iac                   | `digital-dynamics/guava-platform/infrastructure/iac`              |
+| 8   | project-governance    | `digital-dynamics/guava-platform/project-governance`              |
 
 ## Packages
 
-| Package | Purpose |
-| ------- | ------- |
-| `@granit/logger` | Configurable logger factory (`createLogger(prefix)`) |
-| `@granit/utils` | Shared utilities (`cn`, `formatDate`, `formatNumber`, …) |
-| `@granit/api-client` | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`PaginatedResponse`, `ProblemDetails`) |
-| `@granit/auth` | Keycloak hooks, auth context factory, mock provider, permission hooks (`usePermissions`, `usePermissionDefinitions`, `useRolePermissions`, `usePermissionGrant`) |
-| `@granit/timeline` | Unified activity feed (headless): hooks (`useTimeline`, `useTimelineActions`, `useTimelineFollowers`), types — UI components live in consumer apps |
-| `@granit/cookies` | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface |
-| `@granit/cookies-klaro` | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory |
-| `@granit/workflow` | Workflow lifecycle (headless): hooks (`useWorkflowStatus`, `useWorkflowTransition`, `useWorkflowHistory`), types — UI components live in consumer apps |
-| `@granit/notifications` | Real-time notifications (headless): SignalR provider, hooks (`useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`), types — UI components live in consumer apps |
-| `@granit/querying` | Odoo-like data grid (headless): hooks (`useQueryMeta`, `useQueryEndpoint`, `useSavedViews`, `useSmartFilter`), types mirroring `Granit.Querying` .NET contract — UI components live in consumer apps |
-| `@granit/data-exchange` | Tabular data exchange (headless): **export** — hooks (`useExportJob`, `useExportPresets`, `useExportDefinitions`, `useExportFields`), provider (`ExportProvider`), types mirroring `Granit.DataExchange.Export` .NET contract; **import** — hooks (`useImportJob`, `useImportPreview`, `useImportReport`), provider (`ImportProvider`), types mirroring `Granit.DataExchange.Import` .NET contract — UI components live in consumer apps |
-| `@granit/tracing` | Distributed tracing: `TracingProvider` (OpenTelemetry WebTracerProvider + OTLP exporter + auto-instrumentations), `useTracer`, `useSpan` (custom spans), `getTraceContext` (non-React, for logger-otlp integration) |
-| `@granit/error-boundary` | Structured error capture: `GranitErrorBoundary` (headless class component), `GlobalErrorCapture` (window error/rejection listeners), `ErrorContextProvider` (route, user, breadcrumbs), `useBreadcrumb` |
+| Package                  | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@granit/logger`         | Configurable logger factory (`createLogger(prefix)`)                                                                                                                                                                                                                                                                                                                                                                                     |
+| `@granit/utils`          | Shared utilities (`cn`, `formatDate`, `formatNumber`, …)                                                                                                                                                                                                                                                                                                                                                                                 |
+| `@granit/api-client`     | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`PaginatedResponse`, `ProblemDetails`)                                                                                                                                                                                                                                                                                                                       |
+| `@granit/auth`           | Keycloak hooks, auth context factory, mock provider, permission hooks (`usePermissions`, `usePermissionDefinitions`, `useRolePermissions`, `usePermissionGrant`)                                                                                                                                                                                                                                                                         |
+| `@granit/timeline`       | Unified activity feed (headless): hooks (`useTimeline`, `useTimelineActions`, `useTimelineFollowers`), types — UI components live in consumer apps                                                                                                                                                                                                                                                                                       |
+| `@granit/cookies`        | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface                                                                                                                                                                                                                                                                                                                                    |
+| `@granit/cookies-klaro`  | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory                                                                                                                                                                                                                                                                                                                                                                            |
+| `@granit/workflow`       | Workflow lifecycle (headless): hooks (`useWorkflowStatus`, `useWorkflowTransition`, `useWorkflowHistory`), types — UI components live in consumer apps                                                                                                                                                                                                                                                                                   |
+| `@granit/notifications`  | Real-time notifications (headless): SignalR provider, hooks (`useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`), types — UI components live in consumer apps                                                                                                                                                                                                       |
+| `@granit/querying`       | Odoo-like data grid (headless): hooks (`useQueryMeta`, `useQueryEndpoint`, `useSavedViews`, `useSmartFilter`), types mirroring `Granit.Querying` .NET contract — UI components live in consumer apps                                                                                                                                                                                                                                     |
+| `@granit/data-exchange`  | Tabular data exchange (headless): **export** — hooks (`useExportJob`, `useExportPresets`, `useExportDefinitions`, `useExportFields`), provider (`ExportProvider`), types mirroring `Granit.DataExchange.Export` .NET contract; **import** — hooks (`useImportJob`, `useImportPreview`, `useImportReport`), provider (`ImportProvider`), types mirroring `Granit.DataExchange.Import` .NET contract — UI components live in consumer apps |
+| `@granit/tracing`        | Distributed tracing: `TracingProvider` (OpenTelemetry WebTracerProvider + OTLP exporter + auto-instrumentations), `useTracer`, `useSpan` (custom spans), `getTraceContext` (non-React, for logger-otlp integration)                                                                                                                                                                                                                      |
+| `@granit/error-boundary` | Structured error capture: `GranitErrorBoundary` (headless class component), `GlobalErrorCapture` (window error/rejection listeners), `ErrorContextProvider` (route, user, breadcrumbs), `useBreadcrumb`                                                                                                                                                                                                                                  |
 
 ## Stack & versions
 
@@ -100,9 +100,9 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/auth` → `react`, `keycloak-js`, `@granit/api-client`
   - `@granit/cookies` → `react`
   - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
-  - `@granit/timeline` → `react`, `axios`
+  - `@granit/timeline` → `react`, `axios`, `@granit/querying`
   - `@granit/workflow` → `react`, `axios`
-  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`
+  - `@granit/notifications` → `react`, `axios`, `@microsoft/signalr`, `@granit/querying`
   - `@granit/querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/utils`
   - `@granit/data-exchange` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/utils`
   - `@granit/tracing` → `react`, `@opentelemetry/api`, `@opentelemetry/sdk-trace-web`, `@opentelemetry/exporter-trace-otlp-http`, `@opentelemetry/instrumentation-fetch`, `@opentelemetry/instrumentation-xml-http-request`, `@opentelemetry/instrumentation-document-load`, `@opentelemetry/resources`, `@opentelemetry/semantic-conventions`, `@opentelemetry/context-zone`
@@ -153,12 +153,12 @@ and refuse until the DoD is satisfied or the user explicitly overrides each item
 
 **MR target — STRICT RULE:**
 
-| Branch type | Default target | Exception |
-| ----------- | -------------- | --------- |
-| `feature/*` | `develop` | Only if user explicitly says "target main" |
-| `hotfix/*` | `main` + `develop` | Both, always |
-| `release/*` | `main` + `develop` | Both, always |
-| `fix/*` | `develop` | Only if user explicitly says "target main" |
+| Branch type | Default target     | Exception                                  |
+| ----------- | ------------------ | ------------------------------------------ |
+| `feature/*` | `develop`          | Only if user explicitly says "target main" |
+| `hotfix/*`  | `main` + `develop` | Both, always                               |
+| `release/*` | `main` + `develop` | Both, always                               |
+| `fix/*`     | `develop`          | Only if user explicitly says "target main" |
 
 NEVER target `main` for a `feature/*` or `fix/*` branch unless the user explicitly
 requests it. When in doubt, ask before creating the MR.
@@ -224,4 +224,3 @@ Utilisateur, Professionnel de santé, Product Owner
 
 **Application personas:** Visiteur, Utilisateur authentifié, Administrateur d'application,
 Approbateur, Gestionnaire de contenu
-

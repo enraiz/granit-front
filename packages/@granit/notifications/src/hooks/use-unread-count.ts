@@ -8,7 +8,7 @@ export interface UseUnreadCountOptions {
   pollingInterval?: number;
 }
 
-export interface UseUnreadCountResult {
+export interface UseUnreadCountReturn {
   count: number;
   refresh: () => void;
 }
@@ -21,7 +21,7 @@ export interface UseUnreadCountResult {
  * 2. Periodic polling as a fallback (default 60 s)
  * 3. Manual `refresh()` call
  */
-export function useUnreadCount(options: UseUnreadCountOptions = {}): UseUnreadCountResult {
+export function useUnreadCount(options: UseUnreadCountOptions = {}): UseUnreadCountReturn {
   const { pollingInterval = 60_000 } = options;
   const { config, unreadCount, setUnreadCount } = useNotificationContext();
   const mountedRef = useRef(true);

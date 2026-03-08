@@ -131,7 +131,8 @@ describe('useTimeline', () => {
 
     await waitFor(() => expect(result.current.entries).toHaveLength(2));
     expect(result.current.entries[0].id).toBe('e-new');
-    expect(result.current.totalCount).toBe(2);
+    // totalCount reflects server state — optimistic additions don't change it
+    expect(result.current.totalCount).toBe(1);
   });
 
   it('should remove an optimistic entry by id', async () => {
@@ -153,6 +154,7 @@ describe('useTimeline', () => {
 
     await waitFor(() => expect(result.current.entries).toHaveLength(1));
     expect(result.current.entries[0].id).toBe('e-2');
-    expect(result.current.totalCount).toBe(1);
+    // totalCount reflects server state — optimistic removals don't change it
+    expect(result.current.totalCount).toBe(2);
   });
 });

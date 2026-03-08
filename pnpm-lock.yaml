@@ -253,6 +253,9 @@ importers:
 
   packages/@granit/notifications:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       '@microsoft/signalr':
         specifier: '>=8.0.0'
         version: 10.0.0
@@ -293,6 +296,9 @@ importers:
 
   packages/@granit/timeline:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6

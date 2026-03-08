@@ -10,6 +10,7 @@ Tutoriels pas-à-pas pour prendre en main le framework granit-front.
 
 ## Tutoriels
 
-| Document | Description |
-| --- | --- |
-| [Démarrage rapide](demarrage-rapide.md) | Intégrer granit-front dans une application Vite/React en 5 étapes |
+| Document                                | Description                                                              |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| [Démarrage rapide](demarrage-rapide.md) | Intégrer granit-front dans une application Vite/React en 5 étapes        |
+| [Architecture](architecture.md)         | Vue d'ensemble de l'architecture, dépendances inter-packages et patterns |

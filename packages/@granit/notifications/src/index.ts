@@ -16,22 +16,22 @@ export { NotificationProvider, useNotificationContext } from './providers/notifi
 
 // Hooks
 export { useRealTimeNotifications } from './hooks/use-real-time-notifications.js';
-export type { UseRealTimeNotificationsResult } from './hooks/use-real-time-notifications.js';
+export type { UseRealTimeNotificationsReturn } from './hooks/use-real-time-notifications.js';
 
 export { useUnreadCount } from './hooks/use-unread-count.js';
-export type { UseUnreadCountOptions, UseUnreadCountResult } from './hooks/use-unread-count.js';
+export type { UseUnreadCountOptions, UseUnreadCountReturn } from './hooks/use-unread-count.js';
 
 export { useNotifications } from './hooks/use-notifications.js';
-export type { UseNotificationsOptions, UseNotificationsResult } from './hooks/use-notifications.js';
+export type { UseNotificationsOptions, UseNotificationsReturn } from './hooks/use-notifications.js';
 
 export { useEntityActivityFeed } from './hooks/use-entity-activity-feed.js';
 export type {
   UseEntityActivityFeedOptions,
-  UseEntityActivityFeedResult,
+  UseEntityActivityFeedReturn,
 } from './hooks/use-entity-activity-feed.js';
 
 export { useNotificationPreferences } from './hooks/use-notification-preferences.js';
-export type { UseNotificationPreferencesResult } from './hooks/use-notification-preferences.js';
+export type { UseNotificationPreferencesReturn } from './hooks/use-notification-preferences.js';
 
 // API (for advanced usage)
 export {
