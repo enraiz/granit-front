@@ -13,8 +13,8 @@ export interface UseEntityActivityFeedOptions {
   pageSize?: number;
 }
 
-export interface UseEntityActivityFeedResult {
-  entries: ActivityFeedEntryDto[];
+export interface UseEntityActivityFeedReturn {
+  entries: readonly ActivityFeedEntryDto[];
   totalCount: number;
   loading: boolean;
   loadingMore: boolean;
@@ -31,7 +31,7 @@ const DEFAULT_PAGE_SIZE = 20;
  */
 export function useEntityActivityFeed(
   options: UseEntityActivityFeedOptions
-): UseEntityActivityFeedResult {
+): UseEntityActivityFeedReturn {
   const { entityType, entityId, pageSize = DEFAULT_PAGE_SIZE } = options;
   const { config } = useNotificationContext();
   const basePath = config.basePath ?? '/api';

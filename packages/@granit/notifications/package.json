@@ -16,6 +16,7 @@
     "@granit/api-client": "workspace:*"
   },
   "peerDependencies": {
+    "@granit/querying": "workspace:*",
     "@microsoft/signalr": ">=8.0.0",
     "axios": "*",
     "react": "^19.0.0"

@@ -13,7 +13,7 @@ export interface UseWorkflowStatusOptions {
   entityId: string;
 }
 
-export interface UseWorkflowStatusResult {
+export interface UseWorkflowStatusReturn {
   currentState: string | null;
   transitions: TransitionDto[];
   loading: boolean;
@@ -24,7 +24,7 @@ export interface UseWorkflowStatusResult {
 export function useWorkflowStatus({
   entityType,
   entityId,
-}: UseWorkflowStatusOptions): UseWorkflowStatusResult {
+}: UseWorkflowStatusOptions): UseWorkflowStatusReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
   const [currentState, setCurrentState] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export function useWorkflowStatus({
   }, [apiClient, basePath, entityType, entityId]);
 
   useEffect(() => {
-    refetch().catch(() => {});
+    refetch().catch(() => {}); // Effect cleanup handles abort; error state set inside refetch
     return () => {
       abortRef.current?.abort();
     };

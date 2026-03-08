@@ -59,6 +59,20 @@ export {
 export { QueryProvider, buildQueryKey, useQueryConfig } from './providers/query-provider.js';
 export type { QueryConfig, QueryProviderProps } from './providers/query-provider.js';
 
+// Pagination primitives
+export { useInfiniteScroll } from './hooks/use-infinite-scroll.js';
+export type {
+  InfiniteScrollPage,
+  UseInfiniteScrollOptions,
+  UseInfiniteScrollReturn,
+} from './hooks/use-infinite-scroll.js';
+export { usePagination } from './hooks/use-pagination.js';
+export type {
+  PaginationPage,
+  UsePaginationOptions,
+  UsePaginationReturn,
+} from './hooks/use-pagination.js';
+
 // Hooks
 export { useQueryEndpoint } from './hooks/use-query-endpoint.js';
 export type {

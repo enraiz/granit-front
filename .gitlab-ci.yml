@@ -97,7 +97,7 @@ test:
   stage: test
   extends: .node_base
   script:
-    - pnpm test:coverage
+    - pnpm test:coverage --run
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
     reports:

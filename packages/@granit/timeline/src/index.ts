@@ -16,16 +16,16 @@ export type { TimelineProviderProps } from './providers/timeline-provider.js';
 
 // Hooks
 export { useTimeline } from './hooks/use-timeline.js';
-export type { UseTimelineOptions, UseTimelineResult } from './hooks/use-timeline.js';
+export type { UseTimelineOptions, UseTimelineReturn } from './hooks/use-timeline.js';
 
 export { useTimelineActions } from './hooks/use-timeline-actions.js';
 export type {
   UseTimelineActionsOptions,
-  UseTimelineActionsResult,
+  UseTimelineActionsReturn,
 } from './hooks/use-timeline-actions.js';
 
 export { useTimelineFollowers } from './hooks/use-timeline-followers.js';
 export type {
   UseTimelineFollowersOptions,
-  UseTimelineFollowersResult,
+  UseTimelineFollowersReturn,
 } from './hooks/use-timeline-followers.js';

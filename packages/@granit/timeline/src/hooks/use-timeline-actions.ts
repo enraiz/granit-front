@@ -15,7 +15,7 @@ export interface UseTimelineActionsOptions {
   onEntryDeleted?: (entryId: string) => void;
 }
 
-export interface UseTimelineActionsResult {
+export interface UseTimelineActionsReturn {
   postEntry: (request: CreateTimelineEntryRequest) => Promise<TimelineStreamEntry>;
   removeEntry: (entryId: string) => Promise<void>;
   posting: boolean;
@@ -28,7 +28,7 @@ export function useTimelineActions({
   entityId,
   onEntryCreated,
   onEntryDeleted,
-}: UseTimelineActionsOptions): UseTimelineActionsResult {
+}: UseTimelineActionsOptions): UseTimelineActionsReturn {
   const { apiClient, basePath } = useTimelineConfig();
 
   const [posting, setPosting] = useState(false);
