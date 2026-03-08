@@ -145,19 +145,13 @@ build:
 
 publish:
   stage: publish
-  image: node:24-bookworm-slim
-  tags:
-    - docker
+  extends: .node_base
   interruptible: false
-  before_script:
-    - corepack enable
-    - corepack prepare pnpm@latest --activate
   script:
-    - |
-      cat > .npmrc <<EOF
-      @granit:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/
-      //${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}
-      EOF
+    - echo "@granit:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - cat .npmrc
+    - pnpm build
     - pnpm -r publish --no-git-checks --access restricted
   dependencies:
     - build
