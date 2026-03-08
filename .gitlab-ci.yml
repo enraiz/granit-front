@@ -16,11 +16,16 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 
 workflow:
+  auto_cancel:
+    on_new_commit: interruptible
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'develop'
     - if: $CI_COMMIT_BRANCH == 'main'
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+
+default:
+  interruptible: true
 
 variables:
   NODE_VERSION: '24'
@@ -88,6 +93,7 @@ semgrep-sast:
   stage: gitlab-security
   before_script: []
   allow_failure: false
+  timeout: 10m
 
 # ---------------------------------------------------------------------------
 # TEST
@@ -140,6 +146,7 @@ build:
 publish:
   stage: publish
   extends: .node_base
+  interruptible: false
   script:
     - echo "@granit:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/"
         > .npmrc
@@ -174,7 +181,7 @@ audit:npm:
 
 sonarqube:
   stage: analysis
-  timeout: 2h
+  timeout: 30m
   image:
     name: sonarsource/sonar-scanner-cli
     entrypoint: ['']
