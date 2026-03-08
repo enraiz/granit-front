@@ -1,5 +1,5 @@
 {
-  "name": "@granit/error-boundary",
+  "name": "@granit/templating",
   "version": "0.1.1",
   "license": "UNLICENSED",
   "type": "module",
@@ -12,8 +12,12 @@
   "scripts": {
     "build": "tsup"
   },
+  "devDependencies": {
+    "@granit/api-client": "workspace:*"
+  },
   "peerDependencies": {
-    "@granit/logger": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
     "react": "^19.0.0"
   },
   "publishConfig": {
