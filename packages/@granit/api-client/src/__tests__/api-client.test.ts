@@ -14,6 +14,9 @@ interface ApiClientModule {
   setTokenGetter: (getter: () => Promise<string | undefined>) => void;
   setTenantGetter: (getter: () => string | undefined) => void;
   setOnUnauthorized: (callback: () => void) => void;
+  setIdempotencyKeyGenerator: (
+    generator: (config: InternalAxiosRequestConfig) => string | undefined
+  ) => void;
   createMutator: (
     instance: AxiosInstance
   ) => <T>(config: AxiosRequestConfig, options?: AxiosRequestConfig) => Promise<T>;
@@ -176,6 +179,52 @@ describe('setTenantGetter', () => {
     expect(() => {
       mod.setTenantGetter(() => 'tenant-1');
     }).not.toThrow();
+  });
+});
+
+describe('idempotency interceptor', () => {
+  let mod: ApiClientModule;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    mod = await import('../index.ts');
+  });
+
+  it('should inject Idempotency-Key when generator returns a value', async () => {
+    mod.setIdempotencyKeyGenerator(() => 'test-key-123');
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.post('/test', {});
+    expect(response.config.headers['Idempotency-Key']).toBe('test-key-123');
+  });
+
+  it('should not inject Idempotency-Key when generator returns undefined', async () => {
+    mod.setIdempotencyKeyGenerator(() => undefined);
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.post('/test', {});
+    expect(response.config.headers['Idempotency-Key']).toBeUndefined();
+  });
+
+  it('should not inject Idempotency-Key when no generator is configured', async () => {
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.post('/test', {});
+    expect(response.config.headers['Idempotency-Key']).toBeUndefined();
+  });
+
+  it('should pass the request config to the generator', async () => {
+    const generator = vi.fn((_config: InternalAxiosRequestConfig) => 'key');
+    mod.setIdempotencyKeyGenerator(generator);
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    client.defaults.adapter = captureAdapter;
+
+    await client.post('/test', {});
+    expect(generator).toHaveBeenCalledOnce();
+    expect(generator.mock.calls[0][0]).toHaveProperty('method');
   });
 });
 

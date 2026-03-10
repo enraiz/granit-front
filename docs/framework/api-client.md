@@ -126,6 +126,32 @@ api.interceptors.response.use(
 Le backend retourne les erreurs au format RFC 7807 — le type `ProblemDetails`
 est exporté par ce même package.
 
+### `setIdempotencyKeyGenerator(generator: (config: InternalAxiosRequestConfig) => string | undefined): void`
+
+Enregistre un générateur de clé d'idempotence. Lorsqu'il est configuré,
+l'intercepteur de requête appelle cette fonction pour chaque requête et
+ajoute le header `Idempotency-Key` si elle retourne une valeur non `undefined`.
+
+**Opt-in** : si aucun générateur n'est configuré, le header n'est pas envoyé.
+Ce setter est appelé automatiquement par `@granit/idempotency` — il n'est
+pas nécessaire de l'appeler manuellement si `@granit/idempotency` est utilisé.
+
+```typescript
+import { setIdempotencyKeyGenerator } from '@granit/api-client';
+
+// Exemple d'appel manuel (sans @granit/idempotency)
+setIdempotencyKeyGenerator((config) => {
+  const method = config.method?.toLowerCase();
+  if (['post', 'put', 'patch', 'delete'].includes(method ?? '')) {
+    return crypto.randomUUID();
+  }
+  return undefined;
+});
+```
+
+> Voir la documentation [`@granit/idempotency`](idempotency.md) pour
+> l'activation simplifiée via `enableIdempotency()`.
+
 ## Peer dependencies
 
 - `axios`
