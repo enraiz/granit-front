@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchSettings } from '../api/settings-api.js';
 import { buildSettingsQueryKey, useSettingsConfig } from '../providers/settings-provider.js';
 
-import type { SettingsMap } from '../types/index.js';
-import type { SettingScope } from '../types/index.js';
+import type { SettingScope, SettingsMap } from '../types/index.js';
 import type { UseQueryResult } from '@tanstack/react-query';
 
 /**
