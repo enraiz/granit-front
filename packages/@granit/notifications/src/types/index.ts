@@ -48,32 +48,94 @@ export interface ActivityFeedPageDto {
 }
 
 // ---------------------------------------------------------------------------
-// Preferences
+// Channels — extensible string type with well-known constants
 // ---------------------------------------------------------------------------
 
-export type NotificationChannel = 'inApp' | 'email' | 'push';
+/**
+ * Notification channel identifier — extensible string type.
+ * Consumer apps and backend may define additional channels.
+ */
+export type NotificationChannel = string & {};
+
+/**
+ * Well-known channel identifiers matching the .NET `NotificationChannels` class.
+ */
+export const NotificationChannels = {
+  InApp: 'inApp',
+  Email: 'email',
+  Sms: 'sms',
+  WhatsApp: 'whatsApp',
+  Push: 'push',
+  MobilePush: 'mobilePush',
+  Sse: 'sse',
+  SignalR: 'signalR',
+  Zulip: 'zulip',
+} as const;
+
+// ---------------------------------------------------------------------------
+// Preferences
+// ---------------------------------------------------------------------------
 
 export interface NotificationPreferenceDto {
   notificationType: string;
   label: string;
-  channels: Record<NotificationChannel, boolean>;
+  channels: Record<string, boolean>;
 }
 
 // ---------------------------------------------------------------------------
-// Provider config
+// Transport abstraction — adapters (SignalR, SSE) implement this interface
+// ---------------------------------------------------------------------------
+
+export type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'reconnecting';
+
+/**
+ * Real-time notification transport abstraction.
+ * Adapters (`@granit/notifications-signalr`, `@granit/notifications-sse`)
+ * implement this interface via factory functions.
+ *
+ * Mirrors the `CookieConsentProvider` pattern from `@granit/cookies`.
+ */
+export interface NotificationTransport {
+  /** Establishes the real-time connection. */
+  connect(): Promise<void>;
+
+  /** Gracefully closes the connection. */
+  disconnect(): Promise<void>;
+
+  /** Current connection state. */
+  readonly state: ConnectionState;
+
+  /**
+   * Subscribes to incoming notifications.
+   * Returns an unsubscribe function.
+   */
+  onNotification(callback: (notification: NotificationDto) => void): () => void;
+
+  /**
+   * Subscribes to connection state changes.
+   * Returns an unsubscribe function.
+   */
+  onStateChange(callback: (state: ConnectionState) => void): () => void;
+}
+
+// ---------------------------------------------------------------------------
+// Provider config — transport-agnostic
 // ---------------------------------------------------------------------------
 
 export interface NotificationConfig {
   apiClient: AxiosInstance;
   basePath?: string;
-  hubUrl?: string;
-  tokenGetter?: () => Promise<string | null>;
-  /** When false, skip SignalR connection (useful for mock/dev mode). Defaults to true. */
-  enabled?: boolean;
 }
 
 // ---------------------------------------------------------------------------
-// SignalR connection state
+// Utilities
 // ---------------------------------------------------------------------------
 
-export type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'reconnecting';
+/**
+ * Extracts the list of available channels from a preferences response.
+ * Useful for dynamically rendering a preferences matrix without hardcoding channels.
+ */
+export function getAvailableChannels(preferences: readonly NotificationPreferenceDto[]): string[] {
+  if (preferences.length === 0) return [];
+  return Object.keys(preferences[0].channels);
+}

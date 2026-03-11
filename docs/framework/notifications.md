@@ -1,21 +1,36 @@
 # @granit/notifications
 
-Centre de notifications temps-réel avec SignalR, boîte de réception paginée, badge non-lus, fil d'activité par entité et préférences utilisateur. Consomme l'API REST `Granit.Notifications.Endpoints` (.NET).
+Centre de notifications transport-agnostique : boîte de réception paginée, badge non-lus, fil d'activité par entité, préférences utilisateur et abstraction transport temps-réel. Consomme l'API REST `Granit.Notifications.Endpoints` (.NET).
+
+Le transport temps-réel (SignalR, SSE) est injecté via l'interface `NotificationTransport`. Les apps choisissent le package transport adapté :
+
+| Package                         | Transport                         |
+| ------------------------------- | --------------------------------- |
+| `@granit/notifications-signalr` | SignalR (WebSocket + LongPolling) |
+| `@granit/notifications-sse`     | Server-Sent Events                |
+
+Les canaux de livraison (Web Push, Mobile Push) sont gérés par des packages séparés :
+
+| Package                             | Rôle                                        |
+| ----------------------------------- | ------------------------------------------- |
+| `@granit/notifications-web-push`    | Abonnement VAPID + Service Worker           |
+| `@granit/notifications-mobile-push` | Enregistrement token FCM/APNs via Capacitor |
 
 ## Pourquoi
 
-- Notifications push en temps-réel via SignalR (`@microsoft/signalr`)
+- Transport temps-réel abstrait — l'app choisit SignalR ou SSE sans changer les hooks
 - Boîte de réception paginée avec marquage lu / tout lu
-- Badge non-lus synchronisé (SignalR + polling de repli)
+- Badge non-lus synchronisé (transport push + polling de repli)
 - Fil d'activité par entité (style Odoo)
-- Matrice de préférences type × canal avec mise à jour optimiste et rollback
+- Matrice de préférences type × canal dynamique (canaux extensibles, pas de liste fixe)
 - Composants headless (HTML sémantique + `data-*` pour le styling applicatif)
 
 ## Architecture
 
 ```mermaid
 graph TD
-    A[NotificationProvider] -->|apiClient + hubUrl + tokenGetter| B[SignalR Hub]
+    T[NotificationTransport] -.->|SignalR ou SSE| A
+    A[NotificationProvider] -->|config + transport| B[Transport temps-réel]
     A --> C[useNotifications]
     A --> D[useUnreadCount]
     A --> E[useRealTimeNotifications]
@@ -31,8 +46,8 @@ graph TD
 Le `NotificationProvider` :
 
 1. Injecte la configuration (instance Axios + basePath) dans tous les hooks enfants via un contexte React
-2. Établit une connexion SignalR vers le hub (`/hubs/notifications`) avec reconnexion automatique
-3. Écoute l'événement `ReceiveNotification` et met à jour le compteur non-lus en temps-réel
+2. Si un `transport` est fourni, établit la connexion temps-réel et écoute les notifications entrantes
+3. Sans transport, fonctionne en mode REST-only (polling via `useUnreadCount`)
 
 ## Configuration
 
@@ -42,27 +57,76 @@ Wrappez les composants qui utilisent les hooks notifications dans un `Notificati
 
 ```tsx
 import { NotificationProvider } from '@granit/notifications';
+import { createSignalRTransport } from '@granit/notifications-signalr';
+
+const transport = createSignalRTransport({
+  hubUrl: '/hubs/notifications',
+  tokenGetter: async () => keycloak.token ?? null,
+});
 
 function App() {
   return (
-    <NotificationProvider
-      apiClient={apiClient}
-      basePath="/api"
-      hubUrl="/hubs/notifications"
-      tokenGetter={async () => keycloak.token ?? null}
-    >
+    <NotificationProvider config={{ apiClient, basePath: '/api' }} transport={transport}>
       <Dashboard />
     </NotificationProvider>
   );
 }
 ```
 
-| Prop          | Type                            | Défaut                  | Description                                          |
-| ------------- | ------------------------------- | ----------------------- | ---------------------------------------------------- |
-| `apiClient`   | `AxiosInstance`                 | —                       | Instance Axios configurée (via `@granit/api-client`) |
-| `basePath`    | `string`                        | `'/api'`                | Préfixe des endpoints REST                           |
-| `hubUrl`      | `string`                        | `'/hubs/notifications'` | URL du hub SignalR                                   |
-| `tokenGetter` | `() => Promise<string \| null>` | —                       | Fournit le JWT pour l'authentification SignalR       |
+#### Props
+
+| Prop        | Type                    | Défaut | Description                          |
+| ----------- | ----------------------- | ------ | ------------------------------------ |
+| `config`    | `NotificationConfig`    | —      | Configuration (apiClient + basePath) |
+| `transport` | `NotificationTransport` | —      | Transport temps-réel (optionnel)     |
+
+#### `NotificationConfig`
+
+| Propriété   | Type            | Défaut   | Description                                          |
+| ----------- | --------------- | -------- | ---------------------------------------------------- |
+| `apiClient` | `AxiosInstance` | —        | Instance Axios configurée (via `@granit/api-client`) |
+| `basePath`  | `string`        | `'/api'` | Préfixe des endpoints REST                           |
+
+### `NotificationTransport`
+
+Interface implémentée par les packages transport (`@granit/notifications-signalr`, `@granit/notifications-sse`).
+
+```typescript
+interface NotificationTransport {
+  connect(): Promise<void>;
+  disconnect(): Promise<void>;
+  readonly state: ConnectionState;
+  onNotification(callback: (notification: NotificationDto) => void): () => void;
+  onStateChange(callback: (state: ConnectionState) => void): () => void;
+}
+```
+
+## Canaux de notification
+
+Les canaux sont extensibles — pas de liste TypeScript fixe. Le type `NotificationChannel` est `string & {}` et les constantes bien connues sont fournies :
+
+```typescript
+import { NotificationChannels } from '@granit/notifications';
+
+// NotificationChannels.InApp    → 'inApp'
+// NotificationChannels.Email    → 'email'
+// NotificationChannels.Sms      → 'sms'
+// NotificationChannels.WhatsApp → 'whatsApp'
+// NotificationChannels.Push     → 'push'
+// NotificationChannels.MobilePush → 'mobilePush'
+// NotificationChannels.Sse      → 'sse'
+// NotificationChannels.SignalR   → 'signalR'
+// NotificationChannels.Zulip    → 'zulip'
+```
+
+Pour extraire dynamiquement les canaux disponibles depuis les préférences API :
+
+```typescript
+import { getAvailableChannels } from '@granit/notifications';
+
+const channels = getAvailableChannels(preferences);
+// → ['inApp', 'email', 'sms', 'whatsApp'] (selon le backend)
+```
 
 ## Hooks
 
@@ -93,7 +157,7 @@ const {
 
 ### `useUnreadCount(options?): UseUnreadCountResult`
 
-Compteur non-lus synchronisé par SignalR et polling de repli.
+Compteur non-lus synchronisé par transport temps-réel et polling de repli.
 
 ```tsx
 const { count, refresh } = useUnreadCount({ pollingInterval: 60_000 });
@@ -114,7 +178,7 @@ const { count, refresh } = useUnreadCount({ pollingInterval: 60_000 });
 
 ### `useRealTimeNotifications(): UseRealTimeNotificationsResult`
 
-Expose la dernière notification reçue en temps-réel et l'état de la connexion SignalR. Utile pour déclencher des toasts ou alertes in-app.
+Expose la dernière notification reçue en temps-réel et l'état de la connexion. Utile pour déclencher des toasts ou alertes in-app.
 
 ```tsx
 const { lastNotification, connectionState } = useRealTimeNotifications();
@@ -130,7 +194,7 @@ useEffect(() => {
 
 | Propriété          | Type                      | Description                                                             |
 | ------------------ | ------------------------- | ----------------------------------------------------------------------- |
-| `lastNotification` | `NotificationDto \| null` | Dernière notification reçue via SignalR                                 |
+| `lastNotification` | `NotificationDto \| null` | Dernière notification reçue via le transport                            |
 | `connectionState`  | `ConnectionState`         | `'disconnected'` \| `'connecting'` \| `'connected'` \| `'reconnecting'` |
 
 ### `useEntityActivityFeed(options): UseEntityActivityFeedResult`
@@ -164,11 +228,14 @@ const {
 
 ### `useNotificationPreferences(): UseNotificationPreferencesResult`
 
-Hook CRUD pour les préférences de notification (matrice type × canal) avec mise à jour optimiste et rollback en cas d'erreur.
+Hook CRUD pour les préférences de notification (matrice type × canal) avec mise à jour optimiste et rollback en cas d'erreur. Les canaux sont dynamiques — déterminés par la réponse API.
 
 ```tsx
 const { preferences, loading, saving, error, toggleChannel, refresh } =
   useNotificationPreferences();
+
+// Les canaux disponibles viennent du backend
+const channels = getAvailableChannels(preferences);
 
 await toggleChannel('AppointmentReminder', 'email', false);
 ```
@@ -183,129 +250,6 @@ await toggleChannel('AppointmentReminder', 'email', false);
 | `error`         | `Error \| null`                             | Dernière erreur                        |
 | `toggleChannel` | `(type, channel, enabled) => Promise<void>` | Active/désactive un canal pour un type |
 | `refresh`       | `() => void`                                | Recharge les préférences               |
-
-## Composants
-
-Tous les composants sont **headless** : HTML sémantique, attributs `data-*` pour le styling, aucun CSS intégré.
-
-### `<NotificationBadge />`
-
-Badge affichant le nombre de notifications non lues. Ne rend rien quand le compteur est à 0.
-
-```tsx
-<NotificationBadge count={unreadCount} max={99} />
-```
-
-| Prop        | Type     | Défaut | Description                                |
-| ----------- | -------- | ------ | ------------------------------------------ |
-| `count`     | `number` | —      | Nombre de notifications non lues           |
-| `max`       | `number` | `99`   | Valeur maximale affichée (au-delà : `99+`) |
-| `className` | `string` | —      | Classe CSS optionnelle                     |
-
-#### Attributs `data-*`
-
-| Attribut     | Valeur      | Description                                  |
-| ------------ | ----------- | -------------------------------------------- |
-| `data-count` | nombre réel | Compteur réel (même si l'affichage est capé) |
-
-### `<NotificationItem />`
-
-Ligne de notification individuelle — titre, sévérité, date, état de lecture. Accessible au clavier.
-
-```tsx
-<NotificationItem
-  notification={notification}
-  onClick={(n) => navigateTo(n.entityType, n.entityId)}
-/>
-```
-
-| Prop           | Type                     | Description                       |
-| -------------- | ------------------------ | --------------------------------- |
-| `notification` | `NotificationDto`        | La notification à afficher        |
-| `onClick`      | `(notification) => void` | Callback au clic / Enter / Espace |
-| `className`    | `string`                 | Classe CSS optionnelle            |
-
-#### Attributs `data-*`
-
-| Attribut        | Valeur                                      | Description                 |
-| --------------- | ------------------------------------------- | --------------------------- |
-| `data-severity` | `info` \| `success` \| `warning` \| `error` | Sévérité de la notification |
-| `data-read`     | `true` \| `false`                           | État de lecture             |
-
-### `<NotificationCenter />`
-
-Bouton cloche + dropdown inbox. Gère l'ouverture/fermeture, le marquage global et le chargement progressif.
-
-```tsx
-<NotificationCenter
-  notifications={notifications}
-  unreadCount={count}
-  loading={loading}
-  hasMore={hasMore}
-  onLoadMore={loadMore}
-  onNotificationClick={(n) => markRead(n.id)}
-  onMarkAllRead={markAllRead}
-/>
-```
-
-| Prop                  | Type                          | Défaut                  | Description                            |
-| --------------------- | ----------------------------- | ----------------------- | -------------------------------------- |
-| `notifications`       | `NotificationDto[]`           | —                       | Liste des notifications                |
-| `unreadCount`         | `number`                      | —                       | Compteur non-lus (pour le badge)       |
-| `loading`             | `boolean`                     | —                       | Affiche un indicateur de chargement    |
-| `hasMore`             | `boolean`                     | —                       | Affiche le bouton « Charger plus »     |
-| `onLoadMore`          | `() => void`                  | —                       | Callback pour charger la page suivante |
-| `onNotificationClick` | `(notification) => void`      | —                       | Callback au clic sur une notification  |
-| `onMarkAllRead`       | `() => void`                  | —                       | Callback pour marquer tout comme lu    |
-| `renderItem`          | `(notification) => ReactNode` | —                       | Rendu personnalisé par notification    |
-| `emptyMessage`        | `string`                      | `'Aucune notification'` | Message si la boîte est vide           |
-| `className`           | `string`                      | —                       | Classe CSS optionnelle                 |
-
-### `<EntityActivityFeed />`
-
-Fil d'activité lié à une entité avec pagination.
-
-```tsx
-<EntityActivityFeed
-  entries={entries}
-  loading={loading}
-  loadingMore={loadingMore}
-  hasMore={hasMore}
-  onLoadMore={loadMore}
-/>
-```
-
-| Prop           | Type                     | Défaut              | Description                            |
-| -------------- | ------------------------ | ------------------- | -------------------------------------- |
-| `entries`      | `ActivityFeedEntryDto[]` | —                   | Liste des entrées                      |
-| `loading`      | `boolean`                | —                   | Affiche un indicateur de chargement    |
-| `loadingMore`  | `boolean`                | —                   | Désactive le bouton « Charger plus »   |
-| `hasMore`      | `boolean`                | —                   | Affiche le bouton « Charger plus »     |
-| `onLoadMore`   | `() => void`             | —                   | Callback pour charger la page suivante |
-| `renderEntry`  | `(entry) => ReactNode`   | —                   | Rendu personnalisé par entrée          |
-| `emptyMessage` | `string`                 | `'Aucune activité'` | Message si le fil est vide             |
-| `className`    | `string`                 | —                   | Classe CSS optionnelle                 |
-
-### `<NotificationPreferences />`
-
-Matrice type × canal avec des checkboxes. Désactive les toggles pendant la sauvegarde.
-
-```tsx
-<NotificationPreferences
-  preferences={preferences}
-  loading={loading}
-  saving={saving}
-  onToggle={toggleChannel}
-/>
-```
-
-| Prop          | Type                               | Description                                    |
-| ------------- | ---------------------------------- | ---------------------------------------------- |
-| `preferences` | `NotificationPreferenceDto[]`      | Liste des préférences                          |
-| `loading`     | `boolean`                          | Affiche un indicateur de chargement            |
-| `saving`      | `boolean`                          | Désactive les checkboxes pendant la sauvegarde |
-| `onToggle`    | `(type, channel, enabled) => void` | Callback lors du changement d'un toggle        |
-| `className`   | `string`                           | Classe CSS optionnelle                         |
 
 ## Types
 
@@ -367,7 +311,8 @@ interface ActivityFeedPageDto {
 ### `NotificationChannel`
 
 ```typescript
-type NotificationChannel = 'inApp' | 'email' | 'push';
+// Extensible — accepte toute chaîne, pas une union fixe
+type NotificationChannel = string & {};
 ```
 
 ### `NotificationPreferenceDto`
@@ -376,7 +321,7 @@ type NotificationChannel = 'inApp' | 'email' | 'push';
 interface NotificationPreferenceDto {
   notificationType: string;
   label: string;
-  channels: Record<NotificationChannel, boolean>;
+  channels: Record<string, boolean>;
 }
 ```
 
@@ -392,8 +337,6 @@ type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'reconnecti
 interface NotificationConfig {
   apiClient: AxiosInstance;
   basePath?: string; // défaut: '/api'
-  hubUrl?: string; // défaut: '/hubs/notifications'
-  tokenGetter?: () => Promise<string | null>;
 }
 ```
 
@@ -411,14 +354,6 @@ interface NotificationConfig {
 
 Tous les chemins sont relatifs au `basePath` configuré (défaut : `/api`).
 
-### Hub SignalR
-
-| URL                   | Événement             | Direction        | Payload           |
-| --------------------- | --------------------- | ---------------- | ----------------- |
-| `/hubs/notifications` | `ReceiveNotification` | Serveur → Client | `NotificationDto` |
-
-Transport : WebSockets (prioritaire) avec fallback LongPolling. Reconnexion automatique intégrée.
-
 ## Exemple complet
 
 ```tsx
@@ -428,16 +363,20 @@ import {
   useUnreadCount,
   useRealTimeNotifications,
   useNotificationPreferences,
-  NotificationCenter,
-  NotificationPreferences,
+  getAvailableChannels,
 } from '@granit/notifications';
+import { createSignalRTransport } from '@granit/notifications-signalr';
+
+const transport = createSignalRTransport({
+  hubUrl: '/hubs/notifications',
+  tokenGetter: async () => keycloak.token ?? null,
+});
 
 function NotificationBell() {
   const { notifications, loading, hasMore, loadMore, markRead, markAllRead } = useNotifications();
   const { count } = useUnreadCount();
   const { lastNotification } = useRealTimeNotifications();
 
-  // Toast sur nouvelle notification
   useEffect(() => {
     if (lastNotification) {
       toast.info(lastNotification.title);
@@ -459,10 +398,12 @@ function NotificationBell() {
 
 function SettingsPage() {
   const { preferences, loading, saving, toggleChannel } = useNotificationPreferences();
+  const channels = getAvailableChannels(preferences);
 
   return (
     <NotificationPreferences
       preferences={preferences}
+      channels={channels}
       loading={loading}
       saving={saving}
       onToggle={toggleChannel}
@@ -472,11 +413,7 @@ function SettingsPage() {
 
 function App() {
   return (
-    <NotificationProvider
-      apiClient={apiClient}
-      basePath="/api"
-      tokenGetter={async () => keycloak.token ?? null}
-    >
+    <NotificationProvider config={{ apiClient, basePath: '/api' }} transport={transport}>
       <header>
         <NotificationBell />
       </header>
@@ -490,6 +427,13 @@ function App() {
 
 ## Peer dependencies
 
-- `@microsoft/signalr` >=8.0.0 — Connexion temps-réel
+- `@granit/querying` — Pagination
 - `axios` — Instance Axios pour les appels REST
 - `react` ^19.0.0
+
+## Voir aussi
+
+- [notifications-signalr.md](notifications-signalr.md) — Transport SignalR
+- [notifications-sse.md](notifications-sse.md) — Transport SSE
+- [notifications-web-push.md](notifications-web-push.md) — Abonnement Web Push
+- [notifications-mobile-push.md](notifications-mobile-push.md) — Enregistrement Mobile Push

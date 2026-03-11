@@ -1,6 +1,6 @@
 {
-  "name": "@granit/notifications",
-  "version": "0.1.1",
+  "name": "@granit/notifications-signalr",
+  "version": "0.1.0",
   "license": "UNLICENSED",
   "type": "module",
   "exports": {
@@ -12,13 +12,9 @@
   "scripts": {
     "build": "tsup"
   },
-  "devDependencies": {
-    "@granit/api-client": "workspace:*"
-  },
   "peerDependencies": {
-    "@granit/querying": "workspace:*",
-    "axios": "*",
-    "react": "^19.0.0"
+    "@granit/notifications": "workspace:*",
+    "@microsoft/signalr": ">=8.0.0"
   },
   "publishConfig": {
     "exports": {
@@ -28,5 +24,8 @@
       }
     },
     "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+  },
+  "devDependencies": {
+    "@microsoft/signalr": "10.0.0"
   }
 }

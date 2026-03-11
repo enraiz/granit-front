@@ -1,16 +1,11 @@
-import { HttpTransportType, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import type { ConnectionState, NotificationConfig, NotificationDto } from '../types/index.js';
-import type { HubConnection } from '@microsoft/signalr';
+import type {
+  ConnectionState,
+  NotificationConfig,
+  NotificationDto,
+  NotificationTransport,
+} from '../types/index.js';
 
 // ---------------------------------------------------------------------------
 // Context value
@@ -42,59 +37,46 @@ export function useNotificationContext(): NotificationContextValue {
 // Provider
 // ---------------------------------------------------------------------------
 
-const DEFAULT_BASE_PATH = '/api/v1';
-const DEFAULT_HUB_URL = '/hubs/notifications';
+interface NotificationProviderProps {
+  children: React.ReactNode;
+  config: NotificationConfig;
+  /** Optional real-time transport. When omitted, only REST API polling is available. */
+  transport?: NotificationTransport;
+}
 
 export function NotificationProvider({
   children,
-  ...config
-}: Readonly<NotificationConfig & { children: React.ReactNode }>) {
-  const { apiClient, tokenGetter, hubUrl = DEFAULT_HUB_URL, enabled = true } = config;
-  const basePath = config.basePath ?? DEFAULT_BASE_PATH;
-
+  config,
+  transport,
+}: Readonly<NotificationProviderProps>) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
   const [lastNotification, setLastNotification] = useState<NotificationDto | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
-  const connectionRef = useRef<HubConnection | null>(null);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!transport) return;
 
-    const connection = new HubConnectionBuilder()
-      .withUrl(hubUrl, {
-        transport: HttpTransportType.WebSockets | HttpTransportType.LongPolling,
-        accessTokenFactory: tokenGetter ? async () => (await tokenGetter()) ?? '' : undefined,
-      })
-      .withAutomaticReconnect()
-      .configureLogging(LogLevel.Warning)
-      .build();
-
-    connectionRef.current = connection;
-
-    connection.on('ReceiveNotification', (notification: NotificationDto) => {
+    const unsubNotification = transport.onNotification((notification) => {
       setLastNotification(notification);
       setUnreadCount((prev) => prev + 1);
     });
 
-    connection.onreconnecting(() => setConnectionState('reconnecting'));
-    connection.onreconnected(() => setConnectionState('connected'));
-    connection.onclose(() => setConnectionState('disconnected'));
+    const unsubState = transport.onStateChange((state) => {
+      setConnectionState(state);
+    });
 
     setConnectionState('connecting');
-    connection.start().then(
+    transport.connect().then(
       () => setConnectionState('connected'),
       () => setConnectionState('disconnected')
     );
 
     return () => {
-      connection.stop();
+      unsubNotification();
+      unsubState();
+      transport.disconnect();
     };
-  }, [enabled, hubUrl, tokenGetter]);
-
-  const fullConfig = useMemo<NotificationConfig>(
-    () => ({ apiClient, basePath, hubUrl, tokenGetter }),
-    [apiClient, basePath, hubUrl, tokenGetter]
-  );
+  }, [transport]);
 
   const setUnreadCountCb = useCallback(
     (update: number | ((prev: number) => number)) => setUnreadCount(update),
@@ -103,13 +85,13 @@ export function NotificationProvider({
 
   const value = useMemo<NotificationContextValue>(
     () => ({
-      config: fullConfig,
+      config,
       connectionState,
       lastNotification,
       unreadCount,
       setUnreadCount: setUnreadCountCb,
     }),
-    [fullConfig, connectionState, lastNotification, unreadCount, setUnreadCountCb]
+    [config, connectionState, lastNotification, unreadCount, setUnreadCountCb]
   );
 
   return <NotificationContext value={value}>{children}</NotificationContext>;
