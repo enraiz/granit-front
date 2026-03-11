@@ -32,7 +32,9 @@ export interface UseWebPushReturn {
 }
 
 function isWebPushSupported(): boolean {
-  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  return (
+    'serviceWorker' in navigator && 'PushManager' in globalThis && 'Notification' in globalThis
+  );
 }
 
 /**

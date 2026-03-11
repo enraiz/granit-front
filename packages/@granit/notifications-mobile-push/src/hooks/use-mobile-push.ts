@@ -6,6 +6,27 @@ import { registerDeviceToken, unregisterDeviceToken } from '../api/mobile-push-a
 import type { MobilePlatform } from '../api/mobile-push-api.js';
 import type { AxiosInstance } from 'axios';
 
+/**
+ * Returns a promise that resolves with the device token once Capacitor
+ * fires the 'registration' event, or rejects on 'registrationError'.
+ * Listeners are cleaned up automatically after the first event.
+ */
+function waitForRegistrationToken(): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const regListener = PushNotifications.addListener('registration', (token) => {
+      regListener.then((l) => l.remove());
+      errListener.then((l) => l.remove());
+      resolve(token.value);
+    });
+
+    const errListener = PushNotifications.addListener('registrationError', (err) => {
+      regListener.then((l) => l.remove());
+      errListener.then((l) => l.remove());
+      reject(new Error(err.error));
+    });
+  });
+}
+
 export interface MobilePushConfig {
   readonly apiClient: AxiosInstance;
   readonly basePath?: string;
@@ -96,21 +117,7 @@ export function useMobilePush(config: MobilePushConfig): UseMobilePushReturn {
         throw new Error('Push notification permission denied');
       }
 
-      // Wait for the registration token
-      const tokenPromise = new Promise<string>((resolve, reject) => {
-        const regListener = PushNotifications.addListener('registration', (token) => {
-          regListener.then((l) => l.remove());
-          errListener.then((l) => l.remove());
-          resolve(token.value);
-        });
-
-        const errListener = PushNotifications.addListener('registrationError', (err) => {
-          regListener.then((l) => l.remove());
-          errListener.then((l) => l.remove());
-          reject(new Error(err.error));
-        });
-      });
-
+      const tokenPromise = waitForRegistrationToken();
       await PushNotifications.register();
       const token = await tokenPromise;
       tokenRef.current = token;
