@@ -1,0 +1,46 @@
+import { describe, expect, it, vi } from 'vitest';
+
+import { registerDeviceToken, unregisterDeviceToken } from '../api/mobile-push-api.js';
+
+import type { AxiosInstance } from 'axios';
+
+function createMockClient(): AxiosInstance {
+  return {
+    post: vi.fn().mockResolvedValue({ data: {} }),
+    delete: vi.fn().mockResolvedValue({ data: {} }),
+  } as unknown as AxiosInstance;
+}
+
+describe('mobile-push-api', () => {
+  it('should register a device token', async () => {
+    const client = createMockClient();
+
+    await registerDeviceToken(client, '/api/v1', {
+      token: 'fcm-token-123',
+      platform: 'android',
+    });
+
+    expect(client.post).toHaveBeenCalledWith('/api/v1/notifications/push-tokens', {
+      token: 'fcm-token-123',
+      platform: 'android',
+    });
+  });
+
+  it('should unregister a device token', async () => {
+    const client = createMockClient();
+
+    await unregisterDeviceToken(client, '/api/v1', 'fcm-token-123');
+
+    expect(client.delete).toHaveBeenCalledWith('/api/v1/notifications/push-tokens/fcm-token-123');
+  });
+
+  it('should encode special characters in token for unregister', async () => {
+    const client = createMockClient();
+
+    await unregisterDeviceToken(client, '/api/v1', 'token/with+special=chars');
+
+    expect(client.delete).toHaveBeenCalledWith(
+      '/api/v1/notifications/push-tokens/token%2Fwith%2Bspecial%3Dchars'
+    );
+  });
+});

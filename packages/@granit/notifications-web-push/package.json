@@ -1,6 +1,6 @@
 {
-  "name": "@granit/notifications",
-  "version": "0.1.1",
+  "name": "@granit/notifications-web-push",
+  "version": "0.1.0",
   "license": "UNLICENSED",
   "type": "module",
   "exports": {
@@ -12,11 +12,8 @@
   "scripts": {
     "build": "tsup"
   },
-  "devDependencies": {
-    "@granit/api-client": "workspace:*"
-  },
   "peerDependencies": {
-    "@granit/querying": "workspace:*",
+    "@granit/notifications": "workspace:*",
     "axios": "*",
     "react": "^19.0.0"
   },

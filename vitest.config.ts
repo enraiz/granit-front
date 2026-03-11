@@ -27,6 +27,22 @@ export default defineConfig({
       '@granit/localization': path.resolve(__dirname, 'packages/@granit/localization/src/index.ts'),
       '@granit/logger': path.resolve(__dirname, 'packages/@granit/logger/src/index.ts'),
       '@granit/logger-otlp': path.resolve(__dirname, 'packages/@granit/logger-otlp/src/index.ts'),
+      '@granit/notifications-mobile-push': path.resolve(
+        __dirname,
+        'packages/@granit/notifications-mobile-push/src/index.ts'
+      ),
+      '@granit/notifications-signalr': path.resolve(
+        __dirname,
+        'packages/@granit/notifications-signalr/src/index.ts'
+      ),
+      '@granit/notifications-sse': path.resolve(
+        __dirname,
+        'packages/@granit/notifications-sse/src/index.ts'
+      ),
+      '@granit/notifications-web-push': path.resolve(
+        __dirname,
+        'packages/@granit/notifications-web-push/src/index.ts'
+      ),
       '@granit/notifications': path.resolve(
         __dirname,
         'packages/@granit/notifications/src/index.ts'

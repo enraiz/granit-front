@@ -17,7 +17,7 @@ export interface UseUnreadCountReturn {
  * Returns the current unread notification count.
  *
  * Kept in sync via:
- * 1. SignalR push (increments automatically on ReceiveNotification)
+ * 1. Real-time transport push (increments automatically on ReceiveNotification)
  * 2. Periodic polling as a fallback (default 60 s)
  * 3. Manual `refresh()` call
  */

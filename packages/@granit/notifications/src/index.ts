@@ -9,7 +9,10 @@ export type {
   NotificationPageDto,
   NotificationPreferenceDto,
   NotificationSeverity,
+  NotificationTransport,
 } from './types/index.js';
+
+export { getAvailableChannels, NotificationChannels } from './types/index.js';
 
 // Provider
 export { NotificationProvider, useNotificationContext } from './providers/notification-provider.js';

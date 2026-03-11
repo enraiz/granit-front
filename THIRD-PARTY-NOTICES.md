@@ -4,7 +4,7 @@ Ce fichier répertorie les bibliothèques tierces utilisées par le projet
 **granit-front** ainsi que leurs licences respectives. Il est mis à jour
 à chaque ajout ou modification de dépendance externe.
 
-Dernière mise à jour : 2026-03-06
+Dernière mise à jour : 2026-03-11
 
 ---
 
@@ -12,7 +12,7 @@ Dernière mise à jour : 2026-03-06
 
 | Licence      | Nombre de packages |
 | ------------ | ------------------ |
-| MIT          | 32                 |
+| MIT          | 34                 |
 | Apache-2.0   | 13                 |
 | ISC          | 1                  |
 | BSD-3-Clause | 1                  |
@@ -34,6 +34,8 @@ Dernière mise à jour : 2026-03-06
 | @tanstack/react-table           | 8.21.3  | Copyright (c) Tanner Linsley               |
 | @tanstack/react-virtual         | 3.13.0  | Copyright (c) Tanner Linsley               |
 | @eslint/js                      | 10.0.1  | OpenJS Foundation                          |
+| @capacitor/push-notifications   | 8.0.2   | Copyright (c) Drifty Co.                   |
+| @microsoft/fetch-event-source   | 2.0.1   | Copyright (c) Microsoft Corporation        |
 | @microsoft/signalr              | 10.0.0  | Copyright (c) .NET Foundation              |
 | @testing-library/jest-dom       | 6.9.1   | Copyright (c) Testing Library Contributors |
 | @testing-library/react          | 16.3.2  | Copyright (c) Testing Library Contributors |
