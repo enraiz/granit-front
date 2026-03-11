@@ -16,6 +16,7 @@ Documentation de référence de chaque module du framework.
 | [auth.md](auth.md)                     | Authentification Keycloak, hooks de permissions (utilisateur et administration)                                     |
 | [tracing.md](tracing.md)               | Tracing distribué OpenTelemetry : provider, spans, corrélation log-trace                                            |
 | [error-boundary.md](error-boundary.md) | Capture structurée des erreurs : error boundary, capture globale, breadcrumbs                                       |
+| [idempotency.md](idempotency.md)       | Injection automatique du header `Idempotency-Key` sur les requêtes de mutation                                      |
 | [timeline.md](timeline.md)             | Flux d'activité unifié : commentaires, notes, threading, @mentions, follow/unfollow                                 |
 | [workflow.md](workflow.md)             | Gestion du cycle de vie : barre de statut, transitions, historique d'audit HDS                                      |
 | [notifications.md](notifications.md)   | Centre de notifications temps-réel (SignalR), boîte de réception, badge, fil d'activité, préférences                |

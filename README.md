@@ -11,22 +11,36 @@ utilitaires, client HTTP Axios et couche d'authentification Keycloak.
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| [`@granit/logger`](docs/framework/logger.md) | Factory de loggers configurables (`createLogger`) |
-| [`@granit/utils`](docs/framework/utils.md) | Utilitaires partagés (`cn`, `formatDate`, `formatNumber`, …) |
-| [`@granit/api-client`](docs/framework/api-client.md) | Factory Axios avec intercepteur Bearer token, types de réponse (`PaginatedResponse`, `ProblemDetails`) |
-| [`@granit/auth`](docs/framework/auth.md) | Hooks Keycloak, factory de contexte auth, mock provider, type `KeycloakUserInfo` |
+| Package                                                      | Description                                                                                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| [`@granit/api-client`](docs/framework/api-client.md)         | Factory Axios avec intercepteur Bearer token, types de réponse (`PaginatedResponse`, `ProblemDetails`) |
+| [`@granit/auth`](docs/framework/auth.md)                     | Hooks Keycloak, factory de contexte auth, mock provider, type `KeycloakUserInfo`                       |
+| [`@granit/cookies`](packages/@granit/cookies/)               | Abstractions de consentement cookies                                                                   |
+| [`@granit/cookies-klaro`](packages/@granit/cookies-klaro/)   | Implémentation Klaro du consentement cookies                                                           |
+| [`@granit/data-exchange`](packages/@granit/data-exchange/)   | Composants React d'import/export de données                                                            |
+| [`@granit/error-boundary`](packages/@granit/error-boundary/) | Error boundary React avec fallback configurable                                                        |
+| [`@granit/idempotency`](packages/@granit/idempotency/)       | Injection automatique du header `Idempotency-Key` sur les requêtes de mutation                         |
+| [`@granit/localization`](packages/@granit/localization/)     | Helpers i18next, hooks de localisation                                                                 |
+| [`@granit/logger`](docs/framework/logger.md)                 | Factory de loggers configurables (`createLogger`)                                                      |
+| [`@granit/logger-otlp`](packages/@granit/logger-otlp/)       | Transport OTLP pour `@granit/logger`                                                                   |
+| [`@granit/notifications`](packages/@granit/notifications/)   | Composants React de notifications (SignalR, toast)                                                     |
+| [`@granit/querying`](packages/@granit/querying/)             | Helpers TanStack Query, pagination, filtres                                                            |
+| [`@granit/storage`](packages/@granit/storage/)               | Composants de gestion de fichiers (upload, preview)                                                    |
+| [`@granit/templating`](packages/@granit/templating/)         | Éditeur de templates et prévisualisation                                                               |
+| [`@granit/timeline`](packages/@granit/timeline/)             | Composant de timeline d'audit                                                                          |
+| [`@granit/tracing`](packages/@granit/tracing/)               | OpenTelemetry tracing pour le navigateur                                                               |
+| [`@granit/utils`](docs/framework/utils.md)                   | Utilitaires partagés (`cn`, `formatDate`, `formatNumber`, …)                                           |
+| [`@granit/workflow`](packages/@granit/workflow/)             | Composants de workflow (StatusBar, transitions)                                                        |
 
 ## Documentation
 
-| Section | Description |
-| --- | --- |
-| [Framework](docs/framework/index.md) | Documentation de référence de chaque module |
-| [Guide](docs/guide/index.md) | Tutoriels pas-à-pas, démarrage rapide |
-| [Tests](docs/testing/index.md) | Conventions, stack Vitest, patterns de mock, couverture |
+| Section                                      | Description                                                 |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| [Framework](docs/framework/index.md)         | Documentation de référence de chaque module                 |
+| [Guide](docs/guide/index.md)                 | Tutoriels pas-à-pas, démarrage rapide                       |
+| [Tests](docs/testing/index.md)               | Conventions, stack Vitest, patterns de mock, couverture     |
 | [CI/CD et qualité](docs/deployment/index.md) | Pipeline GitLab CI, analyse de qualité, workflow de release |
-| [Patterns](docs/patterns/index.md) | 8 design patterns identifiés dans granit-front |
+| [Patterns](docs/patterns/index.md)           | 8 design patterns identifiés dans granit-front              |
 
 ## Intégration dans une application
 
@@ -37,10 +51,10 @@ Les packages sont consommés directement depuis les sources TypeScript — aucun
 ```json
 {
   "dependencies": {
-    "@granit/logger":     "link:../../../granit-front/packages/@granit/logger",
-    "@granit/utils":      "link:../../../granit-front/packages/@granit/utils",
+    "@granit/logger": "link:../../../granit-front/packages/@granit/logger",
+    "@granit/utils": "link:../../../granit-front/packages/@granit/utils",
     "@granit/api-client": "link:../../../granit-front/packages/@granit/api-client",
-    "@granit/auth":       "link:../../../granit-front/packages/@granit/auth"
+    "@granit/auth": "link:../../../granit-front/packages/@granit/auth"
   }
 }
 ```
@@ -55,10 +69,10 @@ const GRANIT = path.resolve(__dirname, '../../../granit-front/packages/@granit')
 export default defineConfig({
   resolve: {
     alias: {
-      '@granit/logger':     path.join(GRANIT, 'logger/src/index.ts'),
-      '@granit/utils':      path.join(GRANIT, 'utils/src/index.ts'),
+      '@granit/logger': path.join(GRANIT, 'logger/src/index.ts'),
+      '@granit/utils': path.join(GRANIT, 'utils/src/index.ts'),
       '@granit/api-client': path.join(GRANIT, 'api-client/src/index.ts'),
-      '@granit/auth':       path.join(GRANIT, 'auth/src/index.ts'),
+      '@granit/auth': path.join(GRANIT, 'auth/src/index.ts'),
     },
   },
 });
@@ -70,10 +84,10 @@ export default defineConfig({
 {
   "compilerOptions": {
     "paths": {
-      "@granit/logger":     ["../../../granit-front/packages/@granit/logger/src/index.ts"],
-      "@granit/utils":      ["../../../granit-front/packages/@granit/utils/src/index.ts"],
+      "@granit/logger": ["../../../granit-front/packages/@granit/logger/src/index.ts"],
+      "@granit/utils": ["../../../granit-front/packages/@granit/utils/src/index.ts"],
       "@granit/api-client": ["../../../granit-front/packages/@granit/api-client/src/index.ts"],
-      "@granit/auth":       ["../../../granit-front/packages/@granit/auth/src/index.ts"]
+      "@granit/auth": ["../../../granit-front/packages/@granit/auth/src/index.ts"]
     }
   }
 }
@@ -104,7 +118,7 @@ pnpm --filter @granit/auth test
 
 ## Applications consommatrices
 
-| Application | Chemin relatif depuis ce dépôt |
-| --- | --- |
+| Application   | Chemin relatif depuis ce dépôt                  |
+| ------------- | ----------------------------------------------- |
 | `guava-front` | `../../guava-platform/applications/guava-front` |
 | `guava-admin` | `../../guava-platform/applications/guava-admin` |

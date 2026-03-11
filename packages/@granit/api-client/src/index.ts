@@ -48,6 +48,13 @@ let _tenantGetter: (() => string | undefined) | null = null;
 // Global callback invoked on any 401 response — wired by @granit/auth to force logout.
 let _onUnauthorized: (() => void) | null = null;
 
+// Global idempotency key generator — opt-in via @granit/idempotency.
+// When set, mutation requests (POST/PUT/PATCH/DELETE) automatically receive
+// an Idempotency-Key header. The generator receives the request config and
+// returns a key string, or undefined to skip the header for that request.
+let _idempotencyKeyGenerator: ((config: InternalAxiosRequestConfig) => string | undefined) | null =
+  null;
+
 export function setTokenGetter(getter: () => Promise<string | undefined>): void {
   _tokenGetter = getter;
 }
@@ -64,6 +71,21 @@ export function setTenantGetter(getter: () => string | undefined): void {
  */
 export function setOnUnauthorized(callback: () => void): void {
   _onUnauthorized = callback;
+}
+
+/**
+ * Register a synchronous idempotency key generator for mutation requests.
+ *
+ * When set, POST/PUT/PATCH/DELETE requests receive an `Idempotency-Key` header.
+ * Typically wired by `@granit/idempotency` during app initialization.
+ *
+ * @param generator - Receives the request config, returns a key string or
+ *   `undefined` to skip the header for that specific request.
+ */
+export function setIdempotencyKeyGenerator(
+  generator: (config: InternalAxiosRequestConfig) => string | undefined
+): void {
+  _idempotencyKeyGenerator = generator;
 }
 
 /**
@@ -92,6 +114,12 @@ export function createApiClient(config: ApiClientConfig): AxiosInstance {
         const tenantId = _tenantGetter();
         if (tenantId) {
           req.headers['X-Tenant-Id'] = tenantId;
+        }
+      }
+      if (_idempotencyKeyGenerator) {
+        const key = _idempotencyKeyGenerator(req);
+        if (key) {
+          req.headers['Idempotency-Key'] = key;
         }
       }
       return req;
