@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createLocalization } from '../create-localization.js';
 import { useLocale } from '../use-locale.js';
@@ -54,15 +54,35 @@ describe('useLocale', () => {
     expect(i18n.language).toBe('en');
   });
 
-  it('should return a stable function reference for setLocale', () => {
+  it('should call onLocaleChange when setLocale is called', async () => {
     const i18n = createLocalization();
+    await i18n.changeLanguage('fr');
+    const onLocaleChange = vi.fn();
 
-    const { result, rerender } = renderHook(() => useLocale(), {
+    const { result } = renderHook(() => useLocale({ onLocaleChange }), {
       wrapper: createWrapper(i18n),
     });
 
-    const first = result.current.setLocale;
-    rerender();
-    expect(result.current.setLocale).toBe(first);
+    act(() => {
+      result.current.setLocale('en');
+    });
+
+    expect(onLocaleChange).toHaveBeenCalledWith('en');
+    expect(onLocaleChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('should work without onLocaleChange callback', async () => {
+    const i18n = createLocalization();
+    await i18n.changeLanguage('fr');
+
+    const { result } = renderHook(() => useLocale(), {
+      wrapper: createWrapper(i18n),
+    });
+
+    act(() => {
+      result.current.setLocale('de');
+    });
+
+    expect(i18n.language).toBe('de');
   });
 });
