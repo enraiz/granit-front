@@ -34,7 +34,7 @@ TypeScript 5 (strict) · React 19 · Vitest 4 · ESLint 9 · pnpm workspace · N
 
 | Package                                               | Rôle                                                                                |
 | ----------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| [`@granit/querying`](framework/querying.md)           | Grille de données Odoo-like : filtres, tri, pagination, group-by, vues sauvegardées |
+| [`@granit/querying`](framework/querying.md)           | Grille de données headless : filtres, tri, pagination, group-by, vues sauvegardées  |
 | [`@granit/timeline`](framework/timeline.md)           | Flux d'activité : commentaires, notes, threading, @mentions, follow/unfollow        |
 | [`@granit/workflow`](framework/workflow.md)           | Cycle de vie : statut, transitions, historique d'audit                              |
 | [`@granit/notifications`](framework/notifications.md) | Notifications temps réel (SignalR), boîte de réception, fil d'activité, préférences |

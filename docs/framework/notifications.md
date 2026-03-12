@@ -21,7 +21,7 @@ Les canaux de livraison (Web Push, Mobile Push) sont gérés par des packages s�
 - Transport temps-réel abstrait — l'app choisit SignalR ou SSE sans changer les hooks
 - Boîte de réception paginée avec marquage lu / tout lu
 - Badge non-lus synchronisé (transport push + polling de repli)
-- Fil d'activité par entité (style Odoo)
+- Fil d'activité par entité
 - Matrice de préférences type × canal dynamique (canaux extensibles, pas de liste fixe)
 - Composants headless (HTML sémantique + `data-*` pour le styling applicatif)
 
@@ -199,7 +199,7 @@ useEffect(() => {
 
 ### `useEntityActivityFeed(options): UseEntityActivityFeedResult`
 
-Fil d'activité paginé lié à une entité (style Odoo).
+Fil d'activité paginé lié à une entité.
 
 ```tsx
 const {

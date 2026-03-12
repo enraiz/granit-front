@@ -1,11 +1,11 @@
 # @granit/querying
 
-Grille de données Odoo-like : recherche, filtres, tri, pagination, group-by, vues sauvegardées. Consomme l'API REST `Granit.Querying` (.NET).
+Grille de données headless : recherche, filtres, tri, pagination, group-by, vues sauvegardées. Consomme l'API REST `Granit.Querying` (.NET).
 
 ## Pourquoi
 
 - Recherche plein texte, filtres par champ/opérateur, presets, quick filters, tri multi-colonnes
-- SmartFilterBar omnibox (style Odoo) avec suggestions et tokens
+- SmartFilterBar omnibox avec suggestions et tokens
 - Group-by avec expand/collapse et lazy loading
 - Vues sauvegardées (personnelles/partagées) avec CRUD complet
 - Composants headless intégrés à `@granit/ui` (Table, Button, Badge, DropdownMenu…)
@@ -351,7 +351,7 @@ Barre de filtres omnibox avec suggestions cmdk. Affiche les tokens actifs comme 
 
 ### `<FilterPresets />`
 
-Groupes de presets sous forme de boutons toggle (style Odoo). Sémantique : OR au sein d'un groupe, AND entre groupes.
+Groupes de presets sous forme de boutons toggle. Sémantique : OR au sein d'un groupe, AND entre groupes.
 
 ```tsx
 <FilterPresets
@@ -578,7 +578,7 @@ Lignes de regroupement avec expand/collapse. Le callback `onExpand` permet le la
 
 ### `<QueryView />`
 
-Composant d'assemblage complet — combine SmartFilterBar, FilterPresets, contrôles de toolbar et QueryDataTable en une vue liste Odoo-like.
+Composant d'assemblage complet — combine SmartFilterBar, FilterPresets, contrôles de toolbar et QueryDataTable en une vue liste complète.
 
 ```tsx
 const meta = useQueryMeta();

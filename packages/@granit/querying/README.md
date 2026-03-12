@@ -2,7 +2,7 @@
 
 # @granit/querying
 
-Headless data grid inspired by Odoo: hooks `useQueryEndpoint`, `useQueryMeta`, `useSavedViews`, `useSmartFilter`, and types mirroring the `Granit.Querying` .NET contract.
+Headless data grid: hooks `useQueryEndpoint`, `useQueryMeta`, `useSavedViews`, `useSmartFilter`, and types mirroring the `Granit.Querying` .NET contract.
 
 Part of the [granit-front](../../../README.md) framework.
 

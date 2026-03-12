@@ -27,7 +27,7 @@ export interface UseEntityActivityFeedReturn {
 const DEFAULT_PAGE_SIZE = 20;
 
 /**
- * Odoo-style activity feed scoped to a single entity.
+ * Per-entity activity feed.
  */
 export function useEntityActivityFeed(
   options: UseEntityActivityFeedOptions

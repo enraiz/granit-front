@@ -38,7 +38,7 @@ export interface SortableField {
 }
 
 /**
- * Preset filter group (Odoo-style filter panels).
+ * Preset filter group.
  *
  * OR semantics within the group (one preset selected at a time).
  * AND semantics between groups.

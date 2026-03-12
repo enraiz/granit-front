@@ -24,7 +24,7 @@ Documentation de référence de chaque module du framework.
 | [notifications-sse.md](notifications-sse.md)                 | Transport SSE pour les notifications temps-réel                                                                     |
 | [notifications-web-push.md](notifications-web-push.md)       | Abonnement Web Push VAPID (permission, subscribe, unsubscribe)                                                      |
 | [notifications-mobile-push.md](notifications-mobile-push.md) | Enregistrement token FCM/APNs via Capacitor                                                                         |
-| [querying.md](querying.md)                                   | Grille de données Odoo-like : SmartFilterBar, filtres, presets, tri, pagination, group-by, vues sauvegardées        |
+| [querying.md](querying.md)                                   | Grille de données headless : SmartFilterBar, filtres, presets, tri, pagination, group-by, vues sauvegardées         |
 | [data-exchange.md](data-exchange.md)                         | Import/export tabulaire : définitions, presets, mapping colonnes, rapports d'erreurs                                |
 | [cookies.md](cookies.md)                                     | Abstraction RGPD de consentement cookies : contexte React, hook, interface CMP-agnostique                           |
 | [cookies-klaro.md](cookies-klaro.md)                         | Adaptateur Klaro pour `@granit/cookies` : factory, configuration statique/dynamique                                 |

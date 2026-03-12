@@ -1,6 +1,6 @@
 # @granit/timeline
 
-Flux d'activité unifié pour les entités, inspiré du chatter Odoo. Consomme l'API REST `Granit.Timeline.Endpoints` (.NET).
+Flux d'activité unifié pour les entités. Consomme l'API REST `Granit.Timeline.Endpoints` (.NET).
 
 ## Pourquoi
 
