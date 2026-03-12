@@ -5,6 +5,7 @@
       "@granit/logger": ["../logger/src/index.ts"],
       "@granit/timeline": ["../timeline/src/index.ts"],
       "@granit/querying": ["../querying/src/index.ts"],
+      "@granit/react-querying": ["../react-querying/src/index.ts"],
       "@granit/api-client/test-utils": ["../api-client/src/test-utils.ts"]
     }
   },

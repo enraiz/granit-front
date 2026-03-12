@@ -1,4 +1,4 @@
-import { useInfiniteScroll } from '@granit/querying';
+import { useInfiniteScroll } from '@granit/react-querying';
 import { fetchStream } from '@granit/timeline';
 import { useCallback } from 'react';
 

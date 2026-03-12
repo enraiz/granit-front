@@ -2,8 +2,10 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
+      "@granit/localization": ["../localization/src/index.ts"],
       "@granit/storage": ["../storage/src/index.ts"]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/__tests__/**"]
 }

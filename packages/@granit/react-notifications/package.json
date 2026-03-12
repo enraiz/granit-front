@@ -16,6 +16,7 @@
   "peerDependencies": {
     "@granit/notifications": "workspace:*",
     "@granit/querying": "workspace:*",
+    "@granit/react-querying": "workspace:*",
     "axios": "*",
     "react": "^19.0.0"
   },

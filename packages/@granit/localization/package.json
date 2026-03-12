@@ -14,9 +14,7 @@
   },
   "peerDependencies": {
     "@granit/storage": "workspace:*",
-    "i18next": "^25.0.0",
-    "react": "^19.0.0",
-    "react-i18next": "^16.0.0"
+    "i18next": "^25.0.0"
   },
   "publishConfig": {
     "exports": {

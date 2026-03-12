@@ -20,10 +20,6 @@ export default defineConfig({
         __dirname,
         'packages/@granit/data-exchange/src/index.ts'
       ),
-      '@granit/react-data-exchange': path.resolve(
-        __dirname,
-        'packages/@granit/react-data-exchange/src/index.ts'
-      ),
       '@granit/error-boundary': path.resolve(
         __dirname,
         'packages/@granit/error-boundary/src/index.ts'
@@ -52,9 +48,26 @@ export default defineConfig({
         'packages/@granit/notifications/src/index.ts'
       ),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
+      '@granit/react-auth': path.resolve(__dirname, 'packages/@granit/react-auth/src/index.ts'),
+      '@granit/react-cookies': path.resolve(
+        __dirname,
+        'packages/@granit/react-cookies/src/index.ts'
+      ),
+      '@granit/react-data-exchange': path.resolve(
+        __dirname,
+        'packages/@granit/react-data-exchange/src/index.ts'
+      ),
+      '@granit/react-data-exchange': path.resolve(
+        __dirname,
+        'packages/@granit/react-data-exchange/src/index.ts'
+      ),
       '@granit/react-error-boundary': path.resolve(
         __dirname,
         'packages/@granit/react-error-boundary/src/index.ts'
+      ),
+      '@granit/react-localization': path.resolve(
+        __dirname,
+        'packages/@granit/react-localization/src/index.ts'
       ),
       '@granit/react-notifications': path.resolve(
         __dirname,
@@ -67,6 +80,10 @@ export default defineConfig({
       '@granit/react-notifications-web-push': path.resolve(
         __dirname,
         'packages/@granit/react-notifications-web-push/src/index.ts'
+      ),
+      '@granit/react-querying': path.resolve(
+        __dirname,
+        'packages/@granit/react-querying/src/index.ts'
       ),
       '@granit/react-settings': path.resolve(
         __dirname,

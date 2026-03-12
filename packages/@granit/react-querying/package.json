@@ -1,5 +1,5 @@
 {
-  "name": "@granit/querying",
+  "name": "@granit/react-querying",
   "version": "0.1.1",
   "license": "UNLICENSED",
   "type": "module",
@@ -13,8 +13,17 @@
     "build": "tsup"
   },
   "peerDependencies": {
+    "@granit/querying": "workspace:*",
     "@granit/utils": "workspace:*",
-    "axios": "*"
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-virtual": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "exports": {

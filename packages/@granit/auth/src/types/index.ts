@@ -164,6 +164,12 @@ export type UsePermissionGrantOptions = {
   basePath?: string;
 };
 
+/** Parameters for granting or revoking a permission. */
+export type PermissionGrantParams = {
+  roleName: string;
+  permissionName: string;
+};
+
 // ---------------------------------------------------------------------------
 // Hook configuration
 // ---------------------------------------------------------------------------

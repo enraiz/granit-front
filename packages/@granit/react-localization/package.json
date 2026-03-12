@@ -1,5 +1,5 @@
 {
-  "name": "@granit/querying",
+  "name": "@granit/react-localization",
   "version": "0.1.1",
   "license": "UNLICENSED",
   "type": "module",
@@ -13,8 +13,11 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@granit/utils": "workspace:*",
-    "axios": "*"
+    "@granit/localization": "workspace:*",
+    "@granit/storage": "workspace:*",
+    "i18next": "^25.0.0",
+    "react": "^19.0.0",
+    "react-i18next": "^16.0.0"
   },
   "publishConfig": {
     "exports": {
