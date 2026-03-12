@@ -11,7 +11,7 @@ métier par-dessus.
 
 ```mermaid
 flowchart TB
-    subgraph Framework ["@granit/auth"]
+    subgraph Framework ["@granit/react-authentication"]
         HOOK["useKeycloakInit(config)"]
         HOOK --> KC[Keycloak init + PKCE]
         HOOK --> TOKEN[Token refresh 60s]
@@ -32,15 +32,15 @@ flowchart TB
 
 ## Implémentation dans Granit
 
-| Couche | Responsabilité | Localisation |
-| --- | --- | --- |
-| Hook framework | Init Keycloak, PKCE, token refresh, état React | `@granit/auth` — `useKeycloakInit` |
-| Provider applicatif | Extension métier, plateforme, mémoïsation | `guava-front` — `AuthProvider` |
+| Couche              | Responsabilité                                 | Localisation                                       |
+| ------------------- | ---------------------------------------------- | -------------------------------------------------- |
+| Hook framework      | Init Keycloak, PKCE, token refresh, état React | `@granit/react-authentication` — `useKeycloakInit` |
+| Provider applicatif | Extension métier, plateforme, mémoïsation      | `guava-front` — `AuthProvider`                     |
 
 ### Hook framework (socle)
 
 ```typescript
-// @granit/auth — fournit le socle commun
+// @granit/react-authentication — fournit le socle commun
 export function useKeycloakInit(config: KeycloakCoreConfig): KeycloakCoreResult {
   // Init unique, PKCE S256, check-sso
   // Token refresh automatique toutes les 60s

@@ -48,7 +48,7 @@ body:
     id: package
     attributes:
       label: Granit package(s)
-      description: "Which package(s) are affected? (e.g. @granit/auth 0.1.0)"
+      description: "Which package(s) are affected? (e.g. @granit/react-authentication 0.1.0)"
     validations:
       required: true
   - type: input

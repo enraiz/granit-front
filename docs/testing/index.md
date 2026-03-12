@@ -7,17 +7,17 @@ Conventions, stack et patterns de test pour granit-front.
 Granit-front applique une approche mixte :
 
 - **Tests unitaires** pour les fonctions pures (`@granit/utils`, `@granit/logger`)
-- **Tests d'intégration React** pour les hooks et contextes (`@granit/auth`)
+- **Tests d'intégration React** pour les hooks et contextes (`@granit/react-authentication`, `@granit/react-authorization`)
 - **Couverture ≥ 80 %** sur tout nouveau code — exigence bloquante
 
 ## Stack de tests
 
-| Outil | Rôle |
-| --- | --- |
-| [Vitest](https://vitest.dev/) 3 | Runner de tests, compatible ESM natif |
-| [@testing-library/react](https://testing-library.com/react) 16 | `render()`, `renderHook()`, `screen`, `waitFor()` |
-| jsdom 26 | Environnement DOM pour les tests React |
-| v8 (coverage) | Fournisseur de couverture — rapports lcov, HTML, Cobertura |
+| Outil                                                          | Rôle                                                       |
+| -------------------------------------------------------------- | ---------------------------------------------------------- |
+| [Vitest](https://vitest.dev/) 3                                | Runner de tests, compatible ESM natif                      |
+| [@testing-library/react](https://testing-library.com/react) 16 | `render()`, `renderHook()`, `screen`, `waitFor()`          |
+| jsdom 26                                                       | Environnement DOM pour les tests React                     |
+| v8 (coverage)                                                  | Fournisseur de couverture — rapports lcov, HTML, Cobertura |
 
 ## Configuration
 
@@ -28,10 +28,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    include: [
-      'packages/@granit/*/src/**/*.test.ts',
-      'packages/@granit/*/src/**/*.test.tsx',
-    ],
+    include: ['packages/@granit/*/src/**/*.test.ts', 'packages/@granit/*/src/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html', 'cobertura'],
@@ -48,15 +45,15 @@ export default defineConfig({
 ```bash
 pnpm test               # Mode watch — développement
 pnpm test:coverage      # Exécution unique avec couverture
-pnpm --filter @granit/auth test  # Cibler un package
+pnpm --filter @granit/react-authentication test  # Cibler un package
 ```
 
 ## Structure des fichiers de test
 
 Les tests sont co-localisés avec les sources dans `src/__tests__/` :
 
-```
-packages/@granit/auth/
+```text
+packages/@granit/react-authentication/
 └── src/
     ├── index.ts
     ├── keycloak-core.ts
@@ -70,11 +67,11 @@ packages/@granit/auth/
 
 ## Conventions de nommage
 
-| Élément | Convention | Exemple |
-| --- | --- | --- |
-| Fichier de test | `<module>.test.ts(x)` | `logger.test.ts` |
-| Bloc `describe` | Nom de la fonction ou du hook | `describe('createLogger', …)` |
-| Bloc `it` | Comportement attendu en anglais | `it('should log warn in production', …)` |
+| Élément         | Convention                      | Exemple                                  |
+| --------------- | ------------------------------- | ---------------------------------------- |
+| Fichier de test | `<module>.test.ts(x)`           | `logger.test.ts`                         |
+| Bloc `describe` | Nom de la fonction ou du hook   | `describe('createLogger', …)`            |
+| Bloc `it`       | Comportement attendu en anglais | `it('should log warn in production', …)` |
 
 ## Patterns de mock
 
@@ -87,10 +84,7 @@ const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 logger.warn('Token expiré');
 
 // Assert
-expect(warnSpy).toHaveBeenCalledWith(
-  expect.stringContaining('[MonApp]'),
-  'Token expiré',
-);
+expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[MonApp]'), 'Token expiré');
 ```
 
 ### Mocker un module (`@granit/api-client`)
@@ -108,7 +102,7 @@ vi.mock('axios', () => ({
 }));
 ```
 
-### Mocks hoistés avec état mutable (`@granit/auth`)
+### Mocks hoistés avec état mutable (`@granit/react-authentication`)
 
 ```typescript
 const mockKeycloak = vi.hoisted(() => ({
@@ -153,12 +147,12 @@ expect(result.current.authenticated).toBe(true);
 
 Les rapports de couverture sont générés dans `./coverage/` :
 
-| Format | Fichier | Usage |
-| --- | --- | --- |
-| Texte | terminal | Développeur (résumé rapide) |
-| HTML | `coverage/index.html` | Développeur (exploration détaillée) |
-| LCOV | `coverage/lcov.info` | SonarQube |
-| Cobertura | `coverage/cobertura-coverage.xml` | GitLab CI (widget MR) |
+| Format    | Fichier                           | Usage                               |
+| --------- | --------------------------------- | ----------------------------------- |
+| Texte     | terminal                          | Développeur (résumé rapide)         |
+| HTML      | `coverage/index.html`             | Développeur (exploration détaillée) |
+| LCOV      | `coverage/lcov.info`              | SonarQube                           |
+| Cobertura | `coverage/cobertura-coverage.xml` | GitLab CI (widget MR)               |
 
 ## Voir aussi
 

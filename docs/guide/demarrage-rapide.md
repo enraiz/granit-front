@@ -9,7 +9,7 @@ authentifié et d'un contexte d'authentification Keycloak typé.
 ```mermaid
 flowchart LR
     APP[Application Vite/React]
-    APP --> AUTH["@granit/auth"]
+    APP --> AUTH["@granit/react-authentication"]
     APP --> API["@granit/api-client"]
     APP --> UTILS["@granit/utils"]
     APP --> LOGGER["@granit/logger"]
@@ -43,7 +43,7 @@ Dans le `package.json` de l'application, ajouter les packages via le protocole `
     "@granit/logger": "link:../granit-front/packages/@granit/logger",
     "@granit/utils": "link:../granit-front/packages/@granit/utils",
     "@granit/api-client": "link:../granit-front/packages/@granit/api-client",
-    "@granit/auth": "link:../granit-front/packages/@granit/auth"
+    "@granit/react-authentication": "link:../granit-front/packages/@granit/react-authentication"
   }
 }
 ```
@@ -72,7 +72,7 @@ export default defineConfig({
       '@granit/logger': path.join(GRANIT, 'logger/src/index.ts'),
       '@granit/utils': path.join(GRANIT, 'utils/src/index.ts'),
       '@granit/api-client': path.join(GRANIT, 'api-client/src/index.ts'),
-      '@granit/auth': path.join(GRANIT, 'auth/src/index.ts'),
+      '@granit/react-authentication': path.join(GRANIT, 'react-authentication/src/index.ts'),
     },
   },
 });
@@ -90,7 +90,9 @@ Ajouter les `paths` correspondants dans **chaque** tsconfig de l'application
       "@granit/logger": ["../granit-front/packages/@granit/logger/src/index.ts"],
       "@granit/utils": ["../granit-front/packages/@granit/utils/src/index.ts"],
       "@granit/api-client": ["../granit-front/packages/@granit/api-client/src/index.ts"],
-      "@granit/auth": ["../granit-front/packages/@granit/auth/src/index.ts"]
+      "@granit/react-authentication": [
+        "../granit-front/packages/@granit/react-authentication/src/index.ts"
+      ]
     }
   }
 }
@@ -117,7 +119,7 @@ export const api = createApiClient({
 });
 ```
 
-Le Bearer token est automatiquement injecté par `@granit/auth` à l'étape suivante.
+Le Bearer token est automatiquement injecté par `@granit/react-authentication` à l'étape suivante.
 
 ## Étape 5 — Configurer l'authentification Keycloak
 
@@ -125,7 +127,8 @@ Le Bearer token est automatiquement injecté par `@granit/auth` à l'étape suiv
 
 ```typescript
 // src/auth/auth-context.ts
-import { createAuthContext, type BaseAuthContextType } from '@granit/auth';
+import { createAuthContext } from '@granit/react-authentication';
+import type { BaseAuthContextType } from '@granit/authentication';
 
 interface AuthContextType extends BaseAuthContextType {
   // Ajouter des champs spécifiques à l'application si besoin
@@ -138,7 +141,7 @@ export const { AuthContext, useAuth } = createAuthContext<AuthContextType>();
 
 ```typescript
 // src/auth/AuthProvider.tsx
-import { useKeycloakInit } from '@granit/auth';
+import { useKeycloakInit } from '@granit/react-authentication';
 import { AuthContext } from './auth-context';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

@@ -6,11 +6,11 @@
 
 ## Contexte
 
-Pourquoi cette story ? Quel probleme resout-elle dans le framework @granit/* ?
+Pourquoi cette story ? Quel probleme resout-elle dans le framework @granit/\* ?
 
 ## Implementation
 
-- Package(s) concerne(s) (`@granit/logger`, `@granit/auth`, ...) :
+- Package(s) concerne(s) (`@granit/logger`, `@granit/react-authentication`, ...) :
 - Dependances (peer deps, internal) :
 - Apps impactees (guava-front / guava-admin) :
 

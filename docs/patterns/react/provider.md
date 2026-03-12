@@ -56,10 +56,10 @@ classDiagram
 
 ## Implémentation dans Granit
 
-| Composant | Package | Fichier |
-| --- | --- | --- |
-| `createAuthContext<T>` | `@granit/auth` | `src/use-auth-context.ts` |
-| `createMockProvider<T>` | `@granit/auth` | `src/mock-provider.tsx` |
+| Composant               | Package                        | Fichier                   |
+| ----------------------- | ------------------------------ | ------------------------- |
+| `createAuthContext<T>`  | `@granit/react-authentication` | `src/use-auth-context.ts` |
+| `createMockProvider<T>` | `@granit/react-authentication` | `src/mock-provider.tsx`   |
 
 ### Factory de contexte
 
@@ -103,7 +103,8 @@ même implémentation sous-jacente.
 
 ```typescript
 // 1. Définir le type dans l'application
-import { createAuthContext, type BaseAuthContextType } from '@granit/auth';
+import { createAuthContext } from '@granit/react-authentication';
+import type { BaseAuthContextType } from '@granit/authentication';
 
 interface AuthContextType extends BaseAuthContextType {
   register: () => void;
@@ -124,7 +125,7 @@ function NavBar() {
 }
 
 // 4. Mock pour Storybook / tests
-import { createMockProvider } from '@granit/auth';
+import { createMockProvider } from '@granit/react-authentication';
 const MockAuth = createMockProvider(AuthContext, {
   keycloak: null, authenticated: true, loading: false,
   user: { sub: '1', name: 'Test' },

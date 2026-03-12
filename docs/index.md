@@ -26,7 +26,8 @@ TypeScript 5 (strict) · React 19 · Vitest 4 · ESLint 9 · pnpm workspace · N
 | [`@granit/logger-otlp`](framework/logger.md)        | Transport OTLP pour le logger (corrélation trace-log)                                                 |
 | [`@granit/utils`](framework/utils.md)               | Utilitaires partagés (`cn`, `formatDate`, `formatNumber`, …)                                          |
 | [`@granit/api-client`](framework/api-client.md)     | Factory Axios, intercepteur Bearer, classes d'erreur (`HttpError`, `ValidationError`, `TimeoutError`) |
-| [`@granit/auth`](framework/auth.md)                 | Hooks Keycloak, factory de contexte auth, permissions (RBAC)                                          |
+| [`@granit/react-authentication`](framework/auth.md) | Hooks Keycloak, factory de contexte auth, mock provider                                               |
+| [`@granit/react-authorization`](framework/auth.md)  | Permissions RBAC (`usePermissions`, `usePermissionDefinitions`, `useRolePermissions`)                 |
 | [`@granit/storage`](framework/storage.md)           | Abstraction `localStorage`/`sessionStorage` avec préfixe et accesseurs typés                          |
 | [`@granit/localization`](framework/localization.md) | Résolution de locale, chargement de traductions i18next                                               |
 

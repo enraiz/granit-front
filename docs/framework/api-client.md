@@ -22,13 +22,13 @@ export const api = createApiClient({
 ### `setTokenGetter(getter: () => Promise<string | undefined>): void`
 
 Enregistre la fonction de récupération du token Keycloak. Cette fonction est appelée
-automatiquement par `useKeycloakInit` de `@granit/auth` — il n'est pas nécessaire de
-l'appeler manuellement si `@granit/auth` est utilisé.
+automatiquement par `useKeycloakInit` de `@granit/react-authentication` — il n'est pas nécessaire de
+l'appeler manuellement si `@granit/react-authentication` est utilisé.
 
 ```typescript
 import { setTokenGetter } from '@granit/api-client';
 
-// Exemple d'appel manuel (sans @granit/auth)
+// Exemple d'appel manuel (sans @granit/react-authentication)
 setTokenGetter(async () => {
   await keycloak.updateToken(5);
   return keycloak.token;
@@ -73,13 +73,13 @@ Enregistre un callback invoqué automatiquement lorsqu'une requête reçoit une
 réponse HTTP 401. Chaque instance créée par `createApiClient` inclut un
 intercepteur de réponse qui déclenche ce callback.
 
-Typiquement wiré par `@granit/auth` pour forcer un logout Keycloak lorsque le
+Typiquement wiré par `@granit/react-authentication` pour forcer un logout Keycloak lorsque le
 backend rejette un token (ex : session révoquée via back-channel logout).
 
 ```typescript
 import { setOnUnauthorized } from '@granit/api-client';
 
-// Appelé automatiquement par useKeycloakInit — appel manuel si sans @granit/auth
+// Appelé automatiquement par useKeycloakInit — appel manuel si sans @granit/react-authentication
 setOnUnauthorized(() => {
   keycloak.logout();
 });

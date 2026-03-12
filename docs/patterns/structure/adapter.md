@@ -48,20 +48,20 @@ classDiagram
 
 ## Implémentation dans Granit
 
-| Adaptateur | Package | Source | Cible |
-| --- | --- | --- | --- |
-| `useKeycloakInit` | `@granit/auth` | API `keycloak-js` (callbacks, promesses) | Hook React avec état typé |
+| Adaptateur        | Package                        | Source                                   | Cible                     |
+| ----------------- | ------------------------------ | ---------------------------------------- | ------------------------- |
+| `useKeycloakInit` | `@granit/react-authentication` | API `keycloak-js` (callbacks, promesses) | Hook React avec état typé |
 
 ### Transformations effectuées par l'adaptateur
 
-| API Keycloak native | Interface adaptée |
-| --- | --- |
-| `keycloak.init({ onLoad, pkceMethod })` | Appel unique dans un `useEffect` avec garde `initStartedRef` |
-| `keycloak.loadUserInfo()` → `Promise<object>` | `user: KeycloakUserInfo \| null` (état React typé) |
-| `keycloak.onTokenExpired = callback` | Renouvellement automatique toutes les 60 secondes |
-| `keycloak.token` (string mutable) | Wiring transparent vers `setTokenGetter()` |
-| `keycloak.authenticated` (booléen mutable) | `authenticated: boolean` (état React réactif) |
-| Init async en cours | `loading: boolean` (état React) |
+| API Keycloak native                           | Interface adaptée                                            |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| `keycloak.init({ onLoad, pkceMethod })`       | Appel unique dans un `useEffect` avec garde `initStartedRef` |
+| `keycloak.loadUserInfo()` → `Promise<object>` | `user: KeycloakUserInfo \| null` (état React typé)           |
+| `keycloak.onTokenExpired = callback`          | Renouvellement automatique toutes les 60 secondes            |
+| `keycloak.token` (string mutable)             | Wiring transparent vers `setTokenGetter()`                   |
+| `keycloak.authenticated` (booléen mutable)    | `authenticated: boolean` (état React réactif)                |
+| Init async en cours                           | `loading: boolean` (état React)                              |
 
 ## Justification
 
@@ -78,7 +78,7 @@ classDiagram
 ## Exemple d'usage
 
 ```typescript
-import { useKeycloakInit } from '@granit/auth';
+import { useKeycloakInit } from '@granit/react-authentication';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   // L'adaptateur masque toute la complexité Keycloak

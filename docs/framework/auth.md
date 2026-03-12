@@ -1,7 +1,12 @@
-# @granit/auth
+# Authentification et autorisation
 
-Couche d'authentification Keycloak partagée : hook d'initialisation, factory de contexte
-React typé, et mock provider pour les tests et Storybook.
+Couche d'authentification Keycloak et d'autorisation par permissions, répartie en
+quatre packages :
+
+- **`@granit/authentication`** — types d'authentification (interfaces, options, événements)
+- **`@granit/react-authentication`** — hooks et providers React (initialisation Keycloak, factory de contexte, mock provider)
+- **`@granit/authorization`** — types d'autorisation (DTOs de permissions)
+- **`@granit/react-authorization`** — hooks React d'administration des permissions
 
 ## API
 
@@ -20,24 +25,32 @@ Gère automatiquement :
 - Remontée des événements du cycle de vie Keycloak (callbacks optionnels)
 
 ```typescript
-import { useKeycloakInit } from '@granit/auth';
+import { useKeycloakInit } from '@granit/react-authentication';
 
 const {
-  keycloak, keycloakRef, authenticated, loading, user,
-  login, logout, register,
-  hasRealmRole, hasResourceRole,
-  isTokenExpired, tokenParsed,
+  keycloak,
+  keycloakRef,
+  authenticated,
+  loading,
+  user,
+  login,
+  logout,
+  register,
+  hasRealmRole,
+  hasResourceRole,
+  isTokenExpired,
+  tokenParsed,
 } = useKeycloakInit({
-  url:      import.meta.env.VITE_KEYCLOAK_URL,
-  realm:    import.meta.env.VITE_KEYCLOAK_REALM,
+  url: import.meta.env.VITE_KEYCLOAK_URL,
+  realm: import.meta.env.VITE_KEYCLOAK_REALM,
   clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
   silentCheckSso: true, // false sur Capacitor native
 
   // Callbacks du cycle de vie (tous optionnels)
-  onTokenExpired:    () => logger.warn('Token expiré'),
-  onAuthRefreshError:() => logger.error('Échec du refresh token'),
-  onAuthLogout:      () => logger.info('Session Keycloak terminée'),
-  onEvent:           (event, error) => logger.debug(`KC: ${event}`, error),
+  onTokenExpired: () => logger.warn('Token expiré'),
+  onAuthRefreshError: () => logger.error('Échec du refresh token'),
+  onAuthLogout: () => logger.info('Session Keycloak terminée'),
+  onEvent: (event, error) => logger.debug(`KC: ${event}`, error),
 });
 ```
 
@@ -48,23 +61,24 @@ des URLs de login/logout personnalisées (ex : schéma URL custom sur Capacitor)
 
 Le hook retourne tous les champs de `BaseAuthContextType` plus :
 
-| Champ | Type | Description |
-| --- | --- | --- |
-| `keycloakRef` | `Ref<Keycloak \| null>` | Ref vers l'instance Keycloak brute |
-| `login(options?)` | `(LoginOptions?) => void` | Redirige vers la page de login |
-| `logout(options?)` | `(LogoutOptions?) => void` | Redirige vers la page de logout |
-| `register(options?)` | `(Omit<LoginOptions, 'action'>?) => void` | Raccourci pour `login({ action: 'register' })` |
-| `hasRealmRole(role)` | `(string) => boolean` | Vérifie un rôle au niveau du realm |
-| `hasResourceRole(role, resource?)` | `(string, string?) => boolean` | Vérifie un rôle au niveau d'une ressource |
-| `isTokenExpired(minValidity?)` | `(number?) => boolean` | Vérifie si le token expire dans les `n` secondes |
-| `tokenParsed` | `Record<string, unknown> \| undefined` | Payload JWT décodé |
+| Champ                              | Type                                      | Description                                      |
+| ---------------------------------- | ----------------------------------------- | ------------------------------------------------ |
+| `keycloakRef`                      | `Ref<Keycloak \| null>`                   | Ref vers l'instance Keycloak brute               |
+| `login(options?)`                  | `(LoginOptions?) => void`                 | Redirige vers la page de login                   |
+| `logout(options?)`                 | `(LogoutOptions?) => void`                | Redirige vers la page de logout                  |
+| `register(options?)`               | `(Omit<LoginOptions, 'action'>?) => void` | Raccourci pour `login({ action: 'register' })`   |
+| `hasRealmRole(role)`               | `(string) => boolean`                     | Vérifie un rôle au niveau du realm               |
+| `hasResourceRole(role, resource?)` | `(string, string?) => boolean`            | Vérifie un rôle au niveau d'une ressource        |
+| `isTokenExpired(minValidity?)`     | `(number?) => boolean`                    | Vérifie si le token expire dans les `n` secondes |
+| `tokenParsed`                      | `Record<string, unknown> \| undefined`    | Payload JWT décodé                               |
 
 ### `createAuthContext<T extends BaseAuthContextType>()`
 
 Factory générique de contexte d'authentification typé. Retourne `{ AuthContext, useAuth }`.
 
 ```typescript
-import { createAuthContext, type BaseAuthContextType } from '@granit/auth';
+import type { BaseAuthContextType } from '@granit/authentication';
+import { createAuthContext } from '@granit/react-authentication';
 
 // Définir le type étendu de l'application
 interface AuthContextType extends BaseAuthContextType {
@@ -83,20 +97,20 @@ Factory de provider mock pour Storybook et tests unitaires. Utilise le même `Au
 que le provider réel — aucun double contexte.
 
 ```typescript
-import { createMockProvider } from '@granit/auth';
+import { createMockProvider } from '@granit/react-authentication';
 import { AuthContext } from './auth-context';
 
 export const MockAuthProvider = createMockProvider(AuthContext, {
-  keycloak:      null,
+  keycloak: null,
   authenticated: true,
-  loading:       false,
+  loading: false,
   user: {
-    sub:  'mock-001',
+    sub: 'mock-001',
     name: 'Test User',
     email: 'test@example.com',
   },
   hasAdminRole: true,
-  login:  () => {},
+  login: () => {},
   logout: () => {},
 });
 ```
@@ -109,12 +123,12 @@ Interface de base partagée par toutes les applications.
 
 ```typescript
 interface BaseAuthContextType {
-  keycloak:      Keycloak | null; // null avant la fin de l'init
+  keycloak: Keycloak | null; // null avant la fin de l'init
   authenticated: boolean;
-  loading:       boolean;
-  user:          KeycloakUserInfo | null;
-  login:         () => void;
-  logout:        () => void;
+  loading: boolean;
+  user: KeycloakUserInfo | null;
+  login: () => void;
+  logout: () => void;
 }
 ```
 
@@ -122,10 +136,10 @@ interface BaseAuthContextType {
 
 ```typescript
 interface KeycloakCoreConfig {
-  url:              string;
-  realm:            string;
-  clientId:         string;
-  silentCheckSso?:  boolean; // défaut : true — passer false sur Capacitor
+  url: string;
+  realm: string;
+  clientId: string;
+  silentCheckSso?: boolean; // défaut : true — passer false sur Capacitor
 
   /**
    * Fallback vers une redirection `check-sso` classique quand l'iframe
@@ -143,10 +157,10 @@ interface KeycloakCoreConfig {
   useTokenClaims?: boolean;
 
   // -- Callbacks du cycle de vie (tous optionnels) --
-  onTokenExpired?:     () => void;
+  onTokenExpired?: () => void;
   onAuthRefreshError?: () => void;
-  onAuthLogout?:       () => void;
-  onEvent?:            (event: KeycloakEvent, error?: unknown) => void;
+  onAuthLogout?: () => void;
+  onEvent?: (event: KeycloakEvent, error?: unknown) => void;
 }
 ```
 
@@ -157,13 +171,13 @@ Options transmises à `keycloak.login()`. Tous les champs sont optionnels.
 ```typescript
 interface LoginOptions {
   redirectUri?: string;
-  idpHint?:     string;  // Bypass la page Keycloak → IDP directement
-  loginHint?:   string;  // Pré-remplit le champ email/username
-  locale?:      string;  // Force la locale de l'UI Keycloak (ex : "fr")
-  action?:      'register' | string;
-  prompt?:      'login' | 'consent' | 'none';
-  scope?:       string;  // Scopes OAuth supplémentaires (espace-délimités)
-  maxAge?:      number;  // Durée max depuis dernière auth (secondes)
+  idpHint?: string; // Bypass la page Keycloak → IDP directement
+  loginHint?: string; // Pré-remplit le champ email/username
+  locale?: string; // Force la locale de l'UI Keycloak (ex : "fr")
+  action?: 'register' | string;
+  prompt?: 'login' | 'consent' | 'none';
+  scope?: string; // Scopes OAuth supplémentaires (espace-délimités)
+  maxAge?: number; // Durée max depuis dernière auth (secondes)
 }
 ```
 
@@ -195,15 +209,15 @@ type KeycloakEvent =
 Le hook wires les callbacks Keycloak suivants. Ils peuvent être utilisés
 individuellement ou via le handler générique `onEvent`.
 
-| Événement | Callback dédié | Effet sur l'état |
-| --- | --- | --- |
-| Token expiré | `onTokenExpired` | Aucun (le refresh automatique s'en charge) |
-| Échec du refresh | `onAuthRefreshError` | `authenticated` → `false`, **logout forcé** |
-| Session terminée | `onAuthLogout` | `authenticated` → `false`, `user` → `null` |
-| Refresh réussi | — | Met à jour `user` si `useTokenClaims` est actif |
-| Auth réussie | — | — |
-| Erreur d'auth | — | `error` passé à `onEvent` |
-| Ready | — | — |
+| Événement        | Callback dédié       | Effet sur l'état                                |
+| ---------------- | -------------------- | ----------------------------------------------- |
+| Token expiré     | `onTokenExpired`     | Aucun (le refresh automatique s'en charge)      |
+| Échec du refresh | `onAuthRefreshError` | `authenticated` → `false`, **logout forcé**     |
+| Session terminée | `onAuthLogout`       | `authenticated` → `false`, `user` → `null`      |
+| Refresh réussi   | —                    | Met à jour `user` si `useTokenClaims` est actif |
+| Auth réussie     | —                    | —                                               |
+| Erreur d'auth    | —                    | `error` passé à `onEvent`                       |
+| Ready            | —                    | —                                               |
 
 Quand `useTokenClaims` est activé, l'utilisateur est automatiquement mis à jour
 à partir du `tokenParsed` après chaque refresh de token réussi.
@@ -278,37 +292,41 @@ logout via l'intercepteur. Les deux mécanismes sont donc complémentaires.
 
 ```typescript
 // Rôle au niveau du realm
-if (hasRealmRole('admin')) { /* ... */ }
+if (hasRealmRole('admin')) {
+  /* ... */
+}
 
 // Rôle au niveau d'une ressource (client Keycloak)
-if (hasResourceRole('manage-users', 'guava-api')) { /* ... */ }
+if (hasResourceRole('manage-users', 'guava-api')) {
+  /* ... */
+}
 ```
 
 Les deux méthodes retournent `false` si l'utilisateur n'est pas authentifié.
 
 ## Extensions par application
 
-| Application | Champs supplémentaires |
-| --- | --- |
-| `guava-front` | `register: () => void` |
+| Application   | Champs supplémentaires  |
+| ------------- | ----------------------- |
+| `guava-front` | `register: () => void`  |
 | `guava-admin` | `hasAdminRole: boolean` |
 
 ## Administration des permissions
 
-Hooks destinés aux interfaces d'administration (gestion des rôles, matrice de permissions).
-Miroir TypeScript du contrat .NET `Granit.Authorization`.
+Hooks fournis par `@granit/react-authorization`, destinés aux interfaces d'administration
+(gestion des rôles, matrice de permissions). Miroir TypeScript du contrat .NET `Granit.Authorization`.
 
 ### `permissionKeys`
 
 Factory de query keys pour React Query. Partagée entre tous les hooks de permissions.
 
 ```typescript
-import { permissionKeys } from '@granit/auth';
+import { permissionKeys } from '@granit/react-authorization';
 
-permissionKeys.all;            // ['auth', 'permissions']
-permissionKeys.me();           // ['auth', 'permissions', 'me', undefined]
-permissionKeys.definitions();  // ['auth', 'permissions', 'definitions']
-permissionKeys.role('admin');  // ['auth', 'permissions', 'roles', 'admin']
+permissionKeys.all; // ['auth', 'permissions']
+permissionKeys.me(); // ['auth', 'permissions', 'me', undefined]
+permissionKeys.definitions(); // ['auth', 'permissions', 'definitions']
+permissionKeys.role('admin'); // ['auth', 'permissions', 'roles', 'admin']
 ```
 
 ### `usePermissions(options): UsePermissionsReturn`
@@ -321,7 +339,9 @@ const { hasPermission, hasAnyPermission, isLoading } = usePermissions({
   basePath: '/auth', // défaut
 });
 
-if (hasPermission('Invoices.Delete')) { /* ... */ }
+if (hasPermission('Invoices.Delete')) {
+  /* ... */
+}
 ```
 
 ### `usePermissionDefinitions(options): UseQueryResult<PermissionGroupDto[]>`
@@ -330,7 +350,7 @@ Récupère l'arbre complet des définitions de permissions groupées par module.
 Appelle `GET {basePath}/definitions`.
 
 ```typescript
-import { usePermissionDefinitions } from '@granit/auth';
+import { usePermissionDefinitions } from '@granit/react-authorization';
 
 const { data: groups, isLoading } = usePermissionDefinitions({ client: api });
 
@@ -344,7 +364,7 @@ Récupère les permissions accordées à un rôle spécifique.
 Appelle `GET {basePath}/roles/{roleName}`.
 
 ```typescript
-import { useRolePermissions } from '@granit/auth';
+import { useRolePermissions } from '@granit/react-authorization';
 
 const { data: grant } = useRolePermissions({
   client: api,
@@ -360,7 +380,7 @@ Mutations pour accorder et révoquer des permissions individuelles sur un rôle.
 Invalide automatiquement le cache du rôle après chaque mutation réussie.
 
 ```typescript
-import { usePermissionGrant } from '@granit/auth';
+import { usePermissionGrant } from '@granit/react-authorization';
 
 const { grant, revoke } = usePermissionGrant({ client: api });
 
@@ -371,12 +391,12 @@ grant.mutate({ roleName: 'editor', permissionName: 'Invoices.Create' });
 revoke.mutate({ roleName: 'editor', permissionName: 'Invoices.Delete' });
 ```
 
-| Mutation | Méthode HTTP | Endpoint |
-| --- | --- | --- |
-| `grant` | `PUT` | `{basePath}/roles/{roleName}/permissions/{permissionName}` |
-| `revoke` | `DELETE` | `{basePath}/roles/{roleName}/permissions/{permissionName}` |
+| Mutation | Méthode HTTP | Endpoint                                                   |
+| -------- | ------------ | ---------------------------------------------------------- |
+| `grant`  | `PUT`        | `{basePath}/roles/{roleName}/permissions/{permissionName}` |
+| `revoke` | `DELETE`     | `{basePath}/roles/{roleName}/permissions/{permissionName}` |
 
-### DTOs d'administration
+### DTOs d'administration (`@granit/authorization`)
 
 ```typescript
 type PermissionDefinitionDto = {
@@ -398,26 +418,70 @@ type PermissionGrantDto = {
 
 ## Types exportés
 
-| Export | Type | Description |
-| --- | --- | --- |
-| `BaseAuthContextType` | `interface` | Interface de base du contexte auth |
-| `KeycloakCoreConfig` | `interface` | Configuration du hook d'init |
-| `KeycloakCoreResult` | `interface` | Résultat du hook d'init |
-| `KeycloakEvent` | `type` | Union des événements du cycle de vie |
-| `LoginOptions` | `interface` | Options de login |
-| `LogoutOptions` | `interface` | Options de logout |
-| `PermissionDefinitionDto` | `type` | Définition d'une permission |
-| `PermissionGroupDto` | `type` | Groupe de définitions de permissions |
-| `PermissionGrantDto` | `type` | Permissions accordées à un rôle |
-| `UsePermissionDefinitionsOptions` | `type` | Options du hook definitions |
-| `UseRolePermissionsOptions` | `type` | Options du hook role permissions |
-| `UsePermissionGrantOptions` | `type` | Options du hook grant/revoke |
-| `PermissionGrantParams` | `type` | Paramètres des mutations grant/revoke |
-| `UsePermissionGrantReturn` | `type` | Retour du hook grant/revoke |
+### `@granit/authentication`
+
+| Export                | Type        | Description                          |
+| --------------------- | ----------- | ------------------------------------ |
+| `BaseAuthContextType` | `interface` | Interface de base du contexte auth   |
+| `KeycloakCoreConfig`  | `interface` | Configuration du hook d'init         |
+| `KeycloakUserInfo`    | `interface` | Informations utilisateur Keycloak    |
+| `KeycloakEvent`       | `type`      | Union des événements du cycle de vie |
+| `LoginOptions`        | `interface` | Options de login                     |
+| `LogoutOptions`       | `interface` | Options de logout                    |
+
+### `@granit/react-authentication`
+
+| Export               | Type        | Description                    |
+| -------------------- | ----------- | ------------------------------ |
+| `useKeycloakInit`    | `function`  | Hook d'initialisation Keycloak |
+| `createAuthContext`  | `function`  | Factory de contexte auth typé  |
+| `createMockProvider` | `function`  | Factory de provider mock       |
+| `KeycloakCoreResult` | `interface` | Résultat du hook d'init        |
+
+### `@granit/authorization`
+
+| Export                    | Type   | Description                           |
+| ------------------------- | ------ | ------------------------------------- |
+| `PermissionsResponse`     | `type` | Réponse des permissions utilisateur   |
+| `PermissionDefinitionDto` | `type` | Définition d'une permission           |
+| `PermissionGroupDto`      | `type` | Groupe de définitions de permissions  |
+| `PermissionGrantDto`      | `type` | Permissions accordées à un rôle       |
+| `PermissionGrantParams`   | `type` | Paramètres des mutations grant/revoke |
+
+### `@granit/react-authorization`
+
+| Export                            | Type       | Description                              |
+| --------------------------------- | ---------- | ---------------------------------------- |
+| `permissionKeys`                  | `object`   | Factory de query keys React Query        |
+| `usePermissions`                  | `function` | Hook des permissions utilisateur courant |
+| `usePermissionDefinitions`        | `function` | Hook de l'arbre des définitions          |
+| `useRolePermissions`              | `function` | Hook des permissions d'un rôle           |
+| `usePermissionGrant`              | `function` | Hook des mutations grant/revoke          |
+| `UsePermissionDefinitionsOptions` | `type`     | Options du hook definitions              |
+| `UseRolePermissionsOptions`       | `type`     | Options du hook role permissions         |
+| `UsePermissionGrantOptions`       | `type`     | Options du hook grant/revoke             |
+| `UsePermissionGrantReturn`        | `type`     | Retour du hook grant/revoke              |
 
 ## Peer dependencies
 
+### `@granit/authentication`
+
+- `keycloak-js`
+
+### `@granit/react-authentication`
+
 - `react`
 - `keycloak-js`
-- `@tanstack/react-query`
+- `@granit/authentication`
 - `@granit/api-client`
+
+### `@granit/authorization`
+
+(aucune)
+
+### `@granit/react-authorization`
+
+- `react`
+- `axios`
+- `@tanstack/react-query`
+- `@granit/authorization`
