@@ -57,10 +57,6 @@ export default defineConfig({
         __dirname,
         'packages/@granit/react-data-exchange/src/index.ts'
       ),
-      '@granit/react-data-exchange': path.resolve(
-        __dirname,
-        'packages/@granit/react-data-exchange/src/index.ts'
-      ),
       '@granit/react-error-boundary': path.resolve(
         __dirname,
         'packages/@granit/react-error-boundary/src/index.ts'
