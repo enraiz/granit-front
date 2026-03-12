@@ -2,8 +2,8 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@granit/api-client": ["../api-client/src/index.ts"],
-      "@granit/auth": ["../auth/src/index.ts"]
+      "@granit/react-authentication": ["../react-authentication/src/index.ts"],
+      "@granit/react-authorization": ["../react-authorization/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],

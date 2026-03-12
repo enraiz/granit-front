@@ -1,6 +1,6 @@
 {
   "name": "@granit/auth",
-  "description": "Keycloak authentication hooks, context factory, and permission management",
+  "description": "Facade — re-exports from @granit/authentication and @granit/authorization for backward compatibility",
   "version": "0.1.1",
   "license": "Apache-2.0",
   "type": "module",
@@ -14,8 +14,8 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "axios": "*",
-    "keycloak-js": "*"
+    "@granit/authentication": "workspace:*",
+    "@granit/authorization": "workspace:*"
   },
   "publishConfig": {
     "exports": {

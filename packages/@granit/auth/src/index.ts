@@ -1,3 +1,10 @@
+// ---------------------------------------------------------------------------
+// Facade re-exports — @granit/auth re-exports from the split packages
+// for backward compatibility. Prefer importing directly from
+// @granit/authentication or @granit/authorization in new code.
+// ---------------------------------------------------------------------------
+
+// Authentication types
 export type {
   BaseAuthContextType,
   KeycloakCoreConfig,
@@ -5,6 +12,10 @@ export type {
   KeycloakUserInfo,
   LoginOptions,
   LogoutOptions,
+} from '@granit/authentication';
+
+// Authorization types
+export type {
   PermissionDefinitionDto,
   PermissionGrantDto,
   PermissionGrantParams,
@@ -15,4 +26,4 @@ export type {
   UsePermissionsOptions,
   UsePermissionsReturn,
   UseRolePermissionsOptions,
-} from './types/index.js';
+} from '@granit/authorization';

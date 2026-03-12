@@ -1,4 +1,10 @@
 {
   "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@granit/authentication": ["../authentication/src/index.ts"],
+      "@granit/authorization": ["../authorization/src/index.ts"]
+    }
+  },
   "include": ["src/**/*.ts"]
 }

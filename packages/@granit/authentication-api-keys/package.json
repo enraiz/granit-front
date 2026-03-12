@@ -1,0 +1,26 @@
+{
+  "name": "@granit/authentication-api-keys",
+  "description": "API key types — TypeScript mirror of Granit.Authentication.ApiKeys .NET",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {},
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+  }
+}

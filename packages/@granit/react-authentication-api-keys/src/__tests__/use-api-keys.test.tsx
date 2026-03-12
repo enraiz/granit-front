@@ -1,0 +1,247 @@
+import { createMockClient } from '@granit/api-client/test-utils';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
+import * as React from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import { useApiKey } from '../hooks/use-api-key.js';
+import { useApiKeys } from '../hooks/use-api-keys.js';
+
+import type { ApiKeyResponse } from '@granit/authentication-api-keys';
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0 },
+    },
+  });
+  return {
+    wrapper: ({ children }: { children: React.ReactNode }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    ),
+    queryClient,
+  };
+}
+
+const mockApiKey: ApiKeyResponse = {
+  id: 'key-1',
+  name: 'Test Key',
+  type: 'Secret',
+  environment: 'production',
+  prefix: 'test',
+  lastFourChars: 'xYzW',
+  permissions: ['Invoices.Read'],
+  allowedCidrs: ['10.0.0.0/8'],
+  expiresAt: null,
+  lastUsedAt: null,
+  revokedAt: null,
+  cacheBehavior: 'Normal',
+  createdAt: '2026-01-01T00:00:00Z',
+};
+
+// ---------------------------------------------------------------------------
+// useApiKeys
+// ---------------------------------------------------------------------------
+
+describe('useApiKeys', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch the API key list with default base path', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [mockApiKey] });
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(() => useApiKeys({}, { client }), { wrapper });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/api/v1/api-keys', expect.objectContaining({}));
+    expect(result.current.data).toHaveLength(1);
+    expect(result.current.data![0].id).toBe('key-1');
+  });
+
+  it('should pass search param to the request', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKeys({ search: 'prod' }, { client }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith(
+      '/api/v1/api-keys',
+      expect.objectContaining({ params: expect.objectContaining({ search: 'prod' }) })
+    );
+  });
+
+  it('should pass type filter as comma-separated string', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKeys({ type: ['Secret', 'Webhook'] }, { client }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith(
+      '/api/v1/api-keys',
+      expect.objectContaining({
+        params: expect.objectContaining({ type: 'Secret,Webhook' }),
+      })
+    );
+  });
+
+  it('should pass environment filter to the request', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKeys({ environment: 'staging' }, { client }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith(
+      '/api/v1/api-keys',
+      expect.objectContaining({
+        params: expect.objectContaining({ environment: 'staging' }),
+      })
+    );
+  });
+
+  it('should pass includeRevoked param to the request', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKeys({ includeRevoked: true }, { client }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith(
+      '/api/v1/api-keys',
+      expect.objectContaining({
+        params: expect.objectContaining({ includeRevoked: true }),
+      })
+    );
+  });
+
+  it('should pass pagination params to the request', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKeys({ page: 2, pageSize: 25 }, { client }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith(
+      '/api/v1/api-keys',
+      expect.objectContaining({
+        params: expect.objectContaining({ page: 2, pageSize: 25 }),
+      })
+    );
+  });
+
+  it('should use custom basePath when provided', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKeys({}, { client, basePath: '/api/v2/api-keys' }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith('/api/v2/api-keys', expect.any(Object));
+  });
+
+  it('should surface errors from the API', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockRejectedValueOnce(new Error('Unauthorized'));
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(() => useApiKeys({}, { client }), { wrapper });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(result.current.error?.message).toBe('Unauthorized');
+  });
+
+  it('should return an empty array when the list is empty', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(() => useApiKeys({}, { client }), { wrapper });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useApiKey
+// ---------------------------------------------------------------------------
+
+describe('useApiKey', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch a single API key by ID', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: mockApiKey });
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(() => useApiKey('key-1', { client }), { wrapper });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/api/v1/api-keys/key-1');
+    expect(result.current.data?.id).toBe('key-1');
+    expect(result.current.data?.name).toBe('Test Key');
+  });
+
+  it('should use custom basePath when provided', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: mockApiKey });
+
+    const { wrapper } = createWrapper();
+    renderHook(() => useApiKey('key-1', { client, basePath: '/api/v2/api-keys' }), { wrapper });
+
+    await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
+
+    expect(client.get).toHaveBeenCalledWith('/api/v2/api-keys/key-1');
+  });
+
+  it('should not fetch when id is empty', async () => {
+    const client = createMockClient();
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(() => useApiKey('', { client }), { wrapper });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(client.get).not.toHaveBeenCalled();
+    expect(result.current.isFetching).toBe(false);
+  });
+
+  it('should surface errors from the API', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockRejectedValueOnce(new Error('Not found'));
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(() => useApiKey('key-999', { client }), { wrapper });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(result.current.error?.message).toBe('Not found');
+  });
+});
