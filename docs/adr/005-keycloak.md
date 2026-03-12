@@ -24,13 +24,15 @@ Les alternatives evaluees :
 
 ## Decision
 
-Utiliser **Keycloak** comme provider d'authentification via le package
-`@granit/auth`. Le package encapsule `keycloak-js` et expose :
+Utiliser **Keycloak** comme provider d'authentification via les packages
+`@granit/authentication` (types), `@granit/react-authentication` (hooks React)
+et `@granit/react-authorization` (permissions RBAC). Les packages encapsulent
+`keycloak-js` et exposent :
 
-- Un contexte React d'authentification (`BaseAuthContextType`)
-- Des hooks d'integration (`useAuth`, `usePermissions`,
-  `usePermissionDefinitions`, `useRolePermissions`)
-- Un mock provider pour les tests et le developpement local
+- Un contexte React d'authentification (`BaseAuthContextType` dans `@granit/authentication`)
+- Des hooks d'integration (`useAuth`, `useKeycloakInit` dans `@granit/react-authentication` ;
+  `usePermissions`, `usePermissionDefinitions`, `useRolePermissions` dans `@granit/react-authorization`)
+- Un mock provider pour les tests et le developpement local (`@granit/react-authentication`)
 - Un intercepteur 401 pour la gestion des sessions revoquees
 
 Le `BaseAuthContextType` est une interface extensible : les applications

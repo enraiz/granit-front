@@ -27,9 +27,9 @@ sequenceDiagram
 
 ## Implémentation dans Granit
 
-| Sujet | Événements | Package |
-| --- | --- | --- |
-| `keycloak-js` | `onTokenExpired`, `onAuthRefreshError`, `onAuthLogout` | `@granit/auth` |
+| Sujet         | Événements                                             | Package                        |
+| ------------- | ------------------------------------------------------ | ------------------------------ |
+| `keycloak-js` | `onTokenExpired`, `onAuthRefreshError`, `onAuthLogout` | `@granit/react-authentication` |
 
 ### Événements disponibles
 
@@ -68,8 +68,8 @@ vers l'application :
 
 ```typescript
 keycloak.onTokenExpired = () => {
-  keycloak.updateToken(60);       // Comportement framework
-  config.onTokenExpired?.();      // Observer spécifique
+  keycloak.updateToken(60); // Comportement framework
+  config.onTokenExpired?.(); // Observer spécifique
   config.onEvent?.('onTokenExpired'); // Observer générique
 };
 ```
@@ -86,11 +86,11 @@ surcharger ou remplacer le comportement du framework.
 ## Exemple d'usage
 
 ```typescript
-import { useKeycloakInit } from '@granit/auth';
+import { useKeycloakInit } from '@granit/react-authentication';
 
 const auth = useKeycloakInit({
-  url:      import.meta.env.VITE_KEYCLOAK_URL,
-  realm:    import.meta.env.VITE_KEYCLOAK_REALM,
+  url: import.meta.env.VITE_KEYCLOAK_URL,
+  realm: import.meta.env.VITE_KEYCLOAK_REALM,
   clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
 
   // Observer spécifique

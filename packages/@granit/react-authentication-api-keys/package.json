@@ -1,0 +1,34 @@
+{
+  "name": "@granit/react-authentication-api-keys",
+  "description": "React hooks for @granit/authentication-api-keys — useApiKeys, useApiKey, useCreateApiKey, useRevokeApiKey, useRotateApiKey, useUpdateApiKeyScopes",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@granit/api-client": "workspace:*"
+  },
+  "peerDependencies": {
+    "@granit/authentication-api-keys": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+  }
+}

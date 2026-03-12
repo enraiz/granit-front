@@ -10,7 +10,7 @@ granit-front.
 TypeScript ou Vite ne résout pas un import `@granit/*` :
 
 ```text
-Cannot find module '@granit/auth' or its corresponding type declarations.
+Cannot find module '@granit/authentication' or its corresponding type declarations.
 ```
 
 ### Solution
@@ -21,7 +21,7 @@ Cannot find module '@granit/auth' or its corresponding type declarations.
    ```json
    {
      "dependencies": {
-       "@granit/auth": "link:../granit-front/packages/@granit/auth"
+       "@granit/authentication": "link:../granit-front/packages/@granit/authentication"
      }
    }
    ```
@@ -31,7 +31,7 @@ Cannot find module '@granit/auth' or its corresponding type declarations.
    ```typescript
    resolve: {
      alias: {
-       '@granit/auth': path.join(GRANIT, 'auth/src/index.ts'),
+       '@granit/authentication': path.join(GRANIT, 'auth/src/index.ts'),
      },
    }
    ```
@@ -84,7 +84,7 @@ Ajouter les `paths` dans **chaque** fichier `tsconfig` de l'application
   "compilerOptions": {
     "paths": {
       "@granit/utils": ["../granit-front/packages/@granit/utils/src/index.ts"],
-      "@granit/auth": ["../granit-front/packages/@granit/auth/src/index.ts"]
+      "@granit/authentication": ["../granit-front/packages/@granit/authentication/src/index.ts"]
     }
   }
 }

@@ -1,0 +1,41 @@
+import { useQuery } from '@tanstack/react-query';
+
+import { permissionKeys } from './use-permissions.js';
+
+import type { PermissionGroupDto, UsePermissionDefinitionsOptions } from '@granit/authorization';
+import type { UseQueryResult } from '@tanstack/react-query';
+
+const DEFAULT_BASE_PATH = '/api/v1/auth';
+
+/**
+ * Fetches all permission definitions grouped by module.
+ *
+ * Calls `GET {basePath}/definitions` (default `/api/v1/auth/definitions`) and returns
+ * the full permission tree used for admin UIs (role-permission matrix).
+ *
+ * @param options - Axios client instance and optional configuration.
+ * @returns Standard React Query result with permission groups.
+ *
+ * @example
+ * ```tsx
+ * const { data: groups, isLoading } = usePermissionDefinitions({ client: api });
+ *
+ * if (isLoading) return <Spinner />;
+ * return groups?.map(g => <PermissionGroup key={g.name} group={g} />);
+ * ```
+ */
+export function usePermissionDefinitions(
+  options: UsePermissionDefinitionsOptions
+): UseQueryResult<PermissionGroupDto[]> {
+  const { client, basePath = DEFAULT_BASE_PATH, enabled } = options;
+
+  return useQuery({
+    queryKey: permissionKeys.definitions(),
+    queryFn: async () => {
+      const response = await client.get<PermissionGroupDto[]>(`${basePath}/definitions`);
+      return response.data;
+    },
+    enabled: enabled ?? true,
+    staleTime: 5 * 60 * 1000,
+  });
+}

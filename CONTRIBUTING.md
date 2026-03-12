@@ -46,7 +46,7 @@ pnpm format
 
 # Target a specific package
 pnpm --filter @granit/utils lint
-pnpm --filter @granit/auth test
+pnpm --filter @granit/authentication test
 ```
 
 ## How to Contribute

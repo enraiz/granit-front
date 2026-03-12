@@ -38,7 +38,8 @@ graph TD
 
     subgraph "Couche infrastructure"
         api["@granit/api-client"]
-        auth["@granit/auth"]
+        react-authn["@granit/react-authentication"]
+        react-authz["@granit/react-authorization"]
         localization["@granit/localization"]
         logger-otlp["@granit/logger-otlp"]
         cookies-klaro["@granit/cookies-klaro"]
@@ -55,7 +56,7 @@ graph TD
     end
 
     %% Dependances internes @granit
-    auth --> api
+    react-authn --> api
     localization --> storage
     logger-otlp --> logger
     cookies-klaro --> cookies
@@ -70,7 +71,7 @@ graph TD
     utils -.-> tw["tailwind-merge"]
     utils -.-> datefns["date-fns"]
     api -.-> axios["axios"]
-    auth -.-> keycloak["keycloak-js"]
+    react-authn -.-> keycloak["keycloak-js"]
     querying -.-> tanstack["@tanstack/react-query"]
     data-exchange -.-> tanstack
     notifications -.-> signalr["@microsoft/signalr"]
@@ -84,7 +85,8 @@ graph TD
     style storage fill:#e8f5e9
     style cookies fill:#e8f5e9
     style api fill:#e3f2fd
-    style auth fill:#e3f2fd
+    style react-authn fill:#e3f2fd
+    style react-authz fill:#e3f2fd
     style localization fill:#e3f2fd
     style logger-otlp fill:#e3f2fd
     style cookies-klaro fill:#e3f2fd
@@ -145,7 +147,7 @@ Les applications `guava-front` et `guava-admin` consomment les packages
 ```json
 {
   "dependencies": {
-    "@granit/auth": "link:../../granit-front/packages/@granit/auth",
+    "@granit/react-authentication": "link:../../granit-front/packages/@granit/react-authentication",
     "@granit/querying": "link:../../granit-front/packages/@granit/querying"
   }
 }
@@ -157,7 +159,9 @@ Les applications `guava-front` et `guava-admin` consomment les packages
 export default defineConfig({
   resolve: {
     alias: {
-      '@granit/auth': resolve('../../granit-front/packages/@granit/auth/src'),
+      '@granit/react-authentication': resolve(
+        '../../granit-front/packages/@granit/react-authentication/src'
+      ),
       '@granit/querying': resolve('../../granit-front/packages/@granit/querying/src'),
     },
   },

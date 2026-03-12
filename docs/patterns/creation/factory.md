@@ -53,12 +53,12 @@ classDiagram
 
 ## Implémentation dans Granit
 
-| Factory | Package | Entrée | Sortie |
-| --- | --- | --- | --- |
-| `createLogger` | `@granit/logger` | `prefix`, `options?` | `Logger` avec transports configurés |
-| `createApiClient` | `@granit/api-client` | `ApiClientConfig` | `AxiosInstance` avec intercepteur Bearer |
-| `createAuthContext<T>` | `@granit/auth` | — (générique) | `{ AuthContext, useAuth }` typés |
-| `createMockProvider<T>` | `@granit/auth` | `AuthContext`, `value` | `React.FC` mock provider |
+| Factory                 | Package                        | Entrée                 | Sortie                                   |
+| ----------------------- | ------------------------------ | ---------------------- | ---------------------------------------- |
+| `createLogger`          | `@granit/logger`               | `prefix`, `options?`   | `Logger` avec transports configurés      |
+| `createApiClient`       | `@granit/api-client`           | `ApiClientConfig`      | `AxiosInstance` avec intercepteur Bearer |
+| `createAuthContext<T>`  | `@granit/react-authentication` | — (générique)          | `{ AuthContext, useAuth }` typés         |
+| `createMockProvider<T>` | `@granit/react-authentication` | `AuthContext`, `value` | `React.FC` mock provider                 |
 
 ### Variante : factory générique
 
@@ -90,7 +90,8 @@ import { createApiClient } from '@granit/api-client';
 const api = createApiClient({ baseURL: import.meta.env.VITE_API_URL });
 
 // Contexte auth — typé pour l'application
-import { createAuthContext, type BaseAuthContextType } from '@granit/auth';
+import { createAuthContext } from '@granit/react-authentication';
+import type { BaseAuthContextType } from '@granit/authentication';
 interface AuthContextType extends BaseAuthContextType {
   register: () => void;
 }

@@ -10,7 +10,22 @@ export default defineConfig({
         'packages/@granit/api-client/src/test-utils.ts'
       ),
       '@granit/api-client': path.resolve(__dirname, 'packages/@granit/api-client/src/index.ts'),
-      '@granit/auth': path.resolve(__dirname, 'packages/@granit/auth/src/index.ts'),
+      '@granit/background-jobs': path.resolve(
+        __dirname,
+        'packages/@granit/background-jobs/src/index.ts'
+      ),
+      '@granit/authentication-api-keys': path.resolve(
+        __dirname,
+        'packages/@granit/authentication-api-keys/src/index.ts'
+      ),
+      '@granit/authentication': path.resolve(
+        __dirname,
+        'packages/@granit/authentication/src/index.ts'
+      ),
+      '@granit/authorization': path.resolve(
+        __dirname,
+        'packages/@granit/authorization/src/index.ts'
+      ),
       '@granit/cookies': path.resolve(__dirname, 'packages/@granit/cookies/src/index.ts'),
       '@granit/cookies-klaro': path.resolve(
         __dirname,
@@ -53,7 +68,30 @@ export default defineConfig({
         'packages/@granit/notifications/src/index.ts'
       ),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
-      '@granit/react-auth': path.resolve(__dirname, 'packages/@granit/react-auth/src/index.ts'),
+      '@granit/react-reference-data': path.resolve(
+        __dirname,
+        'packages/@granit/react-reference-data/src/index.ts'
+      ),
+      '@granit/reference-data': path.resolve(
+        __dirname,
+        'packages/@granit/reference-data/src/index.ts'
+      ),
+      '@granit/react-authentication-api-keys': path.resolve(
+        __dirname,
+        'packages/@granit/react-authentication-api-keys/src/index.ts'
+      ),
+      '@granit/react-background-jobs': path.resolve(
+        __dirname,
+        'packages/@granit/react-background-jobs/src/index.ts'
+      ),
+      '@granit/react-authentication': path.resolve(
+        __dirname,
+        'packages/@granit/react-authentication/src/index.ts'
+      ),
+      '@granit/react-authorization': path.resolve(
+        __dirname,
+        'packages/@granit/react-authorization/src/index.ts'
+      ),
       '@granit/react-cookies': path.resolve(
         __dirname,
         'packages/@granit/react-cookies/src/index.ts'

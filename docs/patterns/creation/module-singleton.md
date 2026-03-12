@@ -10,7 +10,7 @@ instances qui importent le même package — sans class statique ni registre glo
 
 ```mermaid
 flowchart LR
-    AUTH["@granit/auth<br/>useKeycloakInit"]
+    AUTH["@granit/react-authentication<br/>useKeycloakInit"]
     API["@granit/api-client<br/>_tokenGetter (privé)"]
     APP1["Instance API 1"]
     APP2["Instance API 2"]
@@ -22,17 +22,15 @@ flowchart LR
 
 ## Implémentation dans Granit
 
-| Singleton | Package | Fichier source |
-| --- | --- | --- |
+| Singleton      | Package              | Fichier source |
+| -------------- | -------------------- | -------------- |
 | `_tokenGetter` | `@granit/api-client` | `src/index.ts` |
 
 ```typescript
 // Variable privée au module — une seule instance par application
 let _tokenGetter: (() => Promise<string | undefined>) | null = null;
 
-export function setTokenGetter(
-  getter: () => Promise<string | undefined>,
-): void {
+export function setTokenGetter(getter: () => Promise<string | undefined>): void {
   _tokenGetter = getter;
 }
 ```
@@ -53,8 +51,8 @@ instance.interceptors.request.use(async (req) => {
 
 ## Justification
 
-Le token Keycloak est géré par `@granit/auth`, mais consommé par `@granit/api-client`.
-Le module singleton évite de coupler ces deux packages directement : `@granit/auth`
+Le token Keycloak est géré par `@granit/react-authentication`, mais consommé par `@granit/api-client`.
+Le module singleton évite de coupler ces deux packages directement : `@granit/react-authentication`
 enregistre le getter une seule fois au démarrage, et toutes les instances Axios
 en bénéficient automatiquement.
 
@@ -65,7 +63,7 @@ trop verbeux et impossible à synchroniser avec le renouvellement automatique.
 
 ```typescript
 // Le wiring est automatique via useKeycloakInit — pas d'appel manuel nécessaire
-import { useKeycloakInit } from '@granit/auth';
+import { useKeycloakInit } from '@granit/react-authentication';
 
 // useKeycloakInit appelle setTokenGetter() en interne
 const auth = useKeycloakInit({ url, realm, clientId });

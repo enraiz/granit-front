@@ -62,8 +62,8 @@ Use these Markdown callouts to break monotony and add value. Use them sparingly
 > a scoped notification feed for a single entity.
 
 > [!WARNING]
-> **Attention:** Never import from internal paths (`@granit/auth/src/internal/...`).
-> Only use what is re-exported from `@granit/auth`.
+> **Attention:** Never import from internal paths (`@granit/react-authentication/src/internal/...`).
+> Only use what is re-exported from `@granit/react-authentication`.
 
 > [!NOTE]
 > **Under the hood:** `useQueryEndpoint` wraps `@tanstack/react-query` with
@@ -170,13 +170,13 @@ When invoked:
 
 ## Argument parsing
 
-| Argument            | Example                              | Behavior                                                |
-| ------------------- | ------------------------------------ | ------------------------------------------------------- |
-| Package name        | `/doc @granit/notifications`         | Document the package (guide format, developer audience) |
-| Package + audience  | `/doc @granit/auth --audience arch`  | Architect-focused documentation                         |
-| Package + type      | `/doc @granit/workflow --type adr`   | Generate an ADR                                         |
-| Topic               | `/doc headless-pattern`              | Document a cross-cutting concept                        |
-| `--readme` shortcut | `/doc @granit/tracing --type readme` | Generate the package README.md                          |
+| Argument            | Example                                             | Behavior                                                |
+| ------------------- | --------------------------------------------------- | ------------------------------------------------------- |
+| Package name        | `/doc @granit/notifications`                        | Document the package (guide format, developer audience) |
+| Package + audience  | `/doc @granit/react-authentication --audience arch` | Architect-focused documentation                         |
+| Package + type      | `/doc @granit/workflow --type adr`                  | Generate an ADR                                         |
+| Topic               | `/doc headless-pattern`                             | Document a cross-cutting concept                        |
+| `--readme` shortcut | `/doc @granit/tracing --type readme`                | Generate the package README.md                          |
 
 If the argument is ambiguous, ask the user to clarify before writing.
 

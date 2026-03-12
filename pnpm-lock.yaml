@@ -165,14 +165,21 @@ importers:
         specifier: '*'
         version: 1.13.5
 
-  packages/@granit/auth:
+  packages/@granit/authentication:
+    dependencies:
+      keycloak-js:
+        specifier: '*'
+        version: 26.2.3
+
+  packages/@granit/authentication-api-keys: {}
+
+  packages/@granit/authorization:
     dependencies:
       axios:
         specifier: '*'
         version: 1.13.6
-      keycloak-js:
-        specifier: '*'
-        version: 26.2.3
+
+  packages/@granit/background-jobs: {}
 
   packages/@granit/cookies: {}
 
@@ -281,23 +288,66 @@ importers:
         specifier: '*'
         version: 1.13.6
 
-  packages/@granit/react-auth:
+  packages/@granit/react-authentication:
     dependencies:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
-      '@granit/auth':
+      '@granit/authentication':
         specifier: workspace:*
-        version: link:../auth
+        version: link:../authentication
+      keycloak-js:
+        specifier: '*'
+        version: 26.2.3
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-authentication-api-keys:
+    dependencies:
+      '@granit/authentication-api-keys':
+        specifier: workspace:*
+        version: link:../authentication-api-keys
       '@tanstack/react-query':
         specifier: ^5.0.0
         version: 5.90.21(react@19.2.4)
       axios:
         specifier: '*'
         version: 1.13.6
-      keycloak-js:
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+    devDependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+
+  packages/@granit/react-authorization:
+    dependencies:
+      '@granit/authorization':
+        specifier: workspace:*
+        version: link:../authorization
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
         specifier: '*'
-        version: 26.2.3
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-background-jobs:
+    dependencies:
+      '@granit/background-jobs':
+        specifier: workspace:*
+        version: link:../background-jobs
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -456,6 +506,21 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
 
+  packages/@granit/react-reference-data:
+    dependencies:
+      '@granit/reference-data':
+        specifier: workspace:*
+        version: link:../reference-data
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
   packages/@granit/react-settings:
     dependencies:
       '@granit/settings':
@@ -553,6 +618,8 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+
+  packages/@granit/reference-data: {}
 
   packages/@granit/settings:
     dependencies:
