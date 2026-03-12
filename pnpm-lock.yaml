@@ -205,6 +205,12 @@ importers:
         specifier: ^1.0.0
         version: 1.13.6
 
+  packages/@granit/identity:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+
   packages/@granit/localization:
     dependencies:
       '@granit/storage':
@@ -332,6 +338,21 @@ importers:
       '@granit/logger':
         specifier: workspace:*
         version: link:../logger
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-identity:
+    dependencies:
+      '@granit/identity':
+        specifier: workspace:*
+        version: link:../identity
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
       react:
         specifier: ^19.0.0
         version: 19.2.4
