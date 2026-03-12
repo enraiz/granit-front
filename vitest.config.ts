@@ -27,6 +27,10 @@ export default defineConfig({
       '@granit/identity': path.resolve(__dirname, 'packages/@granit/identity/src/index.ts'),
       '@granit/localization': path.resolve(__dirname, 'packages/@granit/localization/src/index.ts'),
       '@granit/logger': path.resolve(__dirname, 'packages/@granit/logger/src/index.ts'),
+      '@granit/multi-tenancy': path.resolve(
+        __dirname,
+        'packages/@granit/multi-tenancy/src/index.ts'
+      ),
       '@granit/logger-otlp': path.resolve(__dirname, 'packages/@granit/logger-otlp/src/index.ts'),
       '@granit/notifications-mobile-push': path.resolve(
         __dirname,
@@ -65,6 +69,10 @@ export default defineConfig({
       '@granit/react-identity': path.resolve(
         __dirname,
         'packages/@granit/react-identity/src/index.ts'
+      ),
+      '@granit/react-multi-tenancy': path.resolve(
+        __dirname,
+        'packages/@granit/react-multi-tenancy/src/index.ts'
       ),
       '@granit/react-localization': path.resolve(
         __dirname,

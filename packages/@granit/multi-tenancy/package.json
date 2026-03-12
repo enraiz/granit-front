@@ -1,0 +1,25 @@
+{
+  "name": "@granit/multi-tenancy",
+  "description": "Multi-tenancy types and tenant resolver abstraction — mirrors Granit.MultiTenancy .NET contract",
+  "version": "0.1.0",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+  }
+}
