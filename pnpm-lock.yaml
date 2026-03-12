@@ -228,6 +228,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
 
+  packages/@granit/multi-tenancy: {}
+
   packages/@granit/notifications:
     dependencies:
       axios:
@@ -374,6 +376,18 @@ importers:
       react-i18next:
         specifier: ^16.0.0
         version: 16.5.4(i18next@25.8.14(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+
+  packages/@granit/react-multi-tenancy:
+    dependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+      '@granit/multi-tenancy':
+        specifier: workspace:*
+        version: link:../multi-tenancy
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
 
   packages/@granit/react-notifications:
     dependencies:
