@@ -48,6 +48,26 @@ export default defineConfig({
         'packages/@granit/notifications/src/index.ts'
       ),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
+      '@granit/react-error-boundary': path.resolve(
+        __dirname,
+        'packages/@granit/react-error-boundary/src/index.ts'
+      ),
+      '@granit/react-notifications-mobile-push': path.resolve(
+        __dirname,
+        'packages/@granit/react-notifications-mobile-push/src/index.ts'
+      ),
+      '@granit/react-notifications-web-push': path.resolve(
+        __dirname,
+        'packages/@granit/react-notifications-web-push/src/index.ts'
+      ),
+      '@granit/react-storage': path.resolve(
+        __dirname,
+        'packages/@granit/react-storage/src/index.ts'
+      ),
+      '@granit/react-tracing': path.resolve(
+        __dirname,
+        'packages/@granit/react-tracing/src/index.ts'
+      ),
       '@granit/storage': path.resolve(__dirname, 'packages/@granit/storage/src/index.ts'),
       '@granit/timeline': path.resolve(__dirname, 'packages/@granit/timeline/src/index.ts'),
       '@granit/tracing': path.resolve(__dirname, 'packages/@granit/tracing/src/index.ts'),

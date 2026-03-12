@@ -9,7 +9,8 @@ import { BatchSpanProcessor, WebTracerProvider } from '@opentelemetry/sdk-trace-
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import * as React from 'react';
 
-import type { TracingExporterConfig, TracingProviderProps } from '../types/index.js';
+import type { TracingProviderProps } from '../types/index.js';
+import type { TracingExporterConfig } from '@granit/tracing';
 import type { Instrumentation } from '@opentelemetry/instrumentation';
 import type { ReadableSpan, SpanExporter } from '@opentelemetry/sdk-trace-web';
 

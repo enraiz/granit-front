@@ -219,14 +219,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
 
-  packages/@granit/error-boundary:
-    dependencies:
-      '@granit/logger':
-        specifier: workspace:*
-        version: link:../logger
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
+  packages/@granit/error-boundary: {}
 
   packages/@granit/idempotency:
     dependencies:
@@ -278,19 +271,9 @@ importers:
 
   packages/@granit/notifications-mobile-push:
     dependencies:
-      '@granit/notifications':
-        specifier: workspace:*
-        version: link:../notifications
       axios:
         specifier: '*'
         version: 1.13.6
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
-    devDependencies:
-      '@capacitor/push-notifications':
-        specifier: ^8.0.2
-        version: 8.0.2(@capacitor/core@8.2.0)
 
   packages/@granit/notifications-signalr:
     dependencies:
@@ -314,15 +297,9 @@ importers:
 
   packages/@granit/notifications-web-push:
     dependencies:
-      '@granit/notifications':
-        specifier: workspace:*
-        version: link:../notifications
       axios:
         specifier: '*'
         version: 1.13.6
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
 
   packages/@granit/querying:
     dependencies:
@@ -342,6 +319,91 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
 
+  packages/@granit/react-error-boundary:
+    dependencies:
+      '@granit/error-boundary':
+        specifier: workspace:*
+        version: link:../error-boundary
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-notifications-mobile-push:
+    dependencies:
+      '@granit/notifications-mobile-push':
+        specifier: workspace:*
+        version: link:../notifications-mobile-push
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+    devDependencies:
+      '@capacitor/push-notifications':
+        specifier: ^8.0.2
+        version: 8.0.2(@capacitor/core@8.2.0)
+
+  packages/@granit/react-notifications-web-push:
+    dependencies:
+      '@granit/notifications-web-push':
+        specifier: workspace:*
+        version: link:../notifications-web-push
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-storage:
+    dependencies:
+      '@granit/storage':
+        specifier: workspace:*
+        version: link:../storage
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-tracing:
+    dependencies:
+      '@granit/tracing':
+        specifier: workspace:*
+        version: link:../tracing
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@opentelemetry/context-zone':
+        specifier: ^2.6.0
+        version: 2.6.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/exporter-trace-otlp-http':
+        specifier: ^0.213.0
+        version: 0.213.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-document-load':
+        specifier: ^0.57.0
+        version: 0.57.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-fetch':
+        specifier: ^0.213.0
+        version: 0.213.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-xml-http-request':
+        specifier: ^0.213.0
+        version: 0.213.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources':
+        specifier: ^2.6.0
+        version: 2.6.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-web':
+        specifier: ^2.6.0
+        version: 2.6.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions':
+        specifier: ^1.40.0
+        version: 1.40.0
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
   packages/@granit/settings:
     dependencies:
       '@tanstack/react-query':
@@ -354,11 +416,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
 
-  packages/@granit/storage:
-    dependencies:
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
+  packages/@granit/storage: {}
 
   packages/@granit/templating:
     dependencies:
@@ -397,33 +455,6 @@ importers:
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.0
-      '@opentelemetry/context-zone':
-        specifier: ^2.6.0
-        version: 2.6.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/exporter-trace-otlp-http':
-        specifier: ^0.213.0
-        version: 0.213.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-document-load':
-        specifier: ^0.57.0
-        version: 0.57.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-fetch':
-        specifier: ^0.213.0
-        version: 0.213.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-xml-http-request':
-        specifier: ^0.213.0
-        version: 0.213.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources':
-        specifier: ^2.6.0
-        version: 2.6.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-web':
-        specifier: ^2.6.0
-        version: 2.6.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions':
-        specifier: ^1.40.0
-        version: 1.40.0
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
 
   packages/@granit/utils:
     dependencies:

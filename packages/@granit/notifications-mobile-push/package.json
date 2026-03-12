@@ -13,10 +13,7 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@capacitor/push-notifications": ">=6.0.0",
-    "@granit/notifications": "workspace:*",
-    "axios": "*",
-    "react": "^19.0.0"
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {
@@ -27,7 +24,5 @@
     },
     "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
   },
-  "devDependencies": {
-    "@capacitor/push-notifications": "^8.0.2"
-  }
+  "devDependencies": {}
 }

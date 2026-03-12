@@ -1,7 +1,8 @@
 {
-  "name": "@granit/tracing",
-  "version": "0.1.1",
-  "license": "UNLICENSED",
+  "name": "@granit/react-storage",
+  "description": "React bindings for @granit/storage — hooks for synchronized browser storage",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -13,7 +14,8 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@opentelemetry/api": "^1.9.0"
+    "@granit/storage": "workspace:*",
+    "react": "^19.0.0"
   },
   "publishConfig": {
     "exports": {
@@ -21,7 +23,6 @@
         "types": "./dist/index.d.ts",
         "import": "./dist/index.js"
       }
-    },
-    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+    }
   }
 }

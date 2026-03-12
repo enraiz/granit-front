@@ -1,9 +1,8 @@
 import { PushNotifications } from '@capacitor/push-notifications';
+import { registerDeviceToken, unregisterDeviceToken } from '@granit/notifications-mobile-push';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { registerDeviceToken, unregisterDeviceToken } from '../api/mobile-push-api.js';
-
-import type { MobilePlatform } from '../api/mobile-push-api.js';
+import type { MobilePlatform } from '@granit/notifications-mobile-push';
 import type { AxiosInstance } from 'axios';
 
 /**

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type { Breadcrumb, ErrorContextConfig, ErrorContextValue } from '../types/index.js';
+import type { Breadcrumb, ErrorContextConfig, ErrorContextValue } from '@granit/error-boundary';
 
 // ---------------------------------------------------------------------------
 // Context

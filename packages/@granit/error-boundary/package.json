@@ -12,10 +12,7 @@
   "scripts": {
     "build": "tsup"
   },
-  "peerDependencies": {
-    "@granit/logger": "workspace:*",
-    "react": "^19.0.0"
-  },
+  "peerDependencies": {},
   "publishConfig": {
     "exports": {
       ".": {

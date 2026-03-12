@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { TracingProvider, useTracer } from '../providers/tracing-provider.js';
 
-import type { TracingConfig } from '../types/index.js';
+import type { TracingConfig } from '@granit/tracing';
 
 // ---------------------------------------------------------------------------
 // Mock OpenTelemetry

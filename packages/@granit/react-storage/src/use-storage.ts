@@ -1,8 +1,7 @@
+import { createStorage } from '@granit/storage';
 import { useCallback, useRef, useSyncExternalStore } from 'react';
 
-import { createStorage } from './create-storage.js';
-
-import type { StorageOptions } from './create-storage.js';
+import type { StorageOptions } from '@granit/storage';
 
 /**
  * React hook that synchronizes component state with localStorage (or sessionStorage).

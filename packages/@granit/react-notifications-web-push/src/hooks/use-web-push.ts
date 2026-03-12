@@ -1,7 +1,9 @@
+import {
+  registerPushSubscription,
+  unregisterPushSubscription,
+  urlBase64ToUint8Array,
+} from '@granit/notifications-web-push';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-import { registerPushSubscription, unregisterPushSubscription } from '../api/web-push-api.js';
-import { urlBase64ToUint8Array } from '../utils/vapid.js';
 
 import type { AxiosInstance } from 'axios';
 

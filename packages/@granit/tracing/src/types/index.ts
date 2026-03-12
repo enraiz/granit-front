@@ -39,13 +39,3 @@ export type TracingConfig = {
   /** Additional OTel instrumentations to register. */
   additionalInstrumentations?: Instrumentation[];
 };
-
-// ---------------------------------------------------------------------------
-// Provider props
-// ---------------------------------------------------------------------------
-
-/** Props for the `TracingProvider` component. */
-export type TracingProviderProps = {
-  config: TracingConfig;
-  children: React.ReactNode;
-};
