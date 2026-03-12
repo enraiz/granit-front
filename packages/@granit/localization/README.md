@@ -2,14 +2,14 @@
 
 # @granit/localization
 
-Résolution de locale et intégration i18next : `createLocalization`, `resolveInitialLocale`, `useLocale` et ré-export de `react-i18next`.
+Locale resolution and i18next integration: `createLocalization`, `resolveInitialLocale`, `useLocale`, and `react-i18next` re-exports.
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/localization.md).
+See the [full documentation](../../../docs/framework/localization.md).

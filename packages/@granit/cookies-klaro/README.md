@@ -2,14 +2,14 @@
 
 # @granit/cookies-klaro
 
-Adaptateur Klaro CMP pour `@granit/cookies` : factory `createKlaroCookieConsentProvider`.
+Klaro CMP adapter for `@granit/cookies`: `createKlaroCookieConsentProvider` factory.
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/cookies-klaro.md).
+See the [full documentation](../../../docs/framework/cookies-klaro.md).

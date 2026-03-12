@@ -1,7 +1,8 @@
 {
   "name": "@granit/data-exchange",
+  "description": "Tabular data import/export hooks and providers",
   "version": "0.1.1",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

@@ -134,7 +134,7 @@ glab -R "$PROJECT" issue create \
 
 ## Contraintes
 
-- [ ] Souveraineté : OVHcloud FR (pour les apps consommatrices)
+- [ ] Infrastructure sovereignty constraints verified for consumer apps
 - [ ] Rétrocompatibilité des APIs publiques (@granit/*)
 - [ ] Aucune dépendance app-spécifique dans les packages
 

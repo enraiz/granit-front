@@ -20,7 +20,7 @@ flowchart LR
 
 Cloner `granit-front` à côté de l'application consommatrice :
 
-```
+```text
 workspace/
 ├── granit-front/          ← ce dépôt
 └── mon-app/               ← application Vite/React
@@ -28,7 +28,8 @@ workspace/
 
 ```bash
 cd workspace
-git clone git@gitlab.digitaldynamics.be:digital-dynamics/granit-front.git
+git clone <repository-url>
+# Replace <repository-url> with the actual repository URL
 cd granit-front && pnpm install
 ```
 
@@ -39,10 +40,10 @@ Dans le `package.json` de l'application, ajouter les packages via le protocole `
 ```json
 {
   "dependencies": {
-    "@granit/logger":     "link:../granit-front/packages/@granit/logger",
-    "@granit/utils":      "link:../granit-front/packages/@granit/utils",
+    "@granit/logger": "link:../granit-front/packages/@granit/logger",
+    "@granit/utils": "link:../granit-front/packages/@granit/utils",
     "@granit/api-client": "link:../granit-front/packages/@granit/api-client",
-    "@granit/auth":       "link:../granit-front/packages/@granit/auth"
+    "@granit/auth": "link:../granit-front/packages/@granit/auth"
   }
 }
 ```
@@ -68,10 +69,10 @@ const GRANIT = path.resolve(__dirname, '../granit-front/packages/@granit');
 export default defineConfig({
   resolve: {
     alias: {
-      '@granit/logger':     path.join(GRANIT, 'logger/src/index.ts'),
-      '@granit/utils':      path.join(GRANIT, 'utils/src/index.ts'),
+      '@granit/logger': path.join(GRANIT, 'logger/src/index.ts'),
+      '@granit/utils': path.join(GRANIT, 'utils/src/index.ts'),
       '@granit/api-client': path.join(GRANIT, 'api-client/src/index.ts'),
-      '@granit/auth':       path.join(GRANIT, 'auth/src/index.ts'),
+      '@granit/auth': path.join(GRANIT, 'auth/src/index.ts'),
     },
   },
 });
@@ -86,10 +87,10 @@ Ajouter les `paths` correspondants dans **chaque** tsconfig de l'application
 {
   "compilerOptions": {
     "paths": {
-      "@granit/logger":     ["../granit-front/packages/@granit/logger/src/index.ts"],
-      "@granit/utils":      ["../granit-front/packages/@granit/utils/src/index.ts"],
+      "@granit/logger": ["../granit-front/packages/@granit/logger/src/index.ts"],
+      "@granit/utils": ["../granit-front/packages/@granit/utils/src/index.ts"],
       "@granit/api-client": ["../granit-front/packages/@granit/api-client/src/index.ts"],
-      "@granit/auth":       ["../granit-front/packages/@granit/auth/src/index.ts"]
+      "@granit/auth": ["../granit-front/packages/@granit/auth/src/index.ts"]
     }
   }
 }

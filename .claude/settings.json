@@ -5,8 +5,7 @@
       "Bash(git pull:*)",
       "Bash(pnpm test:*)",
       "Bash(pnpm lint)",
-      "Bash(pnpm tsc)",
-      "Read(//home/jf/dev/digital-dynamics/granit-front/**)"
+      "Bash(pnpm tsc)"
     ]
   }
 }

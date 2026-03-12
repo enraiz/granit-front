@@ -2,14 +2,14 @@
 
 # @granit/utils
 
-Utilitaires partagés — classes CSS Tailwind et formatage — pour les applications Digital Dynamics.
+Shared utilities — Tailwind CSS class merging and formatting — for Digital Dynamics applications.
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/utils.md).
+See the [full documentation](../../../docs/framework/utils.md).

@@ -4,47 +4,52 @@
 
 # granit-front
 
-Framework TypeScript/React partagé — équivalent JavaScript/TypeScript de `granit-dotnet`.
+Shared TypeScript/React framework — JavaScript/TypeScript counterpart of `granit-dotnet`.
 
-Fournit les briques communes à toutes les applications front-end Digital Dynamics : logger,
-utilitaires, client HTTP Axios et couche d'authentification Keycloak.
+Provides common building blocks for Digital Dynamics front-end applications: logger,
+utilities, Axios HTTP client, Keycloak authentication, notifications, querying, and more.
 
 ## Packages
 
-| Package                                                      | Description                                                                                            |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| [`@granit/api-client`](docs/framework/api-client.md)         | Factory Axios avec intercepteur Bearer token, types de réponse (`PaginatedResponse`, `ProblemDetails`) |
-| [`@granit/auth`](docs/framework/auth.md)                     | Hooks Keycloak, factory de contexte auth, mock provider, type `KeycloakUserInfo`                       |
-| [`@granit/cookies`](packages/@granit/cookies/)               | Abstractions de consentement cookies                                                                   |
-| [`@granit/cookies-klaro`](packages/@granit/cookies-klaro/)   | Implémentation Klaro du consentement cookies                                                           |
-| [`@granit/data-exchange`](packages/@granit/data-exchange/)   | Composants React d'import/export de données                                                            |
-| [`@granit/error-boundary`](packages/@granit/error-boundary/) | Error boundary React avec fallback configurable                                                        |
-| [`@granit/idempotency`](packages/@granit/idempotency/)       | Injection automatique du header `Idempotency-Key` sur les requêtes de mutation                         |
-| [`@granit/localization`](packages/@granit/localization/)     | Helpers i18next, hooks de localisation                                                                 |
-| [`@granit/logger`](docs/framework/logger.md)                 | Factory de loggers configurables (`createLogger`)                                                      |
-| [`@granit/logger-otlp`](packages/@granit/logger-otlp/)       | Transport OTLP pour `@granit/logger`                                                                   |
-| [`@granit/notifications`](packages/@granit/notifications/)   | Composants React de notifications (SignalR, toast)                                                     |
-| [`@granit/querying`](packages/@granit/querying/)             | Helpers TanStack Query, pagination, filtres                                                            |
-| [`@granit/storage`](packages/@granit/storage/)               | Composants de gestion de fichiers (upload, preview)                                                    |
-| [`@granit/templating`](packages/@granit/templating/)         | Éditeur de templates et prévisualisation                                                               |
-| [`@granit/timeline`](packages/@granit/timeline/)             | Composant de timeline d'audit                                                                          |
-| [`@granit/tracing`](packages/@granit/tracing/)               | OpenTelemetry tracing pour le navigateur                                                               |
-| [`@granit/utils`](docs/framework/utils.md)                   | Utilitaires partagés (`cn`, `formatDate`, `formatNumber`, …)                                           |
-| [`@granit/workflow`](packages/@granit/workflow/)             | Composants de workflow (StatusBar, transitions)                                                        |
+| Package                                                                            | Description                                                                |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`@granit/api-client`](packages/@granit/api-client/)                               | Axios factory with Bearer token interceptor and shared response types      |
+| [`@granit/auth`](packages/@granit/auth/)                                           | Keycloak hooks, auth context factory, mock provider, permission management |
+| [`@granit/cookies`](packages/@granit/cookies/)                                     | Cookie consent abstraction with React context and hooks                    |
+| [`@granit/cookies-klaro`](packages/@granit/cookies-klaro/)                         | Klaro CMP adapter for `@granit/cookies`                                    |
+| [`@granit/data-exchange`](packages/@granit/data-exchange/)                         | Tabular data import/export hooks and providers                             |
+| [`@granit/error-boundary`](packages/@granit/error-boundary/)                       | Structured error capture with React error boundary and global listeners    |
+| [`@granit/idempotency`](packages/@granit/idempotency/)                             | Automatic `Idempotency-Key` header injection for mutation requests         |
+| [`@granit/localization`](packages/@granit/localization/)                           | i18next helpers and localization hooks                                     |
+| [`@granit/logger`](packages/@granit/logger/)                                       | Configurable logger factory (`createLogger`)                               |
+| [`@granit/logger-otlp`](packages/@granit/logger-otlp/)                             | OTLP transport for `@granit/logger`                                        |
+| [`@granit/notifications`](packages/@granit/notifications/)                         | Transport-agnostic notification hooks and providers                        |
+| [`@granit/notifications-mobile-push`](packages/@granit/notifications-mobile-push/) | Mobile push (FCM/APNs) device token registration via Capacitor             |
+| [`@granit/notifications-signalr`](packages/@granit/notifications-signalr/)         | SignalR transport adapter for `@granit/notifications`                      |
+| [`@granit/notifications-sse`](packages/@granit/notifications-sse/)                 | SSE transport adapter for `@granit/notifications`                          |
+| [`@granit/notifications-web-push`](packages/@granit/notifications-web-push/)       | Web Push VAPID subscription management                                     |
+| [`@granit/querying`](packages/@granit/querying/)                                   | Headless data grid hooks with TanStack Query integration                   |
+| [`@granit/settings`](packages/@granit/settings/)                                   | User settings hooks and providers                                          |
+| [`@granit/storage`](packages/@granit/storage/)                                     | File upload and storage management hooks                                   |
+| [`@granit/templating`](packages/@granit/templating/)                               | Template editing and preview hooks                                         |
+| [`@granit/timeline`](packages/@granit/timeline/)                                   | Unified activity feed hooks for audit trails                               |
+| [`@granit/tracing`](packages/@granit/tracing/)                                     | OpenTelemetry distributed tracing for the browser                          |
+| [`@granit/utils`](packages/@granit/utils/)                                         | Shared utilities (`cn`, `formatDate`, `formatNumber`, ...)                 |
+| [`@granit/workflow`](packages/@granit/workflow/)                                   | Workflow lifecycle hooks (status, transitions, history)                    |
 
 ## Documentation
 
-| Section                                      | Description                                                 |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| [Framework](docs/framework/index.md)         | Documentation de référence de chaque module                 |
-| [Guide](docs/guide/index.md)                 | Tutoriels pas-à-pas, démarrage rapide                       |
-| [Tests](docs/testing/index.md)               | Conventions, stack Vitest, patterns de mock, couverture     |
-| [CI/CD et qualité](docs/deployment/index.md) | Pipeline GitLab CI, analyse de qualité, workflow de release |
-| [Patterns](docs/patterns/index.md)           | 8 design patterns identifiés dans granit-front              |
+| Section                              | Description                                        |
+| ------------------------------------ | -------------------------------------------------- |
+| [Framework](docs/framework/index.md) | Reference documentation for each module            |
+| [Guide](docs/guide/index.md)         | Step-by-step tutorials, quick start                |
+| [Tests](docs/testing/index.md)       | Conventions, Vitest stack, mock patterns, coverage |
+| [CI/CD](docs/deployment/index.md)    | CI pipeline, quality analysis, release workflow    |
+| [Patterns](docs/patterns/index.md)   | Design patterns used in granit-front               |
 
-## Intégration dans une application
+## Integration
 
-Les packages sont consommés directement depuis les sources TypeScript — aucun build step séparé.
+Packages are consumed directly as TypeScript source — no separate build step.
 
 ### 1. `package.json`
 
@@ -93,32 +98,34 @@ export default defineConfig({
 }
 ```
 
-À répéter dans chaque tsconfig de l'application : `tsconfig.app.json`, `tsconfig.test.json`, `tsconfig.storybook.json`.
+Repeat in each app tsconfig: `tsconfig.app.json`, `tsconfig.test.json`, `tsconfig.storybook.json`.
 
-## Commandes workspace
+## Workspace Commands
 
 ```bash
-# Tous les packages
-pnpm lint               # ESLint (0 warnings max)
-pnpm tsc                # TypeScript check (tous les packages)
-pnpm test               # Vitest — mode watch
-pnpm test:coverage      # Vitest — couverture v8 (lcov + html)
+# All packages
+pnpm lint               # ESLint (zero warnings)
+pnpm tsc                # TypeScript check (all packages)
+pnpm test               # Vitest — watch mode
+pnpm test:coverage      # Vitest — v8 coverage (lcov + html)
 
-# Cibler un package
+# Target a specific package
 pnpm --filter @granit/utils lint
 pnpm --filter @granit/auth test
 ```
 
 ## Conventions
 
-- **Source-direct** : les packages exportent les fichiers `.ts` — `"exports": { ".": "./src/index.ts" }`, pas de `dist/`
-- **Peer deps** : les dépendances tierces (`axios`, `clsx`, `keycloak-js`…) sont déclarées en `peerDependencies` et fournies par l'application consommatrice
-- **API stable** : tout changement d'export public requiert une mise à jour coordonnée de `guava-front` et `guava-admin`
-- **Pas de code app-spécifique** : aucune logique FHIR, Capacitor, rôle admin, ou contrainte HDS dans les packages
+- **Source-direct**: packages export `.ts` files — `"exports": { ".": "./src/index.ts" }`, no `dist/`
+- **Peer deps**: third-party dependencies (`axios`, `clsx`, `keycloak-js`, ...) are declared in `peerDependencies` and provided by the consumer application
+- **Stable API**: any public export change requires coordinated updates to consumer apps
+- **No app-specific code**: no application-specific logic in packages
 
-## Applications consommatrices
+## Contributing
 
-| Application   | Chemin relatif depuis ce dépôt                  |
-| ------------- | ----------------------------------------------- |
-| `guava-front` | `../../guava-platform/applications/guava-front` |
-| `guava-admin` | `../../guava-platform/applications/guava-admin` |
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding conventions, and
+submission guidelines.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).

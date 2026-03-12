@@ -1,7 +1,8 @@
 {
   "name": "@granit/notifications-signalr",
+  "description": "SignalR transport adapter for @granit/notifications",
   "version": "0.1.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

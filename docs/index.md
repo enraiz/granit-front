@@ -10,7 +10,7 @@ Granit-front fournit les briques communes à toutes les applications front-end :
 logger, utilitaires, client HTTP, authentification, notifications temps réel,
 flux d'activité, workflow, grille de données, import/export, tracing et gestion d'erreurs.
 
-Équivalent JavaScript/TypeScript de [`granit-dotnet`](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet).
+Équivalent JavaScript/TypeScript de `granit-dotnet`.
 
 ## Stack technique
 
