@@ -15,15 +15,7 @@
   },
   "peerDependencies": {
     "@granit/utils": "workspace:*",
-    "@tanstack/react-query": "^5.0.0",
-    "axios": "*",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@tanstack/react-virtual": {
-      "optional": true
-    }
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {

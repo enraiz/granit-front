@@ -1,0 +1,37 @@
+{
+  "name": "@granit/react-tracing",
+  "description": "React bindings for @granit/tracing — TracingProvider, useTracer, useSpan",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/tracing": "workspace:*",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/context-zone": "^2.6.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.213.0",
+    "@opentelemetry/instrumentation-document-load": "^0.57.0",
+    "@opentelemetry/instrumentation-fetch": "^0.213.0",
+    "@opentelemetry/instrumentation-xml-http-request": "^0.213.0",
+    "@opentelemetry/resources": "^2.6.0",
+    "@opentelemetry/sdk-trace-web": "^2.6.0",
+    "@opentelemetry/semantic-conventions": "^1.40.0",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
 import { createInstance } from 'i18next';
-import { initReactI18next } from 'react-i18next';
 
 import type { LocalizationConfig } from './types.js';
 import type { i18n } from 'i18next';
@@ -14,18 +13,28 @@ import type { i18n } from 'i18next';
  * locale is resolved by `resolveInitialLocale()` and applied later via
  * `applyTranslations()` once the backend responds.
  *
+ * Plugins (e.g. `initReactI18next`) can be injected via `config.plugins`.
+ *
  * @example
  * ```typescript
- * // src/lib/i18n.ts
+ * // Pure i18next (no React)
  * import { createLocalization } from '@granit/localization';
  * export const i18n = createLocalization();
+ *
+ * // With React integration
+ * import { createLocalization } from '@granit/localization';
+ * import { initReactI18next } from 'react-i18next';
+ * export const i18n = createLocalization({ plugins: [initReactI18next] });
  * ```
  */
 export function createLocalization(config?: LocalizationConfig): i18n {
   const instance = createInstance();
 
+  for (const plugin of config?.plugins ?? []) {
+    instance.use(plugin);
+  }
+
   instance
-    .use(initReactI18next)
     .init({
       defaultNS: config?.defaultNS ?? 'translation',
       interpolation: {

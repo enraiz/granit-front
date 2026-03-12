@@ -1,0 +1,40 @@
+{
+  "name": "@granit/react-auth",
+  "version": "0.1.1",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/api-client": "workspace:*",
+    "@granit/auth": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
+    "keycloak-js": "*",
+    "react": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
+    "axios": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+  }
+}

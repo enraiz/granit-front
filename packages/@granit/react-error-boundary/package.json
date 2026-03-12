@@ -1,0 +1,29 @@
+{
+  "name": "@granit/react-error-boundary",
+  "description": "React bindings for @granit/error-boundary — GranitErrorBoundary, GlobalErrorCapture, ErrorContextProvider",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/error-boundary": "workspace:*",
+    "@granit/logger": "workspace:*",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  }
+}

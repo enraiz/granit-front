@@ -13,9 +13,7 @@
   "scripts": {
     "build": "tsup"
   },
-  "peerDependencies": {
-    "react": "^19.0.0"
-  },
+  "peerDependencies": {},
   "publishConfig": {
     "exports": {
       ".": {

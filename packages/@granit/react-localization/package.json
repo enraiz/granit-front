@@ -1,0 +1,31 @@
+{
+  "name": "@granit/react-localization",
+  "version": "0.1.1",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/localization": "workspace:*",
+    "@granit/storage": "workspace:*",
+    "i18next": "^25.0.0",
+    "react": "^19.0.0",
+    "react-i18next": "^16.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+  }
+}

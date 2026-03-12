@@ -1,0 +1,33 @@
+{
+  "name": "@granit/react-notifications-mobile-push",
+  "description": "React bindings for @granit/notifications-mobile-push — useMobilePush hook",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@capacitor/push-notifications": ">=6.0.0",
+    "@granit/notifications-mobile-push": "workspace:*",
+    "axios": "*",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/push-notifications": "^8.0.2"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  }
+}

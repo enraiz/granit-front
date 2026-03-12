@@ -1,0 +1,30 @@
+{
+  "name": "@granit/react-identity",
+  "description": "React bindings for @granit/identity — IdentityProvider, useIdentityCapabilities",
+  "version": "0.1.0",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/identity": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  }
+}

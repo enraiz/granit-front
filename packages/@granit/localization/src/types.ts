@@ -1,3 +1,5 @@
+import type { Module } from 'i18next';
+
 /** Matches backend Granit.Localization.LanguageInfo. */
 export interface LanguageInfo {
   cultureName: string;
@@ -18,4 +20,6 @@ export interface LocalizationConfig {
   storageKey?: string;
   /** i18next default namespace (default: 'translation'). */
   defaultNS?: string;
+  /** i18next plugins to register (e.g. initReactI18next for React integration). */
+  plugins?: Module[];
 }

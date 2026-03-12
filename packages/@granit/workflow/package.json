@@ -17,8 +17,7 @@
     "@granit/api-client": "workspace:*"
   },
   "peerDependencies": {
-    "axios": "*",
-    "react": "^19.0.0"
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {

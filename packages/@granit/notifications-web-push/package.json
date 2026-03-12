@@ -14,9 +14,7 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@granit/notifications": "workspace:*",
-    "axios": "*",
-    "react": "^19.0.0"
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {
