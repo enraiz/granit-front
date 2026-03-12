@@ -2,14 +2,14 @@
 
 # @granit/timeline
 
-Fil d'activité unifié (headless) : hooks `useTimeline`, `useTimelineActions`, `useTimelineFollowers` et types associés.
+Unified activity feed (headless): hooks `useTimeline`, `useTimelineActions`, `useTimelineFollowers`.
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/timeline.md).
+See the [full documentation](../../../docs/framework/timeline.md).

@@ -1,7 +1,8 @@
 {
   "name": "@granit/workflow",
+  "description": "Workflow lifecycle hooks (status, transitions, history)",
   "version": "0.1.1",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

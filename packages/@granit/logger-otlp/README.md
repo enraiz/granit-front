@@ -2,14 +2,14 @@
 
 # @granit/logger-otlp
 
-Transport OTLP HTTP pour `@granit/logger` — envoie les logs vers un collecteur OpenTelemetry (Alloy, Aspire Dashboard).
+OTLP HTTP transport for `@granit/logger` — sends logs to an OpenTelemetry collector (Alloy, Aspire Dashboard).
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/logger.md).
+See the [full documentation](../../../docs/framework/logger.md).

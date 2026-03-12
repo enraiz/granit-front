@@ -2,14 +2,14 @@
 
 # @granit/notifications
 
-Notifications temps réel (headless) : fournisseur SignalR, hooks `useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`.
+Transport-agnostic real-time notifications (headless): hooks `useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`.
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/notifications.md).
+See the [full documentation](../../../docs/framework/notifications.md).

@@ -1,7 +1,8 @@
 {
   "name": "@granit/settings",
+  "description": "User settings hooks and providers",
   "version": "0.1.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

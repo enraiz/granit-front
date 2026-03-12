@@ -1,203 +1,190 @@
-# Contribuer à granit-front
+# Contributing to Granit Front
 
-Guide de contribution pour le framework TypeScript/React partagé Digital Dynamics.
+Thank you for your interest in contributing to Granit Front! This guide will help you
+get started.
 
-## Prérequis
+## Code of Conduct
 
-| Outil   | Version minimale |
-| ------- | ---------------- |
-| Node.js | 24               |
-| pnpm    | 10               |
-| Git     | 2.40+            |
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing. We are
+committed to providing a welcoming and inclusive experience for everyone.
 
-> **pnpm uniquement** — ne jamais utiliser npm ou yarn.
+## Getting Started
 
-## Installation
+### Prerequisites
+
+- **Node.js 24** — `node --version` should return `v24.x`
+- **pnpm 10** — `pnpm --version` should return `10.x`
+- **Git** with SSH access
+
+> **pnpm only** — never use npm or yarn.
+
+### Setup
 
 ```bash
-git clone git@gitlab.digitaldynamics.be:digital-dynamics/granit-front.git
+git clone <repository-url>
 cd granit-front
 pnpm install
 ```
 
-## Commandes
+### Build and test
 
 ```bash
-# Lint — ESLint strict (0 warnings max)
+# Lint — ESLint strict (zero warnings)
 pnpm lint
 
-# Vérification TypeScript — tous les packages
+# TypeScript check — all packages
 pnpm tsc
 
-# Tests — mode watch (développement)
+# Tests — watch mode (development)
 pnpm test
 
-# Tests — exécution unique avec couverture (v8, lcov + html)
+# Tests — single run with coverage (v8, lcov + html)
 pnpm test:coverage
 
-# Formatage — Prettier
+# Format — Prettier
 pnpm format
 
-# Cibler un package spécifique
+# Target a specific package
 pnpm --filter @granit/utils lint
 pnpm --filter @granit/auth test
 ```
 
-## Conventions de commit
+## How to Contribute
 
-Les commits suivent la spécification
-[Conventional Commits](https://www.conventionalcommits.org/fr/) et sont
-validés par [commitlint](https://commitlint.js.org/).
+### Reporting Bugs
 
-### Format
+Open an issue using the **Bug Report** template. Include:
+
+- A clear, concise description of the problem
+- Steps to reproduce
+- Expected vs actual behavior
+- Node.js version and OS
+
+### Suggesting Features
+
+Open an issue using the **Feature Request** template. Describe:
+
+- The use case and motivation
+- How it fits into Granit's modular architecture
+- Any alternatives you considered
+
+### Submitting Changes
+
+1. **Fork** the repository
+2. **Create a branch** from `develop`:
+
+   ```text
+   <type>/<short-description>
+
+   Types: feature/ | fix/ | docs/ | refactor/ | chore/ | test/ | perf/
+   ```
+
+3. **Write your code** following the conventions below
+4. **Write or update tests** — every package has co-located tests in `src/__tests__/`
+5. **Run the Definition of Done checks** (see below)
+6. **Commit** using [Conventional Commits](https://www.conventionalcommits.org/):
+
+   ```bash
+   git commit -m "feat(querying): add enum filter support"
+   git commit -m "fix(auth): handle expired token refresh"
+   git commit -m "docs: update getting started guide"
+   ```
+
+7. **Open a pull request** against `develop`
+
+### Definition of Done
+
+All checks are **blocking** — a PR will not be merged until they pass:
+
+1. `pnpm lint` — zero warnings
+2. `pnpm tsc` — zero TypeScript errors
+3. `pnpm test run` — all tests pass
+4. `npx markdownlint-cli2 "<file>"` — every modified `.md` file passes
+5. Code coverage &ge; 80% on new code
+6. Documentation updated if the change affects public API or behavior
+
+## Code Conventions
+
+### TypeScript
+
+- **Target**: ES2022, **TypeScript strict** mode
+- **Nullable**: `verbatimModuleSyntax` enabled
+- **`import type`**: mandatory for type-only imports
+- **No implicit `any`** — TypeScript strict on all `.ts`/`.tsx` files
+
+### ESLint
+
+- Zero warnings tolerated (`--max-warnings 0`)
+- Strict import ordering (`import-x/order`) — run `npx eslint --fix` after
+  creating new files
+- No blank lines between import groups
+
+### Package Structure
+
+Each `@granit/*` package follows this structure:
 
 ```text
-<type>(<scope>): <description>
-```
-
-### Types autorisés
-
-| Type       | Usage                                   |
-| ---------- | --------------------------------------- |
-| `feat`     | Nouvelle fonctionnalité                 |
-| `fix`      | Correction de bug                       |
-| `docs`     | Documentation uniquement                |
-| `chore`    | Maintenance, dépendances, CI            |
-| `refactor` | Refactoring sans changement fonctionnel |
-| `test`     | Ajout ou modification de tests          |
-| `perf`     | Amélioration de performance             |
-
-### Exemples
-
-```text
-feat(querying): ajouter le support des filtres enum
-fix(auth): corriger le rafraîchissement du token expiré
-docs: mettre à jour le guide de démarrage rapide
-chore(deps): mettre à jour pnpm-lock.yaml
-refactor(api-client): extraire la logique d'intercepteur
-test(notifications): améliorer la couverture ≥80%
-```
-
-## Workflow Git
-
-Le projet suit le modèle **GitFlow** :
-
-```text
-main ─────────────────────────────── versions stables (tags vX.Y.Z)
-  │
-  └── develop ────────────────────── intégration continue
-        │
-        ├── feature/ma-feature ──── nouvelles fonctionnalités
-        ├── fix/mon-fix ──────────── corrections
-        ├── release/vX.Y.Z ──────── préparation de release
-        └── hotfix/vX.Y.Z ───────── correctifs urgents
-```
-
-### Branches
-
-| Type de branche | Base      | Cible MR           | Nommage                  |
-| --------------- | --------- | ------------------ | ------------------------ |
-| `feature/*`     | `develop` | `develop`          | `feature/nom-descriptif` |
-| `fix/*`         | `develop` | `develop`          | `fix/nom-descriptif`     |
-| `release/*`     | `develop` | `main` + `develop` | `release/vX.Y.Z`         |
-| `hotfix/*`      | `main`    | `main` + `develop` | `hotfix/vX.Y.Z`          |
-
-> **Le push direct sur `main` est interdit.**
-
-### Merge Requests
-
-- 1 approbation minimum pour `main`
-- Titre en Conventional Commits
-- Description claire du changement et de son impact
-
-## Structure des packages
-
-Chaque package `@granit/*` suit cette structure :
-
-```text
-packages/@granit/mon-package/
+packages/@granit/my-package/
 ├── package.json          ← exports: { ".": "./src/index.ts" }
 ├── tsconfig.json
 └── src/
-    ├── index.ts          ← point d'entrée unique (re-exports)
-    ├── types/            ← types et interfaces exportés
-    ├── api/              ← fonctions d'appel API
-    ├── hooks/            ← hooks React
-    ├── providers/        ← contextes et providers React
-    └── __tests__/        ← tests co-localisés
+    ├── index.ts          ← single entry point (re-exports)
+    ├── types/            ← exported types and interfaces
+    ├── api/              ← API call functions
+    ├── hooks/            ← React hooks
+    ├── providers/        ← React contexts and providers
+    └── __tests__/        ← co-located tests
         ├── hook-a.test.ts
         └── hook-b.test.tsx
 ```
 
-### Principes
+### Architecture Principles
 
-- **Source-direct** : les packages exportent des fichiers `.ts` — pas de build,
-  pas de `dist/`
-- **Point d'entrée unique** : `src/index.ts` re-exporte l'API publique
-- **Headless** : les packages fournissent hooks et logique — les composants UI
-  vivent dans les applications consommatrices
-- **Agnostique** : aucun code spécifique à une application (pas de FHIR,
-  Capacitor, HDS, etc.)
+- **Source-direct**: packages export `.ts` files — no build, no `dist/`
+- **Single entry point**: `src/index.ts` re-exports the public API
+- **Headless**: packages provide hooks and logic — UI components live in
+  consumer applications
+- **App-agnostic**: no application-specific code (no FHIR, Capacitor, etc.)
 
-## Qualité du code
+### Dependencies
 
-### Critères bloquants (Definition of Done)
+- External dependencies go in `peerDependencies`, never `dependencies`
+- The consumer application installs the required versions
+- When adding, removing, or upgrading a dependency, update
+  `THIRD-PARTY-NOTICES.md` at the repository root
 
-Tout code poussé doit satisfaire ces quatre critères :
+### Tests
 
-1. **Lint** : `pnpm lint` passe sans aucun warning
-2. **TypeScript** : `pnpm tsc` compile sans erreur
-3. **Tests** : `pnpm test run` passe — tous les tests au vert
-4. **Couverture** : ≥ 80 % sur tout nouveau code
+- **Framework**: Vitest + React Testing Library
+- **Coverage**: v8 provider, &ge; 80% threshold
+- **Files**: co-located in `src/__tests__/`
 
-### Hooks de pré-commit
+### Security
 
-Les hooks Git sont gérés par [Husky](https://typicode.github.io/husky/) et
-[lint-staged](https://github.com/lint-staged/lint-staged) :
+**Never**:
 
-- **pre-commit** : `pnpm lint && pnpm tsc` sur les fichiers modifiés
-- **commit-msg** : validation du message via commitlint
+- Commit secrets or credentials
+- Log PII in plain text
+- Disable security scans
 
-Si un hook échoue, le commit est bloqué. Corriger les erreurs avant de
-recommencer.
+**Always**:
 
-### Règles TypeScript
+- Encrypt sensitive data in transit
+- Maintain audit trail for sensitive operations
 
-- Mode `strict` activé sur tous les fichiers `.ts`/`.tsx`
-- `import type` obligatoire pour les imports de type uniquement
-- Jamais de `any` implicite
+## Review Process
 
-### Règles ESLint
+A maintainer will review your PR against this checklist:
 
-- Zéro warning toléré (`--max-warnings 0`)
-- Ordre des imports strict (`import-x/order`) — exécuter `npx eslint --fix`
-  après création de nouveaux fichiers
-- Pas de lignes vides entre les groupes d'imports
+- [ ] No hardcoded secrets
+- [ ] Tests pass (`pnpm test run`)
+- [ ] Lint passes (`pnpm lint`)
+- [ ] TypeScript compiles (`pnpm tsc`)
+- [ ] No PII in logs
+- [ ] THIRD-PARTY-NOTICES.md updated (if dependencies changed)
+- [ ] Documentation updated if applicable
 
-## Dépendances
+## License
 
-### Peer dependencies
-
-Les dépendances externes sont déclarées en `peerDependencies`, jamais en
-`dependencies`. L'application consommatrice installe les versions requises.
-
-### THIRD-PARTY-NOTICES.md
-
-Lors de l'ajout, la suppression ou la mise à jour d'une dépendance externe,
-mettre à jour le fichier `THIRD-PARTY-NOTICES.md` à la racine du dépôt
-(nom, version, licence SPDX, copyright).
-
-## Langue
-
-| Contexte                                 | Langue   |
-| ---------------------------------------- | -------- |
-| Code (identifiants, JSDoc, commentaires) | Anglais  |
-| Documentation, issues, commits           | Français |
-
-## Ressources
-
-- [Démarrage rapide](docs/guide/demarrage-rapide.md)
-- [Documentation framework](docs/framework/index.md)
-- [Tests](docs/testing/index.md)
-- [CI/CD et déploiement](docs/deployment/index.md)
-- [Patterns](docs/patterns/index.md)
+By contributing, you agree that your contributions will be licensed under the
+[Apache License 2.0](LICENSE).

@@ -2,14 +2,14 @@
 
 # @granit/logger
 
-Factory de loggers configurables pour les applications Digital Dynamics.
+Configurable logger factory for Digital Dynamics applications.
 
-Fait partie du framework [granit-front](https://gitlab.digitaldynamics.be/digital-dynamics/granit-front).
+Part of the [granit-front](../../../README.md) framework.
 
 ## Installation
 
-Consommé via `link:` protocol — voir la [documentation d'intégration](../../../README.md).
+Consumed via `link:` protocol — see the [integration documentation](../../../README.md).
 
 ## Documentation
 
-Voir la [documentation complète](../../../docs/framework/logger.md).
+See the [full documentation](../../../docs/framework/logger.md).

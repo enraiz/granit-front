@@ -8,13 +8,13 @@ Description de l'objectif global de cet epic et sa valeur pour les applications 
 
 ## Architecture
 
-Description de l'architecture cible et des packages @granit/* concernes.
+Description de l'architecture cible et des packages @granit/\* concernes.
 
 ## Contraintes
 
-- [ ] API publique retro-compatible (@granit/*)
+- [ ] API publique retro-compatible (@granit/\*)
 - [ ] Aucune dependance app-specifique dans les packages
-- [ ] Souverainete : infrastructure OVHcloud FR pour les apps consommatrices
+- [ ] Infrastructure sovereignty constraints verified for consumer apps
 
 ## Criteres de succes
 

@@ -119,8 +119,7 @@ Le header `Idempotency-Key` est consommé par le middleware
 - Renvoie HTTP 422 si le header est manquant et que l'endpoint le requiert
   (`[Idempotent(Required = true)]`)
 
-Documentation backend complète :
-[docs/framework/api/idempotency.md](https://gitlab.digitaldynamics.be/digital-dynamics/granit-dotnet/-/blob/develop/docs/framework/api/idempotency.md)
+Documentation backend complète : see `granit-dotnet/docs/framework/api/idempotency.md`.
 
 ## Peer dependencies
 

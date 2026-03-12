@@ -1,7 +1,8 @@
 {
   "name": "@granit/utils",
+  "description": "Shared utilities (cn, formatDate, formatNumber, ...)",
   "version": "0.1.1",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

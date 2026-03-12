@@ -1,29 +1,29 @@
-# Avis relatifs aux composants tiers — granit-front
+# Third-Party Notices — granit-front
 
-Ce fichier répertorie les bibliothèques tierces utilisées par le projet
-**granit-front** ainsi que leurs licences respectives. Il est mis à jour
-à chaque ajout ou modification de dépendance externe.
+This file lists the third-party libraries used by the **granit-front** project
+along with their respective licenses. It is updated whenever an external
+dependency is added or modified.
 
-Dernière mise à jour : 2026-03-11
-
----
-
-## Récapitulatif des licences
-
-| Licence      | Nombre de packages |
-| ------------ | ------------------ |
-| MIT          | 34                 |
-| Apache-2.0   | 13                 |
-| ISC          | 1                  |
-| BSD-3-Clause | 1                  |
+Last updated: 2026-03-12
 
 ---
 
-## Dépendances (devDependencies — monorepo workspace)
+## License Summary
 
-> Le `package.json` racine ne déclare aucune `dependencies` de production.
-> Toutes les dépendances sont en `devDependencies` et servent les packages
-> workspace `@granit/*` via `peerDependencies`.
+| License      | Package count |
+| ------------ | ------------- |
+| MIT          | 34            |
+| Apache-2.0   | 13            |
+| ISC          | 1             |
+| BSD-3-Clause | 1             |
+
+---
+
+## Dependencies (devDependencies — monorepo workspace)
+
+> The root `package.json` declares no production `dependencies`.
+> All dependencies are in `devDependencies` and serve the `@granit/*` workspace
+> packages via `peerDependencies`.
 
 ### MIT
 
@@ -95,5 +95,5 @@ Dernière mise à jour : 2026-03-11
 | ------- | ------- | ------------------------------------ |
 | klaro   | 0.7.x   | Copyright (c) KIProtect GmbH, Berlin |
 
-> `klaro` est une peerDependency de `@granit/cookies-klaro`, installée
-> dans les applications consommatrices (guava-front).
+> `klaro` is a peerDependency of `@granit/cookies-klaro`, installed in
+> consumer applications.

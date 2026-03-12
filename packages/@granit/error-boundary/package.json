@@ -1,7 +1,8 @@
 {
   "name": "@granit/error-boundary",
+  "description": "Structured error capture with React error boundary and global listeners",
   "version": "0.1.1",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
