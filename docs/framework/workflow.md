@@ -5,7 +5,7 @@ Gestion du cycle de vie (workflow) des entités, avec machine à états finis c�
 ## Pourquoi
 
 - Composant réutilisable pour afficher l'état courant et les transitions disponibles
-- Barre de statut headless (style Odoo) avec `data-*` attributs pour le styling personnalisé
+- Barre de statut headless avec `data-*` attributs pour le styling personnalisé
 - Gestion des approbations (routing automatique quand l'utilisateur n'a pas la permission directe)
 - Historique des transitions (piste d'audit HDS, INSERT-only)
 - Intégrable dans le composant `<Timeline />` comme entrées système
@@ -136,7 +136,7 @@ const { history, loading, error, refetch } = useWorkflowHistory({
 
 ### `<WorkflowStatusBar />`
 
-Barre de statut headless (style Odoo). Affiche les états comme des chips et les transitions comme des boutons d'action.
+Barre de statut headless. Affiche les états comme des chips et les transitions comme des boutons d'action.
 
 ```tsx
 <WorkflowStatusBar

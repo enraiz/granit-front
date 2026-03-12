@@ -26,7 +26,7 @@ Ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
   `usePermissionGrant`) (2026-03-04)
 - **@granit/data-exchange** : nouveau package — export et import tabulaire
   (renommé depuis `@granit/data-export`) (2026-03-04)
-- **@granit/querying** : nouveau package — vues liste filtrées Odoo-like
+- **@granit/querying** : nouveau package — vues liste filtrées headless
   (`useQueryMeta`, `useQueryEndpoint`, `useSavedViews`, `useSmartFilter`) (2026-03-04)
 - **@granit/ui** et **@granit/ui-back** : packages de composants UI partagés
   (2026-03-03)
