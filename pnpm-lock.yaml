@@ -183,11 +183,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
 
-  packages/@granit/cookies:
-    dependencies:
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
+  packages/@granit/cookies: {}
 
   packages/@granit/cookies-klaro:
     dependencies:
@@ -197,27 +193,15 @@ importers:
       klaro:
         specifier: ^0.7.0
         version: 0.7.21(@babel/core@7.29.0)(eslint@10.0.2(jiti@2.6.1))
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
 
   packages/@granit/data-exchange:
     dependencies:
       '@granit/utils':
         specifier: workspace:*
         version: link:../utils
-      '@tanstack/react-query':
-        specifier: ^5.0.0
-        version: 5.90.21(react@19.2.4)
       axios:
         specifier: '*'
         version: 1.13.6
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.2.4(react@19.2.4)
 
   packages/@granit/error-boundary: {}
 
@@ -255,15 +239,9 @@ importers:
 
   packages/@granit/notifications:
     dependencies:
-      '@granit/querying':
-        specifier: workspace:*
-        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
     devDependencies:
       '@granit/api-client':
         specifier: workspace:*
@@ -319,6 +297,36 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
 
+  packages/@granit/react-cookies:
+    dependencies:
+      '@granit/cookies':
+        specifier: workspace:*
+        version: link:../cookies
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-data-exchange:
+    dependencies:
+      '@granit/data-exchange':
+        specifier: workspace:*
+        version: link:../data-exchange
+      '@granit/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
+
   packages/@granit/react-error-boundary:
     dependencies:
       '@granit/error-boundary':
@@ -327,6 +335,21 @@ importers:
       '@granit/logger':
         specifier: workspace:*
         version: link:../logger
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
+  packages/@granit/react-notifications:
+    dependencies:
+      '@granit/notifications':
+        specifier: workspace:*
+        version: link:../notifications
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
+      axios:
+        specifier: '*'
+        version: 1.13.6
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -359,6 +382,21 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
 
+  packages/@granit/react-settings:
+    dependencies:
+      '@granit/settings':
+        specifier: workspace:*
+        version: link:../settings
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+
   packages/@granit/react-storage:
     dependencies:
       '@granit/storage':
@@ -367,6 +405,25 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+
+  packages/@granit/react-timeline:
+    dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
+      '@granit/timeline':
+        specifier: workspace:*
+        version: link:../timeline
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+    devDependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
 
   packages/@granit/react-tracing:
     dependencies:
@@ -404,17 +461,27 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
 
-  packages/@granit/settings:
+  packages/@granit/react-workflow:
     dependencies:
-      '@tanstack/react-query':
-        specifier: ^5.0.0
-        version: 5.90.21(react@19.2.4)
+      '@granit/workflow':
+        specifier: workspace:*
+        version: link:../workflow
       axios:
         specifier: '*'
         version: 1.13.6
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+
+  packages/@granit/settings:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
 
   packages/@granit/storage: {}
 
@@ -436,15 +503,9 @@ importers:
 
   packages/@granit/timeline:
     dependencies:
-      '@granit/querying':
-        specifier: workspace:*
-        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
     devDependencies:
       '@granit/api-client':
         specifier: workspace:*
@@ -473,9 +534,6 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
     devDependencies:
       '@granit/api-client':
         specifier: workspace:*

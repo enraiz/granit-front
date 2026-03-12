@@ -14,8 +14,7 @@
   },
   "peerDependencies": {
     "@granit/cookies": "workspace:*",
-    "klaro": "^0.7.0",
-    "react": "^19.0.0"
+    "klaro": "^0.7.0"
   },
   "publishConfig": {
     "exports": {

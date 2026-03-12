@@ -1,8 +1,7 @@
+import { axiosResponse, createMockClient } from '@granit/api-client/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
 import { executeTransition, fetchHistory, fetchStatus } from '../api/workflow-api.js';
-
-import { axiosResponse, createMockClient } from './test-utils.tsx';
 
 import type {
   TransitionHistoryDto,

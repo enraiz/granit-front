@@ -1,3 +1,4 @@
+import { axiosResponse, createMockClient } from '@granit/api-client/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -9,8 +10,6 @@ import {
   markAsRead,
   updatePreference,
 } from '../api/notification-api.js';
-
-import { axiosResponse, createMockClient } from './test-utils.js';
 
 import type {
   ActivityFeedPageDto,

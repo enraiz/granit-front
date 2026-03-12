@@ -1,0 +1,30 @@
+{
+  "name": "@granit/react-notifications",
+  "description": "React bindings for @granit/notifications — NotificationProvider, hooks",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/notifications": "workspace:*",
+    "@granit/querying": "workspace:*",
+    "axios": "*",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  }
+}

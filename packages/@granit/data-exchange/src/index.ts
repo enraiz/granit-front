@@ -2,21 +2,19 @@
 // @granit/data-exchange — public API
 // ---------------------------------------------------------------------------
 
-// Export
+// Export types
+export type {
+  CreateExportJobRequest,
+  ExportDefinitionResponse,
+  ExportFieldDescriptor,
+  ExportJobResponse,
+  ExportJobStatus,
+  ExportPresetResponse,
+  SaveExportPresetRequest,
+} from './export/index.js';
+
+// Export API
 export {
-  type CreateExportJobRequest,
-  type ExportConfig,
-  type ExportDefinitionResponse,
-  type ExportFieldDescriptor,
-  type ExportJobResponse,
-  type ExportJobStatus,
-  type ExportPresetResponse,
-  type ExportProviderProps,
-  type SaveExportPresetRequest,
-  type UseExportJobReturn,
-  type UseExportPresetsReturn,
-  ExportProvider,
-  buildExportQueryKey,
   createExportJob,
   deleteExportPreset,
   downloadExportFile,
@@ -25,32 +23,24 @@ export {
   fetchExportJobStatus,
   fetchExportPresets,
   saveExportPreset,
-  useExportConfig,
-  useExportDefinitions,
-  useExportFields,
-  useExportJob,
-  useExportPresets,
 } from './export/index.js';
 
-// Import
+// Import types
+export type {
+  ConfirmMappingsRequest,
+  ImportColumnMapping,
+  ImportFieldMetadata,
+  ImportJobResponse,
+  ImportJobStatus,
+  ImportPreviewResponse,
+  ImportReportResponse,
+  ImportRowError,
+  ImportRowErrorKind,
+  MappingConfidence,
+} from './import/index.js';
+
+// Import API
 export {
-  type ImportColumnMapping,
-  type ConfirmMappingsRequest,
-  type ImportFieldMetadata,
-  type ImportConfig,
-  type ImportJobResponse,
-  type ImportJobStatus,
-  type ImportPreviewResponse,
-  type ImportProviderProps,
-  type ImportReportResponse,
-  type ImportRowError,
-  type ImportRowErrorKind,
-  type MappingConfidence,
-  type UseImportJobReturn,
-  type UseImportPreviewReturn,
-  type UseImportReportReturn,
-  ImportProvider,
-  buildImportQueryKey,
   cancelImportJob,
   confirmMappings,
   downloadCorrectionFile,
@@ -60,8 +50,4 @@ export {
   fetchImportReport,
   previewImport,
   uploadImportFile,
-  useImportConfig,
-  useImportJob,
-  useImportPreview,
-  useImportReport,
 } from './import/index.js';

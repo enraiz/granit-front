@@ -13,9 +13,7 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^5.0.0",
-    "axios": "*",
-    "react": "^19.0.0"
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {

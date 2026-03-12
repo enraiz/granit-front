@@ -1,0 +1,11 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@granit/notifications": ["../notifications/src/index.ts"],
+      "@granit/querying": ["../querying/src/index.ts"],
+      "@granit/api-client/test-utils": ["../api-client/src/test-utils.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}
