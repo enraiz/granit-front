@@ -45,7 +45,7 @@ let _tokenGetter: (() => Promise<string | undefined>) | null = null;
 // Call setTenantGetter() from the app initialization code.
 let _tenantGetter: (() => string | undefined) | null = null;
 
-// Global callback invoked on any 401 response — wired by @granit/auth to force logout.
+// Global callback invoked on any 401 response — wired by @granit/react-authentication to force logout.
 let _onUnauthorized: (() => void) | null = null;
 
 // Global idempotency key generator — opt-in via @granit/idempotency.
@@ -66,7 +66,7 @@ export function setTenantGetter(getter: () => string | undefined): void {
 /**
  * Register a callback invoked on any HTTP 401 response.
  *
- * Typically wired by `@granit/auth` to force a Keycloak logout when the
+ * Typically wired by `@granit/react-authentication` to force a Keycloak logout when the
  * backend rejects a token (e.g. session revoked via back-channel logout).
  */
 export function setOnUnauthorized(callback: () => void): void {

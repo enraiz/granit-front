@@ -165,15 +165,6 @@ importers:
         specifier: '*'
         version: 1.13.5
 
-  packages/@granit/auth:
-    dependencies:
-      '@granit/authentication':
-        specifier: workspace:*
-        version: link:../authentication
-      '@granit/authorization':
-        specifier: workspace:*
-        version: link:../authorization
-
   packages/@granit/authentication:
     dependencies:
       keycloak-js:
@@ -296,15 +287,6 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
-
-  packages/@granit/react-auth:
-    dependencies:
-      '@granit/react-authentication':
-        specifier: workspace:*
-        version: link:../react-authentication
-      '@granit/react-authorization':
-        specifier: workspace:*
-        version: link:../react-authorization
 
   packages/@granit/react-authentication:
     dependencies:

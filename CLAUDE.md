@@ -34,8 +34,6 @@
 | `@granit/react-authentication`          | React bindings for `@granit/authentication`: `useKeycloakInit`, `createAuthContext`, `createMockProvider`                                                                                                                                                                                                                                                                                                                                |
 | `@granit/authorization`                 | Permission/role authorization types: `PermissionsResponse`, `PermissionDefinitionDto`, `PermissionGroupDto`, `PermissionGrantDto` — mirrors `Granit.Authorization` .NET                                                                                                                                                                                                                                                                  |
 | `@granit/react-authorization`           | React hooks for `@granit/authorization`: `usePermissions`, `usePermissionDefinitions`, `useRolePermissions`, `usePermissionGrant`                                                                                                                                                                                                                                                                                                        |
-| `@granit/auth`                          | **Facade** — re-exports from `@granit/authentication` + `@granit/authorization` for backward compatibility                                                                                                                                                                                                                                                                                                                               |
-| `@granit/react-auth`                    | **Facade** — re-exports from `@granit/react-authentication` + `@granit/react-authorization` for backward compatibility                                                                                                                                                                                                                                                                                                                   |
 | `@granit/timeline`                      | Unified activity feed (headless): hooks (`useTimeline`, `useTimelineActions`, `useTimelineFollowers`), types — UI components live in consumer apps                                                                                                                                                                                                                                                                                       |
 | `@granit/cookies`                       | Cookie consent abstraction: React context, `useCookieConsent` hook, `CookieConsentProvider` interface                                                                                                                                                                                                                                                                                                                                    |
 | `@granit/cookies-klaro`                 | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory                                                                                                                                                                                                                                                                                                                                                                            |
@@ -75,7 +73,7 @@ pnpm test:coverage      # Vitest coverage (v8, lcov + html)
 
 # Per package
 pnpm --filter @granit/utils lint
-pnpm --filter @granit/auth test
+pnpm --filter @granit/authentication test
 ```
 
 ## Package conventions
@@ -111,7 +109,7 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   — breaking changes require coordinating updates to both guava-front and guava-admin
 - **No app-specific code**: packages must remain app-agnostic
   (no FHIR, no Capacitor, no admin roles, no HDS-specific behavior)
-- **`@granit/auth` base interface**: `BaseAuthContextType` is the shared base
+- **`@granit/authentication` base interface**: `BaseAuthContextType` is the shared base
   — apps extend it with their own fields (`register` in front, `hasAdminRole` in admin)
 - **Peer dep matrix**:
   - `@granit/utils` → `clsx`, `tailwind-merge`, `date-fns`
@@ -120,8 +118,6 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/react-authentication` → `react`, `keycloak-js`, `@granit/api-client`, `@granit/authentication`
   - `@granit/authorization` → `axios`
   - `@granit/react-authorization` → `react`, `axios`, `@tanstack/react-query`, `@granit/authorization`
-  - `@granit/auth` → `@granit/authentication`, `@granit/authorization` _(facade)_
-  - `@granit/react-auth` → `@granit/react-authentication`, `@granit/react-authorization` _(facade)_
   - `@granit/cookies` → `react`
   - `@granit/cookies-klaro` → `react`, `klaro`, `@granit/cookies`
   - `@granit/timeline` → `react`, `axios`, `@granit/querying`

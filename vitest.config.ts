@@ -26,7 +26,6 @@ export default defineConfig({
         __dirname,
         'packages/@granit/authorization/src/index.ts'
       ),
-      '@granit/auth': path.resolve(__dirname, 'packages/@granit/auth/src/index.ts'),
       '@granit/cookies': path.resolve(__dirname, 'packages/@granit/cookies/src/index.ts'),
       '@granit/cookies-klaro': path.resolve(
         __dirname,
@@ -93,7 +92,6 @@ export default defineConfig({
         __dirname,
         'packages/@granit/react-authorization/src/index.ts'
       ),
-      '@granit/react-auth': path.resolve(__dirname, 'packages/@granit/react-auth/src/index.ts'),
       '@granit/react-cookies': path.resolve(
         __dirname,
         'packages/@granit/react-cookies/src/index.ts'

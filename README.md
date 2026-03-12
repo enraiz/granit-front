@@ -11,31 +11,40 @@ utilities, Axios HTTP client, Keycloak authentication, notifications, querying, 
 
 ## Packages
 
-| Package                                                                            | Description                                                                |
-| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| [`@granit/api-client`](packages/@granit/api-client/)                               | Axios factory with Bearer token interceptor and shared response types      |
-| [`@granit/auth`](packages/@granit/auth/)                                           | Keycloak hooks, auth context factory, mock provider, permission management |
-| [`@granit/cookies`](packages/@granit/cookies/)                                     | Cookie consent abstraction with React context and hooks                    |
-| [`@granit/cookies-klaro`](packages/@granit/cookies-klaro/)                         | Klaro CMP adapter for `@granit/cookies`                                    |
-| [`@granit/data-exchange`](packages/@granit/data-exchange/)                         | Tabular data import/export hooks and providers                             |
-| [`@granit/error-boundary`](packages/@granit/error-boundary/)                       | Structured error capture with React error boundary and global listeners    |
-| [`@granit/idempotency`](packages/@granit/idempotency/)                             | Automatic `Idempotency-Key` header injection for mutation requests         |
-| [`@granit/localization`](packages/@granit/localization/)                           | i18next helpers and localization hooks                                     |
-| [`@granit/logger`](packages/@granit/logger/)                                       | Configurable logger factory (`createLogger`)                               |
-| [`@granit/logger-otlp`](packages/@granit/logger-otlp/)                             | OTLP transport for `@granit/logger`                                        |
-| [`@granit/notifications`](packages/@granit/notifications/)                         | Transport-agnostic notification hooks and providers                        |
-| [`@granit/notifications-mobile-push`](packages/@granit/notifications-mobile-push/) | Mobile push (FCM/APNs) device token registration via Capacitor             |
-| [`@granit/notifications-signalr`](packages/@granit/notifications-signalr/)         | SignalR transport adapter for `@granit/notifications`                      |
-| [`@granit/notifications-sse`](packages/@granit/notifications-sse/)                 | SSE transport adapter for `@granit/notifications`                          |
-| [`@granit/notifications-web-push`](packages/@granit/notifications-web-push/)       | Web Push VAPID subscription management                                     |
-| [`@granit/querying`](packages/@granit/querying/)                                   | Headless data grid hooks with TanStack Query integration                   |
-| [`@granit/settings`](packages/@granit/settings/)                                   | User settings hooks and providers                                          |
-| [`@granit/storage`](packages/@granit/storage/)                                     | File upload and storage management hooks                                   |
-| [`@granit/templating`](packages/@granit/templating/)                               | Template editing and preview hooks                                         |
-| [`@granit/timeline`](packages/@granit/timeline/)                                   | Unified activity feed hooks for audit trails                               |
-| [`@granit/tracing`](packages/@granit/tracing/)                                     | OpenTelemetry distributed tracing for the browser                          |
-| [`@granit/utils`](packages/@granit/utils/)                                         | Shared utilities (`cn`, `formatDate`, `formatNumber`, ...)                 |
-| [`@granit/workflow`](packages/@granit/workflow/)                                   | Workflow lifecycle hooks (status, transitions, history)                    |
+| Package                                                                                    | Description                                                             |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| [`@granit/api-client`](packages/@granit/api-client/)                                       | Axios factory with Bearer token interceptor and shared response types   |
+| [`@granit/authentication`](packages/@granit/authentication/)                               | Keycloak/OIDC authentication types and configuration                    |
+| [`@granit/authentication-api-keys`](packages/@granit/authentication-api-keys/)             | API key management types                                                |
+| [`@granit/authorization`](packages/@granit/authorization/)                                 | Permission and role authorization types                                 |
+| [`@granit/background-jobs`](packages/@granit/background-jobs/)                             | Background job monitoring types                                         |
+| [`@granit/cookies`](packages/@granit/cookies/)                                             | Cookie consent abstraction with React context and hooks                 |
+| [`@granit/cookies-klaro`](packages/@granit/cookies-klaro/)                                 | Klaro CMP adapter for `@granit/cookies`                                 |
+| [`@granit/data-exchange`](packages/@granit/data-exchange/)                                 | Tabular data import/export hooks and providers                          |
+| [`@granit/error-boundary`](packages/@granit/error-boundary/)                               | Structured error capture with React error boundary and global listeners |
+| [`@granit/idempotency`](packages/@granit/idempotency/)                                     | Automatic `Idempotency-Key` header injection for mutation requests      |
+| [`@granit/localization`](packages/@granit/localization/)                                   | i18next helpers and localization hooks                                  |
+| [`@granit/logger`](packages/@granit/logger/)                                               | Configurable logger factory (`createLogger`)                            |
+| [`@granit/logger-otlp`](packages/@granit/logger-otlp/)                                     | OTLP transport for `@granit/logger`                                     |
+| [`@granit/notifications`](packages/@granit/notifications/)                                 | Transport-agnostic notification hooks and providers                     |
+| [`@granit/notifications-mobile-push`](packages/@granit/notifications-mobile-push/)         | Mobile push (FCM/APNs) device token registration via Capacitor          |
+| [`@granit/notifications-signalr`](packages/@granit/notifications-signalr/)                 | SignalR transport adapter for `@granit/notifications`                   |
+| [`@granit/notifications-sse`](packages/@granit/notifications-sse/)                         | SSE transport adapter for `@granit/notifications`                       |
+| [`@granit/notifications-web-push`](packages/@granit/notifications-web-push/)               | Web Push VAPID subscription management                                  |
+| [`@granit/querying`](packages/@granit/querying/)                                           | Headless data grid hooks with TanStack Query integration                |
+| [`@granit/react-authentication`](packages/@granit/react-authentication/)                   | React hooks for Keycloak init, auth context factory, mock provider      |
+| [`@granit/react-authentication-api-keys`](packages/@granit/react-authentication-api-keys/) | React hooks for API key CRUD operations                                 |
+| [`@granit/react-authorization`](packages/@granit/react-authorization/)                     | React hooks for permissions, definitions, role grants                   |
+| [`@granit/react-background-jobs`](packages/@granit/react-background-jobs/)                 | React hooks for background job monitoring and control                   |
+| [`@granit/react-reference-data`](packages/@granit/react-reference-data/)                   | React hooks for reference data (countries) CRUD                         |
+| [`@granit/reference-data`](packages/@granit/reference-data/)                               | Reference data types (countries)                                        |
+| [`@granit/settings`](packages/@granit/settings/)                                           | User settings hooks and providers                                       |
+| [`@granit/storage`](packages/@granit/storage/)                                             | File upload and storage management hooks                                |
+| [`@granit/templating`](packages/@granit/templating/)                                       | Template editing and preview hooks                                      |
+| [`@granit/timeline`](packages/@granit/timeline/)                                           | Unified activity feed hooks for audit trails                            |
+| [`@granit/tracing`](packages/@granit/tracing/)                                             | OpenTelemetry distributed tracing for the browser                       |
+| [`@granit/utils`](packages/@granit/utils/)                                                 | Shared utilities (`cn`, `formatDate`, `formatNumber`, ...)              |
+| [`@granit/workflow`](packages/@granit/workflow/)                                           | Workflow lifecycle hooks (status, transitions, history)                 |
 
 ## Documentation
 
@@ -59,7 +68,8 @@ Packages are consumed directly as TypeScript source — no separate build step.
     "@granit/logger": "link:../../../granit-front/packages/@granit/logger",
     "@granit/utils": "link:../../../granit-front/packages/@granit/utils",
     "@granit/api-client": "link:../../../granit-front/packages/@granit/api-client",
-    "@granit/auth": "link:../../../granit-front/packages/@granit/auth"
+    "@granit/authentication": "link:../../../granit-front/packages/@granit/authentication",
+    "@granit/react-authentication": "link:../../../granit-front/packages/@granit/react-authentication"
   }
 }
 ```
@@ -77,7 +87,8 @@ export default defineConfig({
       '@granit/logger': path.join(GRANIT, 'logger/src/index.ts'),
       '@granit/utils': path.join(GRANIT, 'utils/src/index.ts'),
       '@granit/api-client': path.join(GRANIT, 'api-client/src/index.ts'),
-      '@granit/auth': path.join(GRANIT, 'auth/src/index.ts'),
+      '@granit/authentication': path.join(GRANIT, 'authentication/src/index.ts'),
+      '@granit/react-authentication': path.join(GRANIT, 'react-authentication/src/index.ts'),
     },
   },
 });
@@ -92,7 +103,12 @@ export default defineConfig({
       "@granit/logger": ["../../../granit-front/packages/@granit/logger/src/index.ts"],
       "@granit/utils": ["../../../granit-front/packages/@granit/utils/src/index.ts"],
       "@granit/api-client": ["../../../granit-front/packages/@granit/api-client/src/index.ts"],
-      "@granit/auth": ["../../../granit-front/packages/@granit/auth/src/index.ts"]
+      "@granit/authentication": [
+        "../../../granit-front/packages/@granit/authentication/src/index.ts"
+      ],
+      "@granit/react-authentication": [
+        "../../../granit-front/packages/@granit/react-authentication/src/index.ts"
+      ]
     }
   }
 }
@@ -111,7 +127,7 @@ pnpm test:coverage      # Vitest — v8 coverage (lcov + html)
 
 # Target a specific package
 pnpm --filter @granit/utils lint
-pnpm --filter @granit/auth test
+pnpm --filter @granit/authentication test
 ```
 
 ## Conventions
