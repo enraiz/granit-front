@@ -3,13 +3,13 @@
 // ---------------------------------------------------------------------------
 
 import {
+  buildQueryKey,
   createSavedView,
   deleteSavedView,
   fetchSavedViews,
   setDefaultSavedView,
   updateSavedView,
 } from '@granit/querying';
-import { buildQueryKey } from '@granit/querying';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useQueryConfig } from '../providers/query-provider.js';

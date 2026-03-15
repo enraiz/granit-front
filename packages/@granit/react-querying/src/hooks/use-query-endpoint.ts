@@ -2,15 +2,19 @@
 // useQueryEndpoint — main data fetching hook (Story #49)
 // ---------------------------------------------------------------------------
 
-import { fetchGrouped, fetchPage } from '@granit/querying';
-import { buildQueryKey } from '@granit/querying';
+import { buildQueryKey, fetchGrouped, fetchPage } from '@granit/querying';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useReducer } from 'react';
 
 import { useQueryConfig } from '../providers/query-provider.js';
 
-import type { FilterEntry, QueryParams, SortEntry } from '@granit/querying';
-import type { GroupedResult, PagedResult } from '@granit/querying';
+import type {
+  FilterEntry,
+  GroupedResult,
+  PagedResult,
+  QueryParams,
+  SortEntry,
+} from '@granit/querying';
 import type { UseQueryResult } from '@tanstack/react-query';
 
 // ---------------------------------------------------------------------------

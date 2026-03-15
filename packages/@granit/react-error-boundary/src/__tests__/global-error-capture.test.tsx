@@ -29,7 +29,7 @@ describe('GlobalErrorCapture', () => {
   });
 
   it('should register error and unhandledrejection listeners on mount', () => {
-    const addSpy = vi.spyOn(window, 'addEventListener');
+    const addSpy = vi.spyOn(globalThis, 'addEventListener');
     const logger = createMockLogger();
 
     render(<GlobalErrorCapture logger={logger} />);
@@ -39,7 +39,7 @@ describe('GlobalErrorCapture', () => {
   });
 
   it('should remove listeners on unmount', () => {
-    const removeSpy = vi.spyOn(window, 'removeEventListener');
+    const removeSpy = vi.spyOn(globalThis, 'removeEventListener');
     const logger = createMockLogger();
 
     const { unmount } = render(<GlobalErrorCapture logger={logger} />);
@@ -60,7 +60,7 @@ describe('GlobalErrorCapture', () => {
       lineno: 42,
       colno: 10,
     });
-    window.dispatchEvent(errorEvent);
+    globalThis.dispatchEvent(errorEvent);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught error',
@@ -81,7 +81,7 @@ describe('GlobalErrorCapture', () => {
       promise: Promise.resolve(),
       reason: new Error('Rejected!'),
     });
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
@@ -98,7 +98,7 @@ describe('GlobalErrorCapture', () => {
       error: new Error('Callback test'),
       message: 'Callback test',
     });
-    window.dispatchEvent(errorEvent);
+    globalThis.dispatchEvent(errorEvent);
 
     expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: 'Callback test' }));
   });
@@ -113,9 +113,9 @@ describe('GlobalErrorCapture', () => {
         message: 'Duplicate',
       });
 
-    window.dispatchEvent(createEvent());
-    window.dispatchEvent(createEvent());
-    window.dispatchEvent(createEvent());
+    globalThis.dispatchEvent(createEvent());
+    globalThis.dispatchEvent(createEvent());
+    globalThis.dispatchEvent(createEvent());
 
     expect(logger.error).toHaveBeenCalledTimes(1);
   });
@@ -128,7 +128,7 @@ describe('GlobalErrorCapture', () => {
       promise: Promise.resolve(),
       reason: 'string error',
     });
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
@@ -144,7 +144,7 @@ describe('GlobalErrorCapture', () => {
       error: 'not-an-error-object',
       message: 'fallback message',
     });
-    window.dispatchEvent(errorEvent);
+    globalThis.dispatchEvent(errorEvent);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught error',
@@ -160,7 +160,7 @@ describe('GlobalErrorCapture', () => {
       error: null,
       message: '',
     });
-    window.dispatchEvent(errorEvent);
+    globalThis.dispatchEvent(errorEvent);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught error',
@@ -176,7 +176,7 @@ describe('GlobalErrorCapture', () => {
       promise: Promise.resolve(),
       reason: null,
     });
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
@@ -192,7 +192,7 @@ describe('GlobalErrorCapture', () => {
       promise: Promise.resolve(),
       reason: undefined,
     });
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',

@@ -54,20 +54,20 @@ export const apiKeyKeys = {
  *
  * Calls `GET {basePath}` with query parameters derived from `params`.
  *
- * @param params - Optional search/filter/pagination parameters.
  * @param options - Axios client and optional base path.
+ * @param params - Optional search/filter/pagination parameters.
  *
  * @example
  * ```tsx
  * const { data, isLoading } = useApiKeys(
- *   { environment: 'production', type: ['Secret'] },
- *   { client: api }
+ *   { client: api },
+ *   { environment: 'production', type: ['Secret'] }
  * );
  * ```
  */
 export function useApiKeys(
-  params: UseApiKeysParams = {},
-  options: ApiKeyHookOptions
+  options: ApiKeyHookOptions,
+  params: UseApiKeysParams = {}
 ): UseQueryResult<ApiKeyResponse[]> {
   const { client, basePath = DEFAULT_BASE_PATH } = options;
 

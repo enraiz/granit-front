@@ -4,9 +4,14 @@
 
 import { useCallback, useMemo, useReducer } from 'react';
 
-import type { QueryMetadata } from '@granit/querying';
-import type { FilterEntry, FilterOperator } from '@granit/querying';
-import type { FilterSuggestion, FilterToken, SmartFilterPhase } from '@granit/querying';
+import type {
+  FilterEntry,
+  FilterOperator,
+  FilterSuggestion,
+  FilterToken,
+  QueryMetadata,
+  SmartFilterPhase,
+} from '@granit/querying';
 
 // ---------------------------------------------------------------------------
 // State

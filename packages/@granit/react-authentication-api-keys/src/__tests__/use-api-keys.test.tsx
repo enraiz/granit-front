@@ -57,7 +57,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [mockApiKey] });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(() => useApiKeys({}, { client }), { wrapper });
+    const { result } = renderHook(() => useApiKeys({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -71,7 +71,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    renderHook(() => useApiKeys({ search: 'prod' }, { client }), { wrapper });
+    renderHook(() => useApiKeys({ client }, { search: 'prod' }), { wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -86,7 +86,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    renderHook(() => useApiKeys({ type: ['Secret', 'Webhook'] }, { client }), { wrapper });
+    renderHook(() => useApiKeys({ client }, { type: ['Secret', 'Webhook'] }), { wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -103,7 +103,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    renderHook(() => useApiKeys({ environment: 'staging' }, { client }), { wrapper });
+    renderHook(() => useApiKeys({ client }, { environment: 'staging' }), { wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -120,7 +120,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    renderHook(() => useApiKeys({ includeRevoked: true }, { client }), { wrapper });
+    renderHook(() => useApiKeys({ client }, { includeRevoked: true }), { wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -137,7 +137,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    renderHook(() => useApiKeys({ page: 2, pageSize: 25 }, { client }), { wrapper });
+    renderHook(() => useApiKeys({ client }, { page: 2, pageSize: 25 }), { wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -154,7 +154,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    renderHook(() => useApiKeys({}, { client, basePath: '/api/v2/api-keys' }), { wrapper });
+    renderHook(() => useApiKeys({ client, basePath: '/api/v2/api-keys' }), { wrapper });
 
     await waitFor(() => expect(client.get).toHaveBeenCalledOnce());
 
@@ -166,7 +166,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockRejectedValueOnce(new Error('Unauthorized'));
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(() => useApiKeys({}, { client }), { wrapper });
+    const { result } = renderHook(() => useApiKeys({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
 
@@ -178,7 +178,7 @@ describe('useApiKeys', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
 
     const { wrapper } = createWrapper();
-    const { result } = renderHook(() => useApiKeys({}, { client }), { wrapper });
+    const { result } = renderHook(() => useApiKeys({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 

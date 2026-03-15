@@ -12,7 +12,11 @@ import type { ReactNode } from 'react';
 // Helpers
 // ---------------------------------------------------------------------------
 
-function createMockClient(response: PermissionsResponse = { permissions: [] }): AxiosInstance {
+const EMPTY_PERMISSIONS_RESPONSE: PermissionsResponse = { permissions: [] };
+
+function createMockClient(
+  response: PermissionsResponse = EMPTY_PERMISSIONS_RESPONSE
+): AxiosInstance {
   return {
     get: vi.fn().mockResolvedValue({ data: response } as AxiosResponse<PermissionsResponse>),
   } as unknown as AxiosInstance;

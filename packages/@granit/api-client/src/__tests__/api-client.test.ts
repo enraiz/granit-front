@@ -289,12 +289,23 @@ describe('401 response interceptor', () => {
   });
 
   function rejectAdapter(status: number) {
-    return (config: InternalAxiosRequestConfig) =>
-      Promise.reject({
-        response: { status, data: {}, headers: {}, config, statusText: 'Error' },
-        config,
-        isAxiosError: true,
-      });
+    return (config: InternalAxiosRequestConfig) => {
+      const error = new Error(`Request failed with status ${status}`) as Error & {
+        response: {
+          status: number;
+          data: object;
+          headers: object;
+          config: InternalAxiosRequestConfig;
+          statusText: string;
+        };
+        config: InternalAxiosRequestConfig;
+        isAxiosError: boolean;
+      };
+      error.response = { status, data: {}, headers: {}, config, statusText: 'Error' };
+      error.config = config;
+      error.isAxiosError = true;
+      return Promise.reject(error);
+    };
   }
 
   it('should call onUnauthorized callback on 401 response', async () => {
