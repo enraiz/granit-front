@@ -20,6 +20,6 @@
         "import": "./dist/index.js"
       }
     },
-    "registry": "https://gitlab.digitaldynamics.be/api/v4/projects/9/packages/npm/"
+    "registry": "https://npm.pkg.github.com"
   }
 }

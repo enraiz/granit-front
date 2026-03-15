@@ -8,21 +8,6 @@
 - **Location**: this repository root
 - **Consumers**: guava-front, guava-admin (via pnpm `link:` protocol + Vite aliases)
 
-## GitLab repositories
-
-| ID  | Repo                  | Path                                                              |
-| --- | --------------------- | ----------------------------------------------------------------- |
-| 5   | governance-compliance | `digital-dynamics/governance-compliance`                          |
-| 6   | granit-dotnet         | `digital-dynamics/granit-dotnet`                                  |
-| 9   | **granit-front**      | `digital-dynamics/granit-front`                                   |
-| 10  | guava-admin           | `digital-dynamics/guava-platform/applications/guava-admin`        |
-| 4   | guava-app-template    | `digital-dynamics/guava-platform/applications/guava-app-template` |
-| 7   | guava-backend         | `digital-dynamics/guava-platform/applications/guava-backend`      |
-| 1   | guava-front           | `digital-dynamics/guava-platform/applications/guava-front`        |
-| 3   | gitops                | `digital-dynamics/guava-platform/infrastructure/gitops`           |
-| 2   | iac                   | `digital-dynamics/guava-platform/infrastructure/iac`              |
-| 8   | project-governance    | `digital-dynamics/guava-platform/project-governance`              |
-
 ## Packages
 
 | Package                                 | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -142,13 +127,13 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/reference-data` → _(no peer dependencies)_
   - `@granit/react-reference-data` → `react`, `axios`, `@tanstack/react-query`, `@granit/reference-data`
 
-## GitLab issues
+## GitHub issues
 
-Before any GitLab operation, **invoke skill `/gitlab`** to load commands and conventions.
+Before any GitHub operation, **invoke skill `/github`** to load commands and conventions.
 
 - **Types**: Epic (`[EPIC]`), Feature (`[FEATURE]`), Story (`[STORY]`) — no emoji in titles
-- **Hierarchy**: GitLab Free — `relates_to` links via API + references in parent description
-- **Templates**: `.gitlab/issue_templates/`
+- **Hierarchy**: references in parent description (GitHub Free has no native sub-tasks)
+- **Templates**: `.github/ISSUE_TEMPLATE/`
 
 ## Third-party license notices
 
