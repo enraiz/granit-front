@@ -28,9 +28,9 @@ env:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # QUALITY + TEST (single job — avoids node_modules artifact transfer)
+  # BUILD + TEST (single job — avoids node_modules artifact transfer)
   # ---------------------------------------------------------------------------
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -105,7 +105,7 @@ jobs:
   # ANALYSIS
   # ---------------------------------------------------------------------------
   sonarcloud:
-    needs: build
+    needs: build-and-test
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     continue-on-error: true
@@ -160,7 +160,7 @@ jobs:
   # BUILD (tsup — develop/main/tags only)
   # ---------------------------------------------------------------------------
   pack:
-    needs: build
+    needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     steps:
