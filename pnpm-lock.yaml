@@ -33,8 +33,8 @@ importers:
         specifier: ^0.213.0
         version: 0.213.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-document-load':
-        specifier: ^0.57.0
-        version: 0.57.0(@opentelemetry/api@1.9.0)
+        specifier: ^0.58.0
+        version: 0.58.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-fetch':
         specifier: ^0.213.0
         version: 0.213.0(@opentelemetry/api@1.9.0)
@@ -1289,6 +1289,12 @@ packages:
 
   '@opentelemetry/instrumentation-document-load@0.57.0':
     resolution: {integrity: sha512-ppZ4KNuCIcAtJMugIfdaNdHpeuOmJIoft7/FVeUDhdtnd4zWlg07IokydXok80Hol7H3g+QkpkyXMQzYdgES/A==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+
+  '@opentelemetry/instrumentation-document-load@0.58.0':
+    resolution: {integrity: sha512-szTyKkwz3BgHhlUZgQwmj3d9Xz6ZvYJAL/8wehsQyW9HAsfxfWVCaBTfnv/HmkX+zXtXSiwi3W4//WndJsiNsA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
@@ -4832,6 +4838,16 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.212.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-web': 2.6.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.40.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@opentelemetry/instrumentation-document-load@0.58.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation': 0.213.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-web': 2.6.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.40.0
     transitivePeerDependencies:
