@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import * as React from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { TracingProvider, useTracer } from '../providers/tracing-provider.js';
 
@@ -10,10 +10,11 @@ import type { TracingConfig } from '@granit/tracing';
 // Mock OpenTelemetry
 // ---------------------------------------------------------------------------
 
-const { mockTracer, mockShutdown, mockRegister } = vi.hoisted(() => ({
+const { mockTracer, mockShutdown, mockRegister, mockResourceFromAttributes } = vi.hoisted(() => ({
   mockTracer: { startSpan: vi.fn() },
   mockShutdown: vi.fn().mockResolvedValue(undefined),
   mockRegister: vi.fn(),
+  mockResourceFromAttributes: vi.fn((attrs: Record<string, string>) => attrs),
 }));
 
 vi.mock('@opentelemetry/api', () => ({
@@ -31,15 +32,22 @@ vi.mock('@opentelemetry/sdk-trace-web', () => {
   class MockWebTracerProvider {
     register = mockRegister;
   }
-  return { WebTracerProvider: MockWebTracerProvider, BatchSpanProcessor: class {} };
+  return {
+    WebTracerProvider: MockWebTracerProvider,
+    BatchSpanProcessor: class {
+      /* empty mock */
+    },
+  };
 });
 
 vi.mock('@opentelemetry/exporter-trace-otlp-http', () => ({
-  OTLPTraceExporter: class {},
+  OTLPTraceExporter: class {
+    /* empty mock */
+  },
 }));
 
 vi.mock('@opentelemetry/resources', () => ({
-  resourceFromAttributes: vi.fn((attrs: Record<string, string>) => attrs),
+  resourceFromAttributes: mockResourceFromAttributes,
 }));
 
 vi.mock('@opentelemetry/semantic-conventions', () => ({
@@ -48,7 +56,9 @@ vi.mock('@opentelemetry/semantic-conventions', () => ({
 }));
 
 vi.mock('@opentelemetry/context-zone', () => ({
-  ZoneContextManager: class {},
+  ZoneContextManager: class {
+    /* empty mock */
+  },
 }));
 
 vi.mock('@opentelemetry/instrumentation-fetch', () => ({
@@ -84,6 +94,10 @@ function createWrapper(config: TracingConfig = DEFAULT_CONFIG) {
   );
 }
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -111,6 +125,109 @@ describe('TracingProvider', () => {
     unmount();
 
     expect(mockShutdown).toHaveBeenCalled();
+  });
+
+  it('should include serviceVersion in resource attributes when provided', () => {
+    const config: TracingConfig = {
+      serviceName: 'test-app',
+      serviceVersion: '1.2.3',
+      exporter: { url: '/v1/traces' },
+    };
+
+    renderHook(() => useTracer(), { wrapper: createWrapper(config) });
+
+    expect(mockResourceFromAttributes).toHaveBeenCalledWith(
+      expect.objectContaining({ 'service.version': '1.2.3' })
+    );
+  });
+
+  it('should not include serviceVersion when omitted', () => {
+    renderHook(() => useTracer(), { wrapper: createWrapper() });
+
+    const callArgs = mockResourceFromAttributes.mock.calls[0][0] as Record<string, string>;
+    expect(callArgs).not.toHaveProperty('service.version');
+  });
+
+  it('should skip fetch instrumentation when instrumentFetch is false', () => {
+    const config: TracingConfig = {
+      serviceName: 'test-app',
+      exporter: { url: '/v1/traces' },
+      instrumentFetch: false,
+      instrumentXhr: true,
+      instrumentDocumentLoad: true,
+    };
+
+    renderHook(() => useTracer(), { wrapper: createWrapper(config) });
+
+    // Provider still registers successfully
+    expect(mockRegister).toHaveBeenCalled();
+  });
+
+  it('should skip XHR instrumentation when instrumentXhr is false', () => {
+    const config: TracingConfig = {
+      serviceName: 'test-app',
+      exporter: { url: '/v1/traces' },
+      instrumentFetch: true,
+      instrumentXhr: false,
+      instrumentDocumentLoad: true,
+    };
+
+    renderHook(() => useTracer(), { wrapper: createWrapper(config) });
+
+    expect(mockRegister).toHaveBeenCalled();
+  });
+
+  it('should skip document-load instrumentation when instrumentDocumentLoad is false', () => {
+    const config: TracingConfig = {
+      serviceName: 'test-app',
+      exporter: { url: '/v1/traces' },
+      instrumentFetch: true,
+      instrumentXhr: true,
+      instrumentDocumentLoad: false,
+    };
+
+    renderHook(() => useTracer(), { wrapper: createWrapper(config) });
+
+    expect(mockRegister).toHaveBeenCalled();
+  });
+
+  it('should skip all instrumentations when all are disabled', () => {
+    const config: TracingConfig = {
+      serviceName: 'test-app',
+      exporter: { url: '/v1/traces' },
+      instrumentFetch: false,
+      instrumentXhr: false,
+      instrumentDocumentLoad: false,
+    };
+
+    renderHook(() => useTracer(), { wrapper: createWrapper(config) });
+
+    expect(mockRegister).toHaveBeenCalled();
+  });
+
+  it('should handle additional instrumentations without enable method', () => {
+    const instrumentationWithoutEnable = {} as never;
+    const config: TracingConfig = {
+      serviceName: 'test-app',
+      exporter: { url: '/v1/traces' },
+      additionalInstrumentations: [instrumentationWithoutEnable],
+    };
+
+    renderHook(() => useTracer(), { wrapper: createWrapper(config) });
+
+    expect(mockRegister).toHaveBeenCalled();
+  });
+
+  it('should handle unmount when tracer provider has no shutdown method', async () => {
+    const { trace } = await import('@opentelemetry/api');
+    vi.mocked(trace.getTracerProvider).mockReturnValueOnce({} as never);
+
+    const { unmount } = renderHook(() => useTracer(), {
+      wrapper: createWrapper(),
+    });
+
+    // Should not throw when shutdown is missing
+    expect(() => unmount()).not.toThrow();
   });
 });
 

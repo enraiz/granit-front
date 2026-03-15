@@ -3,7 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useNotificationPreferences } from '../hooks/use-notification-preferences.js';
 
-import { axiosResponse, createMockClient, createWrapper } from './test-utils.js';
+import {
+  axiosResponse,
+  createMockClient,
+  createWrapper,
+  createWrapperWithoutBasePath,
+} from './test-utils.js';
 
 import type { NotificationPreferenceDto } from '@granit/notifications';
 
@@ -170,5 +175,118 @@ describe('useNotificationPreferences', () => {
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.preferences).toHaveLength(1);
     expect(result.current.preferences[0].channels.push).toBe(true);
+  });
+
+  it('should not update state when unmounted during initial fetch', async () => {
+    let resolveGet: (value: unknown) => void;
+    const pendingGet = new Promise((resolve) => {
+      resolveGet = resolve;
+    });
+
+    const client = createMockClient();
+    vi.mocked(client.get).mockReturnValue(pendingGet as never);
+
+    const { unmount } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    // Unmount before the fetch resolves
+    unmount();
+
+    // Resolve the fetch after unmount — should not throw or update state
+    await act(async () => {
+      resolveGet!(axiosResponse(MOCK_PREFS));
+    });
+  });
+
+  it('should not update state when unmounted during initial fetch error', async () => {
+    let rejectGet: (reason: unknown) => void;
+    const pendingGet = new Promise((_resolve, reject) => {
+      rejectGet = reject;
+    });
+
+    const client = createMockClient();
+    vi.mocked(client.get).mockReturnValue(pendingGet as never);
+
+    const { unmount } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    unmount();
+
+    await act(async () => {
+      rejectGet!(new Error('Network error'));
+    });
+  });
+
+  it('should not update state when unmounted during toggleChannel save', async () => {
+    let resolvePut: (value: unknown) => void;
+    const pendingPut = new Promise((resolve) => {
+      resolvePut = resolve;
+    });
+
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
+    vi.mocked(client.put).mockReturnValue(pendingPut as never);
+
+    const { result, unmount } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    // Start the toggle but don't await — we'll unmount during the save
+    act(() => {
+      void result.current.toggleChannel('AppointmentReminder', 'email', false);
+    });
+
+    unmount();
+
+    // Resolve after unmount
+    await act(async () => {
+      resolvePut!(
+        axiosResponse({ ...MOCK_PREFS[0], channels: { inApp: true, email: false, push: false } })
+      );
+    });
+  });
+
+  it('should not update state when unmounted during toggleChannel error', async () => {
+    let rejectPut: (reason: unknown) => void;
+    const pendingPut = new Promise((_resolve, reject) => {
+      rejectPut = reject;
+    });
+
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
+    vi.mocked(client.put).mockReturnValue(pendingPut as never);
+
+    const { result, unmount } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    act(() => {
+      void result.current.toggleChannel('AppointmentReminder', 'email', false);
+    });
+
+    unmount();
+
+    await act(async () => {
+      rejectPut!(new Error('Server error'));
+    });
+  });
+
+  it('should use default basePath when config.basePath is undefined', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
+
+    const { result } = renderHook(() => useNotificationPreferences(), {
+      wrapper: createWrapperWithoutBasePath(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(client.get).toHaveBeenCalledWith(expect.stringContaining('/api'));
   });
 });

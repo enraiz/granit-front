@@ -3,7 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useNotifications } from '../hooks/use-notifications.js';
 
-import { axiosResponse, createMockClient, createWrapper } from './test-utils.js';
+import {
+  axiosResponse,
+  createMockClient,
+  createWrapper,
+  createWrapperWithoutBasePath,
+} from './test-utils.js';
 
 import type { NotificationDto, NotificationPageDto } from '@granit/notifications';
 
@@ -195,5 +200,67 @@ describe('useNotifications', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.notifications[0].title).toBe('Mis à jour');
+  });
+
+  it('should use default basePath when config.basePath is undefined', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
+
+    const { result } = renderHook(() => useNotifications(), {
+      wrapper: createWrapperWithoutBasePath(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(client.get).toHaveBeenCalledWith(expect.stringContaining('/api'), expect.anything());
+  });
+
+  it('should not modify other notifications when marking one as read', async () => {
+    const n2: NotificationDto = {
+      ...MOCK_NOTIFICATION,
+      id: 'n-2',
+      title: 'Autre notification',
+    };
+    const page: NotificationPageDto = {
+      items: [MOCK_NOTIFICATION, n2],
+      totalCount: 2,
+      nextCursor: null,
+      unreadCount: 2,
+    };
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
+    vi.mocked(client.patch).mockResolvedValue(
+      axiosResponse({ ...MOCK_NOTIFICATION, isRead: true, readAt: '2026-01-15T10:05:00Z' })
+    );
+
+    const { result } = renderHook(() => useNotifications(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    await act(async () => {
+      await result.current.markRead('n-1');
+    });
+
+    expect(result.current.notifications[0].isRead).toBe(true);
+    expect(result.current.notifications[1].isRead).toBe(false);
+    expect(result.current.notifications[1].id).toBe('n-2');
+  });
+
+  it('should use default pageSize when no options are provided', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
+
+    const { result } = renderHook(() => useNotifications(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(client.get).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ params: expect.objectContaining({ pageSize: 20 }) })
+    );
   });
 });

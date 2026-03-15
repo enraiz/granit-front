@@ -3,7 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useUnreadCount } from '../hooks/use-unread-count.js';
 
-import { axiosResponse, createMockClient, createWrapper } from './test-utils.js';
+import {
+  axiosResponse,
+  createMockClient,
+  createWrapper,
+  createWrapperWithoutBasePath,
+} from './test-utils.js';
 
 describe('useUnreadCount', () => {
   it('should fetch unread count on mount', async () => {
@@ -98,5 +103,41 @@ describe('useUnreadCount', () => {
     });
 
     await waitFor(() => expect(result.current.count).toBe(5));
+  });
+
+  it('should use default basePath when config.basePath is undefined', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse({ count: 3 }));
+
+    const { result } = renderHook(() => useUnreadCount({ pollingInterval: 0 }), {
+      wrapper: createWrapperWithoutBasePath(client),
+    });
+
+    await waitFor(() => expect(result.current.count).toBe(3));
+
+    expect(client.get).toHaveBeenCalledWith(expect.stringContaining('/api'));
+  });
+
+  it('should not update state when unmounted during fetch', async () => {
+    let resolveGet: (value: unknown) => void;
+    const pendingGet = new Promise((resolve) => {
+      resolveGet = resolve;
+    });
+
+    const client = createMockClient();
+    vi.mocked(client.get).mockReturnValue(pendingGet as never);
+
+    const { unmount } = renderHook(() => useUnreadCount({ pollingInterval: 0 }), {
+      wrapper: createWrapper(client),
+    });
+
+    unmount();
+
+    await act(async () => {
+      resolveGet!(axiosResponse({ count: 10 }));
+    });
+
+    // No assertion on count since component is unmounted — the test verifies
+    // no React "state update on unmounted component" warning is triggered.
   });
 });

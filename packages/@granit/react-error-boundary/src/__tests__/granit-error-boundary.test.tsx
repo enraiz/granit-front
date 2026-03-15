@@ -20,7 +20,7 @@ function createMockLogger(): Logger {
   } as unknown as Logger;
 }
 
-function ThrowingComponent({ shouldThrow }: { shouldThrow: boolean }) {
+function ThrowingComponent({ shouldThrow }: Readonly<{ shouldThrow: boolean }>) {
   if (shouldThrow) throw new Error('Test render error');
   return <div>No error</div>;
 }

@@ -73,4 +73,31 @@ describe('workflow api', () => {
     });
     expect(result).toEqual({ items: historyItems, totalCount: 1, nextCursor: null });
   });
+
+  it('should pass pagination params to fetchHistory when provided', async () => {
+    const client = createMockClient();
+    const historyItems: TransitionHistoryDto[] = [
+      {
+        previousState: 'Draft',
+        newState: 'Published',
+        transitionedAt: '2026-01-15T10:00:00Z',
+        transitionedBy: 'Dr. Martin',
+        comment: null,
+      },
+    ];
+    vi.mocked(client.get).mockResolvedValue(
+      axiosResponse({ items: historyItems, totalCount: 10, nextCursor: 'abc' })
+    );
+
+    const result = await fetchHistory(client, basePath, entityType, entityId, {
+      page: 2,
+      pageSize: 5,
+    });
+
+    expect(client.get).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/history', {
+      params: { page: 2, pageSize: 5 },
+    });
+    expect(result.totalCount).toBe(10);
+    expect(result.nextCursor).toBe('abc');
+  });
 });

@@ -14,3 +14,14 @@ export function createWrapper(client: AxiosInstance, basePath = '/api/v1') {
     return <NotificationProvider config={config}>{children}</NotificationProvider>;
   };
 }
+
+/**
+ * Creates a wrapper where `basePath` is omitted from the config,
+ * exercising the `?? '/api'` fallback in hooks.
+ */
+export function createWrapperWithoutBasePath(client: AxiosInstance) {
+  return function Wrapper({ children }: Readonly<{ children: React.ReactNode }>) {
+    const config: NotificationConfig = { apiClient: client };
+    return <NotificationProvider config={config}>{children}</NotificationProvider>;
+  };
+}

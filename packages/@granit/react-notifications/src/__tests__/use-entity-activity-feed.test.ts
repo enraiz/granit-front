@@ -3,7 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useEntityActivityFeed } from '../hooks/use-entity-activity-feed.js';
 
-import { axiosResponse, createMockClient, createWrapper } from './test-utils.js';
+import {
+  axiosResponse,
+  createMockClient,
+  createWrapper,
+  createWrapperWithoutBasePath,
+} from './test-utils.js';
 
 import type { ActivityFeedPageDto } from '@granit/notifications';
 
@@ -176,5 +181,47 @@ describe('useEntityActivityFeed', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.entries[0].title).toBe('Mis à jour');
+  });
+
+  it('should use default basePath when config.basePath is undefined', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_FEED));
+
+    const { result } = renderHook(
+      () =>
+        useEntityActivityFeed({
+          entityType: 'Patient',
+          entityId: 'p-1',
+        }),
+      { wrapper: createWrapperWithoutBasePath(client) }
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(client.get).toHaveBeenCalledWith(expect.stringContaining('/api'), expect.anything());
+  });
+
+  it('should report hasMore as false when all entries are loaded', async () => {
+    const page: ActivityFeedPageDto = {
+      items: [MOCK_FEED.items[0]],
+      totalCount: 1,
+      nextCursor: null,
+    };
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
+
+    const { result } = renderHook(
+      () =>
+        useEntityActivityFeed({
+          entityType: 'Patient',
+          entityId: 'p-1',
+          pageSize: 10,
+        }),
+      { wrapper: createWrapper(client) }
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.hasMore).toBe(false);
   });
 });

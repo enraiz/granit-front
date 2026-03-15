@@ -76,7 +76,7 @@ describe('useStorage', () => {
 
     act(() => {
       localStorage.setItem('dd:theme', '"dark"');
-      window.dispatchEvent(new StorageEvent('storage', { key: 'dd:theme' }));
+      globalThis.dispatchEvent(new StorageEvent('storage', { key: 'dd:theme' }));
     });
 
     expect(result.current[0]).toBe('dark');
@@ -87,7 +87,7 @@ describe('useStorage', () => {
 
     act(() => {
       localStorage.setItem('dd:other', '"value"');
-      window.dispatchEvent(new StorageEvent('storage', { key: 'dd:other' }));
+      globalThis.dispatchEvent(new StorageEvent('storage', { key: 'dd:other' }));
     });
 
     expect(result.current[0]).toBe('light');

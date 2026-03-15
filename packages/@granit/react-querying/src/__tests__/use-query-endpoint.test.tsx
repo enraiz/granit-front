@@ -231,4 +231,62 @@ describe('useQueryEndpoint', () => {
     expect(result.current.query).toBeDefined();
     expect(result.current.groupedQuery).toBeDefined();
   });
+
+  it('removeFilter is a no-op when no filters exist', () => {
+    const { result } = renderHook(() => useQueryEndpoint(), {
+      wrapper: createWrapper(),
+    });
+
+    // params.filters is undefined initially — exercises the ?? [] fallback
+    act(() => result.current.removeFilter('nonexistent'));
+    expect(result.current.params.filters).toEqual([]);
+  });
+
+  it('removeFilter by field+operator is a no-op when no filters exist', () => {
+    const { result } = renderHook(() => useQueryEndpoint(), {
+      wrapper: createWrapper(),
+    });
+
+    act(() => result.current.removeFilter('nonexistent', 'Eq'));
+    expect(result.current.params.filters).toEqual([]);
+  });
+
+  it('addFilter uses empty array fallback when filters are undefined', () => {
+    const { result } = renderHook(() => useQueryEndpoint(), {
+      wrapper: createWrapper(),
+    });
+
+    // params.filters starts as undefined — exercises the ?? [] fallback in ADD_FILTER
+    act(() => result.current.addFilter({ field: 'status', operator: 'Eq', value: 'active' }));
+    expect(result.current.params.filters).toHaveLength(1);
+  });
+
+  it('toggleSort uses empty array fallback when sort is undefined', () => {
+    const { result } = renderHook(() => useQueryEndpoint(), {
+      wrapper: createWrapper(),
+    });
+
+    // params.sort starts as undefined — exercises the ?? [] fallback in TOGGLE_SORT
+    act(() => result.current.toggleSort('name'));
+    expect(result.current.params.sort).toEqual([{ field: 'name', direction: 'asc' }]);
+  });
+
+  it('toggleQuickFilter uses empty array fallback when quickFilters are undefined', () => {
+    const { result } = renderHook(() => useQueryEndpoint(), {
+      wrapper: createWrapper(),
+    });
+
+    // params.quickFilters starts as undefined — exercises the ?? [] fallback
+    act(() => result.current.toggleQuickFilter('MyItems'));
+    expect(result.current.params.quickFilters).toEqual(['MyItems']);
+  });
+
+  it('disables both queries when enabled is false', () => {
+    const { result } = renderHook(() => useQueryEndpoint({ enabled: false }), {
+      wrapper: createWrapper(),
+    });
+
+    expect(result.current.query.fetchStatus).toBe('idle');
+    expect(result.current.groupedQuery.fetchStatus).toBe('idle');
+  });
 });
