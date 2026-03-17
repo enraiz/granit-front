@@ -26,5 +26,9 @@
         "import": "./dist/index.js"
       }
     }
+  },
+  "devDependencies": {
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
   }
 }

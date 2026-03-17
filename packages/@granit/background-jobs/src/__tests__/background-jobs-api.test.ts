@@ -1,15 +1,9 @@
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import { fetchBackgroundJob } from '../api/background-jobs-api.js';
 
 import type { BackgroundJobStatus } from '../types/index.js';
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn().mockResolvedValue({ data: {} }),
-  } as unknown as AxiosInstance;
-}
 
 const BASE = '/api/v1/background-jobs';
 

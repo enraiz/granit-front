@@ -132,6 +132,10 @@ export default defineConfig({
         __dirname,
         'packages/@granit/react-querying/src/index.ts'
       ),
+      '@granit/react-testing': path.resolve(
+        __dirname,
+        'packages/@granit/react-testing/src/index.ts'
+      ),
       '@granit/react-settings': path.resolve(
         __dirname,
         'packages/@granit/react-settings/src/index.ts'
@@ -154,6 +158,7 @@ export default defineConfig({
       ),
       '@granit/settings': path.resolve(__dirname, 'packages/@granit/settings/src/index.ts'),
       '@granit/storage': path.resolve(__dirname, 'packages/@granit/storage/src/index.ts'),
+      '@granit/testing': path.resolve(__dirname, 'packages/@granit/testing/src/index.ts'),
       '@granit/timeline': path.resolve(__dirname, 'packages/@granit/timeline/src/index.ts'),
       '@granit/tracing': path.resolve(__dirname, 'packages/@granit/tracing/src/index.ts'),
       '@granit/utils': path.resolve(__dirname, 'packages/@granit/utils/src/index.ts'),
@@ -163,7 +168,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['packages/@granit/notifications/src/__tests__/setup.ts'],
+    setupFiles: ['packages/@granit/testing/src/setup.ts'],
     include: ['packages/@granit/*/src/**/*.test.ts', 'packages/@granit/*/src/**/*.test.tsx'],
     coverage: {
       provider: 'v8',

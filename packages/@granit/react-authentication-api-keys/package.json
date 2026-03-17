@@ -14,7 +14,8 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "@granit/api-client": "workspace:*"
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
   },
   "peerDependencies": {
     "@granit/authentication-api-keys": "workspace:*",

@@ -164,12 +164,20 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.5
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/audit-log:
     dependencies:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/authentication:
     dependencies:
@@ -185,7 +193,11 @@ importers:
         specifier: '*'
         version: 1.13.6
 
-  packages/@granit/background-jobs: {}
+  packages/@granit/background-jobs:
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/cookies: {}
 
@@ -206,6 +218,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/error-boundary: {}
 
@@ -223,6 +239,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/localization:
     dependencies:
@@ -258,6 +278,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/notifications-signalr:
     dependencies:
@@ -284,6 +308,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/querying:
     dependencies:
@@ -293,6 +321,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-audit-log:
     dependencies:
@@ -309,6 +341,12 @@ importers:
       '@granit/audit-log':
         specifier: workspace:*
         version: link:../audit-log
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-authentication:
     dependencies:
@@ -340,9 +378,12 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
     devDependencies:
-      '@granit/api-client':
+      '@granit/react-testing':
         specifier: workspace:*
-        version: link:../api-client
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-authorization:
     dependencies:
@@ -358,6 +399,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-background-jobs:
     dependencies:
@@ -373,6 +421,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-cookies:
     dependencies:
@@ -403,6 +458,13 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-error-boundary:
     dependencies:
@@ -430,6 +492,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-localization:
     dependencies:
@@ -478,6 +547,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-notifications-mobile-push:
     dependencies:
@@ -497,6 +573,12 @@ importers:
       '@capacitor/push-notifications':
         specifier: ^8.0.2
         version: 8.0.2(@capacitor/core@8.2.0)
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-notifications-web-push:
     dependencies:
@@ -530,6 +612,13 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-reference-data:
     dependencies:
@@ -545,6 +634,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-settings:
     dependencies:
@@ -560,6 +656,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-storage:
     dependencies:
@@ -585,9 +688,31 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
       '@granit/templating':
         specifier: workspace:*
         version: link:../templating
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
+
+  packages/@granit/react-testing:
+    dependencies:
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      vitest:
+        specifier: ^4.0.0
+        version: 4.1.0(@opentelemetry/api@1.9.0)(@types/node@25.3.3)(jsdom@29.0.0)(msw@2.12.12(@types/node@25.3.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(lightningcss@1.31.1)(sass@1.97.3)(yaml@2.8.2))
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-timeline:
     dependencies:
@@ -610,6 +735,12 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-tracing:
     dependencies:
@@ -662,6 +793,12 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/reference-data: {}
 
@@ -670,6 +807,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/storage: {}
 
@@ -683,6 +824,15 @@ importers:
         specifier: workspace:*
         version: link:../api-client
 
+  packages/@granit/testing:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      vitest:
+        specifier: ^4.0.0
+        version: 4.1.0(@opentelemetry/api@1.9.0)(@types/node@25.3.3)(jsdom@29.0.0)(msw@2.12.12(@types/node@25.3.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(lightningcss@1.31.1)(sass@1.97.3)(yaml@2.8.2))
+
   packages/@granit/timeline:
     dependencies:
       axios:
@@ -692,6 +842,9 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/tracing:
     dependencies:

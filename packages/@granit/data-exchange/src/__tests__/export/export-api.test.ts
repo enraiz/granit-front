@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -9,15 +9,6 @@ import {
   fetchExportJobs,
   fetchExportJobStatus,
 } from '../../export/api/export-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  const client = axios.create();
-  vi.spyOn(client, 'get').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'post').mockResolvedValue({ data: {} });
-  return client;
-}
 
 const BASE = '/api/v1/data-exchange/export';
 

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Test setup for @granit/react-notifications
+// Global test setup for @granit/* packages
 // ---------------------------------------------------------------------------
 
 import '@testing-library/jest-dom';

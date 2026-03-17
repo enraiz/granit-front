@@ -1,34 +1,16 @@
 import { fetchDeviceTokens } from '@granit/notifications-mobile-push';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createQueryWrapper } from '@granit/react-testing';
+import { createMockClient } from '@granit/testing';
 import { renderHook, waitFor } from '@testing-library/react';
-import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { deviceTokenKeys, useDeviceTokens } from '../hooks/use-device-tokens.js';
 
 import type { MobilePushTokenResponse } from '@granit/notifications-mobile-push';
-import type { AxiosInstance } from 'axios';
 
 vi.mock('@granit/notifications-mobile-push', () => ({
   fetchDeviceTokens: vi.fn(),
 }));
-
-function createMockAxios(): AxiosInstance {
-  return {
-    get: vi.fn(),
-    post: vi.fn(),
-    put: vi.fn(),
-    delete: vi.fn(),
-  } as unknown as AxiosInstance;
-}
-
-function createWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return ({ children }: { children: React.ReactNode }) =>
-    React.createElement(QueryClientProvider, { client: queryClient }, children);
-}
 
 const mockTokens: readonly MobilePushTokenResponse[] = [
   {
@@ -53,8 +35,8 @@ describe('useDeviceTokens', () => {
   it('should fetch device tokens with default basePath', async () => {
     vi.mocked(fetchDeviceTokens).mockResolvedValueOnce(mockTokens);
 
-    const client = createMockAxios();
-    const wrapper = createWrapper();
+    const client = createMockClient();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useDeviceTokens({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -66,8 +48,8 @@ describe('useDeviceTokens', () => {
   it('should fetch device tokens with custom basePath', async () => {
     vi.mocked(fetchDeviceTokens).mockResolvedValueOnce(mockTokens);
 
-    const client = createMockAxios();
-    const wrapper = createWrapper();
+    const client = createMockClient();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useDeviceTokens({ client, basePath: '/custom/api' }), {
       wrapper,
     });
@@ -80,8 +62,8 @@ describe('useDeviceTokens', () => {
   it('should handle fetch error', async () => {
     vi.mocked(fetchDeviceTokens).mockRejectedValueOnce(new Error('Unauthorized'));
 
-    const client = createMockAxios();
-    const wrapper = createWrapper();
+    const client = createMockClient();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useDeviceTokens({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
@@ -92,8 +74,8 @@ describe('useDeviceTokens', () => {
   it('should return empty array when no tokens exist', async () => {
     vi.mocked(fetchDeviceTokens).mockResolvedValueOnce([]);
 
-    const client = createMockAxios();
-    const wrapper = createWrapper();
+    const client = createMockClient();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useDeviceTokens({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));

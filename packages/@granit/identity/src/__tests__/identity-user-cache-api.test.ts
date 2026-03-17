@@ -1,3 +1,4 @@
+import { axiosResponse, createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -19,19 +20,6 @@ import type {
   IdentityUserCacheSyncStaleResult,
   IdentityUserPage,
 } from '../types/index.js';
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn(),
-    post: vi.fn(),
-    delete: vi.fn(),
-  } as unknown as AxiosInstance;
-}
-
-function axiosResponse<T>(data: T) {
-  return { data, status: 200, statusText: 'OK', headers: {}, config: {} };
-}
 
 const sampleUser: IdentityUser = {
   id: 'user-1',

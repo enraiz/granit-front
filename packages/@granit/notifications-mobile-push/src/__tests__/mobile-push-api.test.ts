@@ -1,3 +1,4 @@
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -5,16 +6,6 @@ import {
   registerDeviceToken,
   unregisterDeviceToken,
 } from '../api/mobile-push-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn().mockResolvedValue({ data: [] }),
-    post: vi.fn().mockResolvedValue({ data: {} }),
-    delete: vi.fn().mockResolvedValue({ data: {} }),
-  } as unknown as AxiosInstance;
-}
 
 describe('mobile-push-api', () => {
   it('should register a device token', async () => {

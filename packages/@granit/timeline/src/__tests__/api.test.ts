@@ -1,3 +1,4 @@
+import { axiosResponse, createMockClient } from '@granit/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -10,36 +11,7 @@ import {
 } from '../api/timeline-api.js';
 
 import type { CreateTimelineEntryRequest, TimelineStreamPage } from '../types/index.js';
-import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn(),
-    post: vi.fn(),
-    delete: vi.fn(),
-    put: vi.fn(),
-    patch: vi.fn(),
-    request: vi.fn(),
-    head: vi.fn(),
-    options: vi.fn(),
-    getUri: vi.fn(),
-    defaults: {} as AxiosInstance['defaults'],
-    interceptors: {
-      request: { use: vi.fn(), eject: vi.fn(), clear: vi.fn() },
-      response: { use: vi.fn(), eject: vi.fn(), clear: vi.fn() },
-    },
-  } as unknown as AxiosInstance;
-}
-
-function axiosResponse<T>(data: T): AxiosResponse<T> {
-  return {
-    data,
-    status: 200,
-    statusText: 'OK',
-    headers: {},
-    config: {} as InternalAxiosRequestConfig,
-  };
-}
+import type { AxiosInstance } from 'axios';
 
 const BASE_PATH = '/api/v1/timeline';
 

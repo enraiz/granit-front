@@ -1,9 +1,11 @@
-export { createMockClient, axiosResponse } from '@granit/api-client/test-utils';
+import { axiosResponse, createMockClient } from '@granit/testing';
 
 import { NotificationProvider } from '../providers/notification-provider.js';
 
 import type { NotificationConfig } from '@granit/notifications';
 import type { AxiosInstance } from 'axios';
+
+export { createMockClient, axiosResponse };
 
 export function createWrapper(client: AxiosInstance, basePath = '/api/v1') {
   return function Wrapper({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import { fetchGrouped, fetchPage, fetchQueryMeta } from '../api/query-api.js';
@@ -9,17 +9,6 @@ import {
   setDefaultSavedView,
   updateSavedView,
 } from '../api/saved-views-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  const client = axios.create();
-  vi.spyOn(client, 'get').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'post').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'put').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'delete').mockResolvedValue({ data: {} });
-  return client;
-}
 
 describe('query-api', () => {
   it('fetchPage calls GET with serialized params', async () => {

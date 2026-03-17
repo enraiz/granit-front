@@ -15,7 +15,9 @@
   },
   "devDependencies": {
     "@granit/api-client": "workspace:*",
-    "@granit/templating": "workspace:*"
+    "@granit/templating": "workspace:*",
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
   },
   "peerDependencies": {
     "@granit/templating": "workspace:*",

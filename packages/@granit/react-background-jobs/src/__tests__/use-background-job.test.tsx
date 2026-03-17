@@ -1,21 +1,11 @@
-import { createMockClient } from '@granit/api-client/test-utils';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createQueryWrapper } from '@granit/react-testing';
+import { createMockClient } from '@granit/testing';
 import { renderHook, waitFor } from '@testing-library/react';
-import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useBackgroundJob } from '../hooks/use-background-jobs.js';
 
 import type { BackgroundJobStatus } from '@granit/background-jobs';
-
-function createWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
-}
 
 const mockJob: BackgroundJobStatus = {
   jobName: 'InvoiceSync',
@@ -33,7 +23,7 @@ describe('useBackgroundJob', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValueOnce({ data: mockJob });
 
-    const wrapper = createWrapper();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useBackgroundJob('InvoiceSync', { client }), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -46,7 +36,7 @@ describe('useBackgroundJob', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValueOnce({ data: mockJob });
 
-    const wrapper = createWrapper();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(
       () => useBackgroundJob('InvoiceSync', { client, basePath: '/api/v2/jobs' }),
       { wrapper }
@@ -60,7 +50,7 @@ describe('useBackgroundJob', () => {
   it('should not fetch when name is empty', () => {
     const client = createMockClient();
 
-    const wrapper = createWrapper();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useBackgroundJob('', { client }), { wrapper });
 
     expect(result.current.fetchStatus).toBe('idle');
@@ -71,7 +61,7 @@ describe('useBackgroundJob', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValueOnce(new Error('Not Found'));
 
-    const wrapper = createWrapper();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useBackgroundJob('MissingJob', { client }), { wrapper });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
@@ -83,7 +73,7 @@ describe('useBackgroundJob', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValueOnce({ data: mockJob });
 
-    const wrapper = createWrapper();
+    const wrapper = createQueryWrapper();
     const { result } = renderHook(() => useBackgroundJob('job/with spaces', { client }), {
       wrapper,
     });

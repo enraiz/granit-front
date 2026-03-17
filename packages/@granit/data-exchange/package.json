@@ -13,6 +13,9 @@
   "scripts": {
     "build": "tsup"
   },
+  "devDependencies": {
+    "@granit/testing": "workspace:*"
+  },
   "peerDependencies": {
     "@granit/utils": "workspace:*",
     "axios": "*"

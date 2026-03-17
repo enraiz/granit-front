@@ -21,7 +21,9 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@capacitor/push-notifications": "^8.0.2"
+    "@capacitor/push-notifications": "^8.0.2",
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
   },
   "publishConfig": {
     "exports": {

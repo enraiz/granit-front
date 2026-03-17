@@ -1,15 +1,9 @@
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import { fetchIdentityCapabilities } from '../api/identity-capabilities-api.js';
 
 import type { IdentityProviderCapabilities } from '../types/index.js';
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn(),
-  } as unknown as AxiosInstance;
-}
 
 const keycloakCapabilities: IdentityProviderCapabilities = {
   providerName: 'Keycloak',
