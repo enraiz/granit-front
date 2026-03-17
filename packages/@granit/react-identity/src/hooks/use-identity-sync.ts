@@ -36,7 +36,7 @@ export function useIdentitySync(): {
   const sync = useMutation({
     mutationFn: (userIds: string[]) => syncUsers(config.client, basePath, userIds),
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildIdentityQueryKey(config, 'users'),
       });
     },
@@ -45,7 +45,7 @@ export function useIdentitySync(): {
   const syncAll = useMutation({
     mutationFn: () => syncAllUsers(config.client, basePath),
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildIdentityQueryKey(config, 'users'),
       });
     },
@@ -54,7 +54,7 @@ export function useIdentitySync(): {
   const syncStale = useMutation({
     mutationFn: () => syncStaleUsers(config.client, basePath),
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildIdentityQueryKey(config, 'users'),
       });
     },

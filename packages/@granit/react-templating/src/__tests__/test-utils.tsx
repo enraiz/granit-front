@@ -1,12 +1,11 @@
 import { createTestQueryClient } from '@granit/react-testing';
-import { axiosResponse, createMockClient } from '@granit/testing';
 import { QueryClientProvider } from '@tanstack/react-query';
 
 import { TemplatingProvider } from '../providers/templating-provider.js';
 
 import type { AxiosInstance } from 'axios';
 
-export { createMockClient, axiosResponse };
+export { axiosResponse, createMockClient } from '@granit/testing';
 
 export function createWrapper(
   client: AxiosInstance,

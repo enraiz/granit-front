@@ -31,7 +31,7 @@ export function useIdentityRgpd(): {
   const erase = useMutation({
     mutationFn: (userId: string) => eraseUserCache(config.client, basePath, userId),
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildIdentityQueryKey(config, 'users'),
       });
     },
@@ -40,7 +40,7 @@ export function useIdentityRgpd(): {
   const pseudonymize = useMutation({
     mutationFn: (userId: string) => pseudonymizeUserCache(config.client, basePath, userId),
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: buildIdentityQueryKey(config, 'users'),
       });
     },
