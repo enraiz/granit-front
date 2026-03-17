@@ -3,6 +3,21 @@ import type { ConfirmMappingsRequest, ImportPreviewResponse } from '../types/imp
 import type { ImportReportResponse } from '../types/import-report.js';
 import type { AxiosInstance } from 'axios';
 
+/** Paginated response envelope. Mirrors `@granit/api-client` PaginatedResponse. */
+interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+/** Query parameters for listing import jobs. */
+export interface ImportJobListParams {
+  readonly status?: string;
+  readonly page?: number;
+  readonly pageSize?: number;
+}
+
 /**
  * Uploads a file and creates a new import job.
  *
@@ -122,6 +137,22 @@ export async function fetchImportReport(
   const response = await client.get<ImportReportResponse>(
     `${basePath}/${encodeURIComponent(jobId)}/report`
   );
+  return response.data;
+}
+
+/**
+ * Fetches a paginated list of import jobs.
+ *
+ * `GET {basePath}/jobs`
+ */
+export async function fetchImportJobs(
+  client: AxiosInstance,
+  basePath: string,
+  params?: ImportJobListParams
+): Promise<PaginatedResponse<ImportJobResponse>> {
+  const response = await client.get<PaginatedResponse<ImportJobResponse>>(`${basePath}/jobs`, {
+    params,
+  });
   return response.data;
 }
 

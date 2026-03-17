@@ -29,3 +29,24 @@ export async function unregisterDeviceToken(
     buildUrl(basePath, 'notifications', 'push-tokens', encodeURIComponent(token))
   );
 }
+
+export interface MobilePushTokenResponse {
+  readonly deviceToken: string;
+  readonly platform: MobilePlatform;
+  readonly createdAt: string;
+}
+
+/**
+ * Fetches all registered device tokens for the current user.
+ *
+ * `GET {basePath}/notifications/push-tokens`
+ */
+export async function fetchDeviceTokens(
+  client: AxiosInstance,
+  basePath: string
+): Promise<readonly MobilePushTokenResponse[]> {
+  const { data } = await client.get<MobilePushTokenResponse[]>(
+    buildUrl(basePath, 'notifications', 'push-tokens')
+  );
+  return data;
+}

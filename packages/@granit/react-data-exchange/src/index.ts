@@ -14,6 +14,7 @@ export {
   useExportDefinitions,
   useExportFields,
   useExportJob,
+  useExportJobs,
   useExportPresets,
 } from './export/index.js';
 
@@ -28,6 +29,7 @@ export {
   buildImportQueryKey,
   useImportConfig,
   useImportJob,
+  useImportJobs,
   useImportPreview,
   useImportReport,
 } from './import/index.js';

@@ -34,7 +34,7 @@ function createWrapper(client: AxiosInstance, basePath?: string) {
     return React.createElement(
       QueryClientProvider,
       { client: queryClient },
-      React.createElement(SettingsProvider, { config, children })
+      <SettingsProvider config={config}>{children}</SettingsProvider>
     );
   };
 }

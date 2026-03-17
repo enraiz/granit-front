@@ -37,6 +37,26 @@ function captureAdapter(config: InternalAxiosRequestConfig): Promise<AxiosRespon
   });
 }
 
+function rejectAdapter(status: number) {
+  return (config: InternalAxiosRequestConfig) => {
+    const error = new Error(`Request failed with status ${status}`) as Error & {
+      response: {
+        status: number;
+        data: object;
+        headers: object;
+        config: InternalAxiosRequestConfig;
+        statusText: string;
+      };
+      config: InternalAxiosRequestConfig;
+      isAxiosError: boolean;
+    };
+    error.response = { status, data: {}, headers: {}, config, statusText: 'Error' };
+    error.config = config;
+    error.isAxiosError = true;
+    return Promise.reject(error);
+  };
+}
+
 describe('createApiClient', () => {
   let mod: ApiClientModule;
 
@@ -287,26 +307,6 @@ describe('401 response interceptor', () => {
     vi.resetModules();
     mod = await import('../index.ts');
   });
-
-  function rejectAdapter(status: number) {
-    return (config: InternalAxiosRequestConfig) => {
-      const error = new Error(`Request failed with status ${status}`) as Error & {
-        response: {
-          status: number;
-          data: object;
-          headers: object;
-          config: InternalAxiosRequestConfig;
-          statusText: string;
-        };
-        config: InternalAxiosRequestConfig;
-        isAxiosError: boolean;
-      };
-      error.response = { status, data: {}, headers: {}, config, statusText: 'Error' };
-      error.config = config;
-      error.isAxiosError = true;
-      return Promise.reject(error);
-    };
-  }
 
   it('should call onUnauthorized callback on 401 response', async () => {
     const callback = vi.fn();

@@ -16,6 +16,7 @@
   "peerDependencies": {
     "@capacitor/push-notifications": ">=6.0.0",
     "@granit/notifications-mobile-push": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
     "axios": "*",
     "react": "^19.0.0"
   },

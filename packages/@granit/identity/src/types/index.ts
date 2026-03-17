@@ -1,3 +1,12 @@
+export type {
+  IdentityUser,
+  IdentityUserCacheStats,
+  IdentityUserCacheSyncAllResult,
+  IdentityUserCacheSyncStaleResult,
+  IdentityUserListParams,
+  IdentityUserPage,
+} from './identity-user.js';
+
 /** Response from `GET /identity/users/capabilities`. */
 export interface IdentityProviderCapabilities {
   /** Display name of the active identity provider (e.g. "Keycloak", "Entra ID"). */

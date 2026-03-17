@@ -1,6 +1,7 @@
 // Hooks
 export {
   backgroundJobKeys,
+  useBackgroundJob,
   useBackgroundJobs,
   usePauseJob,
   useResumeJob,

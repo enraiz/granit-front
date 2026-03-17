@@ -6,6 +6,7 @@ import {
   downloadExportFile,
   fetchExportDefinitions,
   fetchExportFields,
+  fetchExportJobs,
   fetchExportJobStatus,
 } from '../../export/api/export-api.js';
 
@@ -102,5 +103,24 @@ describe('export-api', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: blob, headers: {} });
     const result = await downloadExportFile(client, BASE, 'abc');
     expect(result.fileName).toBe('export');
+  });
+
+  it('fetchExportJobs calls GET /jobs without params', async () => {
+    const client = createMockClient();
+    const page = { items: [], totalCount: 0 };
+    vi.mocked(client.get).mockResolvedValueOnce({ data: page });
+    const result = await fetchExportJobs(client, BASE);
+    expect(client.get).toHaveBeenCalledWith(`${BASE}/jobs`, { params: undefined });
+    expect(result).toEqual(page);
+  });
+
+  it('fetchExportJobs forwards query params', async () => {
+    const client = createMockClient();
+    const page = { items: [{ id: '1' }], totalCount: 1 };
+    vi.mocked(client.get).mockResolvedValueOnce({ data: page });
+    const params = { status: 'Completed', page: 1, pageSize: 10 };
+    const result = await fetchExportJobs(client, BASE, params);
+    expect(client.get).toHaveBeenCalledWith(`${BASE}/jobs`, { params });
+    expect(result).toEqual(page);
   });
 });

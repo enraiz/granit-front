@@ -28,7 +28,7 @@ function createWrapper(client: AxiosInstance, basePath?: string) {
     return React.createElement(
       QueryClientProvider,
       { client: queryClient },
-      React.createElement(IdentityProvider, { config, children })
+      <IdentityProvider config={config}>{children}</IdentityProvider>
     );
   };
 }

@@ -15,6 +15,8 @@ export {
   downloadExportFile,
   fetchExportDefinitions,
   fetchExportFields,
+  fetchExportJobs,
   fetchExportJobStatus,
 } from './api/export-api.js';
+export type { ExportJobListParams } from './api/export-api.js';
 export { deleteExportPreset, fetchExportPresets, saveExportPreset } from './api/preset-api.js';

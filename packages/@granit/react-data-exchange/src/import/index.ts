@@ -8,6 +8,7 @@ export type { ImportConfig, ImportProviderProps } from './providers/import-provi
 
 // Hooks
 export { useImportJob } from './hooks/use-import-job.js';
+export { useImportJobs } from './hooks/use-import-jobs.js';
 export type { UseImportJobReturn } from './hooks/use-import-job.js';
 export { useImportPreview } from './hooks/use-import-preview.js';
 export type { UseImportPreviewReturn } from './hooks/use-import-preview.js';
