@@ -18,7 +18,7 @@ const mockConfig: IdentityConfig = {
 
 function createWrapper(config: IdentityConfig) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(IdentityProvider, { config, children });
+    return <IdentityProvider config={config}>{children}</IdentityProvider>;
   };
 }
 

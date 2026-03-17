@@ -18,7 +18,7 @@ const mockConfig: SettingsConfig = {
 
 function createWrapper(config: SettingsConfig) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(SettingsProvider, { config, children });
+    return <SettingsProvider config={config}>{children}</SettingsProvider>;
   };
 }
 

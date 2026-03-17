@@ -5,6 +5,21 @@ import type {
 import type { CreateExportJobRequest, ExportJobResponse } from '../types/export-job.js';
 import type { AxiosInstance } from 'axios';
 
+/** Paginated response envelope. Mirrors `@granit/api-client` PaginatedResponse. */
+interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+/** Query parameters for listing export jobs. */
+export interface ExportJobListParams {
+  readonly status?: string;
+  readonly page?: number;
+  readonly pageSize?: number;
+}
+
 /**
  * Fetches all registered export definitions.
  *
@@ -61,6 +76,22 @@ export async function fetchExportJobStatus(
   const response = await client.get<ExportJobResponse>(
     `${basePath}/jobs/${encodeURIComponent(jobId)}`
   );
+  return response.data;
+}
+
+/**
+ * Fetches a paginated list of export jobs.
+ *
+ * `GET {basePath}/jobs`
+ */
+export async function fetchExportJobs(
+  client: AxiosInstance,
+  basePath: string,
+  params?: ExportJobListParams
+): Promise<PaginatedResponse<ExportJobResponse>> {
+  const response = await client.get<PaginatedResponse<ExportJobResponse>>(`${basePath}/jobs`, {
+    params,
+  });
   return response.data;
 }
 

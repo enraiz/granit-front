@@ -21,7 +21,9 @@ export {
   dryRunImport,
   executeImport,
   fetchImportJob,
+  fetchImportJobs,
   fetchImportReport,
   previewImport,
   uploadImportFile,
 } from './api/import-api.js';
+export type { ImportJobListParams } from './api/import-api.js';

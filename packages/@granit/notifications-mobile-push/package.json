@@ -25,5 +25,7 @@
     },
     "registry": "https://npm.pkg.github.com"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@granit/testing": "workspace:*"
+  }
 }

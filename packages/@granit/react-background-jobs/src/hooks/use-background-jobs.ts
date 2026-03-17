@@ -47,6 +47,36 @@ export function useBackgroundJobs(
 }
 
 /**
+ * Query hook that fetches a single background job by name.
+ *
+ * Polls every 15 seconds to reflect live scheduler state.
+ * The query is disabled when the name is empty.
+ *
+ * @example
+ * ```tsx
+ * const { data: job } = useBackgroundJob('InvoiceSync', { client: api });
+ * ```
+ */
+export function useBackgroundJob(
+  name: string,
+  options: BackgroundJobsOptions
+): UseQueryResult<BackgroundJobStatus> {
+  const { client, basePath = DEFAULT_BASE_PATH } = options;
+
+  return useQuery({
+    queryKey: backgroundJobKeys.job(name),
+    queryFn: async () => {
+      const { data } = await client.get<BackgroundJobStatus>(
+        `${basePath}/${encodeURIComponent(name)}`
+      );
+      return data;
+    },
+    refetchInterval: 15_000,
+    enabled: name.length > 0,
+  });
+}
+
+/**
  * Mutation hook to pause a background job by name.
  *
  * Sends `POST {basePath}/{name}/pause` and invalidates the jobs list on success.

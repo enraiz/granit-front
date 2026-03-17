@@ -113,7 +113,7 @@ describe('useSpan', () => {
 
       await expect(
         result.current.withSpan('non-error-op', () => {
-          throw 'string-error';
+          throw 'string-error'; // NOSONAR — intentionally testing non-Error thrown value
         })
       ).rejects.toBe('string-error');
 

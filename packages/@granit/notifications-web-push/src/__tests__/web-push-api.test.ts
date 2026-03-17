@@ -1,15 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { createMockClient } from '@granit/testing';
+import { describe, expect, it } from 'vitest';
 
 import { registerPushSubscription, unregisterPushSubscription } from '../api/web-push-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    post: vi.fn().mockResolvedValue({ data: {} }),
-    delete: vi.fn().mockResolvedValue({ data: {} }),
-  } as unknown as AxiosInstance;
-}
 
 describe('web-push-api', () => {
   it('should register a push subscription', async () => {

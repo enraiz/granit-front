@@ -16,11 +16,14 @@
   "peerDependencies": {
     "@capacitor/push-notifications": ">=6.0.0",
     "@granit/notifications-mobile-push": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
     "axios": "*",
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@capacitor/push-notifications": "^8.0.2"
+    "@capacitor/push-notifications": "^8.0.2",
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
   },
   "publishConfig": {
     "exports": {

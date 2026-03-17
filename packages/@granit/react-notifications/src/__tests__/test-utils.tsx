@@ -1,4 +1,4 @@
-export { createMockClient, axiosResponse } from '@granit/api-client/test-utils';
+export { axiosResponse, createMockClient } from '@granit/testing';
 
 import { NotificationProvider } from '../providers/notification-provider.js';
 

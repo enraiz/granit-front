@@ -38,9 +38,11 @@ vi.mock('@opentelemetry/sdk-trace-web', () => ({
   WebTracerProvider: class {
     register = mockRegister;
   },
-  BatchSpanProcessor: class {
+  BatchSpanProcessor: class MockBatchSpanProcessor {
+    readonly exporter: SpanExporter;
     constructor(exporter: SpanExporter) {
       capturedExporter = exporter;
+      this.exporter = exporter;
     }
   },
 }));

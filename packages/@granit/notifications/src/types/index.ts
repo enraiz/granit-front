@@ -55,7 +55,14 @@ export interface ActivityFeedPageDto {
  * Notification channel identifier — extensible string type.
  * Consumer apps and backend may define additional channels.
  */
-export type NotificationChannel = string;
+export type NotificationChannel =
+  | 'inApp'
+  | 'email'
+  | 'sms'
+  | 'whatsApp'
+  | 'push'
+  | 'mobilePush'
+  | (string & {});
 
 /**
  * Well-known channel identifiers matching the .NET `NotificationChannels` class.

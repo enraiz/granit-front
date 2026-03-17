@@ -1,22 +1,11 @@
-import { axiosResponse, createMockClient } from '@granit/api-client/test-utils';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createQueryWrapper } from '@granit/react-testing';
+import { axiosResponse, createMockClient } from '@granit/testing';
 import { renderHook, waitFor } from '@testing-library/react';
-import * as React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useCountries, useCountry } from '../hooks/use-country.js';
 
 import type { Country } from '@granit/reference-data';
-import type { ReactNode } from 'react';
-
-function createWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return function Wrapper({ children }: { children: ReactNode }) {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children);
-  };
-}
 
 const mockCountry: Country = {
   code: 'BE',
@@ -48,7 +37,9 @@ describe('useCountry', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(mockCountry));
 
-    const { result } = renderHook(() => useCountry('BE', { client }), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useCountry('BE', { client }), {
+      wrapper: createQueryWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -62,7 +53,7 @@ describe('useCountry', () => {
 
     const { result } = renderHook(
       () => useCountry('BE', { client, basePath: '/api/v2/ref/countries' }),
-      { wrapper: createWrapper() }
+      { wrapper: createQueryWrapper() }
     );
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -74,7 +65,7 @@ describe('useCountry', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useCountry('BE', { client, enabled: false }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     expect(result.current.isFetching).toBe(false);
@@ -84,7 +75,9 @@ describe('useCountry', () => {
   it('does not fetch when code is empty', () => {
     const client = createMockClient();
 
-    const { result } = renderHook(() => useCountry('', { client }), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useCountry('', { client }), {
+      wrapper: createQueryWrapper(),
+    });
 
     expect(result.current.isFetching).toBe(false);
     expect(client.get).not.toHaveBeenCalled();
@@ -94,7 +87,9 @@ describe('useCountry', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockRejectedValue(new Error('Not found'));
 
-    const { result } = renderHook(() => useCountry('XX', { client }), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useCountry('XX', { client }), {
+      wrapper: createQueryWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
 
@@ -111,7 +106,9 @@ describe('useCountries', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse([mockCountry]));
 
-    const { result } = renderHook(() => useCountries({ client }), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useCountries({ client }), {
+      wrapper: createQueryWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -129,7 +126,7 @@ describe('useCountries', () => {
 
     const { result } = renderHook(
       () => useCountries({ client, params: { region: 'Europe', isActive: true } }),
-      { wrapper: createWrapper() }
+      { wrapper: createQueryWrapper() }
     );
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -144,7 +141,7 @@ describe('useCountries', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => useCountries({ client, enabled: false }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     expect(result.current.isFetching).toBe(false);

@@ -33,5 +33,9 @@
       }
     },
     "registry": "https://npm.pkg.github.com"
+  },
+  "devDependencies": {
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
   }
 }

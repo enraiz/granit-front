@@ -1,21 +1,11 @@
-import { createMockClient } from '@granit/api-client/test-utils';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createQueryWrapper } from '@granit/react-testing';
+import { createMockClient } from '@granit/testing';
 import { renderHook, waitFor } from '@testing-library/react';
-import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { usePermissionDefinitions } from '../hooks/use-permission-definitions.js';
 
 import type { PermissionGroupDto } from '@granit/authorization';
-
-function createWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
-}
 
 const MOCK_GROUPS: PermissionGroupDto[] = [
   {
@@ -39,7 +29,7 @@ describe('usePermissionDefinitions', () => {
     vi.mocked(client.get).mockResolvedValueOnce({ data: MOCK_GROUPS });
 
     const { result } = renderHook(() => usePermissionDefinitions({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -54,7 +44,7 @@ describe('usePermissionDefinitions', () => {
 
     const { result } = renderHook(
       () => usePermissionDefinitions({ client, basePath: '/api/v1/auth' }),
-      { wrapper: createWrapper() }
+      { wrapper: createQueryWrapper() }
     );
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -66,7 +56,7 @@ describe('usePermissionDefinitions', () => {
     const client = createMockClient();
 
     const { result } = renderHook(() => usePermissionDefinitions({ client, enabled: false }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     expect(result.current.fetchStatus).toBe('idle');
@@ -78,7 +68,7 @@ describe('usePermissionDefinitions', () => {
     vi.mocked(client.get).mockRejectedValueOnce(new Error('Forbidden'));
 
     const { result } = renderHook(() => usePermissionDefinitions({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     await waitFor(() => expect(result.current.isError).toBe(true));

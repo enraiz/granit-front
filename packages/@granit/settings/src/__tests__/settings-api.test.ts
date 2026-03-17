@@ -1,16 +1,7 @@
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import { deleteSetting, fetchSetting, fetchSettings, updateSetting } from '../api/settings-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    get: vi.fn(),
-    put: vi.fn(),
-    delete: vi.fn(),
-  } as unknown as AxiosInstance;
-}
 
 describe('settings-api', () => {
   describe('fetchSettings', () => {

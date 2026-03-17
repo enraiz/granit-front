@@ -1,7 +1,6 @@
-import { axiosResponse, createMockClient } from '@granit/api-client/test-utils';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createQueryWrapper } from '@granit/react-testing';
+import { axiosResponse, createMockClient } from '@granit/testing';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import * as React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -12,16 +11,6 @@ import {
 } from '../hooks/use-country-mutations.js';
 
 import type { Country } from '@granit/reference-data';
-import type { ReactNode } from 'react';
-
-function createWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
-  });
-  return function Wrapper({ children }: { children: ReactNode }) {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children);
-  };
-}
 
 const mockCountry: Country = {
   code: 'BE',
@@ -54,7 +43,7 @@ describe('useCreateCountry', () => {
     vi.mocked(client.post).mockResolvedValue(axiosResponse(mockCountry));
 
     const { result } = renderHook(() => useCreateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     const payload = {
@@ -92,7 +81,7 @@ describe('useCreateCountry', () => {
 
     const { result } = renderHook(
       () => useCreateCountry({ client, basePath: '/api/v2/admin/countries' }),
-      { wrapper: createWrapper() }
+      { wrapper: createQueryWrapper() }
     );
 
     act(() => {
@@ -109,7 +98,7 @@ describe('useCreateCountry', () => {
     vi.mocked(client.post).mockRejectedValue(new Error('Forbidden'));
 
     const { result } = renderHook(() => useCreateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {
@@ -133,7 +122,7 @@ describe('useUpdateCountry', () => {
     vi.mocked(client.put).mockResolvedValue(axiosResponse(updated));
 
     const { result } = renderHook(() => useUpdateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {
@@ -153,7 +142,7 @@ describe('useUpdateCountry', () => {
     vi.mocked(client.put).mockRejectedValue(new Error('Conflict'));
 
     const { result } = renderHook(() => useUpdateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {
@@ -176,7 +165,7 @@ describe('useDeactivateCountry', () => {
     vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
     const { result } = renderHook(() => useDeactivateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {
@@ -193,7 +182,7 @@ describe('useDeactivateCountry', () => {
     vi.mocked(client.delete).mockRejectedValue(new Error('Not found'));
 
     const { result } = renderHook(() => useDeactivateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {
@@ -217,7 +206,7 @@ describe('useReactivateCountry', () => {
     vi.mocked(client.put).mockResolvedValue(axiosResponse(reactivated));
 
     const { result } = renderHook(() => useReactivateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {
@@ -237,7 +226,7 @@ describe('useReactivateCountry', () => {
     vi.mocked(client.put).mockRejectedValue(new Error('Unprocessable'));
 
     const { result } = renderHook(() => useReactivateCountry({ client }), {
-      wrapper: createWrapper(),
+      wrapper: createQueryWrapper(),
     });
 
     act(() => {

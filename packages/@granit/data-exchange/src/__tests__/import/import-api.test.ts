@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -8,21 +8,11 @@ import {
   dryRunImport,
   executeImport,
   fetchImportJob,
+  fetchImportJobs,
   fetchImportReport,
   previewImport,
   uploadImportFile,
 } from '../../import/api/import-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  const client = axios.create();
-  vi.spyOn(client, 'get').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'post').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'put').mockResolvedValue({ data: {} });
-  vi.spyOn(client, 'delete').mockResolvedValue({ data: {} });
-  return client;
-}
 
 const BASE = '/api/v1/data-exchange/import';
 
@@ -139,5 +129,26 @@ describe('import-api', () => {
 
     await fetchImportJob(client, BASE, 'job with spaces');
     expect(client.get).toHaveBeenCalledWith(`${BASE}/job%20with%20spaces`);
+  });
+
+  it('fetchImportJobs calls GET /jobs without params', async () => {
+    const client = createMockClient();
+    const page = { items: [], totalCount: 0 };
+    vi.mocked(client.get).mockResolvedValueOnce({ data: page });
+
+    const result = await fetchImportJobs(client, BASE);
+    expect(client.get).toHaveBeenCalledWith(`${BASE}/jobs`, { params: undefined });
+    expect(result).toEqual(page);
+  });
+
+  it('fetchImportJobs forwards query params', async () => {
+    const client = createMockClient();
+    const page = { items: [{ id: '1' }], totalCount: 1 };
+    vi.mocked(client.get).mockResolvedValueOnce({ data: page });
+    const params = { status: 'Completed', page: 1, pageSize: 10 };
+
+    const result = await fetchImportJobs(client, BASE, params);
+    expect(client.get).toHaveBeenCalledWith(`${BASE}/jobs`, { params });
+    expect(result).toEqual(page);
   });
 });

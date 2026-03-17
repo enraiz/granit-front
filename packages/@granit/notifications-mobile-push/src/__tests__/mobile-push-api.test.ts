@@ -1,15 +1,11 @@
+import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
-import { registerDeviceToken, unregisterDeviceToken } from '../api/mobile-push-api.js';
-
-import type { AxiosInstance } from 'axios';
-
-function createMockClient(): AxiosInstance {
-  return {
-    post: vi.fn().mockResolvedValue({ data: {} }),
-    delete: vi.fn().mockResolvedValue({ data: {} }),
-  } as unknown as AxiosInstance;
-}
+import {
+  fetchDeviceTokens,
+  registerDeviceToken,
+  unregisterDeviceToken,
+} from '../api/mobile-push-api.js';
 
 describe('mobile-push-api', () => {
   it('should register a device token', async () => {
@@ -42,5 +38,26 @@ describe('mobile-push-api', () => {
     expect(client.delete).toHaveBeenCalledWith(
       '/api/v1/notifications/push-tokens/token%2Fwith%2Bspecial%3Dchars'
     );
+  });
+
+  it('should fetch all device tokens', async () => {
+    const client = createMockClient();
+    const tokens = [
+      { deviceToken: 'token-1', platform: 'android' as const, createdAt: '2026-03-17T10:00:00Z' },
+      { deviceToken: 'token-2', platform: 'ios' as const, createdAt: '2026-03-17T11:00:00Z' },
+    ];
+    vi.mocked(client.get).mockResolvedValueOnce({ data: tokens });
+
+    const result = await fetchDeviceTokens(client, '/api/v1');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications/push-tokens');
+    expect(result).toEqual(tokens);
+  });
+
+  it('should return empty array when no tokens registered', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: [] });
+
+    const result = await fetchDeviceTokens(client, '/api/v1');
+    expect(result).toEqual([]);
   });
 });
