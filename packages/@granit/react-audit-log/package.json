@@ -1,0 +1,34 @@
+{
+  "name": "@granit/react-audit-log",
+  "description": "React bindings for @granit/audit-log — AuditLogProvider, hooks",
+  "version": "0.2.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@granit/audit-log": "workspace:*"
+  },
+  "peerDependencies": {
+    "@granit/audit-log": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://npm.pkg.github.com"
+  }
+}
