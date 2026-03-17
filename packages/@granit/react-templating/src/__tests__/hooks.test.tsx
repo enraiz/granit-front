@@ -1,3 +1,4 @@
+import { TemplateLifecycleStatus } from '@granit/templating';
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -8,10 +9,10 @@ import { useTemplatePreview } from '../hooks/use-template-preview.js';
 import { useTemplateVariables } from '../hooks/use-template-variables.js';
 import { useTemplate } from '../hooks/use-template.js';
 import { useTemplates } from '../hooks/use-templates.js';
-import { TemplateLifecycleStatus } from '../types/index.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
+import type { PaginatedResponse } from '@granit/api-client';
 import type {
   TemplateCategory,
   TemplateDetail,
@@ -19,8 +20,7 @@ import type {
   TemplateListItem,
   TemplatePreviewResponse,
   TemplateVariables,
-} from '../types/index.js';
-import type { PaginatedResponse } from '@granit/api-client';
+} from '@granit/templating';
 
 describe('useTemplates', () => {
   it('should fetch templates list', async () => {

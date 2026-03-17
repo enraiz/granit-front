@@ -1,7 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useKeycloakInit } from '../hooks/keycloak-core.js';
+import { useKeycloakInit } from '../hooks/use-keycloak-core.js';
 
 import type { KeycloakCoreConfig } from '@granit/authentication';
 

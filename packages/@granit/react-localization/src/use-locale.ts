@@ -32,14 +32,15 @@ export function useLocale(options?: UseLocaleOptions): {
 } {
   const { i18n } = useTranslation();
   const storage = useMemo(() => createStorage<string>(LOCALE_STORAGE_KEY), []);
+  const onLocaleChange = options?.onLocaleChange;
 
   const setLocale = useCallback(
     (nextLocale: string) => {
       storage.set(nextLocale);
       i18n.changeLanguage(nextLocale).catch(() => undefined);
-      options?.onLocaleChange?.(nextLocale);
+      onLocaleChange?.(nextLocale);
     },
-    [i18n, storage, options]
+    [i18n, storage, onLocaleChange]
   );
 
   return {

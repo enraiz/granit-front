@@ -1,5 +1,5 @@
 import { fetchPreferences, updatePreference } from '@granit/notifications';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useOptimistic, useRef, useState, useTransition } from 'react';
 
 import { useNotificationContext } from '../providers/notification-provider.js';
 
@@ -10,16 +10,20 @@ export interface UseNotificationPreferencesReturn {
   loading: boolean;
   error: Error | null;
   saving: boolean;
-  toggleChannel: (
-    notificationType: string,
-    channel: NotificationChannel,
-    enabled: boolean
-  ) => Promise<void>;
+  toggleChannel: (notificationType: string, channel: NotificationChannel, enabled: boolean) => void;
   refresh: () => void;
 }
 
+type OptimisticAction = {
+  notificationType: string;
+  updated: NotificationPreferenceDto;
+};
+
 /**
  * CRUD hook for notification preferences (type x channel matrix).
+ *
+ * Uses React 19 `useOptimistic` for instant UI feedback with automatic
+ * rollback on server failure.
  */
 export function useNotificationPreferences(): UseNotificationPreferencesReturn {
   const { config } = useNotificationContext();
@@ -28,8 +32,15 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
   const [preferences, setPreferences] = useState<NotificationPreferenceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [saving, setSaving] = useState(false);
   const mountedRef = useRef(true);
+
+  const [optimisticPreferences, applyOptimistic] = useOptimistic(
+    preferences,
+    (state: NotificationPreferenceDto[], action: OptimisticAction) =>
+      state.map((p) => (p.notificationType === action.notificationType ? action.updated : p))
+  );
+
+  const [saving, startTransition] = useTransition();
 
   const load = useCallback(async () => {
     try {
@@ -56,7 +67,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
   }, [load]);
 
   const toggleChannel = useCallback(
-    async (notificationType: string, channel: NotificationChannel, enabled: boolean) => {
+    (notificationType: string, channel: NotificationChannel, enabled: boolean) => {
       const pref = preferences.find((p) => p.notificationType === notificationType);
       if (!pref) return;
 
@@ -65,32 +76,26 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
         channels: { ...pref.channels, [channel]: enabled },
       };
 
-      // Optimistic update
-      setPreferences((prev) =>
-        prev.map((p) => (p.notificationType === notificationType ? updated : p))
-      );
+      startTransition(async () => {
+        applyOptimistic({ notificationType, updated });
 
-      setSaving(true);
-      try {
-        const saved = await updatePreference(config.apiClient, basePath, updated);
-        if (mountedRef.current) {
-          setPreferences((prev) =>
-            prev.map((p) => (p.notificationType === notificationType ? saved : p))
-          );
+        try {
+          const saved = await updatePreference(config.apiClient, basePath, updated);
+          if (mountedRef.current) {
+            setPreferences((prev) =>
+              prev.map((p) => (p.notificationType === notificationType ? saved : p))
+            );
+          }
+        } catch (err) {
+          // No manual rollback — useOptimistic reverts automatically when the
+          // transition ends and setPreferences was not called with a new value.
+          if (mountedRef.current) {
+            setError(err instanceof Error ? err : new Error(String(err)));
+          }
         }
-      } catch (err) {
-        // Rollback on failure
-        if (mountedRef.current) {
-          setPreferences((prev) =>
-            prev.map((p) => (p.notificationType === notificationType ? pref : p))
-          );
-          setError(err instanceof Error ? err : new Error(String(err)));
-        }
-      } finally {
-        if (mountedRef.current) setSaving(false);
-      }
+      });
     },
-    [config.apiClient, basePath, preferences]
+    [config.apiClient, basePath, preferences, applyOptimistic]
   );
 
   const refresh = useCallback(() => {
@@ -98,5 +103,5 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
     load();
   }, [load]);
 
-  return { preferences, loading, error, saving, toggleChannel, refresh };
+  return { preferences: optimisticPreferences, loading, error, saving, toggleChannel, refresh };
 }
