@@ -39,6 +39,7 @@ export default defineConfig({
         __dirname,
         'packages/@granit/error-boundary/src/index.ts'
       ),
+      '@granit/features': path.resolve(__dirname, 'packages/@granit/features/src/index.ts'),
       '@granit/identity': path.resolve(__dirname, 'packages/@granit/identity/src/index.ts'),
       '@granit/localization': path.resolve(__dirname, 'packages/@granit/localization/src/index.ts'),
       '@granit/logger': path.resolve(__dirname, 'packages/@granit/logger/src/index.ts'),
@@ -103,6 +104,10 @@ export default defineConfig({
       '@granit/react-error-boundary': path.resolve(
         __dirname,
         'packages/@granit/react-error-boundary/src/index.ts'
+      ),
+      '@granit/react-features': path.resolve(
+        __dirname,
+        'packages/@granit/react-features/src/index.ts'
       ),
       '@granit/react-identity': path.resolve(
         __dirname,
