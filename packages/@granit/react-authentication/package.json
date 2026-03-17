@@ -1,7 +1,7 @@
 {
   "name": "@granit/react-authentication",
   "description": "React bindings for @granit/authentication — Keycloak init hook, auth context factory, mock provider",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {

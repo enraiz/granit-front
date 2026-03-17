@@ -5,5 +5,5 @@
       "@granit/api-client/test-utils": ["../api-client/src/test-utils.ts"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.ts"]
 }

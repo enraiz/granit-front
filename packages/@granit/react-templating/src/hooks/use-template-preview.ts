@@ -1,9 +1,9 @@
+import { previewTemplate, previewTemplateBinary } from '@granit/templating';
 import { useMutation } from '@tanstack/react-query';
 
-import { previewTemplate, previewTemplateBinary } from '../api/templates-api.js';
 import { useTemplatingConfig } from '../providers/templating-provider.js';
 
-import type { TemplatePreviewRequest } from '../types/index.js';
+import type { TemplatePreviewRequest } from '@granit/templating';
 
 export function useTemplatePreview() {
   const { client, basePath } = useTemplatingConfig();

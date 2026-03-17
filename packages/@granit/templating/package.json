@@ -1,7 +1,7 @@
 {
   "name": "@granit/templating",
-  "description": "Template editing and preview hooks",
-  "version": "0.1.1",
+  "description": "Template management types and API functions — mirrors Granit.Templating .NET",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -17,9 +17,7 @@
     "@granit/api-client": "workspace:*"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^5.0.0",
-    "axios": "*",
-    "react": "^19.0.0"
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {

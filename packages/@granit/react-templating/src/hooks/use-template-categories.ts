@@ -1,19 +1,18 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
 import {
   createCategory,
   deleteCategory,
   getCategories,
+  templateKeys,
   updateCategory,
-} from '../api/templates-api.js';
-import { useTemplatingConfig } from '../providers/templating-provider.js';
+} from '@granit/templating';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { templateKeys } from './query-keys.js';
+import { useTemplatingConfig } from '../providers/templating-provider.js';
 
 import type {
   CreateTemplateCategoryRequest,
   UpdateTemplateCategoryRequest,
-} from '../types/index.js';
+} from '@granit/templating';
 
 export function useTemplateCategories() {
   const { client, basePath, queryKeyPrefix } = useTemplatingConfig();

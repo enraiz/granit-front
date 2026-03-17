@@ -1,7 +1,7 @@
 {
   "name": "@granit/react-reference-data",
   "description": "React hooks for @granit/reference-data — useCountry, useCountries, useCreateCountry, useUpdateCountry, useDeactivateCountry, useReactivateCountry",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {

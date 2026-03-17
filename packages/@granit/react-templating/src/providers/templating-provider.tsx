@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo } from 'react';
 
-import type { TemplatingConfig } from '../types/index.js';
+import type { TemplatingConfig } from '@granit/templating';
 import type { AxiosInstance } from 'axios';
 
 const TemplatingConfigContext = createContext<TemplatingConfig | null>(null);
