@@ -185,6 +185,11 @@ export default defineConfig({
       '@granit/timeline': path.resolve(__dirname, 'packages/@granit/timeline/src/index.ts'),
       '@granit/tracing': path.resolve(__dirname, 'packages/@granit/tracing/src/index.ts'),
       '@granit/utils': path.resolve(__dirname, 'packages/@granit/utils/src/index.ts'),
+      '@granit/webhooks': path.resolve(__dirname, 'packages/@granit/webhooks/src/index.ts'),
+      '@granit/react-webhooks': path.resolve(
+        __dirname,
+        'packages/@granit/react-webhooks/src/index.ts'
+      ),
       '@granit/workflow': path.resolve(__dirname, 'packages/@granit/workflow/src/index.ts'),
     },
   },

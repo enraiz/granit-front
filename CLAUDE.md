@@ -61,6 +61,8 @@
 | `@granit/localization`                  | Localization setup: `createLocalization` factory (i18next configuration)                                                                                                                                                                      |
 | `@granit/react-localization`            | React bindings for `@granit/localization`: `useLocale` hook (locale management + persistence)                                                                                                                                                 |
 | `@granit/logger-otlp`                   | OpenTelemetry log transport: `createOtlpTransport` for `@granit/logger`                                                                                                                                                                       |
+| `@granit/webhooks`                      | Webhook subscription management types and API functions: CRUD, lifecycle (activate/suspend/deactivate), secret rotation, test ping, stats — mirrors `Granit.Webhooks` .NET                                                                    |
+| `@granit/react-webhooks`                | React hooks for `@granit/webhooks`: `useSubscription`, `useCreateSubscription`, `useDeleteSubscription`, `useActivateSubscription`, `useRotateSecret`, `useTestPing`, `useDeliveries`, `useWebhookStats`                                      |
 | `@granit/idempotency`                   | Idempotency key generation: `createIdempotencyKey` — mirrors `Granit.Idempotency` .NET                                                                                                                                                        |
 
 ## Stack & versions
@@ -167,6 +169,8 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/localization` → `i18next`
   - `@granit/react-localization` → `react`, `react-i18next`, `@granit/localization`, `@granit/storage`
   - `@granit/logger-otlp` → `@granit/logger`, `@opentelemetry/api`
+  - `@granit/webhooks` → `axios`
+  - `@granit/react-webhooks` → `react`, `axios`, `@tanstack/react-query`, `@granit/webhooks`
   - `@granit/idempotency` → _(no peer dependencies)_
 
 ## GitHub issues
