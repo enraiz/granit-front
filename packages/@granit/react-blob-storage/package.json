@@ -1,0 +1,35 @@
+{
+  "name": "@granit/react-blob-storage",
+  "description": "React hooks for blob storage — useBlob, useInitiateUpload, useConfirmUpload, useBlobUpload, useDownloadUrl, useDeleteBlob",
+  "version": "0.2.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/blob-storage": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
+    "axios": "*",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@granit/testing": "workspace:*",
+    "@granit/react-testing": "workspace:*"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://npm.pkg.github.com"
+  }
+}

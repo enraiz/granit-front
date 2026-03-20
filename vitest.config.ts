@@ -15,6 +15,7 @@ export default defineConfig({
         __dirname,
         'packages/@granit/background-jobs/src/index.ts'
       ),
+      '@granit/blob-storage': path.resolve(__dirname, 'packages/@granit/blob-storage/src/index.ts'),
       '@granit/authentication-api-keys': path.resolve(
         __dirname,
         'packages/@granit/authentication-api-keys/src/index.ts'
@@ -86,6 +87,10 @@ export default defineConfig({
       '@granit/react-background-jobs': path.resolve(
         __dirname,
         'packages/@granit/react-background-jobs/src/index.ts'
+      ),
+      '@granit/react-blob-storage': path.resolve(
+        __dirname,
+        'packages/@granit/react-blob-storage/src/index.ts'
       ),
       '@granit/react-authentication': path.resolve(
         __dirname,
