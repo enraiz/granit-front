@@ -1,5 +1,5 @@
 // Types
-export type { BackgroundJobStatus } from './types/index.js';
+export type { BackgroundJobListParams, BackgroundJobStatus } from './types/index.js';
 
 // API
-export { fetchBackgroundJob } from './api/background-jobs-api.js';
+export { fetchBackgroundJob, fetchBackgroundJobs } from './api/background-jobs-api.js';

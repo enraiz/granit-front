@@ -1,8 +1,20 @@
 import { describe, expectTypeOf, it } from 'vitest';
 
-import type { BackgroundJobStatus } from '../index.js';
+import type { BackgroundJobListParams, BackgroundJobStatus } from '../index.js';
 
 describe('@granit/background-jobs types', () => {
+  describe('BackgroundJobListParams', () => {
+    it('should have optional page field', () => {
+      expectTypeOf<BackgroundJobListParams>().toHaveProperty('page');
+      expectTypeOf<BackgroundJobListParams['page']>().toEqualTypeOf<number | undefined>();
+    });
+
+    it('should have optional pageSize field', () => {
+      expectTypeOf<BackgroundJobListParams>().toHaveProperty('pageSize');
+      expectTypeOf<BackgroundJobListParams['pageSize']>().toEqualTypeOf<number | undefined>();
+    });
+  });
+
   describe('BackgroundJobStatus', () => {
     it('should have job identification fields', () => {
       expectTypeOf<BackgroundJobStatus>().toHaveProperty('jobName');

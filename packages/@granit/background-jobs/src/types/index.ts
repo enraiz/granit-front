@@ -1,3 +1,5 @@
+export type { BackgroundJobListParams } from './background-job-list-params.js';
+
 /** Status of a background job. Mirrors Granit.BackgroundJobs.BackgroundJobStatus .NET. */
 export interface BackgroundJobStatus {
   readonly jobName: string;

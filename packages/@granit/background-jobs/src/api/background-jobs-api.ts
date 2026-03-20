@@ -1,5 +1,20 @@
-import type { BackgroundJobStatus } from '../types/index.js';
+import type { BackgroundJobListParams, BackgroundJobStatus } from '../types/index.js';
+import type { PagedResult } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
+
+/**
+ * Fetch a paginated list of all background jobs.
+ *
+ * `GET {basePath}?page=&pageSize=`
+ */
+export async function fetchBackgroundJobs(
+  client: AxiosInstance,
+  basePath: string,
+  params?: BackgroundJobListParams
+): Promise<PagedResult<BackgroundJobStatus>> {
+  const { data } = await client.get<PagedResult<BackgroundJobStatus>>(basePath, { params });
+  return data;
+}
 
 /**
  * Fetch the status of a specific background job by name.

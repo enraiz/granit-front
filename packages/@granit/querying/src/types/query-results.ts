@@ -6,6 +6,8 @@
 export interface PagedResult<T> {
   readonly items: readonly T[];
   readonly totalCount: number;
+  /** Whether more pages exist beyond the current one. */
+  readonly hasMore?: boolean;
   /** Opaque cursor for next page (only for keyset pagination). */
   readonly nextCursor?: string;
 }
