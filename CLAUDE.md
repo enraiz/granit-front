@@ -15,6 +15,8 @@
 | `@granit/logger`                        | Configurable logger factory (`createLogger(prefix)`)                                                                                                                                                                                          |
 | `@granit/utils`                         | Shared utilities (`cn`, `formatDate`, `formatNumber`, …)                                                                                                                                                                                      |
 | `@granit/api-client`                    | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`PaginatedResponse`, `ProblemDetails`)                                                                                                                            |
+| `@granit/blob-storage`                  | Blob storage types and API functions: `initiateUpload`, `confirmUpload`, `getDownloadUrl`, `deleteBlob`, `getBlob`, `cleanupOrphans` — mirrors `Granit.BlobStorage` .NET contract                                                             |
+| `@granit/react-blob-storage`            | React hooks for `@granit/blob-storage`: `useBlob`, `useInitiateUpload`, `useConfirmUpload`, `useDeleteBlob`, `useDownloadUrl`, `useCleanupOrphans`, `useBlobUpload` (orchestration)                                                           |
 | `@granit/authentication`                | Keycloak/OIDC authentication types: `BaseAuthContextType`, `KeycloakUserInfo`, `KeycloakCoreConfig`, `LoginOptions`, `LogoutOptions` — mirrors `Granit.Authentication` .NET                                                                   |
 | `@granit/react-authentication`          | React bindings for `@granit/authentication`: `useKeycloakInit`, `createAuthContext`, `createMockProvider`                                                                                                                                     |
 | `@granit/authorization`                 | Permission/role authorization types: `PermissionsResponse`, `PermissionDefinitionDto`, `PermissionGroupDto`, `PermissionGrantDto` — mirrors `Granit.Authorization` .NET                                                                       |
@@ -117,6 +119,8 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
 - **Peer dep matrix** (actual `peerDependencies` from each `package.json`):
   - `@granit/utils` → `clsx`, `tailwind-merge`, `date-fns`
   - `@granit/api-client` → `axios`
+  - `@granit/blob-storage` → `axios`
+  - `@granit/react-blob-storage` → `react`, `axios`, `@tanstack/react-query`, `@granit/blob-storage`
   - `@granit/authentication` → `keycloak-js`
   - `@granit/react-authentication` → `react`, `keycloak-js`, `@granit/api-client`, `@granit/authentication`
   - `@granit/authorization` → `axios`
