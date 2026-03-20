@@ -49,6 +49,10 @@ export {
   inferOperators,
 } from './utils/filter-operators.js';
 
+// Validation
+export { QUERY_LIMITS } from './validation/query-limits.js';
+export { validateQueryRequest } from './validation/validate-query-request.js';
+
 // API
 export { fetchGrouped, fetchPage, fetchQueryMeta } from './api/query-api.js';
 export { parseQueryRequest, serializeQueryRequest } from './api/query-param-serializer.js';

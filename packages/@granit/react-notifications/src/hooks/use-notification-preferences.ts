@@ -4,6 +4,7 @@ import { useCallback, useEffect, useOptimistic, useRef, useState, useTransition 
 import { useNotificationContext } from '../providers/notification-provider.js';
 
 import type { NotificationChannel, NotificationPreferenceDto } from '@granit/notifications';
+import type { AxiosInstance } from 'axios';
 
 export interface UseNotificationPreferencesReturn {
   preferences: NotificationPreferenceDto[];
@@ -18,6 +19,31 @@ type OptimisticAction = {
   notificationType: string;
   updated: NotificationPreferenceDto;
 };
+
+async function savePreference(
+  apiClient: AxiosInstance,
+  basePath: string,
+  notificationType: string,
+  updated: NotificationPreferenceDto,
+  mountedRef: React.RefObject<boolean>,
+  setPreferences: React.Dispatch<React.SetStateAction<NotificationPreferenceDto[]>>,
+  setError: React.Dispatch<React.SetStateAction<Error | null>>
+): Promise<void> {
+  try {
+    const saved = await updatePreference(apiClient, basePath, updated);
+    if (mountedRef.current) {
+      setPreferences((prev) =>
+        prev.map((p) => (p.notificationType === notificationType ? saved : p))
+      );
+    }
+  } catch (err) {
+    // No manual rollback — useOptimistic reverts automatically when the
+    // transition ends and setPreferences was not called with a new value.
+    if (mountedRef.current) {
+      setError(err instanceof Error ? err : new Error(String(err)));
+    }
+  }
+}
 
 /**
  * CRUD hook for notification preferences (type x channel matrix).
@@ -78,21 +104,15 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
 
       startTransition(async () => {
         applyOptimistic({ notificationType, updated });
-
-        try {
-          const saved = await updatePreference(config.apiClient, basePath, updated);
-          if (mountedRef.current) {
-            setPreferences((prev) =>
-              prev.map((p) => (p.notificationType === notificationType ? saved : p))
-            );
-          }
-        } catch (err) {
-          // No manual rollback — useOptimistic reverts automatically when the
-          // transition ends and setPreferences was not called with a new value.
-          if (mountedRef.current) {
-            setError(err instanceof Error ? err : new Error(String(err)));
-          }
-        }
+        await savePreference(
+          config.apiClient,
+          basePath,
+          notificationType,
+          updated,
+          mountedRef,
+          setPreferences,
+          setError
+        );
       });
     },
     [config.apiClient, basePath, preferences, applyOptimistic]

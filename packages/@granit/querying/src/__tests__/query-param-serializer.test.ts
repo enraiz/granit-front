@@ -84,6 +84,25 @@ describe('serializeQueryRequest', () => {
     expect(serializeQueryRequest({})).not.toContain('skipTotalCount');
   });
 
+  it('clamps page=0 to page=1 via validation', () => {
+    const result = serializeQueryRequest({ page: 0 });
+    const params = new URLSearchParams(result);
+    expect(params.get('page')).toBe('1');
+  });
+
+  it('clamps pageSize=1000 to pageSize=500 via validation', () => {
+    const result = serializeQueryRequest({ pageSize: 1000 });
+    const params = new URLSearchParams(result);
+    expect(params.get('pageSize')).toBe('500');
+  });
+
+  it('excludes page when both page and cursor are set (cursor wins)', () => {
+    const result = serializeQueryRequest({ page: 3, cursor: 'abc123' });
+    const params = new URLSearchParams(result);
+    expect(params.get('cursor')).toBe('abc123');
+    expect(params.has('page')).toBe(false);
+  });
+
   it('serializes a full query', () => {
     const params: QueryRequest = {
       page: 1,

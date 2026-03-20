@@ -45,6 +45,31 @@ export async function executeTransition(
   return data;
 }
 
+/** Fetch available transitions for a given state (state-machine level, no entity context). */
+export async function fetchTransitions(
+  client: AxiosInstance,
+  basePath: string,
+  currentState: string
+): Promise<WorkflowStatusDto> {
+  const { data } = await client.get<WorkflowStatusDto>(`${basePath}/transitions`, {
+    params: { currentState },
+  });
+  return data;
+}
+
+/** Execute a state-machine transition (no entity context). */
+export async function executeStateMachineTransition(
+  client: AxiosInstance,
+  basePath: string,
+  currentState: string,
+  request: TransitionRequestDto
+): Promise<TransitionResultDto> {
+  const { data } = await client.post<TransitionResultDto>(`${basePath}/transitions`, request, {
+    params: { currentState },
+  });
+  return data;
+}
+
 /** Response shape for the paginated workflow history endpoint. */
 export type WorkflowHistoryPage = PagedResult<TransitionHistoryDto>;
 
