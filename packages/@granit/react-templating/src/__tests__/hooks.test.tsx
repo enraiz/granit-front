@@ -18,7 +18,7 @@ import { TemplatingProvider } from '../providers/templating-provider.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { PaginatedResponse } from '@granit/api-client';
+import type { PagedResult } from '@granit/querying';
 import type {
   TemplateCategory,
   TemplateDetail,
@@ -54,7 +54,7 @@ describe('useTemplates', () => {
 
   it('should fetch templates list', async () => {
     const client = createMockClient();
-    const response: PaginatedResponse<TemplateListItem> = {
+    const response: PagedResult<TemplateListItem> = {
       items: [
         {
           name: 'Billing.Invoice',
@@ -65,9 +65,7 @@ describe('useTemplates', () => {
           hasPublishedVersion: false,
         },
       ],
-      total: 1,
-      page: 1,
-      pageSize: 20,
+      totalCount: 1,
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(response));
 

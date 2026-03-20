@@ -15,19 +15,6 @@ export interface ApiClientConfig {
 // Generic response types (REST APIs)
 // ---------------------------------------------------------------------------
 
-/**
- * @deprecated Use `PagedResult<T>` from `@granit/querying` instead.
- * This type does not match the backend `PagedResult<T>` contract
- * (uses `total` instead of `totalCount`, includes `page`/`pageSize`
- * which are request params, not response fields).
- */
-export interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 // RFC 7807 Problem Details — standard error format from Granit .NET backend.
 // See: Granit.ExceptionHandling (400 BusinessException, 404 NotFoundException,
 // 403 ForbiddenException, 409 ConflictException, 422 ValidationException, 500).
