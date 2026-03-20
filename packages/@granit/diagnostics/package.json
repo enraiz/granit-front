@@ -1,0 +1,31 @@
+{
+  "name": "@granit/diagnostics",
+  "description": "Monitoring health types and API — mirrors Granit.Diagnostics .NET contract",
+  "version": "0.3.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "axios": "*"
+  },
+  "devDependencies": {
+    "@granit/testing": "workspace:*"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://npm.pkg.github.com"
+  }
+}
