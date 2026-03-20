@@ -1,0 +1,227 @@
+import { createTestQueryClient } from '@granit/react-testing';
+import { axiosResponse, createMockClient } from '@granit/testing';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import * as React from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import { useAIChat } from '../hooks/use-ai-chat.js';
+import { useAIEmbeddings } from '../hooks/use-ai-embeddings.js';
+import { useAIWorkspace } from '../hooks/use-ai-workspace.js';
+import { useAIWorkspaces } from '../hooks/use-ai-workspaces.js';
+import { useCreateAIWorkspace } from '../hooks/use-create-ai-workspace.js';
+import { useDeleteAIWorkspace } from '../hooks/use-delete-ai-workspace.js';
+import { useUpdateAIWorkspace } from '../hooks/use-update-ai-workspace.js';
+import { AIProvider } from '../providers/ai-provider.js';
+
+import type { AIConfig } from '../providers/ai-provider.js';
+import type { AxiosInstance } from 'axios';
+import type { ReactNode } from 'react';
+
+function createWrapper(client: AxiosInstance, basePath?: string) {
+  return function Wrapper({ children }: { children: ReactNode }) {
+    const queryClient = createTestQueryClient();
+    const config: AIConfig = { client, basePath };
+    return React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      <AIProvider config={config}>{children}</AIProvider>
+    );
+  };
+}
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+// -- Workspace queries -------------------------------------------------------
+
+describe('useAIWorkspaces', () => {
+  it('should fetch all workspaces', async () => {
+    const client = createMockClient();
+    const data = {
+      workspaces: [{ name: 'default', provider: 'OpenAI', model: 'gpt-4o' }],
+      totalCount: 1,
+    };
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(data));
+
+    const { result } = renderHook(() => useAIWorkspaces(), {
+      wrapper: createWrapper(client, '/api'),
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/api/ai/workspaces');
+    expect(result.current.data).toEqual(data);
+  });
+
+  it('should not fetch when disabled', () => {
+    const client = createMockClient();
+
+    const { result } = renderHook(() => useAIWorkspaces({ enabled: false }), {
+      wrapper: createWrapper(client),
+    });
+
+    expect(result.current.isFetching).toBe(false);
+    expect(client.get).not.toHaveBeenCalled();
+  });
+});
+
+describe('useAIWorkspace', () => {
+  it('should fetch a single workspace', async () => {
+    const client = createMockClient();
+    const workspace = { name: 'default', provider: 'OpenAI', model: 'gpt-4o' };
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(workspace));
+
+    const { result } = renderHook(() => useAIWorkspace('default'), {
+      wrapper: createWrapper(client, '/api'),
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/api/ai/workspaces/default');
+    expect(result.current.data).toEqual(workspace);
+  });
+});
+
+// -- Workspace mutations -----------------------------------------------------
+
+describe('useCreateAIWorkspace', () => {
+  it('should POST to create a workspace', async () => {
+    const client = createMockClient();
+    const response = { name: 'test', provider: 'OpenAI', model: 'gpt-4o', kind: 'Dynamic' };
+    vi.mocked(client.post).mockResolvedValue(axiosResponse(response));
+
+    const { result } = renderHook(() => useCreateAIWorkspace(), {
+      wrapper: createWrapper(client, '/api'),
+    });
+
+    await act(async () => {
+      result.current.create({ name: 'test', provider: 'OpenAI', model: 'gpt-4o' });
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(false));
+
+    expect(client.post).toHaveBeenCalledWith('/api/ai/workspaces', {
+      name: 'test',
+      provider: 'OpenAI',
+      model: 'gpt-4o',
+    });
+  });
+
+  it('should expose error on failure', async () => {
+    const client = createMockClient();
+    vi.mocked(client.post).mockRejectedValue(new Error('Conflict'));
+
+    const { result } = renderHook(() => useCreateAIWorkspace(), {
+      wrapper: createWrapper(client),
+    });
+
+    await act(async () => {
+      result.current.create({ name: 'dup', provider: 'OpenAI', model: 'gpt-4o' });
+    });
+
+    await waitFor(() => expect(result.current.error).not.toBeNull());
+
+    expect(result.current.error?.message).toBe('Conflict');
+  });
+});
+
+describe('useUpdateAIWorkspace', () => {
+  it('should PUT to update a workspace', async () => {
+    const client = createMockClient();
+    vi.mocked(client.put).mockResolvedValue(axiosResponse({ name: 'ws' }));
+
+    const { result } = renderHook(() => useUpdateAIWorkspace(), {
+      wrapper: createWrapper(client, '/api'),
+    });
+
+    const request = { provider: 'OpenAI', model: 'gpt-4o-mini', isActive: true };
+    await act(async () => {
+      result.current.update('ws', request);
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(false));
+
+    expect(client.put).toHaveBeenCalledWith('/api/ai/workspaces/ws', request);
+  });
+});
+
+describe('useDeleteAIWorkspace', () => {
+  it('should DELETE a workspace', async () => {
+    const client = createMockClient();
+    vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
+
+    const { result } = renderHook(() => useDeleteAIWorkspace(), {
+      wrapper: createWrapper(client),
+    });
+
+    await act(async () => {
+      result.current.remove('test');
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(false));
+
+    expect(client.delete).toHaveBeenCalledWith('/ai/workspaces/test');
+  });
+});
+
+// -- Chat --------------------------------------------------------------------
+
+describe('useAIChat', () => {
+  it('should send a chat completion request', async () => {
+    const client = createMockClient();
+    const response = {
+      workspaceName: 'default',
+      model: 'gpt-4o',
+      content: 'Hi!',
+      usage: null,
+      duration: '00:00:01',
+    };
+    vi.mocked(client.post).mockResolvedValue(axiosResponse(response));
+
+    const { result } = renderHook(() => useAIChat(), {
+      wrapper: createWrapper(client, '/api'),
+    });
+
+    await act(async () => {
+      result.current.send('default', { messages: [{ role: 'user', content: 'Hello' }] });
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(false));
+
+    expect(client.post).toHaveBeenCalledWith('/api/ai/chat/default', {
+      messages: [{ role: 'user', content: 'Hello' }],
+    });
+    expect(result.current.data).toEqual(response);
+  });
+});
+
+// -- Embeddings --------------------------------------------------------------
+
+describe('useAIEmbeddings', () => {
+  it('should generate embeddings', async () => {
+    const client = createMockClient();
+    const response = {
+      workspaceName: 'default',
+      model: 'text-embedding-3-small',
+      embeddings: [{ index: 0, vector: [0.1, 0.2] }],
+    };
+    vi.mocked(client.post).mockResolvedValue(axiosResponse(response));
+
+    const { result } = renderHook(() => useAIEmbeddings(), {
+      wrapper: createWrapper(client, '/api'),
+    });
+
+    await act(async () => {
+      result.current.generate('default', { inputs: ['Hello'] });
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(false));
+
+    expect(client.post).toHaveBeenCalledWith('/api/ai/embeddings/default', {
+      inputs: ['Hello'],
+    });
+    expect(result.current.data).toEqual(response);
+  });
+});

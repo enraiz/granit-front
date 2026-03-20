@@ -10,6 +10,7 @@ export default defineConfig({
         'packages/@granit/api-client/src/test-utils.ts'
       ),
       '@granit/api-client': path.resolve(__dirname, 'packages/@granit/api-client/src/index.ts'),
+      '@granit/ai': path.resolve(__dirname, 'packages/@granit/ai/src/index.ts'),
       '@granit/background-jobs': path.resolve(
         __dirname,
         'packages/@granit/background-jobs/src/index.ts'
@@ -77,6 +78,7 @@ export default defineConfig({
         __dirname,
         'packages/@granit/reference-data/src/index.ts'
       ),
+      '@granit/react-ai': path.resolve(__dirname, 'packages/@granit/react-ai/src/index.ts'),
       '@granit/react-authentication-api-keys': path.resolve(
         __dirname,
         'packages/@granit/react-authentication-api-keys/src/index.ts'
