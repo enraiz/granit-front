@@ -12,7 +12,7 @@ import type {
   FilterEntry,
   GroupedResult,
   PagedResult,
-  QueryParams,
+  QueryRequest,
   SortEntry,
 } from '@granit/querying';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -34,12 +34,12 @@ type QueryAction =
   | { type: 'SET_QUICK_FILTERS'; quickFilters: readonly string[] }
   | { type: 'TOGGLE_QUICK_FILTER'; name: string }
   | { type: 'SET_GROUP_BY'; groupBy: string | undefined }
-  | { type: 'SET_PARAMS'; params: QueryParams }
+  | { type: 'SET_PARAMS'; params: QueryRequest }
   | { type: 'RESET' };
 
 interface QueryState {
-  readonly params: QueryParams;
-  readonly initialParams: QueryParams;
+  readonly params: QueryRequest;
+  readonly initialParams: QueryRequest;
 }
 
 /**
@@ -143,14 +143,14 @@ function queryReducer(state: QueryState, action: QueryAction): QueryState {
 
 export interface UseQueryEndpointOptions {
   /** Initial query parameters. */
-  readonly initialParams?: QueryParams;
+  readonly initialParams?: QueryRequest;
   /** Whether the query is enabled. Defaults to true. */
   readonly enabled?: boolean;
 }
 
 export interface UseQueryEndpointReturn<T> {
   /** Current query parameters. */
-  readonly params: QueryParams;
+  readonly params: QueryRequest;
   /** Query result for flat (paged) data. */
   readonly query: UseQueryResult<PagedResult<T>>;
   /** Query result for grouped data (when groupBy is set). */
@@ -170,7 +170,7 @@ export interface UseQueryEndpointReturn<T> {
   readonly setQuickFilters: (quickFilters: readonly string[]) => void;
   readonly toggleQuickFilter: (name: string) => void;
   readonly setGroupBy: (groupBy: string | undefined) => void;
-  readonly setParams: (params: QueryParams) => void;
+  readonly setParams: (params: QueryRequest) => void;
   readonly reset: () => void;
 }
 
@@ -178,7 +178,7 @@ export interface UseQueryEndpointReturn<T> {
 // Default initial params
 // ---------------------------------------------------------------------------
 
-const DEFAULT_PARAMS: QueryParams = { page: 1, pageSize: 20 };
+const DEFAULT_PARAMS: QueryRequest = { page: 1, pageSize: 20 };
 
 // ---------------------------------------------------------------------------
 // Hook
@@ -275,7 +275,7 @@ export function useQueryEndpoint<T>(options?: UseQueryEndpointOptions): UseQuery
     []
   );
   const setParams = useCallback(
-    (p: QueryParams) => dispatch({ type: 'SET_PARAMS', params: p }),
+    (p: QueryRequest) => dispatch({ type: 'SET_PARAMS', params: p }),
     []
   );
   const reset = useCallback(() => dispatch({ type: 'RESET' }), []);

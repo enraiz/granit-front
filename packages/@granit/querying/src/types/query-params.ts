@@ -2,6 +2,14 @@
 // Query parameters — mirrors Granit.Querying.QueryRequest (.NET)
 // ---------------------------------------------------------------------------
 
+/** Minimal pagination parameters shared across all domain modules. */
+export interface PaginationParams {
+  /** One-based page number. */
+  readonly page?: number;
+  /** Items per page. */
+  readonly pageSize?: number;
+}
+
 /**
  * Filter operators supported by Granit Querying.
  *
@@ -43,7 +51,7 @@ export interface SortEntry {
 }
 
 /**
- * Full query parameters sent to the backend.
+ * Full query request sent to the backend — mirrors `Granit.Querying.QueryRequest` (.NET).
  *
  * Serialized to query string format:
  * ```
@@ -53,13 +61,10 @@ export interface SortEntry {
  *  &presets[group]=name1,name2
  *  &quickFilters=Name1,Name2
  *  &groupBy=field
+ *  &skipTotalCount=true
  * ```
  */
-export interface QueryParams {
-  /** One-based page number. Mutually exclusive with cursor. */
-  readonly page?: number;
-  /** Items per page. Clamped to maxPageSize by backend. */
-  readonly pageSize?: number;
+export interface QueryRequest extends PaginationParams {
   /** Opaque cursor for keyset pagination (base64). Mutually exclusive with page. */
   readonly cursor?: string;
   /** Free-text search on global search properties. */
@@ -80,4 +85,10 @@ export interface QueryParams {
   readonly quickFilters?: readonly string[];
   /** Property name for grouping. When set, response is GroupedResult. */
   readonly groupBy?: string;
+  /**
+   * When true, omits the expensive COUNT(*) query.
+   * Useful for large datasets with cursor pagination where totalCount is not needed.
+   * When set, `PagedResult.totalCount` will be null.
+   */
+  readonly skipTotalCount?: boolean;
 }

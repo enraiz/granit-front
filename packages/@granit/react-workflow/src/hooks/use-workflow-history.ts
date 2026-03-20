@@ -15,7 +15,7 @@ export interface UseWorkflowHistoryOptions {
 }
 
 export interface UseWorkflowHistoryReturn {
-  history: TransitionHistoryDto[];
+  history: readonly TransitionHistoryDto[];
   loading: boolean;
   error: Error | null;
   refetch: () => Promise<void>;
@@ -28,7 +28,7 @@ export function useWorkflowHistory({
 }: UseWorkflowHistoryOptions): UseWorkflowHistoryReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
-  const [history, setHistory] = useState<TransitionHistoryDto[]>([]);
+  const [history, setHistory] = useState<readonly TransitionHistoryDto[]>([]);
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
 

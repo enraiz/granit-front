@@ -1,3 +1,4 @@
+import type { PagedResult } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 // ---------------------------------------------------------------------------
@@ -18,13 +19,9 @@ export interface NotificationDto {
   readAt: string | null;
 }
 
-export interface NotificationPageDto {
-  items: NotificationDto[];
-  totalCount: number;
-  /** Opaque cursor for next page (always null for offset pagination). */
-  nextCursor: string | null;
-  unreadCount: number;
-}
+export type NotificationPageDto = PagedResult<NotificationDto> & {
+  readonly unreadCount: number;
+};
 
 // ---------------------------------------------------------------------------
 // Activity feed
@@ -40,12 +37,7 @@ export interface ActivityFeedEntryDto {
   userDisplayName: string | null;
 }
 
-export interface ActivityFeedPageDto {
-  items: ActivityFeedEntryDto[];
-  totalCount: number;
-  /** Opaque cursor for next page (always null for offset pagination). */
-  nextCursor: string | null;
-}
+export type ActivityFeedPageDto = PagedResult<ActivityFeedEntryDto>;
 
 // ---------------------------------------------------------------------------
 // Channels — extensible string type with well-known constants

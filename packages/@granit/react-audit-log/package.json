@@ -14,7 +14,6 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "@granit/audit-log": "workspace:*",
     "@granit/testing": "workspace:*",
     "@granit/react-testing": "workspace:*"
   },

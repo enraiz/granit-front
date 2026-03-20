@@ -1,3 +1,5 @@
+import type { PagedResult, PaginationParams } from '@granit/querying';
+
 /** Cached identity user — mirrors Granit.Identity.IdentityUser .NET record. */
 export type IdentityUser = {
   readonly id: string;
@@ -9,10 +11,8 @@ export type IdentityUser = {
   readonly attributes: Readonly<Record<string, string>> | null;
 };
 
-export type IdentityUserListParams = {
+export type IdentityUserListParams = PaginationParams & {
   readonly search?: string;
-  readonly page?: number;
-  readonly pageSize?: number;
 };
 
 export type IdentityUserCacheStats = {
@@ -30,10 +30,5 @@ export type IdentityUserCacheSyncStaleResult = {
   readonly refreshedCount: number;
 };
 
-/** Paginated response for identity user listing — mirrors Granit.Querying.PagedResult. */
-export type IdentityUserPage = {
-  readonly items: readonly IdentityUser[];
-  readonly totalCount: number | null;
-  readonly hasMore: boolean;
-  readonly nextCursor: string | null;
-};
+/** Paginated response for identity user listing. */
+export type IdentityUserPage = PagedResult<IdentityUser>;

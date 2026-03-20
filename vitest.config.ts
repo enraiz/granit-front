@@ -10,6 +10,7 @@ export default defineConfig({
         'packages/@granit/api-client/src/test-utils.ts'
       ),
       '@granit/api-client': path.resolve(__dirname, 'packages/@granit/api-client/src/index.ts'),
+      '@granit/audit-log': path.resolve(__dirname, 'packages/@granit/audit-log/src/index.ts'),
       '@granit/ai': path.resolve(__dirname, 'packages/@granit/ai/src/index.ts'),
       '@granit/background-jobs': path.resolve(
         __dirname,
@@ -42,6 +43,7 @@ export default defineConfig({
         'packages/@granit/error-boundary/src/index.ts'
       ),
       '@granit/features': path.resolve(__dirname, 'packages/@granit/features/src/index.ts'),
+      '@granit/idempotency': path.resolve(__dirname, 'packages/@granit/idempotency/src/index.ts'),
       '@granit/identity': path.resolve(__dirname, 'packages/@granit/identity/src/index.ts'),
       '@granit/localization': path.resolve(__dirname, 'packages/@granit/localization/src/index.ts'),
       '@granit/logger': path.resolve(__dirname, 'packages/@granit/logger/src/index.ts'),
@@ -80,6 +82,10 @@ export default defineConfig({
         'packages/@granit/reference-data/src/index.ts'
       ),
       '@granit/react-ai': path.resolve(__dirname, 'packages/@granit/react-ai/src/index.ts'),
+      '@granit/react-audit-log': path.resolve(
+        __dirname,
+        'packages/@granit/react-audit-log/src/index.ts'
+      ),
       '@granit/react-authentication-api-keys': path.resolve(
         __dirname,
         'packages/@granit/react-authentication-api-keys/src/index.ts'
@@ -144,6 +150,10 @@ export default defineConfig({
         __dirname,
         'packages/@granit/react-querying/src/index.ts'
       ),
+      '@granit/react-templating': path.resolve(
+        __dirname,
+        'packages/@granit/react-templating/src/index.ts'
+      ),
       '@granit/react-testing': path.resolve(
         __dirname,
         'packages/@granit/react-testing/src/index.ts'
@@ -170,6 +180,7 @@ export default defineConfig({
       ),
       '@granit/settings': path.resolve(__dirname, 'packages/@granit/settings/src/index.ts'),
       '@granit/storage': path.resolve(__dirname, 'packages/@granit/storage/src/index.ts'),
+      '@granit/templating': path.resolve(__dirname, 'packages/@granit/templating/src/index.ts'),
       '@granit/testing': path.resolve(__dirname, 'packages/@granit/testing/src/index.ts'),
       '@granit/timeline': path.resolve(__dirname, 'packages/@granit/timeline/src/index.ts'),
       '@granit/tracing': path.resolve(__dirname, 'packages/@granit/tracing/src/index.ts'),

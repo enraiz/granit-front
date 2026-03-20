@@ -3,16 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 
 import { buildExportQueryKey, useExportConfig } from '../providers/export-provider.js';
 
+import type { PaginatedResponse } from '@granit/api-client';
 import type { ExportJobListParams, ExportJobResponse } from '@granit/data-exchange';
 import type { UseQueryResult } from '@tanstack/react-query';
-
-/** Paginated response envelope for export jobs. */
-interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
 
 /**
  * Query hook that fetches a paginated list of export jobs.

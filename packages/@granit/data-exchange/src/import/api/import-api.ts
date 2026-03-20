@@ -1,22 +1,14 @@
 import type { ImportJobResponse } from '../types/import-job.js';
 import type { ConfirmMappingsRequest, ImportPreviewResponse } from '../types/import-preview.js';
 import type { ImportReportResponse } from '../types/import-report.js';
+import type { PaginatedResponse } from '@granit/api-client';
+import type { PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
-/** Paginated response envelope. Mirrors `@granit/api-client` PaginatedResponse. */
-interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 /** Query parameters for listing import jobs. */
-export interface ImportJobListParams {
+export type ImportJobListParams = PaginationParams & {
   readonly status?: string;
-  readonly page?: number;
-  readonly pageSize?: number;
-}
+};
 
 /**
  * Uploads a file and creates a new import job.

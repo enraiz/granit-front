@@ -182,6 +182,9 @@ importers:
 
   packages/@granit/audit-log:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
@@ -240,6 +243,12 @@ importers:
 
   packages/@granit/data-exchange:
     dependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       '@granit/utils':
         specifier: workspace:*
         version: link:../utils
@@ -274,6 +283,9 @@ importers:
 
   packages/@granit/identity:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
@@ -303,6 +315,9 @@ importers:
 
   packages/@granit/notifications:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
@@ -388,6 +403,9 @@ importers:
 
   packages/@granit/react-audit-log:
     dependencies:
+      '@granit/audit-log':
+        specifier: workspace:*
+        version: link:../audit-log
       '@tanstack/react-query':
         specifier: ^5.0.0
         version: 5.90.21(react@19.2.4)
@@ -398,9 +416,6 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4
     devDependencies:
-      '@granit/audit-log':
-        specifier: workspace:*
-        version: link:../audit-log
       '@granit/react-testing':
         specifier: workspace:*
         version: link:../react-testing
@@ -525,6 +540,9 @@ importers:
 
   packages/@granit/react-data-exchange:
     dependencies:
+      '@granit/api-client':
+        specifier: workspace:*
+        version: link:../api-client
       '@granit/data-exchange':
         specifier: workspace:*
         version: link:../data-exchange
@@ -907,7 +925,11 @@ importers:
         specifier: workspace:*
         version: link:../testing
 
-  packages/@granit/reference-data: {}
+  packages/@granit/reference-data:
+    dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
 
   packages/@granit/settings:
     dependencies:
@@ -923,6 +945,9 @@ importers:
 
   packages/@granit/templating:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
@@ -942,6 +967,9 @@ importers:
 
   packages/@granit/timeline:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6
@@ -973,6 +1001,9 @@ importers:
 
   packages/@granit/workflow:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       axios:
         specifier: '*'
         version: 1.13.6

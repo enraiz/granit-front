@@ -5,7 +5,8 @@
 export type {
   FilterEntry,
   FilterOperator,
-  QueryParams,
+  PaginationParams,
+  QueryRequest,
   SortDirection,
   SortEntry,
 } from './query-params.js';

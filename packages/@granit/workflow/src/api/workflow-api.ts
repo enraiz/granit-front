@@ -4,6 +4,7 @@ import type {
   TransitionResultDto,
   WorkflowStatusDto,
 } from '../types/index.js';
+import type { PagedResult } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 function buildUrl(
@@ -45,11 +46,7 @@ export async function executeTransition(
 }
 
 /** Response shape for the paginated workflow history endpoint. */
-export interface WorkflowHistoryPage {
-  items: TransitionHistoryDto[];
-  totalCount: number;
-  nextCursor: string | null;
-}
+export type WorkflowHistoryPage = PagedResult<TransitionHistoryDto>;
 
 /** Fetch the transition history (HDS audit trail) for an entity. */
 export async function fetchHistory(

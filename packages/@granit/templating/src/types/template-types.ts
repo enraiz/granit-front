@@ -1,3 +1,4 @@
+import type { PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 // ── Template lifecycle status (mirrors .NET Granit.Templating.Domain.TemplateLifecycleStatus) ──
@@ -59,9 +60,7 @@ export type TemplateListItem = {
   readonly hasPublishedVersion: boolean;
 };
 
-export type TemplateListParams = {
-  readonly page?: number;
-  readonly pageSize?: number;
+export type TemplateListParams = PaginationParams & {
   readonly search?: string;
   readonly status?: TemplateLifecycleStatusValue;
   readonly category?: string;

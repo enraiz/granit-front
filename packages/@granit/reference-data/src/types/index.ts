@@ -1,3 +1,5 @@
+import type { PaginationParams } from '@granit/querying';
+
 /** Country reference data entry. Mirrors Granit.ReferenceData.Country .NET. */
 export interface Country {
   readonly code: string;
@@ -21,12 +23,10 @@ export interface Country {
 }
 
 /** Parameters for listing countries. */
-export interface CountriesListParams {
+export type CountriesListParams = PaginationParams & {
   readonly search?: string;
-  readonly page?: number;
-  readonly pageSize?: number;
   readonly sortBy?: string;
   readonly desc?: boolean;
   readonly region?: string;
   readonly isActive?: boolean;
-}
+};

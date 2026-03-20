@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /** Contract for the fetcher function (compatible with PagedResult). */
 export interface InfiniteScrollPage<T> {
   readonly items: readonly T[];
-  readonly totalCount: number;
+  readonly totalCount: number | null;
 }
 
 export interface UseInfiniteScrollOptions<T, P extends InfiniteScrollPage<T>> {
@@ -27,7 +27,7 @@ export interface UseInfiniteScrollReturn<T> {
   /** Direct setter for optimistic or local updates. */
   readonly setItems: React.Dispatch<React.SetStateAction<readonly T[]>>;
   /** Total number of items available on the server. */
-  readonly totalCount: number;
+  readonly totalCount: number | null;
   /** True during the initial fetch (first page). */
   readonly loading: boolean;
   /** True while loading additional pages (not the first). */
@@ -71,7 +71,7 @@ export function useInfiniteScroll<T, P extends InfiniteScrollPage<T> = InfiniteS
   const { fetcher, pageSize = DEFAULT_PAGE_SIZE, onSuccess, enabled = true } = options;
 
   const [items, setItems] = useState<readonly T[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState<number | null>(0);
   const [loading, setLoading] = useState(enabled);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -124,7 +124,7 @@ export function useInfiniteScroll<T, P extends InfiniteScrollPage<T> = InfiniteS
     fetchPage(1, false);
   }, [fetchPage]);
 
-  const hasMore = items.length < totalCount;
+  const hasMore = items.length < (totalCount ?? 0);
 
   return {
     items,

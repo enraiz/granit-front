@@ -12,6 +12,7 @@ export type {
   FilterGroupMeta,
   FilterOperator,
   FilterSuggestion,
+  PaginationParams,
   FilterSuggestionValue,
   FilterToken,
   FilterTokenType,
@@ -23,7 +24,7 @@ export type {
   PaginationMeta,
   PresetMeta,
   QueryMetadata,
-  QueryParams,
+  QueryRequest,
   QuickFilterMeta,
   SavedViewSummary,
   SmartFilterPhase,
@@ -50,7 +51,7 @@ export {
 
 // API
 export { fetchGrouped, fetchPage, fetchQueryMeta } from './api/query-api.js';
-export { parseQueryParams, serializeQueryParams } from './api/query-param-serializer.js';
+export { parseQueryRequest, serializeQueryRequest } from './api/query-param-serializer.js';
 export {
   createSavedView,
   deleteSavedView,

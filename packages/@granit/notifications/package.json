@@ -17,6 +17,7 @@
     "@granit/api-client": "workspace:*"
   },
   "peerDependencies": {
+    "@granit/querying": "workspace:*",
     "axios": "*"
   },
   "publishConfig": {

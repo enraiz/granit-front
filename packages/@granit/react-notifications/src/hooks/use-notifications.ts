@@ -13,7 +13,7 @@ export interface UseNotificationsOptions {
 
 export interface UseNotificationsReturn {
   notifications: readonly NotificationDto[];
-  totalCount: number;
+  totalCount: number | null;
   loading: boolean;
   loadingMore: boolean;
   error: Error | null;

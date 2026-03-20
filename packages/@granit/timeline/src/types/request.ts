@@ -1,4 +1,5 @@
 import type { TimelineEntryTypeValue } from './entry-type.js';
+import type { PaginationParams } from '@granit/querying';
 
 // --- API request types ---
 
@@ -11,7 +12,4 @@ export interface CreateTimelineEntryRequest {
 
 // --- Pagination ---
 
-export interface TimelineQueryParams {
-  page?: number;
-  pageSize?: number;
-}
+export type TimelineQueryParams = PaginationParams;

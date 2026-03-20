@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /** Contract for the fetcher function (compatible with PagedResult). */
 export interface PaginationPage<T> {
   readonly items: readonly T[];
-  readonly totalCount: number;
+  readonly totalCount: number | null;
 }
 
 export interface UsePaginationOptions<T, P extends PaginationPage<T>> {
@@ -27,7 +27,7 @@ export interface UsePaginationReturn<T> {
   /** Direct setter for optimistic or local updates. */
   readonly setItems: React.Dispatch<React.SetStateAction<readonly T[]>>;
   /** Total number of items across all pages. */
-  readonly totalCount: number;
+  readonly totalCount: number | null;
   /** True during the initial or page-change fetch. */
   readonly loading: boolean;
   /** Last fetch error, or null. */
@@ -73,13 +73,13 @@ export function usePagination<T, P extends PaginationPage<T> = PaginationPage<T>
   const { fetcher, pageSize = DEFAULT_PAGE_SIZE, onSuccess, enabled = true } = options;
 
   const [items, setItems] = useState<readonly T[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState<number | null>(0);
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
   const [page, setPage] = useState(1);
   const abortRef = useRef<AbortController | null>(null);
 
-  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const totalPages = Math.max(1, Math.ceil((totalCount ?? 0) / pageSize));
   const hasPreviousPage = page > 1;
   const hasNextPage = page < totalPages;
 
