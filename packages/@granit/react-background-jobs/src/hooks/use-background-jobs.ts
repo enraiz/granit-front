@@ -1,6 +1,8 @@
+import { fetchBackgroundJobs } from '@granit/background-jobs';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { BackgroundJobStatus } from '@granit/background-jobs';
+import type { BackgroundJobListParams, BackgroundJobStatus } from '@granit/background-jobs';
+import type { PagedResult } from '@granit/querying';
 import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import type { AxiosInstance } from 'axios';
 
@@ -12,36 +14,37 @@ export interface BackgroundJobsOptions {
   readonly client: AxiosInstance;
   /** Base URL for the background-jobs API. Defaults to `/api/v1/background-jobs`. */
   readonly basePath?: string;
+  /** Pagination parameters for the list endpoint. */
+  readonly params?: BackgroundJobListParams;
 }
 
 /** Query key factory for background jobs queries. */
 export const backgroundJobKeys = {
   all: ['background-jobs'] as const,
-  list: () => [...backgroundJobKeys.all, 'list'] as const,
+  list: (params?: BackgroundJobListParams) =>
+    [...backgroundJobKeys.all, 'list', params ?? {}] as const,
   job: (name: string) => [...backgroundJobKeys.all, 'job', name] as const,
 };
 
 /**
- * Query hook that fetches the list of all background jobs with their current status.
+ * Query hook that fetches a paginated list of all background jobs with their current status.
  *
  * Polls every 15 seconds to reflect live scheduler state.
  *
  * @example
  * ```tsx
- * const { data: jobs } = useBackgroundJobs({ client: api });
+ * const { data } = useBackgroundJobs({ client: api });
+ * // data.items, data.totalCount, data.hasMore
  * ```
  */
 export function useBackgroundJobs(
   options: BackgroundJobsOptions
-): UseQueryResult<readonly BackgroundJobStatus[]> {
-  const { client, basePath = DEFAULT_BASE_PATH } = options;
+): UseQueryResult<PagedResult<BackgroundJobStatus>> {
+  const { client, basePath = DEFAULT_BASE_PATH, params } = options;
 
   return useQuery({
-    queryKey: backgroundJobKeys.list(),
-    queryFn: async () => {
-      const response = await client.get<readonly BackgroundJobStatus[]>(basePath);
-      return response.data;
-    },
+    queryKey: backgroundJobKeys.list(params),
+    queryFn: () => fetchBackgroundJobs(client, basePath, params),
     refetchInterval: 15_000,
   });
 }
@@ -98,7 +101,7 @@ export function usePauseJob(
       await client.post(`${basePath}/${encodeURIComponent(jobName)}/pause`);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.list() });
+      await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.all });
     },
   });
 }
@@ -125,7 +128,7 @@ export function useResumeJob(
       await client.post(`${basePath}/${encodeURIComponent(jobName)}/resume`);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.list() });
+      await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.all });
     },
   });
 }
@@ -152,7 +155,7 @@ export function useTriggerJob(
       await client.post(`${basePath}/${encodeURIComponent(jobName)}/trigger`);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.list() });
+      await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.all });
     },
   });
 }

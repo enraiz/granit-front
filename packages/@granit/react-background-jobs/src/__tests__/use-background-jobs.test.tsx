@@ -14,6 +14,7 @@ import {
 } from '../hooks/use-background-jobs.js';
 
 import type { BackgroundJobStatus } from '@granit/background-jobs';
+import type { PagedResult } from '@granit/querying';
 
 function createWrapper() {
   const queryClient = createTestQueryClient();
@@ -36,9 +37,23 @@ const mockJob: BackgroundJobStatus = {
   lastError: null,
 };
 
+const mockPage: PagedResult<BackgroundJobStatus> = {
+  items: [mockJob],
+  totalCount: 1,
+  hasMore: false,
+};
+
 describe('backgroundJobKeys', () => {
-  it('should produce stable list key', () => {
-    expect(backgroundJobKeys.list()).toEqual(['background-jobs', 'list']);
+  it('should produce stable list key without params', () => {
+    expect(backgroundJobKeys.list()).toEqual(['background-jobs', 'list', {}]);
+  });
+
+  it('should produce stable list key with params', () => {
+    expect(backgroundJobKeys.list({ page: 2, pageSize: 10 })).toEqual([
+      'background-jobs',
+      'list',
+      { page: 2, pageSize: 10 },
+    ]);
   });
 
   it('should produce stable job key', () => {
@@ -49,20 +64,20 @@ describe('backgroundJobKeys', () => {
 describe('useBackgroundJobs', () => {
   it('should fetch jobs with default basePath', async () => {
     const client = createMockClient();
-    vi.mocked(client.get).mockResolvedValueOnce({ data: [mockJob] });
+    vi.mocked(client.get).mockResolvedValueOnce({ data: mockPage });
 
     const { wrapper } = createWrapper();
     const { result } = renderHook(() => useBackgroundJobs({ client }), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.get).toHaveBeenCalledWith('/api/v1/background-jobs');
-    expect(result.current.data).toEqual([mockJob]);
+    expect(client.get).toHaveBeenCalledWith('/api/v1/background-jobs', { params: undefined });
+    expect(result.current.data).toEqual(mockPage);
   });
 
   it('should fetch jobs with custom basePath', async () => {
     const client = createMockClient();
-    vi.mocked(client.get).mockResolvedValueOnce({ data: [mockJob] });
+    vi.mocked(client.get).mockResolvedValueOnce({ data: mockPage });
 
     const { wrapper } = createWrapper();
     const { result } = renderHook(() => useBackgroundJobs({ client, basePath: '/api/v2/jobs' }), {
@@ -71,7 +86,24 @@ describe('useBackgroundJobs', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.get).toHaveBeenCalledWith('/api/v2/jobs');
+    expect(client.get).toHaveBeenCalledWith('/api/v2/jobs', { params: undefined });
+  });
+
+  it('should pass pagination params to the request', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValueOnce({ data: mockPage });
+
+    const { wrapper } = createWrapper();
+    const { result } = renderHook(
+      () => useBackgroundJobs({ client, params: { page: 2, pageSize: 10 } }),
+      { wrapper }
+    );
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/api/v1/background-jobs', {
+      params: { page: 2, pageSize: 10 },
+    });
   });
 
   it('should handle fetch error', async () => {
@@ -103,7 +135,7 @@ describe('usePauseJob', () => {
 
     expect(client.post).toHaveBeenCalledWith('/api/v1/background-jobs/InvoiceSync/pause');
     expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: backgroundJobKeys.list(),
+      queryKey: backgroundJobKeys.all,
     });
   });
 
@@ -154,7 +186,7 @@ describe('useResumeJob', () => {
 
     expect(client.post).toHaveBeenCalledWith('/api/v1/background-jobs/InvoiceSync/resume');
     expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: backgroundJobKeys.list(),
+      queryKey: backgroundJobKeys.all,
     });
   });
 
@@ -205,7 +237,7 @@ describe('useTriggerJob', () => {
 
     expect(client.post).toHaveBeenCalledWith('/api/v1/background-jobs/InvoiceSync/trigger');
     expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: backgroundJobKeys.list(),
+      queryKey: backgroundJobKeys.all,
     });
   });
 

@@ -1,7 +1,7 @@
 {
   "name": "@granit/react-background-jobs",
   "description": "React hooks for background job monitoring — useBackgroundJobs, usePauseJob, useResumeJob, useTriggerJob",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -15,6 +15,7 @@
   },
   "peerDependencies": {
     "@granit/background-jobs": "workspace:*",
+    "@granit/querying": "workspace:*",
     "@tanstack/react-query": "^5.0.0",
     "axios": "*",
     "react": "^19.0.0"
