@@ -227,6 +227,16 @@ importers:
         specifier: workspace:*
         version: link:../testing
 
+  packages/@granit/blob-storage:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
+
   packages/@granit/cookies: {}
 
   packages/@granit/cookies-klaro:
@@ -475,6 +485,28 @@ importers:
       '@granit/querying':
         specifier: workspace:*
         version: link:../querying
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
+
+  packages/@granit/react-blob-storage:
+    dependencies:
+      '@granit/blob-storage':
+        specifier: workspace:*
+        version: link:../blob-storage
       '@tanstack/react-query':
         specifier: ^5.0.0
         version: 5.90.21(react@19.2.4)
