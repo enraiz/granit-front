@@ -15,10 +15,12 @@ function createFields(...names: string[]) {
 describe('createConstraintsResolver', () => {
   const t = vi.fn((key: string, params?: Record<string, unknown>) => {
     if (params) {
+      // Filter out i18next options so they don't appear in interpolated output
       const entries = Object.entries(params)
+        .filter(([k]) => k !== 'nsSeparator')
         .map(([k, v]) => `${k}=${v}`)
         .join(', ');
-      return `${key} (${entries})`;
+      return entries ? `${key} (${entries})` : key;
     }
     return key;
   });
@@ -75,6 +77,7 @@ describe('createConstraintsResolver', () => {
     });
     expect(t).toHaveBeenCalledWith('Granit:Validation:MaximumLengthValidator', {
       maxLength: 100,
+      nsSeparator: false,
     });
   });
 

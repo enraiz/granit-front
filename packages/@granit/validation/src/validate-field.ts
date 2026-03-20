@@ -2,7 +2,8 @@ import { VALIDATION_ERROR_CODES } from './constants/error-codes.js';
 
 import type { FieldConstraint, FieldValidationError } from './types/index.js';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Each segment between @ and dots uses [^\s@.]+ to prevent backtracking overlap
+const EMAIL_REGEX = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
 
 function isEmpty(value: unknown): boolean {
   return (
@@ -10,28 +11,11 @@ function isEmpty(value: unknown): boolean {
   );
 }
 
-/**
- * Validates a field value against a FieldConstraint.
- * Returns an array of validation errors (empty if valid).
- * Server-only `granitValidator` constraints are intentionally skipped.
- */
-export function validateField(
-  value: unknown,
-  constraint: FieldConstraint
-): readonly FieldValidationError[] {
-  const errors: FieldValidationError[] = [];
-
-  if (constraint.required && isEmpty(value)) {
-    errors.push({ code: VALIDATION_ERROR_CODES.required });
-  }
-
-  // Skip remaining checks for empty non-required fields
-  if (isEmpty(value)) {
-    return errors;
-  }
-
-  const strValue = String(value);
-
+function validateStringConstraints(
+  strValue: string,
+  constraint: FieldConstraint,
+  errors: FieldValidationError[]
+): void {
   if (constraint.minLength !== undefined && strValue.length < constraint.minLength) {
     errors.push({
       code: VALIDATION_ERROR_CODES.minLength,
@@ -56,9 +40,13 @@ export function validateField(
   if (constraint.format === 'email' && !EMAIL_REGEX.test(strValue)) {
     errors.push({ code: VALIDATION_ERROR_CODES.formatEmail });
   }
+}
 
-  const numValue = Number(value);
-
+function validateNumericConstraints(
+  numValue: number,
+  constraint: FieldConstraint,
+  errors: FieldValidationError[]
+): void {
   if (constraint.minimum !== undefined && numValue < constraint.minimum) {
     errors.push({
       code: VALIDATION_ERROR_CODES.minimum,
@@ -86,6 +74,30 @@ export function validateField(
       params: { exclusiveMaximum: constraint.exclusiveMaximum },
     });
   }
+}
+
+/**
+ * Validates a field value against a FieldConstraint.
+ * Returns an array of validation errors (empty if valid).
+ * Server-only `granitValidator` constraints are intentionally skipped.
+ */
+export function validateField(
+  value: unknown,
+  constraint: FieldConstraint
+): readonly FieldValidationError[] {
+  const errors: FieldValidationError[] = [];
+
+  if (constraint.required && isEmpty(value)) {
+    errors.push({ code: VALIDATION_ERROR_CODES.required });
+  }
+
+  // Skip remaining checks for empty non-required fields
+  if (isEmpty(value)) {
+    return errors;
+  }
+
+  validateStringConstraints(String(value), constraint, errors);
+  validateNumericConstraints(Number(value), constraint, errors);
 
   return errors;
 }

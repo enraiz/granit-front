@@ -43,7 +43,10 @@ export function createConstraintsResolver(
         const first = fieldErrors[0];
         errors[fieldName] = {
           type: first.code,
-          message: t(first.code, first.params as Record<string, unknown> | undefined),
+          message: t(first.code, {
+            ...first.params,
+            nsSeparator: false,
+          } as Record<string, unknown>),
         };
       }
     }

@@ -3,7 +3,6 @@ import type {
   FieldConstraint,
   OpenApiSchema,
   OpenApiSchemaProperty,
-  OpenApiSchemaRef,
   OpenApiSpec,
   SchemaConstraints,
   SpecConstraints,
@@ -24,6 +23,52 @@ interface ResolvedSchema {
   required: string[];
 }
 
+function collectRequired(required: readonly string[] | undefined, target: Set<string>): void {
+  if (!required) return;
+  for (const r of required) {
+    target.add(r);
+  }
+}
+
+function collectProperties(
+  properties: Readonly<Record<string, OpenApiSchemaProperty>> | undefined,
+  target: Record<string, OpenApiSchemaProperty>
+): void {
+  if (!properties) return;
+  for (const [key, value] of Object.entries(properties)) {
+    target[key] = value;
+  }
+}
+
+function mergeResolvedSchema(
+  resolved: ResolvedSchema,
+  properties: Record<string, OpenApiSchemaProperty>,
+  required: Set<string>
+): void {
+  collectProperties(resolved.properties, properties);
+  collectRequired(resolved.required, required);
+}
+
+function processAllOfEntries(
+  entries: readonly OpenApiSchema[],
+  schemas: Readonly<Record<string, OpenApiSchema>>,
+  depth: number,
+  properties: Record<string, OpenApiSchemaProperty>,
+  required: Set<string>
+): void {
+  for (const entry of entries) {
+    if (entry.$ref) {
+      const refSchema = resolveRef(entry.$ref, schemas);
+      if (!refSchema) continue;
+      mergeResolvedSchema(mergeAllOf(refSchema, schemas, depth + 1), properties, required);
+      continue;
+    }
+
+    collectRequired(entry.required, required);
+    collectProperties(entry.properties, properties);
+  }
+}
+
 function mergeAllOf(
   schema: OpenApiSchema,
   schemas: Readonly<Record<string, OpenApiSchema>>,
@@ -32,47 +77,11 @@ function mergeAllOf(
   const properties: Record<string, OpenApiSchemaProperty> = {};
   const required = new Set<string>();
 
-  if (schema.required) {
-    for (const r of schema.required) {
-      required.add(r);
-    }
-  }
-
-  if (schema.properties) {
-    for (const [key, value] of Object.entries(schema.properties)) {
-      properties[key] = value;
-    }
-  }
+  collectRequired(schema.required, required);
+  collectProperties(schema.properties, properties);
 
   if (schema.allOf && depth < MAX_REF_DEPTH) {
-    for (const entry of schema.allOf) {
-      const resolved: OpenApiSchemaRef = entry;
-
-      if (entry.$ref) {
-        const refSchema = resolveRef(entry.$ref, schemas);
-        if (!refSchema) continue;
-        const merged = mergeAllOf(refSchema, schemas, depth + 1);
-        for (const [key, value] of Object.entries(merged.properties)) {
-          properties[key] = value;
-        }
-        for (const r of merged.required) {
-          required.add(r);
-        }
-        continue;
-      }
-
-      if (resolved.required) {
-        for (const r of resolved.required) {
-          required.add(r);
-        }
-      }
-
-      if (resolved.properties) {
-        for (const [key, value] of Object.entries(resolved.properties)) {
-          properties[key] = value;
-        }
-      }
-    }
+    processAllOfEntries(schema.allOf, schemas, depth, properties, required);
   }
 
   return { properties, required: [...required] };
@@ -96,6 +105,21 @@ function buildFieldConstraint(prop: OpenApiSchemaProperty, isRequired: boolean):
   return constraint as FieldConstraint;
 }
 
+function filterSchemaNames(names: string[], options?: ExtractOptions): string[] {
+  let filtered = names;
+
+  if (options?.schemas) {
+    const whitelist = new Set(options.schemas);
+    filtered = filtered.filter((name) => whitelist.has(name));
+  }
+
+  if (options?.schemaPattern) {
+    filtered = filtered.filter((name) => options.schemaPattern!.test(name));
+  }
+
+  return filtered;
+}
+
 /**
  * Extracts validation constraints from an OpenAPI spec.
  * Resolves `$ref` pointers and merges `allOf` compositions.
@@ -103,17 +127,7 @@ function buildFieldConstraint(prop: OpenApiSchemaProperty, isRequired: boolean):
 export function extractConstraints(spec: OpenApiSpec, options?: ExtractOptions): SpecConstraints {
   const schemas = spec.components?.schemas ?? {};
   const result: Record<string, SchemaConstraints> = {};
-
-  let schemaNames = Object.keys(schemas);
-
-  if (options?.schemas) {
-    const whitelist = new Set(options.schemas);
-    schemaNames = schemaNames.filter((name) => whitelist.has(name));
-  }
-
-  if (options?.schemaPattern) {
-    schemaNames = schemaNames.filter((name) => options.schemaPattern!.test(name));
-  }
+  const schemaNames = filterSchemaNames(Object.keys(schemas), options);
 
   for (const name of schemaNames) {
     const schema = schemas[name];

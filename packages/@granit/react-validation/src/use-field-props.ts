@@ -25,8 +25,10 @@ export function useFieldProps(
     }
 
     const inputProps = getInputProps(constraint);
-    const serverHint = constraint.granitValidator ? t(constraint.granitValidator) : undefined;
+    const serverHint = constraint.granitValidator
+      ? t(constraint.granitValidator, { nsSeparator: false })
+      : undefined;
 
-    return serverHint !== undefined ? { inputProps, serverHint } : { inputProps };
+    return serverHint === undefined ? { inputProps } : { inputProps, serverHint };
   }, [constraints, fieldName, t]);
 }
