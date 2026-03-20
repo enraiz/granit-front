@@ -31,7 +31,7 @@ import type {
   TemplateRevision,
   TemplateVariables,
 } from '../types/index.js';
-import type { PaginatedResponse } from '@granit/api-client';
+import type { PagedResult } from '@granit/querying';
 
 const basePath = '/api/v1';
 
@@ -39,7 +39,7 @@ describe('templates-api', () => {
   describe('getTemplates', () => {
     it('should call GET /templates with params', async () => {
       const client = createMockClient();
-      const response: PaginatedResponse<TemplateListItem> = {
+      const response: PagedResult<TemplateListItem> = {
         items: [
           {
             name: 'Billing.Invoice',
@@ -50,9 +50,7 @@ describe('templates-api', () => {
             hasPublishedVersion: false,
           },
         ],
-        total: 1,
-        page: 1,
-        pageSize: 20,
+        totalCount: 1,
       };
       vi.mocked(client.get).mockResolvedValue(axiosResponse(response));
 
@@ -68,9 +66,7 @@ describe('templates-api', () => {
 
     it('should call GET /templates without params', async () => {
       const client = createMockClient();
-      vi.mocked(client.get).mockResolvedValue(
-        axiosResponse({ items: [], total: 0, page: 1, pageSize: 20 })
-      );
+      vi.mocked(client.get).mockResolvedValue(axiosResponse({ items: [], totalCount: 0 }));
 
       await getTemplates(client, basePath);
 

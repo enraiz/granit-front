@@ -546,6 +546,9 @@ importers:
       '@granit/data-exchange':
         specifier: workspace:*
         version: link:../data-exchange
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       '@granit/utils':
         specifier: workspace:*
         version: link:../utils
@@ -813,6 +816,9 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       '@granit/react-testing':
         specifier: workspace:*
         version: link:../react-testing
@@ -998,6 +1004,16 @@ importers:
       tailwind-merge:
         specifier: '*'
         version: 3.5.0
+
+  packages/@granit/webhooks:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/workflow:
     dependencies:

@@ -13,7 +13,7 @@ import type {
   TemplateVariables,
   UpdateTemplateCategoryRequest,
 } from '../types/index.js';
-import type { PaginatedResponse } from '@granit/api-client';
+import type { PagedResult, PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 function templateUrl(basePath: string, name: string, ...segments: string[]): string {
@@ -29,8 +29,8 @@ export async function getTemplates(
   client: AxiosInstance,
   basePath: string,
   params?: TemplateListParams
-): Promise<PaginatedResponse<TemplateListItem>> {
-  const { data } = await client.get<PaginatedResponse<TemplateListItem>>(`${basePath}/templates`, {
+): Promise<PagedResult<TemplateListItem>> {
+  const { data } = await client.get<PagedResult<TemplateListItem>>(`${basePath}/templates`, {
     params,
   });
   return data;
@@ -119,7 +119,7 @@ export async function getHistory(
   client: AxiosInstance,
   basePath: string,
   name: string,
-  params?: { culture?: string; page?: number; pageSize?: number }
+  params?: PaginationParams & { culture?: string }
 ): Promise<TemplateHistory> {
   const { data } = await client.get<TemplateHistory>(templateUrl(basePath, name, 'history'), {
     params,

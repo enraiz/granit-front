@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { buildImportQueryKey, useImportConfig } from '../providers/import-provider.js';
 
-import type { PaginatedResponse } from '@granit/api-client';
 import type { ImportJobListParams, ImportJobResponse } from '@granit/data-exchange';
+import type { PagedResult } from '@granit/querying';
 import type { UseQueryResult } from '@tanstack/react-query';
 
 /**
@@ -19,7 +19,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
  */
 export function useImportJobs(
   params?: ImportJobListParams
-): UseQueryResult<PaginatedResponse<ImportJobResponse>> {
+): UseQueryResult<PagedResult<ImportJobResponse>> {
   const config = useImportConfig();
 
   return useQuery({

@@ -4,7 +4,7 @@ import type {
   TransitionResultDto,
   WorkflowStatusDto,
 } from '../types/index.js';
-import type { PagedResult } from '@granit/querying';
+import type { PagedResult, PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 function buildUrl(
@@ -54,7 +54,7 @@ export async function fetchHistory(
   basePath: string,
   entityType: string,
   entityId: string,
-  params: { page?: number; pageSize?: number } = {}
+  params: PaginationParams = {}
 ): Promise<WorkflowHistoryPage> {
   const { data } = await client.get<WorkflowHistoryPage>(
     buildUrl(basePath, entityType, entityId, 'history'),

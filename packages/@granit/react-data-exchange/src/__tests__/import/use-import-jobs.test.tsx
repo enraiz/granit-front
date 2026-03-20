@@ -43,9 +43,7 @@ describe('useImportJobs', () => {
           completedAt: '2026-03-17T10:01:00Z',
         },
       ],
-      total: 1,
-      page: 1,
-      pageSize: 20,
+      totalCount: 1,
     };
     vi.spyOn(mockClient, 'get').mockResolvedValueOnce({ data: paginatedResponse });
 
@@ -55,7 +53,7 @@ describe('useImportJobs', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data?.items).toHaveLength(1);
-    expect(result.current.data?.total).toBe(1);
+    expect(result.current.data?.totalCount).toBe(1);
     expect(mockClient.get).toHaveBeenCalledWith('/api/v1/data-exchange/import/jobs', {
       params: undefined,
     });
@@ -63,7 +61,7 @@ describe('useImportJobs', () => {
 
   it('passes filtering params to the API', async () => {
     vi.spyOn(mockClient, 'get').mockResolvedValueOnce({
-      data: { items: [], total: 0, page: 1, pageSize: 10 },
+      data: { items: [], totalCount: 0 },
     });
 
     const { result } = renderHook(

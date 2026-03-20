@@ -3,8 +3,7 @@ import type {
   ExportFieldDescriptor,
 } from '../types/export-definition.js';
 import type { CreateExportJobRequest, ExportJobResponse } from '../types/export-job.js';
-import type { PaginatedResponse } from '@granit/api-client';
-import type { PaginationParams } from '@granit/querying';
+import type { PagedResult, PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 /** Query parameters for listing export jobs. */
@@ -80,8 +79,8 @@ export async function fetchExportJobs(
   client: AxiosInstance,
   basePath: string,
   params?: ExportJobListParams
-): Promise<PaginatedResponse<ExportJobResponse>> {
-  const response = await client.get<PaginatedResponse<ExportJobResponse>>(`${basePath}/jobs`, {
+): Promise<PagedResult<ExportJobResponse>> {
+  const response = await client.get<PagedResult<ExportJobResponse>>(`${basePath}/jobs`, {
     params,
   });
   return response.data;

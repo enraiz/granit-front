@@ -4,6 +4,7 @@ import type {
   NotificationPageDto,
   NotificationPreferenceDto,
 } from '../types/index.js';
+import type { PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 function buildUrl(basePath: string, ...segments: string[]): string {
@@ -17,7 +18,7 @@ function buildUrl(basePath: string, ...segments: string[]): string {
 export async function fetchNotifications(
   client: AxiosInstance,
   basePath: string,
-  params: { page?: number; pageSize?: number } = {}
+  params: PaginationParams = {}
 ): Promise<NotificationPageDto> {
   const { data } = await client.get<NotificationPageDto>(buildUrl(basePath, 'notifications'), {
     params,
@@ -60,7 +61,7 @@ export async function fetchEntityActivityFeed(
   basePath: string,
   entityType: string,
   entityId: string,
-  params: { page?: number; pageSize?: number } = {}
+  params: PaginationParams = {}
 ): Promise<ActivityFeedPageDto> {
   const { data } = await client.get<ActivityFeedPageDto>(
     buildUrl(basePath, 'activity-feed', entityType, entityId),
