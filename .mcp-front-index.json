@@ -1,0 +1,2650 @@
+{
+  "generatedAt": "2026-03-20T21:12:34.146938+00:00",
+  "repo": "granit-front",
+  "packages": [
+    {
+      "name": "@granit/ai",
+      "description": "AI workspace management, chat completion, embedding generation, and usage tracking types and API functions — mirrors Granit.AI.Endpoints .NET",
+      "exports": [
+        {
+          "name": "AI_PERMISSIONS",
+          "kind": "const",
+          "signature": "const AI_PERMISSIONS"
+        },
+        {
+          "name": "AI_STREAM_DONE_MARKER",
+          "kind": "const",
+          "signature": "const AI_STREAM_DONE_MARKER"
+        },
+        {
+          "name": "AI_WORKSPACE_KINDS",
+          "kind": "const",
+          "signature": "const AI_WORKSPACE_KINDS"
+        },
+        {
+          "name": "buildChatStreamUrl",
+          "kind": "function",
+          "signature": "function buildChatStreamUrl( baseUrl: string, basePath: string, workspaceName: string ): string"
+        },
+        {
+          "name": "chatComplete",
+          "kind": "function",
+          "signature": "async function chatComplete( client: AxiosInstance, basePath: string, workspaceName: string, request: AIChatRequest ): Promise<AIChatResponse>"
+        },
+        {
+          "name": "ChatStreamOptions",
+          "kind": "interface",
+          "signature": "interface ChatStreamOptions",
+          "members": []
+        },
+        {
+          "name": "generateEmbeddings",
+          "kind": "function",
+          "signature": "async function generateEmbeddings( client: AxiosInstance, basePath: string, workspaceName: string, request: AIEmbeddingRequest ): Promise<AIEmbeddingResponse>"
+        }
+      ]
+    },
+    {
+      "name": "@granit/api-client",
+      "description": "Axios factory with Bearer token interceptor and shared response types",
+      "exports": [
+        {
+          "name": "ApiClientConfig",
+          "kind": "interface",
+          "signature": "interface ApiClientConfig",
+          "members": [
+            {
+              "name": "baseURL",
+              "kind": "property",
+              "signature": "baseURL: string"
+            },
+            {
+              "name": "timeout",
+              "kind": "property",
+              "signature": "timeout?: number"
+            }
+          ]
+        },
+        {
+          "name": "ProblemDetails",
+          "kind": "interface",
+          "signature": "interface ProblemDetails",
+          "members": [
+            {
+              "name": "type",
+              "kind": "property",
+              "signature": "type?: string"
+            },
+            {
+              "name": "title",
+              "kind": "property",
+              "signature": "title: string"
+            },
+            {
+              "name": "status",
+              "kind": "property",
+              "signature": "status: number"
+            },
+            {
+              "name": "detail",
+              "kind": "property",
+              "signature": "detail?: string"
+            },
+            {
+              "name": "instance",
+              "kind": "property",
+              "signature": "instance?: string"
+            },
+            {
+              "name": "traceId",
+              "kind": "property",
+              "signature": "traceId?: string"
+            },
+            {
+              "name": "errorCode",
+              "kind": "property",
+              "signature": "errorCode?: string"
+            }
+          ]
+        },
+        {
+          "name": "setTokenGetter",
+          "kind": "function",
+          "signature": "function setTokenGetter(getter: () => Promise<string | undefined>): void"
+        },
+        {
+          "name": "setTenantGetter",
+          "kind": "function",
+          "signature": "function setTenantGetter(getter: () => string | undefined): void"
+        },
+        {
+          "name": "setOnUnauthorized",
+          "kind": "function",
+          "signature": "function setOnUnauthorized(callback: () => void): void"
+        },
+        {
+          "name": "setIdempotencyKeyGenerator",
+          "kind": "function",
+          "signature": "function setIdempotencyKeyGenerator( generator: (config: InternalAxiosRequestConfig) => string | undefined"
+        },
+        {
+          "name": "createApiClient",
+          "kind": "function",
+          "signature": "function createApiClient(config: ApiClientConfig): AxiosInstance"
+        },
+        {
+          "name": "createMutator",
+          "kind": "function",
+          "signature": "function createMutator(instance: AxiosInstance)"
+        },
+        {
+          "name": "HttpError",
+          "kind": "class",
+          "signature": "class HttpError extends Error"
+        },
+        {
+          "name": "TimeoutError",
+          "kind": "class",
+          "signature": "class TimeoutError extends Error"
+        },
+        {
+          "name": "ValidationError",
+          "kind": "class",
+          "signature": "class ValidationError extends Error"
+        },
+        {
+          "name": "ProblemDetailsPayload",
+          "kind": "interface",
+          "signature": "interface ProblemDetailsPayload",
+          "members": []
+        },
+        {
+          "name": "ValidationDetails",
+          "kind": "interface",
+          "signature": "interface ValidationDetails",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/audit-log",
+      "description": "Audit log types and API functions — mirrors Granit.AuditLog .NET",
+      "exports": [
+        {
+          "name": "AuditChangeType",
+          "kind": "const",
+          "signature": "const AuditChangeType"
+        },
+        {
+          "name": "AuditLogCategory",
+          "kind": "const",
+          "signature": "const AuditLogCategory"
+        }
+      ]
+    },
+    {
+      "name": "@granit/authentication",
+      "description": "Keycloak/OIDC authentication types — TypeScript mirror of Granit.Authentication .NET",
+      "exports": []
+    },
+    {
+      "name": "@granit/authentication-api-keys",
+      "description": "API key types — TypeScript mirror of Granit.Authentication.ApiKeys .NET",
+      "exports": []
+    },
+    {
+      "name": "@granit/authorization",
+      "description": "Permission and role authorization types — TypeScript mirror of Granit.Authorization .NET",
+      "exports": []
+    },
+    {
+      "name": "@granit/background-jobs",
+      "description": "Background job status types — mirrors Granit.BackgroundJobs .NET contract",
+      "exports": [
+        {
+          "name": "BackgroundJobStatus",
+          "kind": "interface",
+          "signature": "interface BackgroundJobStatus",
+          "members": []
+        },
+        {
+          "name": "fetchBackgroundJob",
+          "kind": "function",
+          "signature": "async function fetchBackgroundJob( client: AxiosInstance, basePath: string, name: string ): Promise<BackgroundJobStatus>"
+        },
+        {
+          "name": "fetchBackgroundJobs",
+          "kind": "function",
+          "signature": "async function fetchBackgroundJobs( client: AxiosInstance, basePath: string, params?: BackgroundJobListParams ): Promise<PagedResult<BackgroundJobStatus>>"
+        }
+      ]
+    },
+    {
+      "name": "@granit/blob-storage",
+      "description": "Blob storage types and API functions — mirrors Granit.BlobStorage .NET contract",
+      "exports": [
+        {
+          "name": "BlobStatus",
+          "kind": "const",
+          "signature": "const BlobStatus"
+        },
+        {
+          "name": "blobStorageKeys",
+          "kind": "const",
+          "signature": "const blobStorageKeys"
+        }
+      ]
+    },
+    {
+      "name": "@granit/cookies",
+      "description": "Cookie consent abstraction with React context and hooks",
+      "exports": []
+    },
+    {
+      "name": "@granit/cookies-klaro",
+      "description": "Klaro CMP adapter for @granit/cookies",
+      "exports": [
+        {
+          "name": "createKlaroCookieConsentProvider",
+          "kind": "function",
+          "signature": "function createKlaroCookieConsentProvider( options: CreateKlaroCookieConsentProviderOptions ): CookieConsentProviderInterface"
+        }
+      ]
+    },
+    {
+      "name": "@granit/data-exchange",
+      "description": "Tabular data import/export hooks and providers",
+      "exports": []
+    },
+    {
+      "name": "@granit/diagnostics",
+      "description": "Monitoring health types and API — mirrors Granit.Diagnostics .NET contract",
+      "exports": [
+        {
+          "name": "MonitoringHealthResponse",
+          "kind": "interface",
+          "signature": "interface MonitoringHealthResponse",
+          "members": []
+        },
+        {
+          "name": "ServiceHealth",
+          "kind": "interface",
+          "signature": "interface ServiceHealth",
+          "members": []
+        },
+        {
+          "name": "ServiceStatus",
+          "kind": "type",
+          "signature": "type ServiceStatus = 'healthy' | 'degraded' | 'down'"
+        },
+        {
+          "name": "DEFAULT_DIAGNOSTICS_BASE_PATH",
+          "kind": "const",
+          "signature": "const DEFAULT_DIAGNOSTICS_BASE_PATH"
+        },
+        {
+          "name": "fetchMonitoringHealth",
+          "kind": "function",
+          "signature": "async function fetchMonitoringHealth( client: AxiosInstance, basePath: string ): Promise<MonitoringHealthResponse>"
+        }
+      ]
+    },
+    {
+      "name": "@granit/error-boundary",
+      "description": "Structured error capture with React error boundary and global listeners",
+      "exports": [
+        {
+          "name": "Breadcrumb",
+          "kind": "type",
+          "signature": "type Breadcrumb = { /** Category of the breadcrumb (e.g. `\"navigation\"`, `\"user\"`, `\"api\"`). */ category: string; /** Human-readable description. */ message: string; /** Timestamp of the breadcrumb (ISO 8601). */ timestamp: string; }"
+        },
+        {
+          "name": "ErrorContextConfig",
+          "kind": "type",
+          "signature": "type ErrorContextConfig = { /** Returns the current route path for error enrichment. */ getRouteInfo?: () => string"
+        },
+        {
+          "name": "ErrorContextValue",
+          "kind": "type",
+          "signature": "type ErrorContextValue = { /** The current breadcrumb trail. */ readonly breadcrumbs: readonly Breadcrumb[]; /** Add a breadcrumb to the trail. */ addBreadcrumb: (category: string, message: string) => void"
+        }
+      ]
+    },
+    {
+      "name": "@granit/features",
+      "description": "Feature management types and API functions — mirrors Granit.Features .NET",
+      "exports": [
+        {
+          "name": "FEATURE_VALUE_TYPES",
+          "kind": "const",
+          "signature": "const FEATURE_VALUE_TYPES"
+        }
+      ]
+    },
+    {
+      "name": "@granit/idempotency",
+      "description": "Automatic Idempotency-Key header injection for mutation requests",
+      "exports": [
+        {
+          "name": "IdempotencyOptions",
+          "kind": "interface",
+          "signature": "interface IdempotencyOptions",
+          "members": [
+            {
+              "name": "methods",
+              "kind": "property",
+              "signature": "methods?: string[]"
+            },
+            {
+              "name": "headerName",
+              "kind": "property",
+              "signature": "headerName?: string"
+            },
+            {
+              "name": "keyGenerator",
+              "kind": "method",
+              "signature": "keyGenerator?: (config: InternalAxiosRequestConfig) => string | undefined"
+            }
+          ]
+        },
+        {
+          "name": "enableIdempotency",
+          "kind": "function",
+          "signature": "function enableIdempotency(options?: IdempotencyOptions): void"
+        },
+        {
+          "name": "disableIdempotency",
+          "kind": "function",
+          "signature": "function disableIdempotency(): void"
+        }
+      ]
+    },
+    {
+      "name": "@granit/identity",
+      "description": "Identity provider capabilities — types and API for GET /identity/users/capabilities",
+      "exports": [
+        {
+          "name": "IdentityProviderCapabilities",
+          "kind": "interface",
+          "signature": "interface IdentityProviderCapabilities",
+          "members": []
+        },
+        {
+          "name": "fetchIdentityCapabilities",
+          "kind": "function",
+          "signature": "async function fetchIdentityCapabilities( client: AxiosInstance, basePath: string ): Promise<IdentityProviderCapabilities>"
+        },
+        {
+          "name": "IdentityProviderUserListParams",
+          "kind": "type",
+          "signature": "type IdentityProviderUserListParams = { readonly search?: string; readonly first?: number; readonly max?: number; }"
+        }
+      ]
+    },
+    {
+      "name": "@granit/localization",
+      "description": "i18next helpers and localization hooks",
+      "exports": [
+        {
+          "name": "createLocalization",
+          "kind": "function",
+          "signature": "function createLocalization(config?: LocalizationConfig): i18n"
+        },
+        {
+          "name": "resolveInitialLocale",
+          "kind": "function",
+          "signature": "function resolveInitialLocale( languages?: LanguageInfo[], storageKey?: string, userLocale?: string | null ): string"
+        },
+        {
+          "name": "applyTranslations",
+          "kind": "function",
+          "signature": "function applyTranslations(instance: i18n, data: ApplicationLocalizationDto): void"
+        },
+        {
+          "name": "LOCALE_STORAGE_KEY",
+          "kind": "const",
+          "signature": "const LOCALE_STORAGE_KEY"
+        },
+        {
+          "name": "ApplicationLocalizationDto",
+          "kind": "interface",
+          "signature": "interface ApplicationLocalizationDto",
+          "members": [
+            {
+              "name": "cultureName",
+              "kind": "property",
+              "signature": "cultureName: string"
+            },
+            {
+              "name": "resources",
+              "kind": "property",
+              "signature": "resources: Record<string, Record<string, string>>"
+            },
+            {
+              "name": "languages",
+              "kind": "property",
+              "signature": "languages: LanguageInfo[]"
+            }
+          ]
+        },
+        {
+          "name": "LanguageInfo",
+          "kind": "interface",
+          "signature": "interface LanguageInfo",
+          "members": [
+            {
+              "name": "cultureName",
+              "kind": "property",
+              "signature": "cultureName: string"
+            },
+            {
+              "name": "displayName",
+              "kind": "property",
+              "signature": "displayName: string"
+            },
+            {
+              "name": "flagIcon",
+              "kind": "property",
+              "signature": "flagIcon?: string"
+            },
+            {
+              "name": "isDefault",
+              "kind": "property",
+              "signature": "isDefault: boolean"
+            }
+          ]
+        },
+        {
+          "name": "LocalizationConfig",
+          "kind": "interface",
+          "signature": "interface LocalizationConfig",
+          "members": [
+            {
+              "name": "storageKey",
+              "kind": "property",
+              "signature": "storageKey?: string"
+            },
+            {
+              "name": "defaultNS",
+              "kind": "property",
+              "signature": "defaultNS?: string"
+            },
+            {
+              "name": "plugins",
+              "kind": "property",
+              "signature": "plugins?: Module[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/logger",
+      "description": "Configurable logger factory (createLogger)",
+      "exports": [
+        {
+          "name": "LogLevel",
+          "kind": "const",
+          "signature": "const LogLevel"
+        },
+        {
+          "name": "createConsoleTransport",
+          "kind": "function",
+          "signature": "function createConsoleTransport(): LogTransport"
+        },
+        {
+          "name": "createLogger",
+          "kind": "function",
+          "signature": "function createLogger(prefix: string, options?: LoggerOptions): Logger"
+        }
+      ]
+    },
+    {
+      "name": "@granit/logger-otlp",
+      "description": "OTLP transport for @granit/logger",
+      "exports": [
+        {
+          "name": "createOtlpTransport",
+          "kind": "function",
+          "signature": "function createOtlpTransport(options: OtlpTransportOptions): LogTransport"
+        },
+        {
+          "name": "OtlpTransportOptions",
+          "kind": "interface",
+          "signature": "interface OtlpTransportOptions",
+          "members": [
+            {
+              "name": "endpoint",
+              "kind": "property",
+              "signature": "endpoint: string"
+            },
+            {
+              "name": "serviceName",
+              "kind": "property",
+              "signature": "serviceName: string"
+            },
+            {
+              "name": "serviceVersion",
+              "kind": "property",
+              "signature": "serviceVersion?: string"
+            },
+            {
+              "name": "environment",
+              "kind": "property",
+              "signature": "environment?: string"
+            },
+            {
+              "name": "headers",
+              "kind": "property",
+              "signature": "headers?: Record<string, string>"
+            },
+            {
+              "name": "batchSize",
+              "kind": "property",
+              "signature": "batchSize?: number"
+            },
+            {
+              "name": "flushInterval",
+              "kind": "property",
+              "signature": "flushInterval?: number"
+            },
+            {
+              "name": "getTraceContext",
+              "kind": "method",
+              "signature": "getTraceContext?: () => TraceContext | undefined"
+            }
+          ]
+        },
+        {
+          "name": "TraceContext",
+          "kind": "interface",
+          "signature": "interface TraceContext",
+          "members": [
+            {
+              "name": "traceId",
+              "kind": "property",
+              "signature": "traceId: string"
+            },
+            {
+              "name": "spanId",
+              "kind": "property",
+              "signature": "spanId: string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/multi-tenancy",
+      "description": "Multi-tenancy types and tenant resolver abstraction — mirrors Granit.MultiTenancy .NET contract",
+      "exports": [
+        {
+          "name": "CurrentTenant",
+          "kind": "interface",
+          "signature": "interface CurrentTenant",
+          "members": []
+        },
+        {
+          "name": "MultiTenancyOptions",
+          "kind": "interface",
+          "signature": "interface MultiTenancyOptions",
+          "members": []
+        },
+        {
+          "name": "TenantInfo",
+          "kind": "interface",
+          "signature": "interface TenantInfo",
+          "members": []
+        },
+        {
+          "name": "DEFAULT_MULTI_TENANCY_OPTIONS",
+          "kind": "const",
+          "signature": "const DEFAULT_MULTI_TENANCY_OPTIONS: Required<MultiTenancyOptions>"
+        },
+        {
+          "name": "TenantResolver",
+          "kind": "interface",
+          "signature": "interface TenantResolver",
+          "members": [
+            {
+              "name": "resolve",
+              "kind": "method",
+              "signature": "resolve(): TenantInfo | null"
+            }
+          ]
+        },
+        {
+          "name": "resolveTenant",
+          "kind": "function",
+          "signature": "function resolveTenant(resolvers: readonly TenantResolver[]): TenantInfo | null"
+        },
+        {
+          "name": "JwtClaimTenantResolverOptions",
+          "kind": "interface",
+          "signature": "interface JwtClaimTenantResolverOptions",
+          "members": []
+        },
+        {
+          "name": "createJwtClaimTenantResolver",
+          "kind": "function",
+          "signature": "function createJwtClaimTenantResolver( options: JwtClaimTenantResolverOptions ): TenantResolver"
+        }
+      ]
+    },
+    {
+      "name": "@granit/notifications",
+      "description": "Transport-agnostic notification hooks and providers",
+      "exports": [
+        {
+          "name": "getAvailableChannels",
+          "kind": "function",
+          "signature": "function getAvailableChannels(preferences: readonly NotificationPreferenceDto[]): string[]"
+        },
+        {
+          "name": "NotificationChannels",
+          "kind": "const",
+          "signature": "const NotificationChannels"
+        }
+      ]
+    },
+    {
+      "name": "@granit/notifications-mobile-push",
+      "description": "Mobile push (FCM/APNs) device token registration via Capacitor",
+      "exports": []
+    },
+    {
+      "name": "@granit/notifications-signalr",
+      "description": "SignalR transport adapter for @granit/notifications",
+      "exports": [
+        {
+          "name": "createSignalRTransport",
+          "kind": "function",
+          "signature": "function createSignalRTransport(config: SignalRTransportConfig): NotificationTransport"
+        },
+        {
+          "name": "SignalRTransportConfig",
+          "kind": "interface",
+          "signature": "interface SignalRTransportConfig",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/notifications-sse",
+      "description": "SSE transport adapter for @granit/notifications",
+      "exports": [
+        {
+          "name": "createSseTransport",
+          "kind": "function",
+          "signature": "function createSseTransport(config: SseTransportConfig): NotificationTransport"
+        },
+        {
+          "name": "SseTransportConfig",
+          "kind": "interface",
+          "signature": "interface SseTransportConfig",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/notifications-web-push",
+      "description": "Web Push VAPID subscription management",
+      "exports": [
+        {
+          "name": "registerPushSubscription",
+          "kind": "function",
+          "signature": "async function registerPushSubscription( client: AxiosInstance, basePath: string, subscription: PushSubscriptionJSON ): Promise<void>"
+        },
+        {
+          "name": "unregisterPushSubscription",
+          "kind": "function",
+          "signature": "async function unregisterPushSubscription( client: AxiosInstance, basePath: string, endpoint: string ): Promise<void>"
+        },
+        {
+          "name": "urlBase64ToUint8Array",
+          "kind": "function",
+          "signature": "function urlBase64ToUint8Array(base64String: string): Uint8Array"
+        }
+      ]
+    },
+    {
+      "name": "@granit/querying",
+      "description": "Headless data grid hooks with TanStack Query integration",
+      "exports": [
+        {
+          "name": "buildQueryKey",
+          "kind": "function",
+          "signature": "function buildQueryKey( config: QueryConfig, ...segments: readonly string[] ): readonly unknown[]"
+        },
+        {
+          "name": "QueryConfig",
+          "kind": "interface",
+          "signature": "interface QueryConfig",
+          "members": []
+        },
+        {
+          "name": "QUERY_LIMITS",
+          "kind": "const",
+          "signature": "const QUERY_LIMITS"
+        },
+        {
+          "name": "validateQueryRequest",
+          "kind": "function",
+          "signature": "function validateQueryRequest(params: QueryRequest): QueryRequest"
+        },
+        {
+          "name": "fetchGrouped",
+          "kind": "function",
+          "signature": "async function fetchGrouped<T>( client: AxiosInstance, basePath: string, request: QueryRequest ): Promise<GroupedResult<T>>"
+        },
+        {
+          "name": "fetchPage",
+          "kind": "function",
+          "signature": "async function fetchPage<T>( client: AxiosInstance, basePath: string, request: QueryRequest ): Promise<PagedResult<T>>"
+        },
+        {
+          "name": "fetchQueryMeta",
+          "kind": "function",
+          "signature": "async function fetchQueryMeta( client: AxiosInstance, basePath: string ): Promise<QueryMetadata>"
+        },
+        {
+          "name": "parseQueryRequest",
+          "kind": "function",
+          "signature": "function parseQueryRequest(search: string): QueryRequest"
+        },
+        {
+          "name": "serializeQueryRequest",
+          "kind": "function",
+          "signature": "function serializeQueryRequest(params: QueryRequest): string"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-ai",
+      "description": "React bindings for @granit/ai — AIProvider, useAIWorkspaces, useAIChat, useAIChatStream, useAIEmbeddings, workspace CRUD mutations",
+      "exports": [
+        {
+          "name": "AIProvider",
+          "kind": "function",
+          "signature": "function AIProvider("
+        },
+        {
+          "name": "buildAIQueryKey",
+          "kind": "function",
+          "signature": "function buildAIQueryKey( config: AIConfig, ...segments: readonly string[] ): readonly unknown[]"
+        },
+        {
+          "name": "useAIConfig",
+          "kind": "function",
+          "signature": "function useAIConfig(): AIConfig"
+        },
+        {
+          "name": "AIConfig",
+          "kind": "interface",
+          "signature": "interface AIConfig",
+          "members": []
+        },
+        {
+          "name": "AIProviderProps",
+          "kind": "interface",
+          "signature": "interface AIProviderProps",
+          "members": []
+        },
+        {
+          "name": "useAIWorkspaces",
+          "kind": "function",
+          "signature": "function useAIWorkspaces(options?:"
+        },
+        {
+          "name": "useAIWorkspace",
+          "kind": "function",
+          "signature": "function useAIWorkspace( name: string, options?:"
+        },
+        {
+          "name": "useCreateAIWorkspace",
+          "kind": "function",
+          "signature": "function useCreateAIWorkspace(): UseCreateAIWorkspaceReturn"
+        },
+        {
+          "name": "UseCreateAIWorkspaceReturn",
+          "kind": "interface",
+          "signature": "interface UseCreateAIWorkspaceReturn",
+          "members": []
+        },
+        {
+          "name": "useUpdateAIWorkspace",
+          "kind": "function",
+          "signature": "function useUpdateAIWorkspace(): UseUpdateAIWorkspaceReturn"
+        },
+        {
+          "name": "UseUpdateAIWorkspaceReturn",
+          "kind": "interface",
+          "signature": "interface UseUpdateAIWorkspaceReturn",
+          "members": [
+            {
+              "name": "name",
+              "kind": "property",
+              "signature": "name: string,"
+            },
+            {
+              "name": "request",
+              "kind": "property",
+              "signature": "request: AIWorkspaceUpdateRequest"
+            }
+          ]
+        },
+        {
+          "name": "useDeleteAIWorkspace",
+          "kind": "function",
+          "signature": "function useDeleteAIWorkspace(): UseDeleteAIWorkspaceReturn"
+        },
+        {
+          "name": "UseDeleteAIWorkspaceReturn",
+          "kind": "interface",
+          "signature": "interface UseDeleteAIWorkspaceReturn",
+          "members": []
+        },
+        {
+          "name": "useAIChat",
+          "kind": "function",
+          "signature": "function useAIChat(): UseAIChatReturn"
+        },
+        {
+          "name": "UseAIChatReturn",
+          "kind": "interface",
+          "signature": "interface UseAIChatReturn",
+          "members": []
+        },
+        {
+          "name": "useAIChatStream",
+          "kind": "function",
+          "signature": "function useAIChatStream(): UseAIChatStreamReturn"
+        },
+        {
+          "name": "UseAIChatStreamReturn",
+          "kind": "interface",
+          "signature": "interface UseAIChatStreamReturn",
+          "members": []
+        },
+        {
+          "name": "useAIEmbeddings",
+          "kind": "function",
+          "signature": "function useAIEmbeddings(): UseAIEmbeddingsReturn"
+        },
+        {
+          "name": "UseAIEmbeddingsReturn",
+          "kind": "interface",
+          "signature": "interface UseAIEmbeddingsReturn",
+          "members": [
+            {
+              "name": "workspaceName",
+              "kind": "property",
+              "signature": "workspaceName: string,"
+            },
+            {
+              "name": "request",
+              "kind": "property",
+              "signature": "request: AIEmbeddingRequest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-audit-log",
+      "description": "React bindings for @granit/audit-log — AuditLogProvider, hooks",
+      "exports": [
+        {
+          "name": "AuditLogProvider",
+          "kind": "function",
+          "signature": "function AuditLogProvider("
+        },
+        {
+          "name": "useAuditLogConfig",
+          "kind": "function",
+          "signature": "function useAuditLogConfig(): AuditLogConfig"
+        },
+        {
+          "name": "AuditLogConfig",
+          "kind": "interface",
+          "signature": "interface AuditLogConfig",
+          "members": []
+        },
+        {
+          "name": "AuditLogProviderProps",
+          "kind": "interface",
+          "signature": "interface AuditLogProviderProps",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-authentication",
+      "description": "React bindings for @granit/authentication — Keycloak init hook, auth context factory, mock provider",
+      "exports": [
+        {
+          "name": "useKeycloakInit",
+          "kind": "function",
+          "signature": "function useKeycloakInit(config: KeycloakCoreConfig): KeycloakCoreResult"
+        },
+        {
+          "name": "KeycloakCoreResult",
+          "kind": "interface",
+          "signature": "interface KeycloakCoreResult extends BaseAuthContextType",
+          "members": [
+            {
+              "name": "keycloakRef",
+              "kind": "property",
+              "signature": "keycloakRef: React.RefObject<Keycloak | null>"
+            },
+            {
+              "name": "login",
+              "kind": "method",
+              "signature": "login: (options?: LoginOptions) => void"
+            },
+            {
+              "name": "logout",
+              "kind": "method",
+              "signature": "logout: (options?: LogoutOptions) => void"
+            },
+            {
+              "name": "register",
+              "kind": "method",
+              "signature": "register: (options?: Omit<LoginOptions, 'action'>) => void"
+            },
+            {
+              "name": "hasRealmRole",
+              "kind": "method",
+              "signature": "hasRealmRole: (role: string) => boolean"
+            },
+            {
+              "name": "hasResourceRole",
+              "kind": "method",
+              "signature": "hasResourceRole: (role: string, resource?: string) => boolean"
+            },
+            {
+              "name": "isTokenExpired",
+              "kind": "method",
+              "signature": "isTokenExpired: (minValidity?: number) => boolean"
+            },
+            {
+              "name": "tokenParsed",
+              "kind": "property",
+              "signature": "tokenParsed: Record<string, unknown> | undefined"
+            }
+          ]
+        },
+        {
+          "name": "createAuthContext",
+          "kind": "function",
+          "signature": "function createAuthContext<T extends BaseAuthContextType>()"
+        },
+        {
+          "name": "createMockProvider",
+          "kind": "function",
+          "signature": "function createMockProvider<T extends BaseAuthContextType>( AuthContext: React.Context<T | undefined>, value: T ): React.FC<"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-authentication-api-keys",
+      "description": "React hooks for @granit/authentication-api-keys — useApiKeys, useApiKey, useCreateApiKey, useRevokeApiKey, useRotateApiKey, useUpdateApiKeyScopes",
+      "exports": [
+        {
+          "name": "useApiKeys",
+          "kind": "function",
+          "signature": "function useApiKeys( options: ApiKeyHookOptions, params: UseApiKeysParams ="
+        },
+        {
+          "name": "apiKeyKeys",
+          "kind": "const",
+          "signature": "const apiKeyKeys"
+        },
+        {
+          "name": "ApiKeyHookOptions",
+          "kind": "interface",
+          "signature": "interface ApiKeyHookOptions",
+          "members": [
+            {
+              "name": "client",
+              "kind": "property",
+              "signature": "client: AxiosInstance"
+            },
+            {
+              "name": "basePath",
+              "kind": "property",
+              "signature": "basePath?: string"
+            }
+          ]
+        },
+        {
+          "name": "UseApiKeysParams",
+          "kind": "interface",
+          "signature": "interface UseApiKeysParams",
+          "members": [
+            {
+              "name": "search",
+              "kind": "property",
+              "signature": "search?: string"
+            },
+            {
+              "name": "type",
+              "kind": "property",
+              "signature": "type?: string[]"
+            },
+            {
+              "name": "environment",
+              "kind": "property",
+              "signature": "environment?: string"
+            },
+            {
+              "name": "includeRevoked",
+              "kind": "property",
+              "signature": "includeRevoked?: boolean"
+            },
+            {
+              "name": "page",
+              "kind": "property",
+              "signature": "page?: number"
+            },
+            {
+              "name": "pageSize",
+              "kind": "property",
+              "signature": "pageSize?: number"
+            }
+          ]
+        },
+        {
+          "name": "useApiKey",
+          "kind": "function",
+          "signature": "function useApiKey(id: string, options: ApiKeyHookOptions): UseQueryResult<ApiKeyResponse>"
+        },
+        {
+          "name": "UpdateApiKeyScopesVariables",
+          "kind": "interface",
+          "signature": "interface UpdateApiKeyScopesVariables",
+          "members": [
+            {
+              "name": "id",
+              "kind": "property",
+              "signature": "id: string"
+            },
+            {
+              "name": "request",
+              "kind": "property",
+              "signature": "request: ApiKeyUpdateScopesRequest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-authorization",
+      "description": "React hooks for @granit/authorization — permission checking, definitions, role grants",
+      "exports": [
+        {
+          "name": "usePermissions",
+          "kind": "function",
+          "signature": "function usePermissions(options: UsePermissionsOptions): UsePermissionsReturn"
+        },
+        {
+          "name": "permissionKeys",
+          "kind": "const",
+          "signature": "const permissionKeys"
+        },
+        {
+          "name": "usePermissionDefinitions",
+          "kind": "function",
+          "signature": "function usePermissionDefinitions( options: UsePermissionDefinitionsOptions ): UseQueryResult<PermissionGroupDto[]>"
+        },
+        {
+          "name": "useRolePermissions",
+          "kind": "function",
+          "signature": "function useRolePermissions( options: UseRolePermissionsOptions ): UseQueryResult<PermissionGrantDto>"
+        },
+        {
+          "name": "usePermissionGrant",
+          "kind": "function",
+          "signature": "function usePermissionGrant(options: UsePermissionGrantOptions): UsePermissionGrantReturn"
+        },
+        {
+          "name": "UsePermissionGrantReturn",
+          "kind": "type",
+          "signature": "type UsePermissionGrantReturn = { /** Grant a permission to a role. `PUT {basePath}/roles/{roleName}/permissions/{permissionName}` */ readonly grant: UseMutationResult<void, Error, PermissionGrantParams>; /** Revoke a permission from a role. `DELETE {basePath}/roles/{roleName}/permissions/{permissionName}` */ readonly revoke: UseMutationResult<void, Error, PermissionGrantParams>; }"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-background-jobs",
+      "description": "React hooks for background job monitoring — useBackgroundJobs, usePauseJob, useResumeJob, useTriggerJob",
+      "exports": [
+        {
+          "name": "BackgroundJobsOptions",
+          "kind": "interface",
+          "signature": "interface BackgroundJobsOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-blob-storage",
+      "description": "React hooks for blob storage — useBlob, useInitiateUpload, useConfirmUpload, useBlobUpload, useDownloadUrl, useDeleteBlob",
+      "exports": [
+        {
+          "name": "useBlob",
+          "kind": "function",
+          "signature": "function useBlob( id: string, containerName: string, options: BlobStorageOptions ): UseQueryResult<BlobDescriptorResponse>"
+        },
+        {
+          "name": "useConfirmUpload",
+          "kind": "function",
+          "signature": "function useConfirmUpload( options: BlobStorageOptions ): UseMutationResult< BlobConfirmUploadResponse, Error,"
+        },
+        {
+          "name": "useDeleteBlob",
+          "kind": "function",
+          "signature": "function useDeleteBlob( options: BlobStorageOptions ): UseMutationResult<void, Error,"
+        },
+        {
+          "name": "useInitiateUpload",
+          "kind": "function",
+          "signature": "function useInitiateUpload( options: BlobStorageOptions ): UseMutationResult<BlobUploadInitiateResponse, Error, BlobUploadInitiateRequest>"
+        },
+        {
+          "name": "useDownloadUrl",
+          "kind": "function",
+          "signature": "function useDownloadUrl( options: BlobStorageOptions ): UseMutationResult< BlobDownloadUrlResponse, Error,"
+        },
+        {
+          "name": "useCleanupOrphans",
+          "kind": "function",
+          "signature": "function useCleanupOrphans( options: BlobStorageOptions ): UseMutationResult<BlobCleanupOrphansResponse, Error, void>"
+        },
+        {
+          "name": "useBlobUpload",
+          "kind": "function",
+          "signature": "function useBlobUpload(options: BlobStorageOptions): UseBlobUploadReturn"
+        },
+        {
+          "name": "BlobStorageOptions",
+          "kind": "interface",
+          "signature": "interface BlobStorageOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-cookies",
+      "description": "React bindings for @granit/cookies — CookieConsentProvider, useCookieConsent",
+      "exports": [
+        {
+          "name": "CookieConsentProvider",
+          "kind": "function",
+          "signature": "function CookieConsentProvider("
+        },
+        {
+          "name": "useCookieConsent",
+          "kind": "function",
+          "signature": "function useCookieConsent(): CookieConsentContextValue"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-data-exchange",
+      "description": "React bindings for @granit/data-exchange — ExportProvider, ImportProvider, hooks",
+      "exports": []
+    },
+    {
+      "name": "@granit/react-diagnostics",
+      "description": "React hooks for monitoring health — useMonitoringHealth",
+      "exports": [
+        {
+          "name": "diagnosticsKeys",
+          "kind": "const",
+          "signature": "const diagnosticsKeys"
+        },
+        {
+          "name": "useMonitoringHealth",
+          "kind": "function",
+          "signature": "function useMonitoringHealth( options: MonitoringHealthOptions ): UseQueryResult<MonitoringHealthResponse>"
+        },
+        {
+          "name": "MonitoringHealthOptions",
+          "kind": "interface",
+          "signature": "interface MonitoringHealthOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-error-boundary",
+      "description": "React bindings for @granit/error-boundary — GranitErrorBoundary, GlobalErrorCapture, ErrorContextProvider",
+      "exports": [
+        {
+          "name": "GranitErrorBoundary",
+          "kind": "class",
+          "signature": "class GranitErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState>"
+        },
+        {
+          "name": "GlobalErrorCapture",
+          "kind": "function",
+          "signature": "function GlobalErrorCapture("
+        },
+        {
+          "name": "ErrorContextProvider",
+          "kind": "function",
+          "signature": "function ErrorContextProvider("
+        },
+        {
+          "name": "useErrorContext",
+          "kind": "function",
+          "signature": "function useErrorContext(): ErrorContextValue"
+        },
+        {
+          "name": "useBreadcrumb",
+          "kind": "function",
+          "signature": "function useBreadcrumb(): UseBreadcrumbReturn"
+        },
+        {
+          "name": "ErrorBoundaryProps",
+          "kind": "type",
+          "signature": "type ErrorBoundaryProps = { /** Logger instance for reporting caught errors. */ logger: Logger; /** Render function called when an error is caught. Headless — no built-in UI. */ renderFallback: (error: Error, resetErrorBoundary: () => void) => React.ReactNode"
+        },
+        {
+          "name": "GlobalErrorCaptureProps",
+          "kind": "type",
+          "signature": "type GlobalErrorCaptureProps = { /** Logger instance for reporting uncaught errors. */ logger: Logger; /** Optional callback fired for each captured error. */ onError?: (error: Error) => void"
+        },
+        {
+          "name": "UseBreadcrumbReturn",
+          "kind": "type",
+          "signature": "type UseBreadcrumbReturn = { /** Add a breadcrumb to the error context trail. */ addBreadcrumb: (category: string, message: string) => void"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-features",
+      "description": "React bindings for @granit/features — FeaturesProvider, useFeatureFlag, useFeatureValue, useFeatureDefinitions, useSetFeatureOverride, useDeleteFeatureOverride",
+      "exports": [
+        {
+          "name": "FeaturesConfig",
+          "kind": "interface",
+          "signature": "interface FeaturesConfig",
+          "members": []
+        },
+        {
+          "name": "FeaturesProviderProps",
+          "kind": "interface",
+          "signature": "interface FeaturesProviderProps",
+          "members": []
+        },
+        {
+          "name": "useFeatureDefinitions",
+          "kind": "function",
+          "signature": "function useFeatureDefinitions(options?:"
+        },
+        {
+          "name": "useFeatureValues",
+          "kind": "function",
+          "signature": "function useFeatureValues(options?:"
+        },
+        {
+          "name": "useFeatureFlag",
+          "kind": "function",
+          "signature": "function useFeatureFlag(name: string): UseFeatureFlagReturn"
+        },
+        {
+          "name": "UseFeatureFlagReturn",
+          "kind": "interface",
+          "signature": "interface UseFeatureFlagReturn",
+          "members": []
+        },
+        {
+          "name": "useFeatureValue",
+          "kind": "function",
+          "signature": "function useFeatureValue(name: string): UseFeatureValueReturn"
+        },
+        {
+          "name": "UseFeatureValueReturn",
+          "kind": "interface",
+          "signature": "interface UseFeatureValueReturn",
+          "members": []
+        },
+        {
+          "name": "useSetFeatureOverride",
+          "kind": "function",
+          "signature": "function useSetFeatureOverride(): UseSetFeatureOverrideReturn"
+        },
+        {
+          "name": "UseSetFeatureOverrideReturn",
+          "kind": "interface",
+          "signature": "interface UseSetFeatureOverrideReturn",
+          "members": []
+        },
+        {
+          "name": "useDeleteFeatureOverride",
+          "kind": "function",
+          "signature": "function useDeleteFeatureOverride(): UseDeleteFeatureOverrideReturn"
+        },
+        {
+          "name": "UseDeleteFeatureOverrideReturn",
+          "kind": "interface",
+          "signature": "interface UseDeleteFeatureOverrideReturn",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-identity",
+      "description": "React bindings for @granit/identity — IdentityProvider, useIdentityCapabilities",
+      "exports": [
+        {
+          "name": "IdentityConfig",
+          "kind": "interface",
+          "signature": "interface IdentityConfig",
+          "members": []
+        },
+        {
+          "name": "IdentityProviderProps",
+          "kind": "interface",
+          "signature": "interface IdentityProviderProps",
+          "members": []
+        },
+        {
+          "name": "useIdentityCacheStats",
+          "kind": "function",
+          "signature": "function useIdentityCacheStats(): UseQueryResult<IdentityUserCacheStats>"
+        },
+        {
+          "name": "useBatchResolveUsers",
+          "kind": "function",
+          "signature": "function useBatchResolveUsers(): UseMutationResult< readonly IdentityUser[], Error, string[] >"
+        },
+        {
+          "name": "useIdentityCapabilities",
+          "kind": "function",
+          "signature": "function useIdentityCapabilities(options?:"
+        },
+        {
+          "name": "useIdentityRgpd",
+          "kind": "function",
+          "signature": "function useIdentityRgpd():"
+        },
+        {
+          "name": "useIdentitySync",
+          "kind": "function",
+          "signature": "function useIdentitySync():"
+        },
+        {
+          "name": "useIdentityUser",
+          "kind": "function",
+          "signature": "function useIdentityUser(userId: string): UseQueryResult<IdentityUser>"
+        },
+        {
+          "name": "useIdentityUsers",
+          "kind": "function",
+          "signature": "function useIdentityUsers( params?: IdentityUserListParams ): UseQueryResult<IdentityUserPage>"
+        },
+        {
+          "name": "RoleMutationVariables",
+          "kind": "type",
+          "signature": "type RoleMutationVariables = { readonly userId: string; readonly roleName: string; }"
+        },
+        {
+          "name": "GroupMutationVariables",
+          "kind": "type",
+          "signature": "type GroupMutationVariables = { readonly userId: string; readonly groupId: string; }"
+        },
+        {
+          "name": "TerminateSessionVariables",
+          "kind": "type",
+          "signature": "type TerminateSessionVariables = { readonly userId: string; readonly sessionId: string; }"
+        },
+        {
+          "name": "SetTemporaryPasswordVariables",
+          "kind": "type",
+          "signature": "type SetTemporaryPasswordVariables = { readonly userId: string; readonly password: string; }"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-localization",
+      "description": "",
+      "exports": [
+        {
+          "name": "createReactLocalization",
+          "kind": "function",
+          "signature": "function createReactLocalization(config?: Omit<LocalizationConfig, 'plugins'>): i18n"
+        },
+        {
+          "name": "useLocale",
+          "kind": "function",
+          "signature": "function useLocale(options?: UseLocaleOptions):"
+        },
+        {
+          "name": "UseLocaleOptions",
+          "kind": "interface",
+          "signature": "interface UseLocaleOptions",
+          "members": [
+            {
+              "name": "onLocaleChange",
+              "kind": "method",
+              "signature": "onLocaleChange?: (locale: string) => void"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-multi-tenancy",
+      "description": "React bindings for @granit/multi-tenancy — TenantProvider, useTenant",
+      "exports": [
+        {
+          "name": "TenantProvider",
+          "kind": "function",
+          "signature": "function TenantProvider("
+        },
+        {
+          "name": "useTenant",
+          "kind": "function",
+          "signature": "function useTenant(): CurrentTenant"
+        },
+        {
+          "name": "TenantProviderProps",
+          "kind": "interface",
+          "signature": "interface TenantProviderProps",
+          "members": []
+        },
+        {
+          "name": "useKeycloakTenantResolvers",
+          "kind": "function",
+          "signature": "function useKeycloakTenantResolvers( options: UseKeycloakTenantResolversOptions ): readonly TenantResolver[]"
+        },
+        {
+          "name": "UseKeycloakTenantResolversOptions",
+          "kind": "interface",
+          "signature": "interface UseKeycloakTenantResolversOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-notifications",
+      "description": "React bindings for @granit/notifications — NotificationProvider, hooks",
+      "exports": [
+        {
+          "name": "NotificationProvider",
+          "kind": "function",
+          "signature": "function NotificationProvider("
+        },
+        {
+          "name": "useNotificationContext",
+          "kind": "function",
+          "signature": "function useNotificationContext(): NotificationContextValue"
+        },
+        {
+          "name": "useRealTimeNotifications",
+          "kind": "function",
+          "signature": "function useRealTimeNotifications(): UseRealTimeNotificationsReturn"
+        },
+        {
+          "name": "UseRealTimeNotificationsReturn",
+          "kind": "interface",
+          "signature": "interface UseRealTimeNotificationsReturn",
+          "members": [
+            {
+              "name": "lastNotification",
+              "kind": "property",
+              "signature": "lastNotification: NotificationDto | null"
+            },
+            {
+              "name": "connectionState",
+              "kind": "property",
+              "signature": "connectionState: ConnectionState"
+            }
+          ]
+        },
+        {
+          "name": "useUnreadCount",
+          "kind": "function",
+          "signature": "function useUnreadCount(options: UseUnreadCountOptions ="
+        },
+        {
+          "name": "UseUnreadCountOptions",
+          "kind": "interface",
+          "signature": "interface UseUnreadCountOptions",
+          "members": [
+            {
+              "name": "pollingInterval",
+              "kind": "property",
+              "signature": "pollingInterval?: number"
+            }
+          ]
+        },
+        {
+          "name": "UseUnreadCountReturn",
+          "kind": "interface",
+          "signature": "interface UseUnreadCountReturn",
+          "members": [
+            {
+              "name": "count",
+              "kind": "property",
+              "signature": "count: number"
+            },
+            {
+              "name": "refresh",
+              "kind": "method",
+              "signature": "refresh: () => void"
+            }
+          ]
+        },
+        {
+          "name": "useNotifications",
+          "kind": "function",
+          "signature": "function useNotifications(options: UseNotificationsOptions ="
+        },
+        {
+          "name": "UseNotificationsOptions",
+          "kind": "interface",
+          "signature": "interface UseNotificationsOptions",
+          "members": [
+            {
+              "name": "pageSize",
+              "kind": "property",
+              "signature": "pageSize?: number"
+            }
+          ]
+        },
+        {
+          "name": "UseNotificationsReturn",
+          "kind": "interface",
+          "signature": "interface UseNotificationsReturn",
+          "members": [
+            {
+              "name": "notifications",
+              "kind": "property",
+              "signature": "notifications: readonly NotificationDto[]"
+            },
+            {
+              "name": "totalCount",
+              "kind": "property",
+              "signature": "totalCount: number | null"
+            },
+            {
+              "name": "loading",
+              "kind": "property",
+              "signature": "loading: boolean"
+            },
+            {
+              "name": "loadingMore",
+              "kind": "property",
+              "signature": "loadingMore: boolean"
+            },
+            {
+              "name": "error",
+              "kind": "property",
+              "signature": "error: Error | null"
+            },
+            {
+              "name": "hasMore",
+              "kind": "property",
+              "signature": "hasMore: boolean"
+            },
+            {
+              "name": "loadMore",
+              "kind": "method",
+              "signature": "loadMore: () => void"
+            },
+            {
+              "name": "refresh",
+              "kind": "method",
+              "signature": "refresh: () => void"
+            },
+            {
+              "name": "markRead",
+              "kind": "method",
+              "signature": "markRead: (id: string) => Promise<void>"
+            },
+            {
+              "name": "markAllRead",
+              "kind": "method",
+              "signature": "markAllRead: () => Promise<void>"
+            }
+          ]
+        },
+        {
+          "name": "useEntityActivityFeed",
+          "kind": "function",
+          "signature": "function useEntityActivityFeed( options: UseEntityActivityFeedOptions ): UseEntityActivityFeedReturn"
+        },
+        {
+          "name": "useNotificationPreferences",
+          "kind": "function",
+          "signature": "function useNotificationPreferences(): UseNotificationPreferencesReturn"
+        },
+        {
+          "name": "UseNotificationPreferencesReturn",
+          "kind": "interface",
+          "signature": "interface UseNotificationPreferencesReturn",
+          "members": [
+            {
+              "name": "preferences",
+              "kind": "property",
+              "signature": "preferences: NotificationPreferenceDto[]"
+            },
+            {
+              "name": "loading",
+              "kind": "property",
+              "signature": "loading: boolean"
+            },
+            {
+              "name": "error",
+              "kind": "property",
+              "signature": "error: Error | null"
+            },
+            {
+              "name": "saving",
+              "kind": "property",
+              "signature": "saving: boolean"
+            },
+            {
+              "name": "toggleChannel",
+              "kind": "method",
+              "signature": "toggleChannel: (notificationType: string, channel: NotificationChannel, enabled: boolean) => void"
+            },
+            {
+              "name": "refresh",
+              "kind": "method",
+              "signature": "refresh: () => void"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-notifications-mobile-push",
+      "description": "React bindings for @granit/notifications-mobile-push — useMobilePush hook",
+      "exports": [
+        {
+          "name": "useDeviceTokens",
+          "kind": "function",
+          "signature": "function useDeviceTokens( options: DeviceTokensOptions ): UseQueryResult<readonly MobilePushTokenResponse[]>"
+        },
+        {
+          "name": "deviceTokenKeys",
+          "kind": "const",
+          "signature": "const deviceTokenKeys"
+        },
+        {
+          "name": "DeviceTokensOptions",
+          "kind": "interface",
+          "signature": "interface DeviceTokensOptions",
+          "members": []
+        },
+        {
+          "name": "useMobilePush",
+          "kind": "function",
+          "signature": "function useMobilePush(config: MobilePushConfig): UseMobilePushReturn"
+        },
+        {
+          "name": "MobilePushConfig",
+          "kind": "interface",
+          "signature": "interface MobilePushConfig",
+          "members": []
+        },
+        {
+          "name": "UseMobilePushReturn",
+          "kind": "interface",
+          "signature": "interface UseMobilePushReturn",
+          "members": [
+            {
+              "name": "register",
+              "kind": "method",
+              "signature": "register: () => Promise<void>"
+            },
+            {
+              "name": "unregister",
+              "kind": "method",
+              "signature": "unregister: () => Promise<void>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-notifications-web-push",
+      "description": "React bindings for @granit/notifications-web-push — useWebPush hook",
+      "exports": [
+        {
+          "name": "useWebPush",
+          "kind": "function",
+          "signature": "function useWebPush(config: WebPushConfig): UseWebPushReturn"
+        },
+        {
+          "name": "UseWebPushReturn",
+          "kind": "interface",
+          "signature": "interface UseWebPushReturn",
+          "members": [
+            {
+              "name": "subscribe",
+              "kind": "method",
+              "signature": "subscribe: () => Promise<void>"
+            },
+            {
+              "name": "unsubscribe",
+              "kind": "method",
+              "signature": "unsubscribe: () => Promise<void>"
+            }
+          ]
+        },
+        {
+          "name": "WebPushConfig",
+          "kind": "interface",
+          "signature": "interface WebPushConfig",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-querying",
+      "description": "",
+      "exports": [
+        {
+          "name": "QueryProvider",
+          "kind": "function",
+          "signature": "function QueryProvider("
+        },
+        {
+          "name": "useQueryConfig",
+          "kind": "function",
+          "signature": "function useQueryConfig(): QueryConfig"
+        },
+        {
+          "name": "QueryProviderProps",
+          "kind": "interface",
+          "signature": "interface QueryProviderProps",
+          "members": []
+        },
+        {
+          "name": "useInfiniteScroll",
+          "kind": "function",
+          "signature": "function useInfiniteScroll<T, P extends InfiniteScrollPage<T> = InfiniteScrollPage<T>>( options: UseInfiniteScrollOptions<T, P> ): UseInfiniteScrollReturn<T>"
+        },
+        {
+          "name": "usePagination",
+          "kind": "function",
+          "signature": "function usePagination<T, P extends PaginationPage<T> = PaginationPage<T>>( options: UsePaginationOptions<T, P> ): UsePaginationReturn<T>"
+        },
+        {
+          "name": "useQueryEndpoint",
+          "kind": "function",
+          "signature": "function useQueryEndpoint<T>(options?: UseQueryEndpointOptions): UseQueryEndpointReturn<T>"
+        },
+        {
+          "name": "useQueryMeta",
+          "kind": "function",
+          "signature": "function useQueryMeta(): UseQueryResult<QueryMetadata>"
+        },
+        {
+          "name": "useSavedViews",
+          "kind": "function",
+          "signature": "function useSavedViews(): UseSavedViewsReturn"
+        },
+        {
+          "name": "UseSavedViewsReturn",
+          "kind": "interface",
+          "signature": "interface UseSavedViewsReturn",
+          "members": []
+        },
+        {
+          "name": "useSmartFilter",
+          "kind": "function",
+          "signature": "function useSmartFilter(options?: UseSmartFilterOptions): UseSmartFilterReturn"
+        },
+        {
+          "name": "UseSmartFilterOptions",
+          "kind": "interface",
+          "signature": "interface UseSmartFilterOptions",
+          "members": []
+        },
+        {
+          "name": "UseSmartFilterReturn",
+          "kind": "interface",
+          "signature": "interface UseSmartFilterReturn",
+          "members": [
+            {
+              "name": "field",
+              "kind": "property",
+              "signature": "field: string,"
+            },
+            {
+              "name": "operator",
+              "kind": "property",
+              "signature": "operator: FilterOperator,"
+            },
+            {
+              "name": "value",
+              "kind": "property",
+              "signature": "value: string,"
+            },
+            {
+              "name": "label",
+              "kind": "property",
+              "signature": "label: string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-reference-data",
+      "description": "React hooks for @granit/reference-data — useCountry, useCountries, useCreateCountry, useUpdateCountry, useDeactivateCountry, useReactivateCountry",
+      "exports": [
+        {
+          "name": "countryKeys",
+          "kind": "const",
+          "signature": "const countryKeys"
+        },
+        {
+          "name": "useCountries",
+          "kind": "function",
+          "signature": "function useCountries( options: ReferenceDataHookOptions &"
+        },
+        {
+          "name": "useCountry",
+          "kind": "function",
+          "signature": "function useCountry( code: string, options: ReferenceDataHookOptions &"
+        },
+        {
+          "name": "ReferenceDataHookOptions",
+          "kind": "interface",
+          "signature": "interface ReferenceDataHookOptions",
+          "members": [
+            {
+              "name": "client",
+              "kind": "property",
+              "signature": "client: AxiosInstance"
+            },
+            {
+              "name": "basePath",
+              "kind": "property",
+              "signature": "basePath?: string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-settings",
+      "description": "React bindings for @granit/settings — SettingsProvider, useSetting, useSettings, useUpdateSetting, useDeleteSetting",
+      "exports": [
+        {
+          "name": "SettingsConfig",
+          "kind": "interface",
+          "signature": "interface SettingsConfig",
+          "members": []
+        },
+        {
+          "name": "SettingsProviderProps",
+          "kind": "interface",
+          "signature": "interface SettingsProviderProps",
+          "members": []
+        },
+        {
+          "name": "useDeleteSetting",
+          "kind": "function",
+          "signature": "function useDeleteSetting(scope: SettingScope): UseDeleteSettingReturn"
+        },
+        {
+          "name": "UseDeleteSettingReturn",
+          "kind": "interface",
+          "signature": "interface UseDeleteSettingReturn",
+          "members": []
+        },
+        {
+          "name": "useSetting",
+          "kind": "function",
+          "signature": "function useSetting( scope: SettingScope, name: string, options?:"
+        },
+        {
+          "name": "useSettings",
+          "kind": "function",
+          "signature": "function useSettings( scope: SettingScope, options?:"
+        },
+        {
+          "name": "useUpdateSetting",
+          "kind": "function",
+          "signature": "function useUpdateSetting(scope: SettingScope): UseUpdateSettingReturn"
+        },
+        {
+          "name": "UseUpdateSettingReturn",
+          "kind": "interface",
+          "signature": "interface UseUpdateSettingReturn",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-storage",
+      "description": "React bindings for @granit/storage — hooks for synchronized browser storage",
+      "exports": [
+        {
+          "name": "useStorage",
+          "kind": "function",
+          "signature": "function useStorage<T>( key: string, defaultValue: T, options?: StorageOptions<T> ): [T, (value: T) => void]"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-templating",
+      "description": "React bindings for @granit/templating — TemplatingProvider, hooks",
+      "exports": [
+        {
+          "name": "TemplatingProvider",
+          "kind": "function",
+          "signature": "function TemplatingProvider("
+        },
+        {
+          "name": "useTemplatingConfig",
+          "kind": "function",
+          "signature": "function useTemplatingConfig(): TemplatingConfig"
+        },
+        {
+          "name": "TemplatingProviderProps",
+          "kind": "interface",
+          "signature": "interface TemplatingProviderProps",
+          "members": [
+            {
+              "name": "client",
+              "kind": "property",
+              "signature": "client: AxiosInstance"
+            },
+            {
+              "name": "basePath",
+              "kind": "property",
+              "signature": "basePath?: string"
+            },
+            {
+              "name": "queryKeyPrefix",
+              "kind": "property",
+              "signature": "queryKeyPrefix?: readonly string[]"
+            },
+            {
+              "name": "children",
+              "kind": "property",
+              "signature": "children: React.ReactNode"
+            }
+          ]
+        },
+        {
+          "name": "useTemplate",
+          "kind": "function",
+          "signature": "function useTemplate(name: string, culture?: string)"
+        },
+        {
+          "name": "useTemplateHistory",
+          "kind": "function",
+          "signature": "function useTemplateHistory( name: string, params?:"
+        },
+        {
+          "name": "useTemplateRevision",
+          "kind": "function",
+          "signature": "function useTemplateRevision(name: string, revisionId: string)"
+        },
+        {
+          "name": "useTemplateMutations",
+          "kind": "function",
+          "signature": "function useTemplateMutations()"
+        },
+        {
+          "name": "useTemplateBinaryPreview",
+          "kind": "function",
+          "signature": "function useTemplateBinaryPreview()"
+        },
+        {
+          "name": "useTemplatePreview",
+          "kind": "function",
+          "signature": "function useTemplatePreview()"
+        },
+        {
+          "name": "useTemplateVariables",
+          "kind": "function",
+          "signature": "function useTemplateVariables(name: string)"
+        },
+        {
+          "name": "useTemplates",
+          "kind": "function",
+          "signature": "function useTemplates(params?: TemplateListParams)"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-testing",
+      "description": "React test utilities for @granit/* packages — QueryClient factory, wrapper helpers",
+      "exports": [
+        {
+          "name": "createQueryWrapper",
+          "kind": "function",
+          "signature": "function createQueryWrapper(queryClient?: QueryClient)"
+        },
+        {
+          "name": "createTestQueryClient",
+          "kind": "function",
+          "signature": "function createTestQueryClient(): QueryClient"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-timeline",
+      "description": "React bindings for @granit/timeline — TimelineProvider, useTimeline, useTimelineActions, useTimelineFollowers",
+      "exports": [
+        {
+          "name": "TimelineProvider",
+          "kind": "function",
+          "signature": "function TimelineProvider("
+        },
+        {
+          "name": "useTimelineConfig",
+          "kind": "function",
+          "signature": "function useTimelineConfig(): TimelineConfig"
+        },
+        {
+          "name": "TimelineProviderProps",
+          "kind": "interface",
+          "signature": "interface TimelineProviderProps",
+          "members": [
+            {
+              "name": "apiClient",
+              "kind": "property",
+              "signature": "apiClient: AxiosInstance"
+            },
+            {
+              "name": "basePath",
+              "kind": "property",
+              "signature": "basePath?: string"
+            },
+            {
+              "name": "children",
+              "kind": "property",
+              "signature": "children: React.ReactNode"
+            }
+          ]
+        },
+        {
+          "name": "useTimeline",
+          "kind": "function",
+          "signature": "function useTimeline("
+        },
+        {
+          "name": "UseTimelineOptions",
+          "kind": "interface",
+          "signature": "interface UseTimelineOptions",
+          "members": [
+            {
+              "name": "entityType",
+              "kind": "property",
+              "signature": "entityType: string"
+            },
+            {
+              "name": "entityId",
+              "kind": "property",
+              "signature": "entityId: string"
+            },
+            {
+              "name": "pageSize",
+              "kind": "property",
+              "signature": "pageSize?: number"
+            }
+          ]
+        },
+        {
+          "name": "UseTimelineReturn",
+          "kind": "interface",
+          "signature": "interface UseTimelineReturn",
+          "members": [
+            {
+              "name": "entries",
+              "kind": "property",
+              "signature": "entries: readonly TimelineStreamEntry[]"
+            },
+            {
+              "name": "totalCount",
+              "kind": "property",
+              "signature": "totalCount: number | null"
+            },
+            {
+              "name": "loading",
+              "kind": "property",
+              "signature": "loading: boolean"
+            },
+            {
+              "name": "loadingMore",
+              "kind": "property",
+              "signature": "loadingMore: boolean"
+            },
+            {
+              "name": "error",
+              "kind": "property",
+              "signature": "error: Error | null"
+            },
+            {
+              "name": "hasMore",
+              "kind": "property",
+              "signature": "hasMore: boolean"
+            },
+            {
+              "name": "loadMore",
+              "kind": "method",
+              "signature": "loadMore: () => void"
+            },
+            {
+              "name": "refresh",
+              "kind": "method",
+              "signature": "refresh: () => void"
+            },
+            {
+              "name": "addOptimisticEntry",
+              "kind": "method",
+              "signature": "addOptimisticEntry: (entry: TimelineStreamEntry) => void"
+            },
+            {
+              "name": "removeOptimisticEntry",
+              "kind": "method",
+              "signature": "removeOptimisticEntry: (entryId: string) => void"
+            }
+          ]
+        },
+        {
+          "name": "useTimelineActions",
+          "kind": "function",
+          "signature": "function useTimelineActions("
+        },
+        {
+          "name": "useTimelineFollowers",
+          "kind": "function",
+          "signature": "function useTimelineFollowers("
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-tracing",
+      "description": "React bindings for @granit/tracing — TracingProvider, useTracer, useSpan",
+      "exports": [
+        {
+          "name": "TracingProvider",
+          "kind": "function",
+          "signature": "function TracingProvider("
+        },
+        {
+          "name": "useTracer",
+          "kind": "function",
+          "signature": "function useTracer(): Tracer"
+        },
+        {
+          "name": "useSpan",
+          "kind": "function",
+          "signature": "function useSpan(): UseSpanReturn"
+        },
+        {
+          "name": "TracingProviderProps",
+          "kind": "type",
+          "signature": "type TracingProviderProps = { config: TracingConfig; children: React.ReactNode; }"
+        },
+        {
+          "name": "UseSpanReturn",
+          "kind": "type",
+          "signature": "type UseSpanReturn = { /** * Execute a function within a new span. The span is automatically ended * when the function completes (or rejects). Errors are recorded on the span. * * @param name - Span name. * @param fn - Function to execute within the span context. * @returns The return value of `fn`. */ withSpan: <T>(name: string, fn: (span: Span) => T | Promise<T>) => Promise<T>"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-validation",
+      "description": "React hooks for @granit/validation — resolver factory for react-hook-form, useFieldProps",
+      "exports": [
+        {
+          "name": "createConstraintsResolver",
+          "kind": "function",
+          "signature": "function createConstraintsResolver( constraints: SchemaConstraints, t: TranslateFunction ): ConstraintsResolver"
+        },
+        {
+          "name": "ConstraintsResolver",
+          "kind": "type",
+          "signature": "type ConstraintsResolver = ( values: Record<string, unknown>, context: unknown, options: { fields: Record<string, { name: string }> } ) => Promise<{ values: Record<string, unknown>; errors: Record<string, { type: string; message: string }>; }>"
+        },
+        {
+          "name": "TranslateFunction",
+          "kind": "type",
+          "signature": "type TranslateFunction = (key: string, params?: Record<string, unknown>) => string"
+        },
+        {
+          "name": "useFieldProps",
+          "kind": "function",
+          "signature": "function useFieldProps( constraints: SchemaConstraints, fieldName: string, t: TranslateFunction ): FieldPropsResult"
+        },
+        {
+          "name": "FieldPropsResult",
+          "kind": "interface",
+          "signature": "interface FieldPropsResult",
+          "members": []
+        },
+        {
+          "name": "useServerValidation",
+          "kind": "function",
+          "signature": "function useServerValidation(options: UseServerValidationOptions): ServerValidationState"
+        },
+        {
+          "name": "ServerValidationState",
+          "kind": "interface",
+          "signature": "interface ServerValidationState",
+          "members": []
+        },
+        {
+          "name": "UseServerValidationOptions",
+          "kind": "interface",
+          "signature": "interface UseServerValidationOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-webhooks",
+      "description": "React hooks for webhook subscription management — useSubscription, useCreateSubscription, useTestPing, useWebhookStats",
+      "exports": [
+        {
+          "name": "useSubscription",
+          "kind": "function",
+          "signature": "function useSubscription( id: string, options: WebhooksOptions ): UseQueryResult<WebhookSubscriptionResponse>"
+        },
+        {
+          "name": "useRotateSecret",
+          "kind": "function",
+          "signature": "function useRotateSecret( options: WebhooksOptions ): UseMutationResult<WebhookSubscriptionRotateSecretResponse, Error, string>"
+        },
+        {
+          "name": "useTestPing",
+          "kind": "function",
+          "signature": "function useTestPing( options: WebhooksOptions ): UseMutationResult<WebhookSubscriptionTestPingResponse, Error, string>"
+        },
+        {
+          "name": "useDeliveries",
+          "kind": "function",
+          "signature": "function useDeliveries( subscriptionId: string, options: WebhooksOptions ): UseQueryResult<WebhookDeliveryAttemptResponse[]>"
+        },
+        {
+          "name": "useWebhookStats",
+          "kind": "function",
+          "signature": "function useWebhookStats( options: WebhooksOptions ): UseQueryResult<WebhookSubscriptionStatsResponse>"
+        },
+        {
+          "name": "WebhooksOptions",
+          "kind": "interface",
+          "signature": "interface WebhooksOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-workflow",
+      "description": "React bindings for @granit/workflow — WorkflowProvider, useWorkflowStatus, useWorkflowTransition, useWorkflowHistory",
+      "exports": [
+        {
+          "name": "useWorkflowConfig",
+          "kind": "function",
+          "signature": "function useWorkflowConfig(): WorkflowConfig"
+        },
+        {
+          "name": "WorkflowProvider",
+          "kind": "function",
+          "signature": "function WorkflowProvider("
+        },
+        {
+          "name": "WorkflowProviderProps",
+          "kind": "interface",
+          "signature": "interface WorkflowProviderProps",
+          "members": [
+            {
+              "name": "apiClient",
+              "kind": "property",
+              "signature": "apiClient: AxiosInstance"
+            },
+            {
+              "name": "basePath",
+              "kind": "property",
+              "signature": "basePath?: string"
+            },
+            {
+              "name": "children",
+              "kind": "property",
+              "signature": "children: React.ReactNode"
+            }
+          ]
+        },
+        {
+          "name": "useExecuteTransition",
+          "kind": "function",
+          "signature": "function useExecuteTransition( options?: UseExecuteTransitionOptions ): UseExecuteTransitionReturn"
+        },
+        {
+          "name": "useTransitions",
+          "kind": "function",
+          "signature": "function useTransitions("
+        },
+        {
+          "name": "UseTransitionsOptions",
+          "kind": "interface",
+          "signature": "interface UseTransitionsOptions",
+          "members": [
+            {
+              "name": "currentState",
+              "kind": "property",
+              "signature": "currentState: string"
+            }
+          ]
+        },
+        {
+          "name": "UseTransitionsReturn",
+          "kind": "interface",
+          "signature": "interface UseTransitionsReturn",
+          "members": [
+            {
+              "name": "transitions",
+              "kind": "property",
+              "signature": "transitions: TransitionDto[]"
+            },
+            {
+              "name": "loading",
+              "kind": "property",
+              "signature": "loading: boolean"
+            },
+            {
+              "name": "error",
+              "kind": "property",
+              "signature": "error: Error | null"
+            },
+            {
+              "name": "refetch",
+              "kind": "method",
+              "signature": "refetch: () => Promise<void>"
+            }
+          ]
+        },
+        {
+          "name": "useWorkflowHistory",
+          "kind": "function",
+          "signature": "function useWorkflowHistory("
+        },
+        {
+          "name": "useWorkflowStatus",
+          "kind": "function",
+          "signature": "function useWorkflowStatus("
+        },
+        {
+          "name": "useWorkflowTransition",
+          "kind": "function",
+          "signature": "function useWorkflowTransition("
+        }
+      ]
+    },
+    {
+      "name": "@granit/reference-data",
+      "description": "Reference data types — Country and related types mirroring Granit.ReferenceData .NET",
+      "exports": [
+        {
+          "name": "Country",
+          "kind": "interface",
+          "signature": "interface Country",
+          "members": []
+        },
+        {
+          "name": "CountriesListParams",
+          "kind": "type",
+          "signature": "type CountriesListParams = PaginationParams & { readonly search?: string; readonly sortBy?: string; readonly desc?: boolean; readonly region?: string; readonly isActive?: boolean; }"
+        }
+      ]
+    },
+    {
+      "name": "@granit/settings",
+      "description": "User settings hooks and providers",
+      "exports": [
+        {
+          "name": "SETTING_NAMES",
+          "kind": "const",
+          "signature": "const SETTING_NAMES"
+        },
+        {
+          "name": "deleteSetting",
+          "kind": "function",
+          "signature": "async function deleteSetting( client: AxiosInstance, basePath: string, scope: string, name: string ): Promise<void>"
+        },
+        {
+          "name": "fetchSetting",
+          "kind": "function",
+          "signature": "async function fetchSetting( client: AxiosInstance, basePath: string, scope: string, name: string ): Promise<SettingValueResponse>"
+        },
+        {
+          "name": "fetchSettings",
+          "kind": "function",
+          "signature": "async function fetchSettings( client: AxiosInstance, basePath: string, scope: string ): Promise<SettingsMap>"
+        },
+        {
+          "name": "updateSetting",
+          "kind": "function",
+          "signature": "async function updateSetting( client: AxiosInstance, basePath: string, scope: string, name: string, request: UpdateSettingValueRequest ): Promise<void>"
+        }
+      ]
+    },
+    {
+      "name": "@granit/storage",
+      "description": "File upload and storage management hooks",
+      "exports": [
+        {
+          "name": "createStorage",
+          "kind": "function",
+          "signature": "function createStorage<T>(key: string, options?: StorageOptions<T>): TypedStorage<T>"
+        },
+        {
+          "name": "StorageOptions",
+          "kind": "interface",
+          "signature": "interface StorageOptions<T>",
+          "members": [
+            {
+              "name": "serialize",
+              "kind": "method",
+              "signature": "serialize?: (value: T) => string"
+            },
+            {
+              "name": "deserialize",
+              "kind": "method",
+              "signature": "deserialize?: (raw: string) => T"
+            },
+            {
+              "name": "storage",
+              "kind": "property",
+              "signature": "storage?: 'local' | 'session'"
+            }
+          ]
+        },
+        {
+          "name": "TypedStorage",
+          "kind": "interface",
+          "signature": "interface TypedStorage<T>",
+          "members": [
+            {
+              "name": "get",
+              "kind": "method",
+              "signature": "get(): T | null"
+            },
+            {
+              "name": "set",
+              "kind": "method",
+              "signature": "set(value: T): void"
+            },
+            {
+              "name": "remove",
+              "kind": "method",
+              "signature": "remove(): void"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/templating",
+      "description": "Template management types and API functions — mirrors Granit.Templating .NET",
+      "exports": [
+        {
+          "name": "templateKeys",
+          "kind": "const",
+          "signature": "const templateKeys"
+        }
+      ]
+    },
+    {
+      "name": "@granit/testing",
+      "description": "Shared test utilities for @granit/* packages — mock clients, mock loggers, Axios response helpers",
+      "exports": [
+        {
+          "name": "axiosResponse",
+          "kind": "function",
+          "signature": "function axiosResponse<T>(data: T): AxiosResponse<T>"
+        },
+        {
+          "name": "createMockClient",
+          "kind": "function",
+          "signature": "function createMockClient(): AxiosInstance"
+        },
+        {
+          "name": "createMockLogger",
+          "kind": "function",
+          "signature": "function createMockLogger(): MockLogger"
+        },
+        {
+          "name": "MockLogger",
+          "kind": "interface",
+          "signature": "interface MockLogger",
+          "members": [
+            {
+              "name": "debug",
+              "kind": "property",
+              "signature": "debug: Mock"
+            },
+            {
+              "name": "info",
+              "kind": "property",
+              "signature": "info: Mock"
+            },
+            {
+              "name": "warn",
+              "kind": "property",
+              "signature": "warn: Mock"
+            },
+            {
+              "name": "error",
+              "kind": "property",
+              "signature": "error: Mock"
+            },
+            {
+              "name": "child",
+              "kind": "property",
+              "signature": "child: Mock"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/timeline",
+      "description": "Unified activity feed hooks for audit trails",
+      "exports": []
+    },
+    {
+      "name": "@granit/tracing",
+      "description": "OpenTelemetry distributed tracing for the browser",
+      "exports": [
+        {
+          "name": "getTraceContext",
+          "kind": "function",
+          "signature": "function getTraceContext(): TraceContext | undefined"
+        },
+        {
+          "name": "TraceContext",
+          "kind": "type",
+          "signature": "type TraceContext = { traceId: string; spanId: string; }"
+        },
+        {
+          "name": "TracingConfig",
+          "kind": "type",
+          "signature": "type TracingConfig = { /** Application/service name reported in traces. */ serviceName: string; /** Application version reported in traces. */ serviceVersion?: string; /** OTLP exporter configuration. */ exporter: TracingExporterConfig; /** Whether to instrument `fetch()` calls. Default: `true`. */ instrumentFetch?: boolean; /** Whether to instrument `XMLHttpRequest` calls. Default: `true`. */ instrumentXhr?: boolean; /** Whether to instrument document load timing. Default: `true`. */ instrumentDocumentLoad?: boolean; /** Additional OTel instrumentations to register. */ additionalInstrumentations?: Instrumentation[]; }"
+        },
+        {
+          "name": "TracingExporterConfig",
+          "kind": "type",
+          "signature": "type TracingExporterConfig = { /** OTLP HTTP endpoint URL (e.g. `/v1/traces`). */ url: string; /** Optional HTTP headers to attach to export requests. */ headers?: Record<string, string>; }"
+        }
+      ]
+    },
+    {
+      "name": "@granit/utils",
+      "description": "Shared utilities (cn, formatDate, formatNumber, ...)",
+      "exports": []
+    },
+    {
+      "name": "@granit/validation",
+      "description": "OpenAPI constraint extraction, field validation, and input prop generation — mirrors Granit.Validation .NET contract",
+      "exports": [
+        {
+          "name": "VALIDATION_ERROR_CODES",
+          "kind": "const",
+          "signature": "const VALIDATION_ERROR_CODES"
+        },
+        {
+          "name": "ValidationErrorCode",
+          "kind": "type",
+          "signature": "type ValidationErrorCode ="
+        },
+        {
+          "name": "extractConstraints",
+          "kind": "function",
+          "signature": "function extractConstraints(spec: OpenApiSpec, options?: ExtractOptions): SpecConstraints"
+        },
+        {
+          "name": "getInputProps",
+          "kind": "function",
+          "signature": "function getInputProps(constraint: FieldConstraint): InputConstraintProps"
+        },
+        {
+          "name": "validateField",
+          "kind": "function",
+          "signature": "function validateField( value: unknown, constraint: FieldConstraint ): readonly FieldValidationError[]"
+        }
+      ]
+    },
+    {
+      "name": "@granit/webhooks",
+      "description": "Webhook subscription management types and API functions — mirrors Granit.Webhooks .NET contract",
+      "exports": [
+        {
+          "name": "WebhookSubscriptionStatus",
+          "kind": "const",
+          "signature": "const WebhookSubscriptionStatus"
+        },
+        {
+          "name": "webhooksKeys",
+          "kind": "const",
+          "signature": "const webhooksKeys"
+        }
+      ]
+    },
+    {
+      "name": "@granit/workflow",
+      "description": "Workflow lifecycle hooks (status, transitions, history)",
+      "exports": [
+        {
+          "name": "WorkflowHistoryPage",
+          "kind": "type",
+          "signature": "type WorkflowHistoryPage = PagedResult<TransitionHistoryDto>"
+        }
+      ]
+    }
+  ]
+}
