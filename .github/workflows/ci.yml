@@ -157,6 +157,40 @@ jobs:
         run: pnpm audit --audit-level moderate
 
   # ---------------------------------------------------------------------------
+  # FRONT INDEX: generate and commit front-index.json to the branch.
+  # Consumed by the granit-mcp Worker via raw.githubusercontent.com URLs.
+  # ---------------------------------------------------------------------------
+  front-index:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Generate front-index.json
+        run: node scripts/generate-front-index.mjs
+
+      - name: Commit and push front-index.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add front-index.json
+          if git diff --cached --quiet; then
+            echo "No changes to front-index.json"
+          else
+            git commit -m "chore: update front-index.json [skip ci]"
+            git push
+          fi
+
+  # ---------------------------------------------------------------------------
   # BUILD (tsup — develop/main/tags only)
   # ---------------------------------------------------------------------------
   pack:
