@@ -73,6 +73,7 @@ export default defineConfig({
         'packages/@granit/notifications/src/index.ts'
       ),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
+      '@granit/validation': path.resolve(__dirname, 'packages/@granit/validation/src/index.ts'),
       '@granit/react-reference-data': path.resolve(
         __dirname,
         'packages/@granit/react-reference-data/src/index.ts'
@@ -149,6 +150,10 @@ export default defineConfig({
       '@granit/react-querying': path.resolve(
         __dirname,
         'packages/@granit/react-querying/src/index.ts'
+      ),
+      '@granit/react-validation': path.resolve(
+        __dirname,
+        'packages/@granit/react-validation/src/index.ts'
       ),
       '@granit/react-templating': path.resolve(
         __dirname,
