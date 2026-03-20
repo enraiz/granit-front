@@ -1,4 +1,4 @@
-import { validateField } from '@granit/validation';
+import { VALIDATION_ERROR_CODES, validateField } from '@granit/validation';
 
 import type { FieldValidationError, SchemaConstraints } from '@granit/validation';
 
@@ -41,13 +41,17 @@ export function createConstraintsResolver(
 
       if (fieldErrors.length > 0) {
         const first = fieldErrors[0];
-        errors[fieldName] = {
-          type: first.code,
-          message: t(first.code, {
-            ...first.params,
-            nsSeparator: false,
-          } as Record<string, unknown>),
-        };
+        let message = t(first.code, {
+          ...first.params,
+          nsSeparator: false,
+        } as Record<string, unknown>);
+
+        if (constraint.patternHint && first.code === VALIDATION_ERROR_CODES.pattern) {
+          const hint = t(constraint.patternHint, { nsSeparator: false });
+          message = `${message} : ${hint}`;
+        }
+
+        errors[fieldName] = { type: first.code, message };
       }
     }
 

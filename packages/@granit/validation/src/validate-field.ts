@@ -33,7 +33,10 @@ function validateStringConstraints(
   if (constraint.pattern !== undefined && !new RegExp(constraint.pattern).test(strValue)) {
     errors.push({
       code: VALIDATION_ERROR_CODES.pattern,
-      params: { pattern: constraint.pattern },
+      params: {
+        pattern: constraint.pattern,
+        ...(constraint.patternHint !== undefined && { patternHint: constraint.patternHint }),
+      },
     });
   }
 

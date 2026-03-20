@@ -23,7 +23,7 @@ describe('useFieldProps', () => {
 
   it('returns correct inputProps from getInputProps', () => {
     const { result } = renderHook(() => useFieldProps(constraints, 'name', t));
-    expect(result.current.inputProps).toEqual({ required: true, maxLength: 100 });
+    expect(result.current.inputProps).toEqual({ maxLength: 100 });
   });
 
   it('returns serverHint when granitValidator is present', () => {

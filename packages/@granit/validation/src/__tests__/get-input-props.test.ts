@@ -7,24 +7,20 @@ describe('getInputProps', () => {
     expect(getInputProps({})).toEqual({});
   });
 
-  it('sets required: true when constraint.required is true', () => {
-    expect(getInputProps({ required: true })).toEqual({ required: true });
-  });
-
-  it('omits required when constraint.required is false', () => {
-    expect(getInputProps({ required: false })).toEqual({});
+  it('omits required (handled by resolver, not native validation)', () => {
+    expect(getInputProps({ required: true })).toEqual({});
   });
 
   it('maps maxLength directly', () => {
     expect(getInputProps({ maxLength: 255 })).toEqual({ maxLength: 255 });
   });
 
-  it('maps minLength directly', () => {
-    expect(getInputProps({ minLength: 3 })).toEqual({ minLength: 3 });
+  it('omits minLength (triggers native validation tooltip)', () => {
+    expect(getInputProps({ minLength: 3 })).toEqual({});
   });
 
-  it('maps pattern directly', () => {
-    expect(getInputProps({ pattern: '^\\d{5}$' })).toEqual({ pattern: '^\\d{5}$' });
+  it('omits pattern (triggers native validation tooltip)', () => {
+    expect(getInputProps({ pattern: '^\\d{5}$' })).toEqual({});
   });
 
   it('maps format email to type email', () => {
@@ -59,7 +55,7 @@ describe('getInputProps', () => {
     expect(getInputProps({ maximum: 50, exclusiveMaximum: 100 })).toEqual({ max: 50 });
   });
 
-  it('combines all constraint properties into a single props object', () => {
+  it('only includes maxLength, type, min, max — never required, minLength, or pattern', () => {
     expect(
       getInputProps({
         required: true,
@@ -71,10 +67,7 @@ describe('getInputProps', () => {
         maximum: 100,
       })
     ).toEqual({
-      required: true,
       maxLength: 255,
-      minLength: 1,
-      pattern: '^[a-z]+$',
       type: 'email',
       min: 0,
       max: 100,

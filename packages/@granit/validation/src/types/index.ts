@@ -31,6 +31,7 @@ export interface OpenApiSchemaProperty {
   readonly exclusiveMinimum?: number;
   readonly exclusiveMaximum?: number;
   readonly 'x-granit-validator'?: string;
+  readonly 'x-granit-pattern-hint'?: string;
 }
 
 /** A $ref or inline schema within allOf. */
@@ -50,6 +51,7 @@ export interface FieldConstraint {
   readonly maxLength?: number;
   readonly minLength?: number;
   readonly pattern?: string;
+  readonly patternHint?: string;
   readonly format?: string;
   readonly minimum?: number;
   readonly maximum?: number;
@@ -86,13 +88,13 @@ export interface FieldValidationError {
 // Input prop types
 // ---------------------------------------------------------------------------
 
-/** HTML input attributes derived from a FieldConstraint. */
+/**
+ * HTML input attributes derived from a FieldConstraint.
+ * Only includes attributes that don't trigger native browser validation tooltips.
+ */
 export interface InputConstraintProps {
   readonly type?: string;
-  readonly required?: boolean;
   readonly maxLength?: number;
-  readonly minLength?: number;
-  readonly pattern?: string;
   readonly min?: number;
   readonly max?: number;
 }

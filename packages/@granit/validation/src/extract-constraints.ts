@@ -101,6 +101,8 @@ function buildFieldConstraint(prop: OpenApiSchemaProperty, isRequired: boolean):
   if (prop.exclusiveMaximum !== undefined) constraint['exclusiveMaximum'] = prop.exclusiveMaximum;
   if (prop['x-granit-validator'] !== undefined)
     constraint['granitValidator'] = prop['x-granit-validator'];
+  if (prop['x-granit-pattern-hint'] !== undefined)
+    constraint['patternHint'] = prop['x-granit-pattern-hint'];
 
   return constraint as FieldConstraint;
 }

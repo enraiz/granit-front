@@ -7,10 +7,12 @@ import type { InputConstraintProps, SchemaConstraints } from '@granit/validation
 export interface FieldPropsResult {
   readonly inputProps: InputConstraintProps;
   readonly serverHint?: string;
+  readonly patternHint?: string;
 }
 
 /**
- * Returns HTML input props and an optional server-only hint for a constrained field.
+ * Returns HTML input props, an optional server-only hint, and an optional
+ * pattern hint for a constrained field.
  * Memoized — the returned object is referentially stable when inputs are unchanged.
  */
 export function useFieldProps(
@@ -28,7 +30,14 @@ export function useFieldProps(
     const serverHint = constraint.granitValidator
       ? t(constraint.granitValidator, { nsSeparator: false })
       : undefined;
+    const patternHint = constraint.patternHint
+      ? t(constraint.patternHint, { nsSeparator: false })
+      : undefined;
 
-    return serverHint === undefined ? { inputProps } : { inputProps, serverHint };
+    return {
+      inputProps,
+      ...(serverHint !== undefined && { serverHint }),
+      ...(patternHint !== undefined && { patternHint }),
+    };
   }, [constraints, fieldName, t]);
 }

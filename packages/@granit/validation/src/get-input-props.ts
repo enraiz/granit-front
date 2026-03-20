@@ -6,25 +6,22 @@ const FORMAT_TO_TYPE: Readonly<Record<string, string>> = {
 
 /**
  * Converts a FieldConstraint to HTML input attributes.
- * Exclusive bounds are adjusted by +1/-1 since HTML min/max are inclusive.
+ *
+ * Only attributes that provide useful UX without conflicting with
+ * react-hook-form's resolver are included:
+ * - maxLength: prevents typing beyond the limit (no native tooltip)
+ * - min/max: constrains number spinners
+ * - type: sets input mode (email, number)
+ *
+ * Intentionally omitted (they trigger native browser validation tooltips
+ * that conflict with the resolver's localized error messages):
+ * - required, minLength, pattern
  */
 export function getInputProps(constraint: FieldConstraint): InputConstraintProps {
   const props: Record<string, unknown> = {};
 
-  if (constraint.required) {
-    props['required'] = true;
-  }
-
   if (constraint.maxLength !== undefined) {
     props['maxLength'] = constraint.maxLength;
-  }
-
-  if (constraint.minLength !== undefined) {
-    props['minLength'] = constraint.minLength;
-  }
-
-  if (constraint.pattern !== undefined) {
-    props['pattern'] = constraint.pattern;
   }
 
   if (constraint.format !== undefined && FORMAT_TO_TYPE[constraint.format]) {
