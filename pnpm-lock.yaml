@@ -946,6 +946,9 @@ importers:
       '@granit/validation':
         specifier: workspace:*
         version: link:../validation
+      axios:
+        specifier: '>=1.0.0'
+        version: 1.13.6
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -1076,6 +1079,10 @@ importers:
         version: 3.5.0
 
   packages/@granit/validation:
+    dependencies:
+      axios:
+        specifier: '>=1.0.0'
+        version: 1.13.6
     devDependencies:
       '@granit/testing':
         specifier: workspace:*
