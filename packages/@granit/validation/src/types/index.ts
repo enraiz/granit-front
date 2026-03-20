@@ -98,3 +98,15 @@ export interface InputConstraintProps {
   readonly min?: number;
   readonly max?: number;
 }
+
+// ---------------------------------------------------------------------------
+// Server validation types (re-exported from server-validation.ts)
+// ---------------------------------------------------------------------------
+
+export type {
+  ServerValidationBatchRequest,
+  ServerValidationBatchResponse,
+  ServerValidationRequest,
+  ServerValidationResult,
+  ValidationStatus,
+} from './server-validation.js';
