@@ -7,6 +7,17 @@ export type {
   IdentityUserPage,
 } from './identity-user.js';
 
+export type { IdentityRole } from './identity-role.js';
+export type { IdentityGroup } from './identity-group.js';
+export type { IdentityDeviceActivity, IdentitySession } from './identity-session.js';
+export type { IdentityPasswordChangedAtResponse } from './identity-password.js';
+export type {
+  IdentitySetTemporaryPasswordRequest,
+  IdentityUserCreateRequest,
+  IdentityUserSetEnabledRequest,
+  IdentityUserUpdateRequest,
+} from './identity-provider-requests.js';
+
 /** Response from `GET /identity/users/capabilities`. */
 export interface IdentityProviderCapabilities {
   /** Display name of the active identity provider (e.g. "Keycloak", "Entra ID"). */

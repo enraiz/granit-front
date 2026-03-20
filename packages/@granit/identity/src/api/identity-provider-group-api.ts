@@ -1,0 +1,63 @@
+import type { IdentityGroup } from '../types/index.js';
+import type { AxiosInstance } from 'axios';
+
+/**
+ * List all groups from the identity provider.
+ *
+ * `GET {basePath}/groups`
+ */
+export async function fetchGroups(
+  client: AxiosInstance,
+  basePath: string
+): Promise<readonly IdentityGroup[]> {
+  const response = await client.get<readonly IdentityGroup[]>(`${basePath}/groups`);
+  return response.data;
+}
+
+/**
+ * List groups a user belongs to.
+ *
+ * `GET {basePath}/users/{userId}/groups`
+ */
+export async function fetchUserGroups(
+  client: AxiosInstance,
+  basePath: string,
+  userId: string
+): Promise<readonly IdentityGroup[]> {
+  const response = await client.get<readonly IdentityGroup[]>(
+    `${basePath}/users/${encodeURIComponent(userId)}/groups`
+  );
+  return response.data;
+}
+
+/**
+ * Add a user to a group (idempotent).
+ *
+ * `PUT {basePath}/users/{userId}/groups/{groupId}`
+ */
+export async function addUserToGroup(
+  client: AxiosInstance,
+  basePath: string,
+  userId: string,
+  groupId: string
+): Promise<void> {
+  await client.put(
+    `${basePath}/users/${encodeURIComponent(userId)}/groups/${encodeURIComponent(groupId)}`
+  );
+}
+
+/**
+ * Remove a user from a group (idempotent).
+ *
+ * `DELETE {basePath}/users/{userId}/groups/{groupId}`
+ */
+export async function removeUserFromGroup(
+  client: AxiosInstance,
+  basePath: string,
+  userId: string,
+  groupId: string
+): Promise<void> {
+  await client.delete(
+    `${basePath}/users/${encodeURIComponent(userId)}/groups/${encodeURIComponent(groupId)}`
+  );
+}

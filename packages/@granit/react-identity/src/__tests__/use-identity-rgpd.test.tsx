@@ -48,12 +48,12 @@ describe('useIdentityRgpd', () => {
     result.current.erase.mutate('user-1');
 
     await waitFor(() => expect(result.current.erase.isSuccess).toBe(true));
-    expect(client.delete).toHaveBeenCalledWith('/identity/users/user-1/erase');
+    expect(client.delete).toHaveBeenCalledWith('/identity/users/user-1');
   });
 
   it('pseudonymize mutation pseudonymizes user cache', async () => {
     const client = createMockClient();
-    vi.mocked(client.post).mockResolvedValue({ data: undefined });
+    vi.mocked(client.patch).mockResolvedValue({ data: undefined });
 
     const { result } = renderHook(() => useIdentityRgpd(), {
       wrapper: createWrapper(client),
@@ -62,7 +62,7 @@ describe('useIdentityRgpd', () => {
     result.current.pseudonymize.mutate('user-1');
 
     await waitFor(() => expect(result.current.pseudonymize.isSuccess).toBe(true));
-    expect(client.post).toHaveBeenCalledWith('/identity/users/user-1/pseudonymize');
+    expect(client.patch).toHaveBeenCalledWith('/identity/users/user-1/pseudonymize');
   });
 
   it('uses custom basePath', async () => {
@@ -76,7 +76,7 @@ describe('useIdentityRgpd', () => {
     result.current.erase.mutate('user-1');
 
     await waitFor(() => expect(result.current.erase.isSuccess).toBe(true));
-    expect(client.delete).toHaveBeenCalledWith('/custom/path/user-1/erase');
+    expect(client.delete).toHaveBeenCalledWith('/custom/path/user-1');
   });
 
   it('exposes error state on erase failure', async () => {
@@ -95,7 +95,7 @@ describe('useIdentityRgpd', () => {
 
   it('exposes error state on pseudonymize failure', async () => {
     const client = createMockClient();
-    vi.mocked(client.post).mockRejectedValue(new Error('Not found'));
+    vi.mocked(client.patch).mockRejectedValue(new Error('Not found'));
 
     const { result } = renderHook(() => useIdentityRgpd(), {
       wrapper: createWrapper(client),

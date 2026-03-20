@@ -165,13 +165,13 @@ describe('identity-user-cache-api', () => {
   });
 
   describe('eraseUserCache', () => {
-    it('should DELETE {basePath}/{userId}/erase', async () => {
+    it('should DELETE {basePath}/{userId}', async () => {
       const client = createMockClient();
       vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
       await eraseUserCache(client, basePath, 'user-1');
 
-      expect(client.delete).toHaveBeenCalledWith(`${basePath}/user-1/erase`);
+      expect(client.delete).toHaveBeenCalledWith(`${basePath}/user-1`);
     });
 
     it('should encode userId with special characters', async () => {
@@ -181,28 +181,28 @@ describe('identity-user-cache-api', () => {
       await eraseUserCache(client, basePath, 'user/special@id');
 
       expect(client.delete).toHaveBeenCalledWith(
-        `${basePath}/${encodeURIComponent('user/special@id')}/erase`
+        `${basePath}/${encodeURIComponent('user/special@id')}`
       );
     });
   });
 
   describe('pseudonymizeUserCache', () => {
-    it('should POST {basePath}/{userId}/pseudonymize', async () => {
+    it('should PATCH {basePath}/{userId}/pseudonymize', async () => {
       const client = createMockClient();
-      vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
+      vi.mocked(client.patch).mockResolvedValue(axiosResponse(undefined));
 
       await pseudonymizeUserCache(client, basePath, 'user-1');
 
-      expect(client.post).toHaveBeenCalledWith(`${basePath}/user-1/pseudonymize`);
+      expect(client.patch).toHaveBeenCalledWith(`${basePath}/user-1/pseudonymize`);
     });
 
     it('should encode userId with special characters', async () => {
       const client = createMockClient();
-      vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
+      vi.mocked(client.patch).mockResolvedValue(axiosResponse(undefined));
 
       await pseudonymizeUserCache(client, basePath, 'user/special@id');
 
-      expect(client.post).toHaveBeenCalledWith(
+      expect(client.patch).toHaveBeenCalledWith(
         `${basePath}/${encodeURIComponent('user/special@id')}/pseudonymize`
       );
     });

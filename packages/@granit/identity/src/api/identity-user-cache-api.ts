@@ -105,25 +105,25 @@ export async function syncStaleUsers(
 /**
  * Erase a user's cached data (hard delete).
  *
- * `DELETE {basePath}/{userId}/erase`
+ * `DELETE {basePath}/{userId}`
  */
 export async function eraseUserCache(
   client: AxiosInstance,
   basePath: string,
   userId: string
 ): Promise<void> {
-  await client.delete(`${basePath}/${encodeURIComponent(userId)}/erase`);
+  await client.delete(`${basePath}/${encodeURIComponent(userId)}`);
 }
 
 /**
  * Pseudonymize a user's cached data (GDPR right to be forgotten).
  *
- * `POST {basePath}/{userId}/pseudonymize`
+ * `PATCH {basePath}/{userId}/pseudonymize`
  */
 export async function pseudonymizeUserCache(
   client: AxiosInstance,
   basePath: string,
   userId: string
 ): Promise<void> {
-  await client.post(`${basePath}/${encodeURIComponent(userId)}/pseudonymize`);
+  await client.patch(`${basePath}/${encodeURIComponent(userId)}/pseudonymize`);
 }

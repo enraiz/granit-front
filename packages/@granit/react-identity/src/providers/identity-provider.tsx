@@ -6,8 +6,10 @@ import type { ReactNode } from 'react';
 /** Configuration for the identity provider. */
 export interface IdentityConfig {
   readonly client: AxiosInstance;
-  /** Base path prefix before `/capabilities` (default: `/identity/users`). */
+  /** Base path for user cache endpoints (default: `/identity/users`). */
   readonly basePath?: string;
+  /** Base path for identity provider endpoints (default: `/identity/provider`). */
+  readonly providerBasePath?: string;
   readonly queryKeyPrefix?: readonly string[];
 }
 
