@@ -57,8 +57,29 @@ export function buildChatStreamUrl(
   basePath: string,
   workspaceName: string
 ): string {
-  const clean = baseUrl.replace(/\/+$/, '');
+  let clean = baseUrl;
+  while (clean.endsWith('/')) {
+    clean = clean.slice(0, -1);
+  }
   return `${clean}${basePath}/ai/chat/${encodeURIComponent(workspaceName)}/stream`;
+}
+
+/** Result of parsing a single SSE data line. */
+type ParsedLine = { kind: 'chunk'; content: string } | { kind: 'done' } | { kind: 'skip' };
+
+/** Parses a single SSE line into a typed result. */
+function parseSseLine(line: string): ParsedLine {
+  if (!line.startsWith('data: ')) return { kind: 'skip' };
+
+  const data = line.slice(6).trim();
+  if (data === AI_STREAM_DONE_MARKER) return { kind: 'done' };
+
+  try {
+    const parsed = JSON.parse(data) as AIChatStreamChunk;
+    return { kind: 'chunk', content: parsed.content };
+  } catch {
+    return { kind: 'skip' };
+  }
 }
 
 /**
@@ -97,12 +118,9 @@ export async function* chatStream(
     throw new Error(`AI chat stream failed: ${response.status} ${response.statusText}`);
   }
 
-  const body = response.body;
-  if (!body) {
-    return;
-  }
+  if (!response.body) return;
 
-  const reader = body.getReader();
+  const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
 
@@ -116,17 +134,9 @@ export async function* chatStream(
       buffer = lines.pop()!;
 
       for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-
-        const data = line.slice(6).trim();
-        if (data === AI_STREAM_DONE_MARKER) return;
-
-        try {
-          const parsed = JSON.parse(data) as AIChatStreamChunk;
-          yield parsed.content;
-        } catch {
-          // Skip malformed SSE events.
-        }
+        const result = parseSseLine(line);
+        if (result.kind === 'done') return;
+        if (result.kind === 'chunk') yield result.content;
       }
     }
   } finally {
