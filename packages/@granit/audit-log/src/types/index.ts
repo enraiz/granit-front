@@ -1,3 +1,5 @@
+import type { PagedResult, PaginationParams } from '@granit/querying';
+
 // ---------------------------------------------------------------------------
 // Audit log types — mirrors Granit.AuditLog .NET contracts
 // ---------------------------------------------------------------------------
@@ -64,9 +66,7 @@ export type AuditLogEntryDetail = {
 };
 
 /** Query parameters for listing audit log entries. */
-export type AuditLogListParams = {
-  readonly page?: number;
-  readonly pageSize?: number;
+export type AuditLogListParams = PaginationParams & {
   readonly userId?: string;
   readonly entityType?: string;
   readonly entityId?: string;
@@ -76,9 +76,4 @@ export type AuditLogListParams = {
 };
 
 /** Paginated response for audit log entries. */
-export type AuditLogPage = {
-  readonly items: readonly AuditLogEntry[];
-  readonly totalCount: number | null;
-  readonly hasMore: boolean;
-  readonly nextCursor: string | null;
-};
+export type AuditLogPage = PagedResult<AuditLogEntry>;

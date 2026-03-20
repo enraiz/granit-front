@@ -1,32 +1,32 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseQueryParams, serializeQueryParams } from '../api/query-param-serializer.js';
+import { parseQueryRequest, serializeQueryRequest } from '../api/query-param-serializer.js';
 
-import type { QueryParams } from '../types/query-params.js';
+import type { QueryRequest } from '../types/query-params.js';
 
-describe('serializeQueryParams', () => {
+describe('serializeQueryRequest', () => {
   it('serializes empty params to empty string', () => {
-    expect(serializeQueryParams({})).toBe('');
+    expect(serializeQueryRequest({})).toBe('');
   });
 
   it('serializes page and pageSize', () => {
-    const result = serializeQueryParams({ page: 2, pageSize: 50 });
+    const result = serializeQueryRequest({ page: 2, pageSize: 50 });
     expect(result).toContain('page=2');
     expect(result).toContain('pageSize=50');
   });
 
   it('serializes search', () => {
-    const result = serializeQueryParams({ search: 'Dupont' });
+    const result = serializeQueryRequest({ search: 'Dupont' });
     expect(result).toContain('search=Dupont');
   });
 
   it('serializes cursor', () => {
-    const result = serializeQueryParams({ cursor: 'abc123' });
+    const result = serializeQueryRequest({ cursor: 'abc123' });
     expect(result).toContain('cursor=abc123');
   });
 
   it('serializes filters with field.operator syntax', () => {
-    const result = serializeQueryParams({
+    const result = serializeQueryRequest({
       filters: [
         { field: 'status', operator: 'Eq', value: 'active' },
         { field: 'age', operator: 'Gte', value: '18' },
@@ -38,7 +38,7 @@ describe('serializeQueryParams', () => {
   });
 
   it('serializes sort with descending prefix', () => {
-    const result = serializeQueryParams({
+    const result = serializeQueryRequest({
       sort: [
         { field: 'createdAt', direction: 'desc' },
         { field: 'lastName', direction: 'asc' },
@@ -48,7 +48,7 @@ describe('serializeQueryParams', () => {
   });
 
   it('serializes presets by group', () => {
-    const result = serializeQueryParams({
+    const result = serializeQueryRequest({
       presets: { status: ['Active', 'Pending'] },
     });
     const params = new URLSearchParams(result);
@@ -56,26 +56,36 @@ describe('serializeQueryParams', () => {
   });
 
   it('skips empty preset groups', () => {
-    const result = serializeQueryParams({
+    const result = serializeQueryRequest({
       presets: { status: [] },
     });
     expect(result).not.toContain('presets');
   });
 
   it('serializes quickFilters as comma-separated', () => {
-    const result = serializeQueryParams({
+    const result = serializeQueryRequest({
       quickFilters: ['MyItems', 'Unread'],
     });
     expect(result).toContain('quickFilters=MyItems%2CUnread');
   });
 
   it('serializes groupBy', () => {
-    const result = serializeQueryParams({ groupBy: 'status' });
+    const result = serializeQueryRequest({ groupBy: 'status' });
     expect(result).toContain('groupBy=status');
   });
 
+  it('serializes skipTotalCount when true', () => {
+    const result = serializeQueryRequest({ skipTotalCount: true });
+    expect(result).toContain('skipTotalCount=true');
+  });
+
+  it('omits skipTotalCount when false or undefined', () => {
+    expect(serializeQueryRequest({ skipTotalCount: false })).not.toContain('skipTotalCount');
+    expect(serializeQueryRequest({})).not.toContain('skipTotalCount');
+  });
+
   it('serializes a full query', () => {
-    const params: QueryParams = {
+    const params: QueryRequest = {
       page: 1,
       pageSize: 20,
       search: 'test',
@@ -85,7 +95,7 @@ describe('serializeQueryParams', () => {
       quickFilters: ['MyItems'],
       groupBy: 'status',
     };
-    const result = serializeQueryParams(params);
+    const result = serializeQueryRequest(params);
     const urlParams = new URLSearchParams(result);
     expect(urlParams.get('page')).toBe('1');
     expect(urlParams.get('pageSize')).toBe('20');
@@ -98,30 +108,30 @@ describe('serializeQueryParams', () => {
   });
 });
 
-describe('parseQueryParams', () => {
+describe('parseQueryRequest', () => {
   it('parses empty string', () => {
-    const result = parseQueryParams('');
+    const result = parseQueryRequest('');
     expect(result).toEqual({});
   });
 
   it('parses page and pageSize', () => {
-    const result = parseQueryParams('page=2&pageSize=50');
+    const result = parseQueryRequest('page=2&pageSize=50');
     expect(result.page).toBe(2);
     expect(result.pageSize).toBe(50);
   });
 
   it('parses search', () => {
-    const result = parseQueryParams('search=Dupont');
+    const result = parseQueryRequest('search=Dupont');
     expect(result.search).toBe('Dupont');
   });
 
   it('parses cursor', () => {
-    const result = parseQueryParams('cursor=abc123');
+    const result = parseQueryRequest('cursor=abc123');
     expect(result.cursor).toBe('abc123');
   });
 
   it('parses filters', () => {
-    const result = parseQueryParams('filter[status.Eq]=active&filter[age.Gte]=18');
+    const result = parseQueryRequest('filter[status.Eq]=active&filter[age.Gte]=18');
     expect(result.filters).toEqual([
       { field: 'status', operator: 'Eq', value: 'active' },
       { field: 'age', operator: 'Gte', value: '18' },
@@ -129,7 +139,7 @@ describe('parseQueryParams', () => {
   });
 
   it('parses sort with descending prefix', () => {
-    const result = parseQueryParams('sort=-createdAt,lastName');
+    const result = parseQueryRequest('sort=-createdAt,lastName');
     expect(result.sort).toEqual([
       { field: 'createdAt', direction: 'desc' },
       { field: 'lastName', direction: 'asc' },
@@ -137,22 +147,32 @@ describe('parseQueryParams', () => {
   });
 
   it('parses presets', () => {
-    const result = parseQueryParams('presets[status]=Active,Pending');
+    const result = parseQueryRequest('presets[status]=Active,Pending');
     expect(result.presets).toEqual({ status: ['Active', 'Pending'] });
   });
 
   it('parses quickFilters', () => {
-    const result = parseQueryParams('quickFilters=MyItems,Unread');
+    const result = parseQueryRequest('quickFilters=MyItems,Unread');
     expect(result.quickFilters).toEqual(['MyItems', 'Unread']);
   });
 
   it('parses groupBy', () => {
-    const result = parseQueryParams('groupBy=status');
+    const result = parseQueryRequest('groupBy=status');
     expect(result.groupBy).toBe('status');
   });
 
+  it('parses skipTotalCount', () => {
+    const result = parseQueryRequest('skipTotalCount=true');
+    expect(result.skipTotalCount).toBe(true);
+  });
+
+  it('ignores skipTotalCount when not true', () => {
+    const result = parseQueryRequest('skipTotalCount=false');
+    expect(result.skipTotalCount).toBeUndefined();
+  });
+
   it('round-trips a full query', () => {
-    const original: QueryParams = {
+    const original: QueryRequest = {
       page: 1,
       pageSize: 20,
       search: 'test',
@@ -162,8 +182,8 @@ describe('parseQueryParams', () => {
       quickFilters: ['MyItems'],
       groupBy: 'status',
     };
-    const serialized = serializeQueryParams(original);
-    const parsed = parseQueryParams(serialized);
+    const serialized = serializeQueryRequest(original);
+    const parsed = parseQueryRequest(serialized);
     expect(parsed.page).toBe(original.page);
     expect(parsed.pageSize).toBe(original.pageSize);
     expect(parsed.search).toBe(original.search);

@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------------
-// Query param serializer — QueryParams → URL search string
+// Query param serializer — QueryRequest → URL search string
 // ---------------------------------------------------------------------------
 
-import type { QueryParams } from '../types/query-params.js';
+import type { QueryRequest } from '../types/query-params.js';
 
 /**
- * Serialize QueryParams to a URL search string (without leading '?').
+ * Serialize QueryRequest to a URL search string (without leading '?').
  *
  * Format:
  * ```
@@ -17,22 +17,23 @@ import type { QueryParams } from '../types/query-params.js';
  *   &groupBy=field
  * ```
  */
-function serializeScalarParams(entries: [string, string][], params: QueryParams): void {
+function serializeScalarParams(entries: [string, string][], params: QueryRequest): void {
   if (params.page != null) entries.push(['page', String(params.page)]);
   if (params.pageSize != null) entries.push(['pageSize', String(params.pageSize)]);
   if (params.cursor) entries.push(['cursor', params.cursor]);
   if (params.search) entries.push(['search', params.search]);
   if (params.groupBy) entries.push(['groupBy', params.groupBy]);
+  if (params.skipTotalCount) entries.push(['skipTotalCount', 'true']);
 }
 
-function serializeFilters(entries: [string, string][], params: QueryParams): void {
+function serializeFilters(entries: [string, string][], params: QueryRequest): void {
   if (!params.filters) return;
   for (const filter of params.filters) {
     entries.push([`filter[${filter.field}.${filter.operator}]`, filter.value]);
   }
 }
 
-function serializeSortAndPresets(entries: [string, string][], params: QueryParams): void {
+function serializeSortAndPresets(entries: [string, string][], params: QueryRequest): void {
   if (params.sort && params.sort.length > 0) {
     const sortStr = params.sort
       .map((s) => (s.direction === 'desc' ? `-${s.field}` : s.field))
@@ -53,7 +54,7 @@ function serializeSortAndPresets(entries: [string, string][], params: QueryParam
   }
 }
 
-export function serializeQueryParams(params: QueryParams): string {
+export function serializeQueryRequest(params: QueryRequest): string {
   const entries: [string, string][] = [];
   serializeScalarParams(entries, params);
   serializeFilters(entries, params);
@@ -62,11 +63,11 @@ export function serializeQueryParams(params: QueryParams): string {
 }
 
 /**
- * Parse a URL search string back into QueryParams.
+ * Parse a URL search string back into QueryRequest.
  *
- * Inverse of {@link serializeQueryParams}.
+ * Inverse of {@link serializeQueryRequest}.
  */
-export function parseQueryParams(search: string): QueryParams {
+export function parseQueryRequest(search: string): QueryRequest {
   const url = new URLSearchParams(search);
   const params: {
     page?: number;
@@ -78,6 +79,7 @@ export function parseQueryParams(search: string): QueryParams {
     presets?: Record<string, string[]>;
     quickFilters?: string[];
     groupBy?: string;
+    skipTotalCount?: boolean;
   } = {};
 
   const pageStr = url.get('page');
@@ -136,5 +138,8 @@ export function parseQueryParams(search: string): QueryParams {
   const groupBy = url.get('groupBy');
   if (groupBy) params.groupBy = groupBy;
 
-  return params as QueryParams;
+  const skipTotalCount = url.get('skipTotalCount');
+  if (skipTotalCount === 'true') params.skipTotalCount = true;
+
+  return params as QueryRequest;
 }

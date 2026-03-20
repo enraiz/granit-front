@@ -17,6 +17,8 @@
     "@granit/testing": "workspace:*"
   },
   "peerDependencies": {
+    "@granit/api-client": "workspace:*",
+    "@granit/querying": "workspace:*",
     "@granit/utils": "workspace:*",
     "axios": "*"
   },

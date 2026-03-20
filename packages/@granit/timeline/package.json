@@ -18,6 +18,7 @@
     "@granit/testing": "workspace:*"
   },
   "peerDependencies": {
+    "@granit/querying": "workspace:*",
     "axios": "*"
   },
   "publishConfig": {

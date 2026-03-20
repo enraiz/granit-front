@@ -3,22 +3,14 @@ import type {
   ExportFieldDescriptor,
 } from '../types/export-definition.js';
 import type { CreateExportJobRequest, ExportJobResponse } from '../types/export-job.js';
+import type { PaginatedResponse } from '@granit/api-client';
+import type { PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
-/** Paginated response envelope. Mirrors `@granit/api-client` PaginatedResponse. */
-interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 /** Query parameters for listing export jobs. */
-export interface ExportJobListParams {
+export type ExportJobListParams = PaginationParams & {
   readonly status?: string;
-  readonly page?: number;
-  readonly pageSize?: number;
-}
+};
 
 /**
  * Fetches all registered export definitions.

@@ -1,5 +1,4 @@
+import type { PaginationParams } from '@granit/querying';
+
 /** Pagination parameters for listing background jobs. Mirrors .NET query params. */
-export interface BackgroundJobListParams {
-  readonly page?: number;
-  readonly pageSize?: number;
-}
+export type BackgroundJobListParams = PaginationParams;

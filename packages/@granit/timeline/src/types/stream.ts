@@ -1,4 +1,5 @@
 import type { TimelineEntryTypeValue } from './entry-type.js';
+import type { PagedResult } from '@granit/querying';
 
 // --- API response types ---
 
@@ -15,9 +16,4 @@ export interface TimelineStreamEntry {
   attachmentBlobIds: string[];
 }
 
-export interface TimelineStreamPage {
-  items: TimelineStreamEntry[];
-  totalCount: number;
-  /** Opaque cursor for next page (always null for offset pagination). */
-  nextCursor: string | null;
-}
+export type TimelineStreamPage = PagedResult<TimelineStreamEntry>;

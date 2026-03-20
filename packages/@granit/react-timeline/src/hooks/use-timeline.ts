@@ -16,7 +16,7 @@ export interface UseTimelineOptions {
 
 export interface UseTimelineReturn {
   entries: readonly TimelineStreamEntry[];
-  totalCount: number;
+  totalCount: number | null;
   loading: boolean;
   loadingMore: boolean;
   error: Error | null;

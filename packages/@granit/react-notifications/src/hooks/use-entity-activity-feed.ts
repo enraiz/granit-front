@@ -15,7 +15,7 @@ export interface UseEntityActivityFeedOptions {
 
 export interface UseEntityActivityFeedReturn {
   entries: readonly ActivityFeedEntryDto[];
-  totalCount: number;
+  totalCount: number | null;
   loading: boolean;
   loadingMore: boolean;
   error: Error | null;
