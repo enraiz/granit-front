@@ -2,6 +2,8 @@
 // Query param serializer — QueryRequest → URL search string
 // ---------------------------------------------------------------------------
 
+import { validateQueryRequest } from '../validation/validate-query-request.js';
+
 import type { QueryRequest } from '../types/query-params.js';
 
 /**
@@ -55,10 +57,11 @@ function serializeSortAndPresets(entries: [string, string][], params: QueryReque
 }
 
 export function serializeQueryRequest(params: QueryRequest): string {
+  const validated = validateQueryRequest(params);
   const entries: [string, string][] = [];
-  serializeScalarParams(entries, params);
-  serializeFilters(entries, params);
-  serializeSortAndPresets(entries, params);
+  serializeScalarParams(entries, validated);
+  serializeFilters(entries, validated);
+  serializeSortAndPresets(entries, validated);
   return new URLSearchParams(entries).toString();
 }
 

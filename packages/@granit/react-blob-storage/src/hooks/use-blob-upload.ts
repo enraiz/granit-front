@@ -46,6 +46,57 @@ export interface UseBlobUploadReturn {
   readonly reset: () => void;
 }
 
+interface XhrUploadParams {
+  readonly url: string;
+  readonly method: string;
+  readonly headers: Record<string, string>;
+  readonly body: File;
+  readonly onProgress?: (percent: number) => void;
+}
+
+function uploadViaXhr(
+  params: XhrUploadParams,
+  abortRef: React.RefObject<XMLHttpRequest | null>
+): Promise<void> {
+  const { url, method, headers, body, onProgress } = params;
+
+  return new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    abortRef.current = xhr;
+
+    xhr.upload.addEventListener('progress', (event) => {
+      if (event.lengthComputable) {
+        onProgress?.(Math.round((event.loaded / event.total) * 100));
+      }
+    });
+
+    xhr.addEventListener('load', () => {
+      abortRef.current = null;
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve();
+      } else {
+        reject(new Error(`Upload failed with status ${xhr.status}`));
+      }
+    });
+
+    xhr.addEventListener('error', () => {
+      abortRef.current = null;
+      reject(new Error('Upload failed: network error'));
+    });
+
+    xhr.addEventListener('abort', () => {
+      abortRef.current = null;
+      reject(new Error('Upload aborted'));
+    });
+
+    xhr.open(method, url);
+    for (const [key, value] of Object.entries(headers)) {
+      xhr.setRequestHeader(key, value);
+    }
+    xhr.send(body);
+  });
+}
+
 const IDLE_STATE: BlobUploadState = {
   phase: 'idle',
   progress: 0,
@@ -112,45 +163,19 @@ export function useBlobUpload(options: BlobStorageOptions): UseBlobUploadReturn 
         setState((prev) => ({ ...prev, phase: 'uploading', blobId: ticket.blobId }));
 
         // Step 2: Upload file to pre-signed URL via XMLHttpRequest (for progress)
-        await new Promise<void>((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          abortRef.current = xhr;
-
-          xhr.upload.addEventListener('progress', (event) => {
-            if (event.lengthComputable) {
-              const percent = Math.round((event.loaded / event.total) * 100);
+        await uploadViaXhr(
+          {
+            url: ticket.uploadUrl,
+            method: ticket.httpMethod,
+            headers: ticket.requiredHeaders,
+            body: file,
+            onProgress: (percent) => {
               setState((prev) => ({ ...prev, progress: percent }));
               onProgress?.(percent);
-            }
-          });
-
-          xhr.addEventListener('load', () => {
-            abortRef.current = null;
-            if (xhr.status >= 200 && xhr.status < 300) {
-              resolve();
-            } else {
-              reject(new Error(`Upload failed with status ${xhr.status}`));
-            }
-          });
-
-          xhr.addEventListener('error', () => {
-            abortRef.current = null;
-            reject(new Error('Upload failed: network error'));
-          });
-
-          xhr.addEventListener('abort', () => {
-            abortRef.current = null;
-            reject(new Error('Upload aborted'));
-          });
-
-          xhr.open(ticket.httpMethod, ticket.uploadUrl);
-
-          for (const [key, value] of Object.entries(ticket.requiredHeaders)) {
-            xhr.setRequestHeader(key, value);
-          }
-
-          xhr.send(file);
-        });
+            },
+          },
+          abortRef
+        );
 
         // Step 3: Confirm upload
         setState((prev) => ({ ...prev, phase: 'confirming', progress: 100 }));

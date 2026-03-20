@@ -18,5 +18,11 @@ export type {
 } from './types/index.js';
 
 // API
-export { executeTransition, fetchHistory, fetchStatus } from './api/workflow-api.js';
+export {
+  executeStateMachineTransition,
+  executeTransition,
+  fetchHistory,
+  fetchStatus,
+  fetchTransitions,
+} from './api/workflow-api.js';
 export type { WorkflowHistoryPage } from './api/workflow-api.js';
