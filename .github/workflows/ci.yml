@@ -157,37 +157,26 @@ jobs:
         run: pnpm audit --audit-level moderate
 
   # ---------------------------------------------------------------------------
-  # FRONT INDEX: generate and commit front-index.json to the branch.
-  # Consumed by the granit-mcp Worker via raw.githubusercontent.com URLs.
+  # FRONT INDEX: validate that .mcp-front-index.json is up to date.
+  # The file is generated locally via pre-commit hook and committed with code.
+  # This job fails the CI if someone forgot to regenerate after changing exports.
   # ---------------------------------------------------------------------------
   front-index:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+      - name: Regenerate .mcp-front-index.json
+        run: python3 scripts/generate-front-index.py
 
-      - name: Generate front-index.json
-        run: node scripts/generate-front-index.mjs
-
-      - name: Commit and push front-index.json
+      - name: Check for drift
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add front-index.json
-          if git diff --cached --quiet; then
-            echo "No changes to front-index.json"
-          else
-            git commit -m "chore: update front-index.json [skip ci]"
-            git push
+          if ! git diff --quiet .mcp-front-index.json; then
+            echo "::error::.mcp-front-index.json is out of date. Run 'python3 scripts/generate-front-index.py' and commit."
+            git diff .mcp-front-index.json
+            exit 1
           fi
 
   # ---------------------------------------------------------------------------
