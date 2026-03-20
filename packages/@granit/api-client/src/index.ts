@@ -15,6 +15,12 @@ export interface ApiClientConfig {
 // Generic response types (REST APIs)
 // ---------------------------------------------------------------------------
 
+/**
+ * @deprecated Use `PagedResult<T>` from `@granit/querying` instead.
+ * This type does not match the backend `PagedResult<T>` contract
+ * (uses `total` instead of `totalCount`, includes `page`/`pageSize`
+ * which are request params, not response fields).
+ */
 export interface PaginatedResponse<T> {
   items: T[];
   total: number;
