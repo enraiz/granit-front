@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-21T09:48:03.438367+00:00",
+  "generatedAt": "2026-03-21T15:53:25.873425+00:00",
   "repo": "granit-front",
   "packages": [
     {
@@ -358,77 +358,6 @@
           "name": "LOCALE_STORAGE_KEY",
           "kind": "const",
           "signature": "const LOCALE_STORAGE_KEY"
-        },
-        {
-          "name": "ApplicationLocalizationDto",
-          "kind": "interface",
-          "signature": "interface ApplicationLocalizationDto",
-          "members": [
-            {
-              "name": "cultureName",
-              "kind": "property",
-              "signature": "cultureName: string"
-            },
-            {
-              "name": "resources",
-              "kind": "property",
-              "signature": "resources: Record<string, Record<string, string>>"
-            },
-            {
-              "name": "languages",
-              "kind": "property",
-              "signature": "languages: LanguageInfo[]"
-            }
-          ]
-        },
-        {
-          "name": "LanguageInfo",
-          "kind": "interface",
-          "signature": "interface LanguageInfo",
-          "members": [
-            {
-              "name": "cultureName",
-              "kind": "property",
-              "signature": "cultureName: string"
-            },
-            {
-              "name": "displayName",
-              "kind": "property",
-              "signature": "displayName: string"
-            },
-            {
-              "name": "flagIcon",
-              "kind": "property",
-              "signature": "flagIcon?: string"
-            },
-            {
-              "name": "isDefault",
-              "kind": "property",
-              "signature": "isDefault: boolean"
-            }
-          ]
-        },
-        {
-          "name": "LocalizationConfig",
-          "kind": "interface",
-          "signature": "interface LocalizationConfig",
-          "members": [
-            {
-              "name": "storageKey",
-              "kind": "property",
-              "signature": "storageKey?: string"
-            },
-            {
-              "name": "defaultNS",
-              "kind": "property",
-              "signature": "defaultNS?: string"
-            },
-            {
-              "name": "plugins",
-              "kind": "property",
-              "signature": "plugins?: Module[]"
-            }
-          ]
         }
       ]
     },
@@ -660,6 +589,11 @@
           "signature": "function urlBase64ToUint8Array(base64String: string): Uint8Array"
         }
       ]
+    },
+    {
+      "name": "@granit/privacy",
+      "description": "GDPR privacy types and API — data export, deletion, legal agreements — mirrors Granit.Privacy .NET contract",
+      "exports": []
     },
     {
       "name": "@granit/querying",
@@ -1285,6 +1219,11 @@
           "kind": "interface",
           "signature": "interface UseDeleteFeatureOverrideReturn",
           "members": []
+        },
+        {
+          "name": "ToggleFeatureFlagVariables",
+          "kind": "type",
+          "signature": "type ToggleFeatureFlagVariables = { readonly key: string; readonly enabled: boolean; }"
         }
       ]
     },
@@ -1343,6 +1282,11 @@
           "name": "RoleMutationVariables",
           "kind": "type",
           "signature": "type RoleMutationVariables = { readonly userId: string; readonly roleName: string; }"
+        },
+        {
+          "name": "SetUserRolesVariables",
+          "kind": "type",
+          "signature": "type SetUserRolesVariables = { readonly userId: string; readonly roles: readonly string[]; }"
         },
         {
           "name": "GroupMutationVariables",
@@ -1700,6 +1644,29 @@
       ]
     },
     {
+      "name": "@granit/react-privacy",
+      "description": "React hooks for GDPR privacy — data export, deletion, legal agreements",
+      "exports": [
+        {
+          "name": "PrivacyConfig",
+          "kind": "interface",
+          "signature": "interface PrivacyConfig",
+          "members": []
+        },
+        {
+          "name": "PrivacyProviderProps",
+          "kind": "interface",
+          "signature": "interface PrivacyProviderProps",
+          "members": []
+        },
+        {
+          "name": "useRequestDeletion",
+          "kind": "function",
+          "signature": "function useRequestDeletion(): UseMutationResult<void, Error, PrivacyDeletionRequest>"
+        }
+      ]
+    },
+    {
       "name": "@granit/react-querying",
       "description": "",
       "exports": [
@@ -1875,6 +1842,21 @@
           "kind": "interface",
           "signature": "interface UseUpdateSettingReturn",
           "members": []
+        },
+        {
+          "name": "useAdminAppSettings",
+          "kind": "function",
+          "signature": "function useAdminAppSettings(options?:"
+        },
+        {
+          "name": "useSaveAdminAppSettings",
+          "kind": "function",
+          "signature": "function useSaveAdminAppSettings(): UseMutationResult< void, Error, SaveAppSettingsVariables >"
+        },
+        {
+          "name": "SaveAppSettingsVariables",
+          "kind": "type",
+          "signature": "type SaveAppSettingsVariables = ReadonlyArray<{ key: string; value: string }>"
         }
       ]
     },
@@ -2230,6 +2212,16 @@
           "signature": "function useRetryDelivery( options: RetryDeliveryOptions ): UseMutationResult<void, Error,"
         },
         {
+          "name": "useEventTypes",
+          "kind": "function",
+          "signature": "function useEventTypes( options: EventTypesOptions ): UseQueryResult<WebhookEventTypeResponse[]>"
+        },
+        {
+          "name": "useWebhookConfig",
+          "kind": "function",
+          "signature": "function useWebhookConfig( options: WebhookConfigOptions ): UseQueryResult<WebhookModuleConfig>"
+        },
+        {
           "name": "useWebhookStats",
           "kind": "function",
           "signature": "function useWebhookStats( options: WebhooksOptions ): UseQueryResult<WebhookSubscriptionStatsResponse>"
@@ -2238,6 +2230,18 @@
           "name": "WebhooksOptions",
           "kind": "interface",
           "signature": "interface WebhooksOptions",
+          "members": []
+        },
+        {
+          "name": "EventTypesOptions",
+          "kind": "interface",
+          "signature": "interface EventTypesOptions",
+          "members": []
+        },
+        {
+          "name": "WebhookConfigOptions",
+          "kind": "interface",
+          "signature": "interface WebhookConfigOptions",
           "members": []
         },
         {
@@ -2337,16 +2341,6 @@
           "name": "useWorkflowHistory",
           "kind": "function",
           "signature": "function useWorkflowHistory("
-        },
-        {
-          "name": "useWorkflowStatus",
-          "kind": "function",
-          "signature": "function useWorkflowStatus("
-        },
-        {
-          "name": "useWorkflowTransition",
-          "kind": "function",
-          "signature": "function useWorkflowTransition("
         }
       ]
     },
@@ -2375,26 +2369,6 @@
           "name": "SETTING_NAMES",
           "kind": "const",
           "signature": "const SETTING_NAMES"
-        },
-        {
-          "name": "deleteSetting",
-          "kind": "function",
-          "signature": "async function deleteSetting( client: AxiosInstance, basePath: string, scope: string, name: string ): Promise<void>"
-        },
-        {
-          "name": "fetchSetting",
-          "kind": "function",
-          "signature": "async function fetchSetting( client: AxiosInstance, basePath: string, scope: string, name: string ): Promise<SettingValueResponse>"
-        },
-        {
-          "name": "fetchSettings",
-          "kind": "function",
-          "signature": "async function fetchSettings( client: AxiosInstance, basePath: string, scope: string ): Promise<SettingsMap>"
-        },
-        {
-          "name": "updateSetting",
-          "kind": "function",
-          "signature": "async function updateSetting( client: AxiosInstance, basePath: string, scope: string, name: string, request: UpdateSettingValueRequest ): Promise<void>"
         }
       ]
     },

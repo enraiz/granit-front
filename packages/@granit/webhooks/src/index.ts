@@ -3,6 +3,8 @@ export { WebhookSubscriptionStatus } from './types/index.js';
 
 export type {
   WebhookDeliveryAttemptResponse,
+  WebhookEventTypeResponse,
+  WebhookModuleConfig,
   WebhookSubscriptionCreateRequest,
   WebhookSubscriptionCreatedResponse,
   WebhookSubscriptionDeactivateRequest,
@@ -23,7 +25,9 @@ export {
   createSubscription,
   deactivateSubscription,
   deleteSubscription,
+  getConfig,
   getDeliveries,
+  getEventTypes,
   getStats,
   getSubscription,
   retryDelivery,

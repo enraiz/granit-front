@@ -17,3 +17,10 @@ export { useSetFeatureOverride } from './hooks/use-set-feature-override.js';
 export type { UseSetFeatureOverrideReturn } from './hooks/use-set-feature-override.js';
 export { useDeleteFeatureOverride } from './hooks/use-delete-feature-override.js';
 export type { UseDeleteFeatureOverrideReturn } from './hooks/use-delete-feature-override.js';
+
+// Hooks — Admin
+export {
+  useAdminFeatureFlags,
+  useToggleAdminFeatureFlag,
+} from './hooks/use-admin-feature-flags.js';
+export type { ToggleFeatureFlagVariables } from './hooks/use-admin-feature-flags.js';

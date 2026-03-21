@@ -8,7 +8,11 @@ export type IdentityUser = {
   readonly firstName: string | null;
   readonly lastName: string | null;
   readonly enabled: boolean;
+  readonly emailVerified?: boolean;
+  readonly roles?: readonly string[];
   readonly attributes: Readonly<Record<string, string>> | null;
+  readonly createdAt?: string;
+  readonly lastLoginAt?: string | null;
 };
 
 export type IdentityUserListParams = PaginationParams & {

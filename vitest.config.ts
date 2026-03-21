@@ -217,6 +217,7 @@ export default defineConfig({
         '**/src/index.ts',
         '**/__tests__/setup.ts',
         '**/__tests__/test-utils.tsx',
+        '**/api-client/src/test-utils.ts',
       ],
       thresholds: {
         lines: 80,

@@ -3,9 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   executeStateMachineTransition,
-  executeTransition,
   fetchHistory,
-  fetchStatus,
   fetchTransitions,
 } from '../api/workflow-api.js';
 
@@ -19,43 +17,6 @@ describe('workflow api', () => {
   const basePath = '/api/v1/workflow';
   const entityType = 'Document';
   const entityId = 'doc-1';
-
-  it('should call GET with correct URL for fetchStatus', async () => {
-    const client = createMockClient();
-    const status: WorkflowStatus = {
-      currentState: 'Draft',
-      availableTransitions: [
-        { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
-      ],
-    };
-    vi.mocked(client.get).mockResolvedValue(axiosResponse(status));
-
-    const result = await fetchStatus(client, basePath, entityType, entityId);
-
-    expect(client.get).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/transitions');
-    expect(result).toEqual(status);
-  });
-
-  it('should call POST with correct URL and body for executeTransition', async () => {
-    const client = createMockClient();
-    const transitionResult: WorkflowTransitionResult = {
-      succeeded: true,
-      resultingState: 'Published',
-      outcome: 'Completed',
-    };
-    vi.mocked(client.post).mockResolvedValue(axiosResponse(transitionResult));
-
-    const result = await executeTransition(client, basePath, entityType, entityId, {
-      targetState: 'Published',
-      comment: 'Ready to publish',
-    });
-
-    expect(client.post).toHaveBeenCalledWith('/api/v1/workflow/Document/doc-1/transition', {
-      targetState: 'Published',
-      comment: 'Ready to publish',
-    });
-    expect(result).toEqual(transitionResult);
-  });
 
   it('should call GET with correct URL for fetchHistory', async () => {
     const client = createMockClient();

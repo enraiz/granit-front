@@ -1,4 +1,5 @@
 import type {
+  AdminAppSetting,
   SettingValueResponse,
   SettingsMap,
   UpdateSettingValueRequest,
@@ -63,4 +64,32 @@ export async function deleteSetting(
   name: string
 ): Promise<void> {
   await client.delete(`${basePath}/settings/${scope}/${encodeURIComponent(name)}`);
+}
+
+// ── Admin endpoints ─────────────────────────────────────────────────────────
+
+/**
+ * Fetch all application settings with admin metadata.
+ *
+ * `GET {basePath}/admin/config/settings`
+ */
+export async function fetchAdminAppSettings(
+  client: AxiosInstance,
+  basePath: string
+): Promise<AdminAppSetting[]> {
+  const response = await client.get<AdminAppSetting[]>(`${basePath}/admin/config/settings`);
+  return response.data;
+}
+
+/**
+ * Batch-update application settings.
+ *
+ * `PUT {basePath}/admin/config/settings`
+ */
+export async function saveAdminAppSettings(
+  client: AxiosInstance,
+  basePath: string,
+  settings: ReadonlyArray<{ key: string; value: string }>
+): Promise<void> {
+  await client.put(`${basePath}/admin/config/settings`, settings);
 }

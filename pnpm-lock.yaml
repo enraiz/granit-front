@@ -369,6 +369,16 @@ importers:
         specifier: workspace:*
         version: link:../testing
 
+  packages/@granit/privacy:
+    dependencies:
+      axios:
+        specifier: '*'
+        version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
+
   packages/@granit/querying:
     dependencies:
       '@granit/utils':
@@ -745,6 +755,28 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+
+  packages/@granit/react-privacy:
+    dependencies:
+      '@granit/privacy':
+        specifier: workspace:*
+        version: link:../privacy
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.90.21(react@19.2.4)
+      axios:
+        specifier: '*'
+        version: 1.13.6
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+    devDependencies:
+      '@granit/react-testing':
+        specifier: workspace:*
+        version: link:../react-testing
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-querying:
     dependencies:

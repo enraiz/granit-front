@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useMobilePush } from '../hooks/use-mobile-push.js';
 
@@ -20,9 +20,12 @@ vi.mock('@capacitor/push-notifications', () => ({
   },
 }));
 
+const mockRegisterDeviceToken = vi.fn().mockResolvedValue(undefined);
+const mockUnregisterDeviceToken = vi.fn().mockResolvedValue(undefined);
+
 vi.mock('@granit/notifications-mobile-push', () => ({
-  registerDeviceToken: vi.fn().mockResolvedValue(undefined),
-  unregisterDeviceToken: vi.fn().mockResolvedValue(undefined),
+  registerDeviceToken: (...args: unknown[]) => mockRegisterDeviceToken(...args),
+  unregisterDeviceToken: (...args: unknown[]) => mockUnregisterDeviceToken(...args),
 }));
 
 function createMockAxios(): AxiosInstance {
@@ -46,6 +49,10 @@ describe('useMobilePush', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockAddListener.mockResolvedValue({ remove: vi.fn() });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should initialize with default state', () => {
@@ -79,6 +86,112 @@ describe('useMobilePush', () => {
     expect(result.current.isRegistered).toBe(false);
   });
 
+  it('should register successfully when permission is granted', async () => {
+    mockCheckPermissions.mockResolvedValue({ receive: 'granted' });
+    mockRegister.mockResolvedValue(undefined);
+
+    // Simulate PushNotifications.addListener('registration', ...) firing with a token
+    mockAddListener.mockImplementation((event: string, callback: (data: unknown) => void) => {
+      if (event === 'registration') {
+        // Fire the callback async to simulate native token arrival
+        setTimeout(() => callback({ value: 'device-token-123' }), 0);
+      }
+      return Promise.resolve({ remove: vi.fn() });
+    });
+
+    const config = createConfig();
+    const { result } = renderHook(() => useMobilePush(config));
+
+    await act(async () => {
+      await result.current.register();
+    });
+
+    expect(result.current.isRegistered).toBe(true);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
+    expect(mockRegisterDeviceToken).toHaveBeenCalledWith(config.apiClient, '/api/v1', {
+      token: 'device-token-123',
+      platform: 'android',
+    });
+  });
+
+  it('should skip requestPermissions when already granted', async () => {
+    mockCheckPermissions.mockResolvedValue({ receive: 'granted' });
+    mockRegister.mockResolvedValue(undefined);
+
+    mockAddListener.mockImplementation((event: string, callback: (data: unknown) => void) => {
+      if (event === 'registration') {
+        setTimeout(() => callback({ value: 'token-456' }), 0);
+      }
+      return Promise.resolve({ remove: vi.fn() });
+    });
+
+    const { result } = renderHook(() => useMobilePush(createConfig()));
+
+    await act(async () => {
+      await result.current.register();
+    });
+
+    expect(mockRequestPermissions).not.toHaveBeenCalled();
+    expect(result.current.isRegistered).toBe(true);
+  });
+
+  it('should handle registration error from native layer', async () => {
+    mockCheckPermissions.mockResolvedValue({ receive: 'granted' });
+    mockRegister.mockResolvedValue(undefined);
+
+    mockAddListener.mockImplementation((event: string, callback: (data: unknown) => void) => {
+      if (event === 'registrationError') {
+        setTimeout(() => callback({ error: 'FCM registration failed' }), 0);
+      }
+      return Promise.resolve({ remove: vi.fn() });
+    });
+
+    const { result } = renderHook(() => useMobilePush(createConfig()));
+
+    await act(async () => {
+      await result.current.register();
+    });
+
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('FCM registration failed');
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('should unregister successfully when token exists', async () => {
+    // First register to get a token
+    mockCheckPermissions.mockResolvedValue({ receive: 'granted' });
+    mockRegister.mockResolvedValue(undefined);
+    mockAddListener.mockImplementation((event: string, callback: (data: unknown) => void) => {
+      if (event === 'registration') {
+        setTimeout(() => callback({ value: 'token-789' }), 0);
+      }
+      return Promise.resolve({ remove: vi.fn() });
+    });
+
+    const config = createConfig({ basePath: '/custom' });
+    const { result } = renderHook(() => useMobilePush(config));
+
+    await act(async () => {
+      await result.current.register();
+    });
+    expect(result.current.isRegistered).toBe(true);
+
+    // Now unregister
+    await act(async () => {
+      await result.current.unregister();
+    });
+
+    expect(result.current.isRegistered).toBe(false);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
+    expect(mockUnregisterDeviceToken).toHaveBeenCalledWith(
+      config.apiClient,
+      '/custom',
+      'token-789'
+    );
+  });
+
   it('should handle unregister when no token exists', async () => {
     const { result } = renderHook(() => useMobilePush(createConfig()));
 
@@ -88,12 +201,41 @@ describe('useMobilePush', () => {
 
     expect(result.current.isRegistered).toBe(false);
     expect(result.current.error).toBeNull();
+    expect(mockUnregisterDeviceToken).not.toHaveBeenCalled();
+  });
+
+  it('should handle unregister error', async () => {
+    // Register first
+    mockCheckPermissions.mockResolvedValue({ receive: 'granted' });
+    mockRegister.mockResolvedValue(undefined);
+    mockAddListener.mockImplementation((event: string, callback: (data: unknown) => void) => {
+      if (event === 'registration') {
+        setTimeout(() => callback({ value: 'token-err' }), 0);
+      }
+      return Promise.resolve({ remove: vi.fn() });
+    });
+
+    const { result } = renderHook(() => useMobilePush(createConfig()));
+
+    await act(async () => {
+      await result.current.register();
+    });
+
+    // Fail unregister
+    mockUnregisterDeviceToken.mockRejectedValueOnce(new Error('Server error'));
+
+    await act(async () => {
+      await result.current.unregister();
+    });
+
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('Server error');
+    expect(result.current.loading).toBe(false);
   });
 
   it('should use default basePath', () => {
     const { result } = renderHook(() => useMobilePush(createConfig()));
 
-    // Hook initializes without error using default basePath
     expect(result.current.error).toBeNull();
   });
 
@@ -101,5 +243,18 @@ describe('useMobilePush', () => {
     const { result } = renderHook(() => useMobilePush(createConfig({ basePath: '/custom/api' })));
 
     expect(result.current.error).toBeNull();
+  });
+
+  it('should wrap non-Error thrown values', async () => {
+    mockCheckPermissions.mockRejectedValueOnce('string error');
+
+    const { result } = renderHook(() => useMobilePush(createConfig()));
+
+    await act(async () => {
+      await result.current.register();
+    });
+
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('string error');
   });
 });

@@ -26,7 +26,6 @@ export {
   eraseUserCache,
   getCacheStats,
   getUserById,
-  pseudonymizeUserCache,
   searchUsers,
   syncAllUsers,
   syncStaleUsers,
@@ -48,6 +47,7 @@ export {
   fetchRoles,
   fetchUserRoles,
   removeRole,
+  setUserRoles,
 } from './api/identity-provider-role-api.js';
 export {
   addUserToGroup,

@@ -31,7 +31,7 @@ export async function markAsRead(
   basePath: string,
   notificationId: string
 ): Promise<UserNotification> {
-  const { data } = await client.patch<UserNotification>(
+  const { data } = await client.post<UserNotification>(
     buildUrl(basePath, 'notifications', notificationId, 'read')
   );
   return data;
@@ -47,7 +47,7 @@ export async function markAllAsRead(client: AxiosInstance, basePath: string): Pr
 
 export async function fetchUnreadCount(client: AxiosInstance, basePath: string): Promise<number> {
   const { data } = await client.get<{ count: number }>(
-    buildUrl(basePath, 'notifications', 'unread-count')
+    buildUrl(basePath, 'notifications', 'unread', 'count')
   );
   return data.count;
 }
@@ -64,7 +64,7 @@ export async function fetchEntityActivityFeed(
   params: PaginationParams = {}
 ): Promise<ActivityFeedPage> {
   const { data } = await client.get<ActivityFeedPage>(
-    buildUrl(basePath, 'activity-feed', entityType, entityId),
+    buildUrl(basePath, 'notifications', 'entity', entityType, entityId),
     { params }
   );
   return data;
@@ -79,7 +79,7 @@ export async function fetchPreferences(
   basePath: string
 ): Promise<NotificationPreference[]> {
   const { data } = await client.get<NotificationPreference[]>(
-    buildUrl(basePath, 'notification-preferences')
+    buildUrl(basePath, 'notifications', 'preferences')
   );
   return data;
 }
@@ -90,7 +90,7 @@ export async function updatePreference(
   preference: NotificationPreference
 ): Promise<NotificationPreference> {
   const { data } = await client.put<NotificationPreference>(
-    buildUrl(basePath, 'notification-preferences', preference.notificationType),
+    buildUrl(basePath, 'notifications', 'preferences'),
     preference
   );
   return data;

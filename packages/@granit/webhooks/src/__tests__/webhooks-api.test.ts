@@ -215,7 +215,7 @@ describe('webhooks-api', () => {
   // ── Deliveries ────────────────────────────────────────────────────────────
 
   describe('getDeliveries', () => {
-    it('sends GET to /{id}/deliveries', async () => {
+    it('sends GET to /deliveries/query with subscriptionId param', async () => {
       const client = createMockClient();
       const response: WebhookDeliveryAttemptResponse[] = [
         {
@@ -235,9 +235,11 @@ describe('webhooks-api', () => {
       ];
       vi.mocked(client.get).mockResolvedValueOnce({ data: response });
 
-      const result = await getDeliveries(client, BASE, 'sub-001');
+      const result = await getDeliveries(client, '/api/v1/webhooks', { subscriptionId: 'sub-001' });
 
-      expect(client.get).toHaveBeenCalledWith(`${BASE}/sub-001/deliveries`);
+      expect(client.get).toHaveBeenCalledWith('/api/v1/webhooks/deliveries/query', {
+        params: { subscriptionId: 'sub-001' },
+      });
       expect(result).toEqual(response);
     });
   });

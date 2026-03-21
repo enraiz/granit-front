@@ -43,3 +43,15 @@ export interface FeatureValueResponse {
 export interface SetFeatureOverrideRequest {
   readonly value: string;
 }
+
+// ── Admin types ─────────────────────────────────────────────────────────────
+
+/** Admin-scoped feature flag with audit metadata. */
+export interface AdminFeatureFlag {
+  readonly key: string;
+  readonly label: string;
+  readonly description: string;
+  readonly enabled: boolean;
+  readonly lastModified: string;
+  readonly modifiedBy: string;
+}

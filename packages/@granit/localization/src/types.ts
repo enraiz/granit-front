@@ -15,6 +15,27 @@ export interface ApplicationLocalizationDto {
   languages: LanguageInfo[];
 }
 
+// ── Admin types ─────────────────────────────────────────────────────────────
+
+/** Admin-scoped language with enable/disable capability. */
+export interface AdminLanguage extends LanguageInfo {
+  isEnabled: boolean;
+  parentCulture?: string;
+}
+
+/** Localization override record for admin translation management. */
+export interface LocalizationOverride {
+  readonly id: string;
+  readonly resourceName: string;
+  readonly cultureName: string;
+  readonly key: string;
+  readonly value: string;
+  readonly createdAt: string;
+  readonly createdBy: string;
+  readonly lastModifiedAt: string | null;
+  readonly lastModifiedBy: string | null;
+}
+
 export interface LocalizationConfig {
   /** localStorage key for locale persistence (default: 'locale' → dd:locale). */
   storageKey?: string;

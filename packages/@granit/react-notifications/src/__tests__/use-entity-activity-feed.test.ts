@@ -148,7 +148,7 @@ describe('useEntityActivityFeed', () => {
 
     // Should call with default pageSize (20)
     expect(client.get).toHaveBeenCalledWith(
-      expect.stringContaining('activity-feed/Patient/p-1'),
+      expect.stringContaining('notifications/entity/Patient/p-1'),
       expect.objectContaining({ params: expect.objectContaining({ pageSize: 20 }) })
     );
   });

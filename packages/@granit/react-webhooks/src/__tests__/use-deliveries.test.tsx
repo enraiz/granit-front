@@ -60,7 +60,9 @@ describe('useDeliveries', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.get).toHaveBeenCalledWith('/api/v1/webhooks/subscriptions/sub-001/deliveries');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/webhooks/deliveries/query', {
+      params: { subscriptionId: 'sub-001' },
+    });
     expect(result.current.data).toEqual(mockDeliveries);
   });
 
@@ -86,7 +88,9 @@ describe('useDeliveries', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.get).toHaveBeenCalledWith('/api/v2/webhooks/sub-001/deliveries');
+    expect(client.get).toHaveBeenCalledWith('/api/v2/webhooks/deliveries/query', {
+      params: { subscriptionId: 'sub-001' },
+    });
   });
 
   it('should handle fetch error', async () => {
