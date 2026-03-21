@@ -1,5 +1,7 @@
 import type {
   WebhookDeliveryAttemptResponse,
+  WebhookEventTypeResponse,
+  WebhookModuleConfig,
   WebhookSubscriptionCreateRequest,
   WebhookSubscriptionCreatedResponse,
   WebhookSubscriptionDeactivateRequest,
@@ -157,6 +159,36 @@ export async function testPing(
   const { data } = await client.post<WebhookSubscriptionTestPingResponse>(
     `${basePath}/${encodeURIComponent(id)}/test-ping`
   );
+  return data;
+}
+
+/**
+ * Get all registered webhook event types.
+ *
+ * `GET {basePath}/event-types`
+ *
+ * @param basePath - The webhooks root path (e.g. `/api/v1/webhooks`), **not** the subscriptions path.
+ */
+export async function getEventTypes(
+  client: AxiosInstance,
+  basePath: string
+): Promise<WebhookEventTypeResponse[]> {
+  const { data } = await client.get<WebhookEventTypeResponse[]>(`${basePath}/event-types`);
+  return data;
+}
+
+/**
+ * Get webhook module configuration.
+ *
+ * `GET {basePath}/config`
+ *
+ * @param basePath - The webhooks root path (e.g. `/api/v1/webhooks`), **not** the subscriptions path.
+ */
+export async function getConfig(
+  client: AxiosInstance,
+  basePath: string
+): Promise<WebhookModuleConfig> {
+  const { data } = await client.get<WebhookModuleConfig>(`${basePath}/config`);
   return data;
 }
 

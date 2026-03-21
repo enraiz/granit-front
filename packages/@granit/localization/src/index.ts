@@ -3,4 +3,18 @@ export { resolveInitialLocale } from './resolve-initial-locale.js';
 export { applyTranslations } from './apply-translations.js';
 export { LOCALE_STORAGE_KEY } from './constants.js';
 
-export type { ApplicationLocalizationDto, LanguageInfo, LocalizationConfig } from './types.js';
+export type {
+  AdminLanguage,
+  ApplicationLocalizationDto,
+  LanguageInfo,
+  LocalizationConfig,
+  LocalizationOverride,
+} from './types.js';
+
+// API — Admin
+export {
+  deleteLocalizationOverride,
+  fetchLanguages,
+  setLocalizationOverride,
+  updateLanguageStatus,
+} from './api/localization-admin-api.js';

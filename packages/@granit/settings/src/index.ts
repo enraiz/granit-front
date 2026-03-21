@@ -1,5 +1,6 @@
 // Types
 export type {
+  AdminAppSetting,
   SettingScope,
   SettingValueResponse,
   SettingsMap,
@@ -10,4 +11,11 @@ export type {
 export { SETTING_NAMES } from './constants.js';
 
 // API
-export { deleteSetting, fetchSetting, fetchSettings, updateSetting } from './api/settings-api.js';
+export {
+  deleteSetting,
+  fetchAdminAppSettings,
+  fetchSetting,
+  fetchSettings,
+  saveAdminAppSettings,
+  updateSetting,
+} from './api/settings-api.js';

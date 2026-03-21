@@ -80,6 +80,23 @@ export interface WebhookSubscriptionStatsResponse {
   readonly avgResponseTimeMsLast24h: number;
 }
 
+// ── Event type discovery ──────────────────────────────────────────────────
+
+/** Registered webhook event type descriptor. Sorted by category, then eventType. */
+export interface WebhookEventTypeResponse {
+  readonly eventType: string;
+  readonly displayName: string | null;
+  readonly description: string | null;
+  readonly category: string | null;
+}
+
+// ── Module configuration ──────────────────────────────────────────────────
+
+/** Response from `GET /config`. */
+export interface WebhookModuleConfig {
+  readonly storePayload: boolean;
+}
+
 // ── Delivery audit trail ────────────────────────────────────────────────────
 
 /** Immutable delivery attempt record (ISO 27001 audit trail). */

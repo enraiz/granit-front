@@ -1,5 +1,6 @@
 // Types
 export type {
+  AdminFeatureFlag,
   FeatureDefinition,
   FeatureGroup,
   FeatureValueResponse,
@@ -16,8 +17,10 @@ export { FEATURE_VALUE_TYPES } from './constants.js';
 // API
 export {
   deleteFeatureOverride,
+  fetchAdminFeatureFlags,
   fetchFeatureDefinitions,
   fetchFeatureValue,
   fetchFeatureValues,
   setFeatureOverride,
+  toggleAdminFeatureFlag,
 } from './api/features-api.js';

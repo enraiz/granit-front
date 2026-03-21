@@ -1,4 +1,5 @@
 import type {
+  AdminFeatureFlag,
   FeatureGroup,
   FeatureValueResponse,
   FeatureValuesMap,
@@ -73,4 +74,33 @@ export async function deleteFeatureOverride(
   name: string
 ): Promise<void> {
   await client.delete(`${basePath}/features/overrides/${encodeURIComponent(name)}`);
+}
+
+// ── Admin endpoints ─────────────────────────────────────────────────────────
+
+/**
+ * Fetch all feature flags with admin metadata.
+ *
+ * `GET {basePath}/admin/config/flags`
+ */
+export async function fetchAdminFeatureFlags(
+  client: AxiosInstance,
+  basePath: string
+): Promise<AdminFeatureFlag[]> {
+  const response = await client.get<AdminFeatureFlag[]>(`${basePath}/admin/config/flags`);
+  return response.data;
+}
+
+/**
+ * Toggle a feature flag on or off.
+ *
+ * `PATCH {basePath}/admin/config/flags/{key}`
+ */
+export async function toggleAdminFeatureFlag(
+  client: AxiosInstance,
+  basePath: string,
+  key: string,
+  enabled: boolean
+): Promise<void> {
+  await client.patch(`${basePath}/admin/config/flags/${encodeURIComponent(key)}`, { enabled });
 }

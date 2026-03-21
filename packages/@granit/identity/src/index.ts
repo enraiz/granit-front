@@ -48,6 +48,7 @@ export {
   fetchRoles,
   fetchUserRoles,
   removeRole,
+  setUserRoles,
 } from './api/identity-provider-role-api.js';
 export {
   addUserToGroup,
