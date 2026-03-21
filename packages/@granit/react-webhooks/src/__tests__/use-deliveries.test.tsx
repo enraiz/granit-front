@@ -32,6 +32,7 @@ const mockDeliveries: WebhookDeliveryAttemptResponse[] = [
     durationMs: 142,
     errorMessage: null,
     isSuccess: true,
+    payload: null,
   },
   {
     deliveryId: 'del-002',
@@ -45,6 +46,7 @@ const mockDeliveries: WebhookDeliveryAttemptResponse[] = [
     durationMs: 3021,
     errorMessage: 'Internal Server Error',
     isSuccess: false,
+    payload: null,
   },
 ];
 

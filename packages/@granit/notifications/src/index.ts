@@ -1,15 +1,15 @@
 // Types
 export type {
-  ActivityFeedEntryDto,
-  ActivityFeedPageDto,
+  ActivityFeedEntry,
+  ActivityFeedPage,
   ConnectionState,
   NotificationChannel,
   NotificationConfig,
-  NotificationDto,
-  NotificationPageDto,
-  NotificationPreferenceDto,
+  NotificationPreference,
   NotificationSeverity,
   NotificationTransport,
+  UserNotification,
+  UserNotificationPage,
 } from './types/index.js';
 
 export { getAvailableChannels, NotificationChannels } from './types/index.js';

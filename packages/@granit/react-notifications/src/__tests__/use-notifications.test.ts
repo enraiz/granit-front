@@ -10,9 +10,9 @@ import {
   createWrapperWithoutBasePath,
 } from './test-utils.js';
 
-import type { NotificationDto, NotificationPageDto } from '@granit/notifications';
+import type { UserNotification, UserNotificationPage } from '@granit/notifications';
 
-const MOCK_NOTIFICATION: NotificationDto = {
+const MOCK_NOTIFICATION: UserNotification = {
   id: 'n-1',
   title: 'Nouveau message',
   body: 'Contenu du message',
@@ -24,7 +24,7 @@ const MOCK_NOTIFICATION: NotificationDto = {
   readAt: null,
 };
 
-const MOCK_PAGE: NotificationPageDto = {
+const MOCK_PAGE: UserNotificationPage = {
   items: [MOCK_NOTIFICATION],
   totalCount: 1,
   nextCursor: null,
@@ -86,7 +86,7 @@ describe('useNotifications', () => {
   });
 
   it('should report hasMore when totalCount > loaded items', async () => {
-    const page: NotificationPageDto = {
+    const page: UserNotificationPage = {
       items: [MOCK_NOTIFICATION],
       totalCount: 50,
       nextCursor: null,
@@ -119,18 +119,18 @@ describe('useNotifications', () => {
   });
 
   it('should load more notifications when loadMore is called', async () => {
-    const page1: NotificationPageDto = {
+    const page1: UserNotificationPage = {
       items: [MOCK_NOTIFICATION],
       totalCount: 2,
       nextCursor: null,
       unreadCount: 2,
     };
-    const n2: NotificationDto = {
+    const n2: UserNotification = {
       ...MOCK_NOTIFICATION,
       id: 'n-2',
       title: 'Deuxième notification',
     };
-    const page2: NotificationPageDto = {
+    const page2: UserNotificationPage = {
       items: [n2],
       totalCount: 2,
       nextCursor: null,
@@ -186,7 +186,7 @@ describe('useNotifications', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const updatedPage: NotificationPageDto = {
+    const updatedPage: UserNotificationPage = {
       items: [{ ...MOCK_NOTIFICATION, title: 'Mis à jour' }],
       totalCount: 1,
       nextCursor: null,
@@ -216,12 +216,12 @@ describe('useNotifications', () => {
   });
 
   it('should not modify other notifications when marking one as read', async () => {
-    const n2: NotificationDto = {
+    const n2: UserNotification = {
       ...MOCK_NOTIFICATION,
       id: 'n-2',
       title: 'Autre notification',
     };
-    const page: NotificationPageDto = {
+    const page: UserNotificationPage = {
       items: [MOCK_NOTIFICATION, n2],
       totalCount: 2,
       nextCursor: null,

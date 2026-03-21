@@ -5,9 +5,9 @@ import { useTimeline } from '../hooks/use-timeline.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { TimelineStreamEntry, TimelineStreamPage } from '@granit/timeline';
+import type { TimelineEntry, TimelineEntryPage } from '@granit/timeline';
 
-function makeEntry(overrides: Partial<TimelineStreamEntry> = {}): TimelineStreamEntry {
+function makeEntry(overrides: Partial<TimelineEntry> = {}): TimelineEntry {
   return {
     id: 'e-1',
     entityType: 'Patient',
@@ -26,7 +26,7 @@ function makeEntry(overrides: Partial<TimelineStreamEntry> = {}): TimelineStream
 describe('useTimeline', () => {
   it('should load entries on mount', async () => {
     const client = createMockClient();
-    const page: TimelineStreamPage = {
+    const page: TimelineEntryPage = {
       items: [makeEntry()],
       totalCount: 1,
       nextCursor: null,
@@ -64,7 +64,7 @@ describe('useTimeline', () => {
   it('should detect hasMore when totalCount > loaded entries', async () => {
     const client = createMockClient();
     const items = Array.from({ length: 20 }, (_, i) => makeEntry({ id: `e-${i}` }));
-    const page: TimelineStreamPage = { items, totalCount: 50, nextCursor: null };
+    const page: TimelineEntryPage = { items, totalCount: 50, nextCursor: null };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
     const { result } = renderHook(
@@ -81,12 +81,12 @@ describe('useTimeline', () => {
 
   it('should load more entries via loadMore', async () => {
     const client = createMockClient();
-    const firstPage: TimelineStreamPage = {
+    const firstPage: TimelineEntryPage = {
       items: [makeEntry({ id: 'e-1' })],
       totalCount: 2,
       nextCursor: null,
     };
-    const secondPage: TimelineStreamPage = {
+    const secondPage: TimelineEntryPage = {
       items: [makeEntry({ id: 'e-2', body: 'Second' })],
       totalCount: 2,
       nextCursor: null,
@@ -113,7 +113,7 @@ describe('useTimeline', () => {
 
   it('should add an optimistic entry at the top', async () => {
     const client = createMockClient();
-    const page: TimelineStreamPage = {
+    const page: TimelineEntryPage = {
       items: [makeEntry({ id: 'e-1' })],
       totalCount: 1,
       nextCursor: null,
@@ -137,7 +137,7 @@ describe('useTimeline', () => {
 
   it('should remove an optimistic entry by id', async () => {
     const client = createMockClient();
-    const page: TimelineStreamPage = {
+    const page: TimelineEntryPage = {
       items: [makeEntry({ id: 'e-1' }), makeEntry({ id: 'e-2' })],
       totalCount: 2,
       nextCursor: null,

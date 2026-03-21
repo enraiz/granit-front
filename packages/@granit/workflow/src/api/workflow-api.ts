@@ -1,8 +1,8 @@
 import type {
-  TransitionHistoryDto,
-  TransitionRequestDto,
-  TransitionResultDto,
-  WorkflowStatusDto,
+  TransitionHistory,
+  WorkflowTransitionRequest,
+  WorkflowTransitionResult,
+  WorkflowStatus,
 } from '../types/index.js';
 import type { PagedResult, PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
@@ -23,8 +23,8 @@ export async function fetchStatus(
   basePath: string,
   entityType: string,
   entityId: string
-): Promise<WorkflowStatusDto> {
-  const { data } = await client.get<WorkflowStatusDto>(
+): Promise<WorkflowStatus> {
+  const { data } = await client.get<WorkflowStatus>(
     buildUrl(basePath, entityType, entityId, 'transitions')
   );
   return data;
@@ -36,9 +36,9 @@ export async function executeTransition(
   basePath: string,
   entityType: string,
   entityId: string,
-  request: TransitionRequestDto
-): Promise<TransitionResultDto> {
-  const { data } = await client.post<TransitionResultDto>(
+  request: WorkflowTransitionRequest
+): Promise<WorkflowTransitionResult> {
+  const { data } = await client.post<WorkflowTransitionResult>(
     buildUrl(basePath, entityType, entityId, 'transition'),
     request
   );
@@ -50,8 +50,8 @@ export async function fetchTransitions(
   client: AxiosInstance,
   basePath: string,
   currentState: string
-): Promise<WorkflowStatusDto> {
-  const { data } = await client.get<WorkflowStatusDto>(`${basePath}/transitions`, {
+): Promise<WorkflowStatus> {
+  const { data } = await client.get<WorkflowStatus>(`${basePath}/transitions`, {
     params: { currentState },
   });
   return data;
@@ -62,16 +62,16 @@ export async function executeStateMachineTransition(
   client: AxiosInstance,
   basePath: string,
   currentState: string,
-  request: TransitionRequestDto
-): Promise<TransitionResultDto> {
-  const { data } = await client.post<TransitionResultDto>(`${basePath}/transitions`, request, {
+  request: WorkflowTransitionRequest
+): Promise<WorkflowTransitionResult> {
+  const { data } = await client.post<WorkflowTransitionResult>(`${basePath}/transitions`, request, {
     params: { currentState },
   });
   return data;
 }
 
 /** Response shape for the paginated workflow history endpoint. */
-export type WorkflowHistoryPage = PagedResult<TransitionHistoryDto>;
+export type WorkflowHistoryPage = PagedResult<TransitionHistory>;
 
 /** Fetch the transition history (HDS audit trail) for an entity. */
 export async function fetchHistory(

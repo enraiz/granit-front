@@ -1,8 +1,8 @@
 import type {
-  ActivityFeedPageDto,
-  NotificationDto,
-  NotificationPageDto,
-  NotificationPreferenceDto,
+  ActivityFeedPage,
+  UserNotification,
+  UserNotificationPage,
+  NotificationPreference,
 } from '../types/index.js';
 import type { PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
@@ -19,8 +19,8 @@ export async function fetchNotifications(
   client: AxiosInstance,
   basePath: string,
   params: PaginationParams = {}
-): Promise<NotificationPageDto> {
-  const { data } = await client.get<NotificationPageDto>(buildUrl(basePath, 'notifications'), {
+): Promise<UserNotificationPage> {
+  const { data } = await client.get<UserNotificationPage>(buildUrl(basePath, 'notifications'), {
     params,
   });
   return data;
@@ -30,8 +30,8 @@ export async function markAsRead(
   client: AxiosInstance,
   basePath: string,
   notificationId: string
-): Promise<NotificationDto> {
-  const { data } = await client.patch<NotificationDto>(
+): Promise<UserNotification> {
+  const { data } = await client.patch<UserNotification>(
     buildUrl(basePath, 'notifications', notificationId, 'read')
   );
   return data;
@@ -62,8 +62,8 @@ export async function fetchEntityActivityFeed(
   entityType: string,
   entityId: string,
   params: PaginationParams = {}
-): Promise<ActivityFeedPageDto> {
-  const { data } = await client.get<ActivityFeedPageDto>(
+): Promise<ActivityFeedPage> {
+  const { data } = await client.get<ActivityFeedPage>(
     buildUrl(basePath, 'activity-feed', entityType, entityId),
     { params }
   );
@@ -77,8 +77,8 @@ export async function fetchEntityActivityFeed(
 export async function fetchPreferences(
   client: AxiosInstance,
   basePath: string
-): Promise<NotificationPreferenceDto[]> {
-  const { data } = await client.get<NotificationPreferenceDto[]>(
+): Promise<NotificationPreference[]> {
+  const { data } = await client.get<NotificationPreference[]>(
     buildUrl(basePath, 'notification-preferences')
   );
   return data;
@@ -87,9 +87,9 @@ export async function fetchPreferences(
 export async function updatePreference(
   client: AxiosInstance,
   basePath: string,
-  preference: NotificationPreferenceDto
-): Promise<NotificationPreferenceDto> {
-  const { data } = await client.put<NotificationPreferenceDto>(
+  preference: NotificationPreference
+): Promise<NotificationPreference> {
+  const { data } = await client.put<NotificationPreference>(
     buildUrl(basePath, 'notification-preferences', preference.notificationType),
     preference
   );

@@ -12,7 +12,9 @@ export {
 } from './hooks/use-subscription-lifecycle.js';
 export { useRotateSecret, useTestPing } from './hooks/use-subscription-operations.js';
 export { useDeliveries } from './hooks/use-deliveries.js';
+export { useRetryDelivery } from './hooks/use-retry-delivery.js';
 export { useWebhookStats } from './hooks/use-webhook-stats.js';
 
 // Types
 export type { WebhooksOptions } from './hooks/use-subscription.js';
+export type { RetryDeliveryOptions } from './hooks/use-retry-delivery.js';

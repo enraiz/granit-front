@@ -3,7 +3,7 @@ import type { PagedResult } from '@granit/querying';
 
 // --- API response types ---
 
-export interface TimelineStreamEntry {
+export interface TimelineEntry {
   readonly id: string;
   readonly entityType: string;
   readonly entityId: string;
@@ -16,4 +16,4 @@ export interface TimelineStreamEntry {
   readonly attachmentBlobIds: readonly string[];
 }
 
-export type TimelineStreamPage = PagedResult<TimelineStreamEntry>;
+export type TimelineEntryPage = PagedResult<TimelineEntry>;

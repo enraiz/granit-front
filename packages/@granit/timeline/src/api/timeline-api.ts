@@ -1,8 +1,8 @@
 import type {
   CreateTimelineEntryRequest,
   TimelineQueryParams,
-  TimelineStreamEntry,
-  TimelineStreamPage,
+  TimelineEntry,
+  TimelineEntryPage,
 } from '../types/index.js';
 import type { AxiosInstance } from 'axios';
 
@@ -22,8 +22,8 @@ export async function fetchStream(
   entityType: string,
   entityId: string,
   params?: TimelineQueryParams
-): Promise<TimelineStreamPage> {
-  const { data } = await client.get<TimelineStreamPage>(buildUrl(basePath, entityType, entityId), {
+): Promise<TimelineEntryPage> {
+  const { data } = await client.get<TimelineEntryPage>(buildUrl(basePath, entityType, entityId), {
     params,
   });
   return data;
@@ -35,8 +35,8 @@ export async function createEntry(
   entityType: string,
   entityId: string,
   request: CreateTimelineEntryRequest
-): Promise<TimelineStreamEntry> {
-  const { data } = await client.post<TimelineStreamEntry>(
+): Promise<TimelineEntry> {
+  const { data } = await client.post<TimelineEntry>(
     buildUrl(basePath, entityType, entityId, 'entries'),
     request
   );

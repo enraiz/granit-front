@@ -5,14 +5,14 @@ import { useNotificationContext } from '../providers/notification-provider.js';
 
 import { usePaginatedFetch } from './use-paginated-fetch.js';
 
-import type { NotificationDto, NotificationPageDto } from '@granit/notifications';
+import type { UserNotification, UserNotificationPage } from '@granit/notifications';
 
 export interface UseNotificationsOptions {
   pageSize?: number;
 }
 
 export interface UseNotificationsReturn {
-  notifications: readonly NotificationDto[];
+  notifications: readonly UserNotification[];
   totalCount: number | null;
   loading: boolean;
   loadingMore: boolean;
@@ -41,7 +41,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   );
 
   const onSuccess = useCallback(
-    (page: NotificationPageDto) => setUnreadCount(page.unreadCount),
+    (page: UserNotificationPage) => setUnreadCount(page.unreadCount),
     [setUnreadCount]
   );
 
@@ -55,7 +55,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
     hasMore,
     loadMore,
     refresh,
-  } = usePaginatedFetch<NotificationDto, NotificationPageDto>({
+  } = usePaginatedFetch<UserNotification, UserNotificationPage>({
     fetcher,
     pageSize,
     onSuccess,
@@ -64,8 +64,8 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   const markRead = useCallback(
     async (id: string) => {
       const updated = await markAsRead(config.apiClient, basePath, id);
-      setNotifications((prev: readonly NotificationDto[]) =>
-        prev.map((n: NotificationDto) => (n.id === id ? updated : n))
+      setNotifications((prev: readonly UserNotification[]) =>
+        prev.map((n: UserNotification) => (n.id === id ? updated : n))
       );
       setUnreadCount((prev: number) => Math.max(0, prev - 1));
     },
@@ -74,8 +74,8 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
 
   const markAllRead = useCallback(async () => {
     await markAllAsRead(config.apiClient, basePath);
-    setNotifications((prev: readonly NotificationDto[]) =>
-      prev.map((n: NotificationDto) => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
+    setNotifications((prev: readonly UserNotification[]) =>
+      prev.map((n: UserNotification) => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
     );
     setUnreadCount(0);
   }, [config.apiClient, basePath, setUnreadCount, setNotifications]);

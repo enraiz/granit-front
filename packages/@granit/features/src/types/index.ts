@@ -1,8 +1,8 @@
 /** Storage and validation type of a feature value. Mirrors `Granit.Features.ValueTypes.FeatureValueType`. */
 export type FeatureValueType = 'Toggle' | 'Numeric' | 'Selection';
 
-/** Min/max bounds for Numeric features. Mirrors `Granit.Features.ValueTypes.NumericConstraint`. */
-export interface NumericConstraint {
+/** Min/max bounds for Numeric features. Mirrors `Granit.Features.ValueTypes.FeatureNumericConstraint`. */
+export interface FeatureNumericConstraint {
   readonly min: number;
   readonly max: number;
 }
@@ -17,14 +17,14 @@ export interface FeatureDefinition {
   readonly name: string;
   readonly defaultValue: string;
   readonly valueType: FeatureValueType;
-  readonly numericConstraint: NumericConstraint | null;
+  readonly numericConstraint: FeatureNumericConstraint | null;
   readonly selectionValues: SelectionValues | null;
   readonly displayName: string | null;
   readonly description: string | null;
 }
 
-/** Grouped feature definitions. Mirrors `Granit.Features.Definitions.FeatureGroupDefinition`. */
-export interface FeatureGroupDefinition {
+/** Grouped feature definitions. Mirrors `Granit.Features.Definitions.FeatureGroup`. */
+export interface FeatureGroup {
   readonly name: string;
   readonly displayName: string | null;
   readonly features: readonly FeatureDefinition[];

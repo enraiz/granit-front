@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { getAvailableChannels } from '../types/index.js';
 
-import type { NotificationPreferenceDto } from '../types/index.js';
+import type { NotificationPreference } from '../types/index.js';
 
 describe('getAvailableChannels', () => {
   it('should return empty array for empty preferences', () => {
@@ -10,7 +10,7 @@ describe('getAvailableChannels', () => {
   });
 
   it('should extract channel keys from the first preference', () => {
-    const preferences: NotificationPreferenceDto[] = [
+    const preferences: NotificationPreference[] = [
       {
         notificationType: 'document_update',
         label: 'Document updates',
@@ -27,7 +27,7 @@ describe('getAvailableChannels', () => {
   });
 
   it('should handle preferences with a single channel', () => {
-    const preferences: NotificationPreferenceDto[] = [
+    const preferences: NotificationPreference[] = [
       {
         notificationType: 'alert',
         label: 'Alert',

@@ -2,7 +2,7 @@
  * Metadata about a single exportable field.
  * Mirrors `Granit.DataExchange.Endpoints.Dtos.Export.ExportFieldResponse`.
  */
-export interface ExportFieldDescriptor {
+export interface ExportField {
   readonly propertyPath: string;
   readonly clrTypeName: string;
   readonly header: string | null;

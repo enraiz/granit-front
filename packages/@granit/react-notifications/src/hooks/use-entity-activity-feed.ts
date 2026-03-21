@@ -5,7 +5,7 @@ import { useNotificationContext } from '../providers/notification-provider.js';
 
 import { usePaginatedFetch } from './use-paginated-fetch.js';
 
-import type { ActivityFeedEntryDto, ActivityFeedPageDto } from '@granit/notifications';
+import type { ActivityFeedEntry, ActivityFeedPage } from '@granit/notifications';
 
 export interface UseEntityActivityFeedOptions {
   entityType: string;
@@ -14,7 +14,7 @@ export interface UseEntityActivityFeedOptions {
 }
 
 export interface UseEntityActivityFeedReturn {
-  entries: readonly ActivityFeedEntryDto[];
+  entries: readonly ActivityFeedEntry[];
   totalCount: number | null;
   loading: boolean;
   loadingMore: boolean;
@@ -54,7 +54,7 @@ export function useEntityActivityFeed(
     hasMore,
     loadMore,
     refresh,
-  } = usePaginatedFetch<ActivityFeedEntryDto, ActivityFeedPageDto>({
+  } = usePaginatedFetch<ActivityFeedEntry, ActivityFeedPage>({
     fetcher,
     pageSize,
   });

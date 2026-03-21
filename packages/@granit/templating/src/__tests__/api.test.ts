@@ -25,7 +25,7 @@ import type {
   TemplateCategory,
   TemplateDetail,
   TemplateHistory,
-  TemplateLifecycleInfo,
+  TemplateLifecycle,
   TemplateListItem,
   TemplatePreviewResponse,
   TemplateRevision,
@@ -172,7 +172,7 @@ describe('templates-api', () => {
   describe('getLifecycleInfo', () => {
     it('should call GET /templates/{name}/lifecycle', async () => {
       const client = createMockClient();
-      const info: TemplateLifecycleInfo = {
+      const info: TemplateLifecycle = {
         name: 'Billing.Invoice',
         currentStatus: TemplateLifecycleStatus.Draft,
         workflowEnabled: true,

@@ -9,6 +9,7 @@ import {
   getDeliveries,
   getStats,
   getSubscription,
+  retryDelivery,
   rotateSecret,
   suspendSubscription,
   testPing,
@@ -229,6 +230,7 @@ describe('webhooks-api', () => {
           durationMs: 142,
           errorMessage: null,
           isSuccess: true,
+          payload: null,
         },
       ];
       vi.mocked(client.get).mockResolvedValueOnce({ data: response });
@@ -237,6 +239,26 @@ describe('webhooks-api', () => {
 
       expect(client.get).toHaveBeenCalledWith(`${BASE}/sub-001/deliveries`);
       expect(result).toEqual(response);
+    });
+  });
+
+  describe('retryDelivery', () => {
+    it('sends POST to /deliveries/{deliveryId}/retry', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValueOnce({ data: undefined });
+
+      await retryDelivery(client, '/api/v1/webhooks', 'del-001');
+
+      expect(client.post).toHaveBeenCalledWith('/api/v1/webhooks/deliveries/del-001/retry');
+    });
+
+    it('encodes delivery ID with special characters', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValueOnce({ data: undefined });
+
+      await retryDelivery(client, '/api/v1/webhooks', 'id/slash');
+
+      expect(client.post).toHaveBeenCalledWith('/api/v1/webhooks/deliveries/id%2Fslash/retry');
     });
   });
 });

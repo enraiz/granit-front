@@ -3,11 +3,11 @@ import { useCallback, useEffect, useOptimistic, useRef, useState, useTransition 
 
 import { useNotificationContext } from '../providers/notification-provider.js';
 
-import type { NotificationChannel, NotificationPreferenceDto } from '@granit/notifications';
+import type { NotificationChannel, NotificationPreference } from '@granit/notifications';
 import type { AxiosInstance } from 'axios';
 
 export interface UseNotificationPreferencesReturn {
-  preferences: NotificationPreferenceDto[];
+  preferences: NotificationPreference[];
   loading: boolean;
   error: Error | null;
   saving: boolean;
@@ -17,16 +17,16 @@ export interface UseNotificationPreferencesReturn {
 
 type OptimisticAction = {
   notificationType: string;
-  updated: NotificationPreferenceDto;
+  updated: NotificationPreference;
 };
 
 async function savePreference(
   apiClient: AxiosInstance,
   basePath: string,
   notificationType: string,
-  updated: NotificationPreferenceDto,
+  updated: NotificationPreference,
   mountedRef: React.RefObject<boolean>,
-  setPreferences: React.Dispatch<React.SetStateAction<NotificationPreferenceDto[]>>,
+  setPreferences: React.Dispatch<React.SetStateAction<NotificationPreference[]>>,
   setError: React.Dispatch<React.SetStateAction<Error | null>>
 ): Promise<void> {
   try {
@@ -55,14 +55,14 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
   const { config } = useNotificationContext();
   const basePath = config.basePath ?? '/api';
 
-  const [preferences, setPreferences] = useState<NotificationPreferenceDto[]>([]);
+  const [preferences, setPreferences] = useState<NotificationPreference[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const mountedRef = useRef(true);
 
   const [optimisticPreferences, applyOptimistic] = useOptimistic(
     preferences,
-    (state: NotificationPreferenceDto[], action: OptimisticAction) =>
+    (state: NotificationPreference[], action: OptimisticAction) =>
       state.map((p) => (p.notificationType === action.notificationType ? action.updated : p))
   );
 
@@ -97,7 +97,7 @@ export function useNotificationPreferences(): UseNotificationPreferencesReturn {
       const pref = preferences.find((p) => p.notificationType === notificationType);
       if (!pref) return;
 
-      const updated: NotificationPreferenceDto = {
+      const updated: NotificationPreference = {
         ...pref,
         channels: { ...pref.channels, [channel]: enabled },
       };

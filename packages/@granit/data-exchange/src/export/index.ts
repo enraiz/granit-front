@@ -1,5 +1,5 @@
 // Types
-export type { ExportDefinitionResponse, ExportFieldDescriptor } from './types/export-definition.js';
+export type { ExportDefinitionResponse, ExportField } from './types/export-definition.js';
 
 export type {
   CreateExportJobRequest,

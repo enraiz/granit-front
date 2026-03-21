@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useWorkflowConfig } from '../providers/workflow-provider.js';
 
-import type { TransitionHistoryDto } from '@granit/workflow';
+import type { TransitionHistory } from '@granit/workflow';
 
 const logger = createLogger('workflow:history');
 
@@ -15,7 +15,7 @@ export interface UseWorkflowHistoryOptions {
 }
 
 export interface UseWorkflowHistoryReturn {
-  history: readonly TransitionHistoryDto[];
+  history: readonly TransitionHistory[];
   loading: boolean;
   error: Error | null;
   refetch: () => Promise<void>;
@@ -28,7 +28,7 @@ export function useWorkflowHistory({
 }: UseWorkflowHistoryOptions): UseWorkflowHistoryReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
-  const [history, setHistory] = useState<readonly TransitionHistoryDto[]>([]);
+  const [history, setHistory] = useState<readonly TransitionHistory[]>([]);
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
 

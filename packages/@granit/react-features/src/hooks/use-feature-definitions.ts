@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { buildFeaturesQueryKey, useFeaturesConfig } from '../providers/features-provider.js';
 
-import type { FeatureGroupDefinition } from '@granit/features';
+import type { FeatureGroup } from '@granit/features';
 import type { UseQueryResult } from '@tanstack/react-query';
 
 /**
@@ -17,7 +17,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
  */
 export function useFeatureDefinitions(options?: {
   enabled?: boolean;
-}): UseQueryResult<FeatureGroupDefinition[]> {
+}): UseQueryResult<FeatureGroup[]> {
   const config = useFeaturesConfig();
 
   return useQuery({

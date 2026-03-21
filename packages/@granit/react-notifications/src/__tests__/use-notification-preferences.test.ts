@@ -10,9 +10,9 @@ import {
   createWrapperWithoutBasePath,
 } from './test-utils.js';
 
-import type { NotificationPreferenceDto } from '@granit/notifications';
+import type { NotificationPreference } from '@granit/notifications';
 
-const MOCK_PREFS: NotificationPreferenceDto[] = [
+const MOCK_PREFS: NotificationPreference[] = [
   {
     notificationType: 'AppointmentReminder',
     label: 'Rappel de rendez-vous',
@@ -44,7 +44,7 @@ describe('useNotificationPreferences', () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PREFS));
 
-    const updatedPref: NotificationPreferenceDto = {
+    const updatedPref: NotificationPreference = {
       ...MOCK_PREFS[0],
       channels: { inApp: true, email: false, push: false },
     };
@@ -163,7 +163,7 @@ describe('useNotificationPreferences', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const updatedPrefs: NotificationPreferenceDto[] = [
+    const updatedPrefs: NotificationPreference[] = [
       { ...MOCK_PREFS[0], channels: { inApp: false, email: true, push: true } },
     ];
     vi.mocked(client.get).mockResolvedValue(axiosResponse(updatedPrefs));

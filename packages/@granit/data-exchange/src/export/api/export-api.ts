@@ -1,7 +1,4 @@
-import type {
-  ExportDefinitionResponse,
-  ExportFieldDescriptor,
-} from '../types/export-definition.js';
+import type { ExportDefinitionResponse, ExportField } from '../types/export-definition.js';
 import type { CreateExportJobRequest, ExportJobResponse } from '../types/export-job.js';
 import type { PagedResult, PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
@@ -33,8 +30,8 @@ export async function fetchExportFields(
   client: AxiosInstance,
   basePath: string,
   definitionName: string
-): Promise<readonly ExportFieldDescriptor[]> {
-  const response = await client.get<ExportFieldDescriptor[]>(
+): Promise<readonly ExportField[]> {
+  const response = await client.get<ExportField[]>(
     `${basePath}/definitions/${encodeURIComponent(definitionName)}/fields`
   );
   return response.data;
