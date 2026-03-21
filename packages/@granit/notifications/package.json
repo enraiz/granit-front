@@ -13,9 +13,6 @@
   "scripts": {
     "build": "tsup"
   },
-  "devDependencies": {
-    "@granit/api-client": "workspace:*"
-  },
   "peerDependencies": {
     "@granit/querying": "workspace:*",
     "axios": "*"

@@ -2,7 +2,7 @@
   "name": "@granit/react-settings",
   "description": "React bindings for @granit/settings — SettingsProvider, useSetting, useSettings, useUpdateSetting, useDeleteSetting",
   "version": "0.2.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

@@ -4,16 +4,16 @@ import type { PagedResult } from '@granit/querying';
 // --- API response types ---
 
 export interface TimelineStreamEntry {
-  id: string;
-  entityType: string;
-  entityId: string;
-  entryType: TimelineEntryTypeValue;
-  body: string;
-  authorId: string;
-  authorDisplayName: string;
-  parentEntryId: string | null;
-  createdAt: string;
-  attachmentBlobIds: string[];
+  readonly id: string;
+  readonly entityType: string;
+  readonly entityId: string;
+  readonly entryType: TimelineEntryTypeValue;
+  readonly body: string;
+  readonly authorId: string;
+  readonly authorDisplayName: string;
+  readonly parentEntryId: string | null;
+  readonly createdAt: string;
+  readonly attachmentBlobIds: readonly string[];
 }
 
 export type TimelineStreamPage = PagedResult<TimelineStreamEntry>;

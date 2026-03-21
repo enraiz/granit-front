@@ -31,9 +31,7 @@ export function GlobalErrorCapture({ logger, onError }: GlobalErrorCaptureProps)
 
       if (isDuplicate(error.message)) return;
 
-      logger.error('Uncaught error', {
-        error: error.message,
-        stack: error.stack,
+      logger.error('Uncaught error', error, {
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
@@ -50,10 +48,7 @@ export function GlobalErrorCapture({ logger, onError }: GlobalErrorCaptureProps)
 
       if (isDuplicate(error.message)) return;
 
-      logger.error('Unhandled promise rejection', {
-        error: error.message,
-        stack: error.stack,
-      });
+      logger.error('Unhandled promise rejection', error);
 
       onError?.(error);
     }

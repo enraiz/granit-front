@@ -2,7 +2,7 @@
   "name": "@granit/multi-tenancy",
   "description": "Multi-tenancy types and tenant resolver abstraction — mirrors Granit.MultiTenancy .NET contract",
   "version": "0.2.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

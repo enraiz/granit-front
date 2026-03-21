@@ -1,11 +1,11 @@
 import { getDownloadUrl } from '@granit/blob-storage';
 import { useMutation } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { BlobStorageOptions } from './use-blob.js';
 import type { BlobDownloadUrlRequest, BlobDownloadUrlResponse } from '@granit/blob-storage';
 import type { UseMutationResult } from '@tanstack/react-query';
-
-const DEFAULT_BASE_PATH = '/api/v1/blobs';
 
 /**
  * Mutation hook to generate a pre-signed download URL.

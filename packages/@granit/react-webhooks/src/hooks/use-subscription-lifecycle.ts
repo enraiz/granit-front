@@ -6,14 +6,14 @@ import {
 } from '@granit/webhooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { WebhooksOptions } from './use-subscription.js';
 import type {
   WebhookSubscriptionDeactivateRequest,
   WebhookSubscriptionResponse,
 } from '@granit/webhooks';
 import type { UseMutationResult } from '@tanstack/react-query';
-
-const DEFAULT_BASE_PATH = '/api/v1/webhooks/subscriptions';
 
 /**
  * Mutation hook to activate a suspended webhook subscription.

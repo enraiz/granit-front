@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import { apiKeyKeys } from './use-api-keys.js';
 
 import type { ApiKeyHookOptions } from './use-api-keys.js';
@@ -10,8 +12,6 @@ import type {
   ApiKeyUpdateScopesRequest,
 } from '@granit/authentication-api-keys';
 import type { UseMutationResult } from '@tanstack/react-query';
-
-const DEFAULT_BASE_PATH = '/api/v1/api-keys';
 
 // ---------------------------------------------------------------------------
 // useCreateApiKey

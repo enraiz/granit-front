@@ -48,9 +48,7 @@ export class GranitErrorBoundary extends React.Component<ErrorBoundaryProps, Err
   }
 
   override componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    this.logger.error('Uncaught render error', {
-      error: error.message,
-      stack: error.stack,
+    this.logger.error('Uncaught render error', error, {
       componentStack: errorInfo.componentStack ?? undefined,
     });
 

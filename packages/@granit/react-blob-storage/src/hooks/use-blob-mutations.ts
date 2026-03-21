@@ -1,6 +1,8 @@
 import { blobStorageKeys, confirmUpload, deleteBlob, initiateUpload } from '@granit/blob-storage';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { BlobStorageOptions } from './use-blob.js';
 import type {
   BlobConfirmUploadRequest,
@@ -10,8 +12,6 @@ import type {
   BlobUploadInitiateResponse,
 } from '@granit/blob-storage';
 import type { UseMutationResult } from '@tanstack/react-query';
-
-const DEFAULT_BASE_PATH = '/api/v1/blobs';
 
 /**
  * Mutation hook to initiate a direct-to-cloud upload.

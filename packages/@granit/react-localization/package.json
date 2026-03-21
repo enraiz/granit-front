@@ -1,7 +1,7 @@
 {
   "name": "@granit/react-localization",
   "version": "0.2.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

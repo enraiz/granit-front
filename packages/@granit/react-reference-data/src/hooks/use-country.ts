@@ -1,3 +1,4 @@
+import { fetchCountries, fetchCountry } from '@granit/reference-data';
 import { useQuery } from '@tanstack/react-query';
 
 import type { Country, CountriesListParams } from '@granit/reference-data';
@@ -36,10 +37,7 @@ export function useCountries(
 
   return useQuery({
     queryKey: countryKeys.list(params),
-    queryFn: async () => {
-      const response = await client.get<Country[]>(basePath, { params });
-      return response.data;
-    },
+    queryFn: async () => fetchCountries(client, basePath, params),
     enabled,
   });
 }
@@ -60,10 +58,7 @@ export function useCountry(
 
   return useQuery({
     queryKey: countryKeys.detail(code),
-    queryFn: async () => {
-      const response = await client.get<Country>(`${basePath}/${code}`);
-      return response.data;
-    },
+    queryFn: async () => fetchCountry(client, basePath, code),
     enabled: enabled && code.length > 0,
   });
 }

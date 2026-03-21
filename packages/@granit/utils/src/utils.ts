@@ -13,8 +13,12 @@ export function cn(...inputs: ClassValue[]): string {
 /**
  * Format a number with locale-aware thousand separators.
  */
-export function formatNumber(value: number, opts?: Intl.NumberFormatOptions): string {
-  return new Intl.NumberFormat('en-US', opts).format(value);
+export function formatNumber(
+  value: number,
+  opts?: Intl.NumberFormatOptions,
+  locale?: string
+): string {
+  return new Intl.NumberFormat(locale, opts).format(value);
 }
 
 /**

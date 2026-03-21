@@ -9,7 +9,7 @@ export function useTemplateHistory(
 ) {
   const { client, basePath, queryKeyPrefix } = useTemplatingConfig();
   return useQuery({
-    queryKey: templateKeys.history(queryKeyPrefix, name),
+    queryKey: [...templateKeys.history(queryKeyPrefix, name), params],
     queryFn: () => getHistory(client, basePath, name, params),
     enabled: !!name,
   });

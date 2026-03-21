@@ -64,8 +64,8 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught error',
+      expect.objectContaining({ message: 'Global error' }),
       expect.objectContaining({
-        error: 'Global error',
         filename: 'app.js',
         lineno: 42,
         colno: 10,
@@ -85,7 +85,7 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
-      expect.objectContaining({ error: 'Rejected!' })
+      expect.objectContaining({ message: 'Rejected!' })
     );
   });
 
@@ -132,7 +132,7 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
-      expect.objectContaining({ error: 'string error' })
+      expect.objectContaining({ message: 'string error' })
     );
   });
 
@@ -148,7 +148,8 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught error',
-      expect.objectContaining({ error: 'fallback message' })
+      expect.objectContaining({ message: 'fallback message' }),
+      expect.objectContaining({})
     );
   });
 
@@ -164,7 +165,8 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught error',
-      expect.objectContaining({ error: 'Unknown error' })
+      expect.objectContaining({ message: 'Unknown error' }),
+      expect.objectContaining({})
     );
   });
 
@@ -180,7 +182,7 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
-      expect.objectContaining({ error: 'Unhandled promise rejection' })
+      expect.objectContaining({ message: 'Unhandled promise rejection' })
     );
   });
 
@@ -196,7 +198,7 @@ describe('GlobalErrorCapture', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Unhandled promise rejection',
-      expect.objectContaining({ error: 'Unhandled promise rejection' })
+      expect.objectContaining({ message: 'Unhandled promise rejection' })
     );
   });
 });

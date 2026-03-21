@@ -14,7 +14,8 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "@granit/querying": "workspace:*"
+    "@granit/querying": "workspace:*",
+    "axios": "*"
   },
   "publishConfig": {
     "exports": {

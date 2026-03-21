@@ -2,10 +2,10 @@ import { blobStorageKeys, confirmUpload, initiateUpload } from '@granit/blob-sto
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useRef, useState } from 'react';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { BlobStorageOptions } from './use-blob.js';
 import type { BlobConfirmUploadResponse } from '@granit/blob-storage';
-
-const DEFAULT_BASE_PATH = '/api/v1/blobs';
 
 /** Upload progress phase. */
 export type BlobUploadPhase =

@@ -4,10 +4,10 @@ import type { PaginationParams } from '@granit/querying';
 // --- API request types ---
 
 export interface CreateTimelineEntryRequest {
-  entryType: TimelineEntryTypeValue;
-  body: string;
-  parentEntryId?: string;
-  attachmentBlobIds?: string[];
+  readonly entryType: TimelineEntryTypeValue;
+  readonly body: string;
+  readonly parentEntryId?: string;
+  readonly attachmentBlobIds?: readonly string[];
 }
 
 // --- Pagination ---

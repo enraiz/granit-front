@@ -8,7 +8,7 @@ import type {
 import type {
   CookieCategory,
   CookieConsentConfig,
-  CookieConsentProviderInterface,
+  CookieConsentProvider as CookieConsentProviderInterface,
   ConsentState,
 } from '@granit/cookies';
 

@@ -70,9 +70,8 @@ describe('GranitErrorBoundary', () => {
 
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught render error',
-      expect.objectContaining({
-        error: 'Test render error',
-      })
+      expect.objectContaining({ message: 'Test render error' }),
+      expect.objectContaining({ componentStack: expect.any(String) })
     );
   });
 
@@ -105,13 +104,11 @@ describe('GranitErrorBoundary', () => {
       </GranitErrorBoundary>
     );
 
-    // Verify componentStack is passed (may be string or undefined via ?? undefined)
+    // Verify the Error object and componentStack are passed correctly
     expect(logger.error).toHaveBeenCalledWith(
       'Uncaught render error',
-      expect.objectContaining({
-        error: 'Test render error',
-        componentStack: expect.anything(),
-      })
+      expect.objectContaining({ message: 'Test render error' }),
+      expect.objectContaining({ componentStack: expect.anything() })
     );
   });
 

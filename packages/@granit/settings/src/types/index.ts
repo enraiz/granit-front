@@ -1,12 +1,12 @@
 /** Response for `GET /settings/user/{name}` (and global, tenant). */
 export interface SettingValueResponse {
-  name: string;
-  value: string | null;
+  readonly name: string;
+  readonly value: string | null;
 }
 
 /** Request body for `PUT /settings/{scope}/{name}`. */
 export interface UpdateSettingValueRequest {
-  value: string | null;
+  readonly value: string | null;
 }
 
 /** Response for `GET /settings/user` — flat key/value map. */

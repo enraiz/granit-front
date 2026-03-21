@@ -1,11 +1,11 @@
 import { getSubscription, webhooksKeys } from '@granit/webhooks';
 import { useQuery } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { WebhookSubscriptionResponse } from '@granit/webhooks';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { AxiosInstance } from 'axios';
-
-const DEFAULT_BASE_PATH = '/api/v1/webhooks/subscriptions';
 
 /** Options accepted by all webhook hooks. */
 export interface WebhooksOptions {

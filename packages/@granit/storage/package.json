@@ -1,6 +1,6 @@
 {
   "name": "@granit/storage",
-  "description": "File upload and storage management hooks",
+  "description": "Typed localStorage/sessionStorage wrapper with JSON serialization",
   "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",

@@ -15,7 +15,7 @@
   },
   "peerDependencies": {
     "@granit/validation": "workspace:*",
-    "axios": ">=1.0.0",
+    "axios": "*",
     "react": "^19.0.0"
   },
   "devDependencies": {

@@ -1,3 +1,4 @@
+import { createLogger } from '@granit/logger';
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import type {
@@ -13,6 +14,8 @@ const DEFAULT_CONSENTS: ConsentState = {
   analytics: false,
   marketing: false,
 };
+
+const logger = createLogger('cookies');
 
 export const CookieConsentContext = createContext<CookieConsentContextValue | null>(null);
 
@@ -44,15 +47,21 @@ export function CookieConsentProvider({
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
 
-    provider.init().then(() => {
-      setConsents(provider.getConsents());
-      setHasConsented(provider.hasConsented());
-      setIsLoaded(true);
-      unsubscribe = provider.onConsentChange((newConsents) => {
-        setConsents(newConsents);
+    provider
+      .init()
+      .then(() => {
+        setConsents(provider.getConsents());
         setHasConsented(provider.hasConsented());
+        setIsLoaded(true);
+        unsubscribe = provider.onConsentChange((newConsents) => {
+          setConsents(newConsents);
+          setHasConsented(provider.hasConsented());
+        });
+      })
+      .catch((err: unknown) => {
+        logger.error('CMP initialization failed — keeping defaults', err);
+        setIsLoaded(true);
       });
-    });
 
     return () => unsubscribe?.();
   }, [provider]);
@@ -97,5 +106,5 @@ export function CookieConsentProvider({
     [consents, isLoaded, hasConsented, acceptCategory, revokeCategory, acceptAll, revokeAll]
   );
 
-  return <CookieConsentContext.Provider value={value}>{children}</CookieConsentContext.Provider>;
+  return <CookieConsentContext value={value}>{children}</CookieConsentContext>;
 }
