@@ -14,9 +14,7 @@ import {
 } from '../hooks/use-admin-roles.js';
 import { OpenIddictAdminProvider } from '../providers/openiddict-admin-provider.js';
 
-import type { AdminRoleMember } from '@granit/openiddict-admin';
-
-import type { AdminRole } from '@granit/openiddict-admin';
+import type { AdminRole, AdminRoleMember } from '@granit/openiddict-admin';
 
 vi.mock('@granit/openiddict-admin', () => ({
   listRoles: vi.fn(),
@@ -35,9 +33,7 @@ function createWrapper() {
   return {
     wrapper: ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={queryClient}>
-        <OpenIddictAdminProvider config={{ client }}>
-          {children}
-        </OpenIddictAdminProvider>
+        <OpenIddictAdminProvider config={{ client }}>{children}</OpenIddictAdminProvider>
       </QueryClientProvider>
     ),
     queryClient,
@@ -94,11 +90,10 @@ describe('useCreateAdminRole', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(createRole).toHaveBeenCalledWith(
-      expect.anything(),
-      '/api/admin',
-      { name: 'admin', description: 'Administrator role' }
-    );
+    expect(createRole).toHaveBeenCalledWith(expect.anything(), '/api/admin', {
+      name: 'admin',
+      description: 'Administrator role',
+    });
     expect(result.current.data).toEqual(mockRole);
     expect(invalidateSpy).toHaveBeenCalledWith({
       queryKey: ['openiddict-admin', 'roles'],
