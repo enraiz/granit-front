@@ -1,7 +1,43 @@
 {
-  "generatedAt": "2026-03-21T15:53:25.873425+00:00",
+  "generatedAt": "2026-03-21T22:47:46.250794+00:00",
   "repo": "granit-front",
   "packages": [
+    {
+      "name": "@granit/account",
+      "description": "Account self-service types and API functions — mirrors Granit.OpenIddict.Endpoints .NET contract",
+      "exports": [
+        {
+          "name": "accountKeys",
+          "kind": "const",
+          "signature": "const accountKeys"
+        },
+        {
+          "name": "getProfile",
+          "kind": "function",
+          "signature": "async function getProfile( client: AxiosInstance, basePath: string ): Promise<AccountProfileResponse>"
+        },
+        {
+          "name": "updateProfile",
+          "kind": "function",
+          "signature": "async function updateProfile( client: AxiosInstance, basePath: string, request: AccountProfileUpdateRequest ): Promise<AccountProfileResponse>"
+        },
+        {
+          "name": "backToImpersonator",
+          "kind": "function",
+          "signature": "async function backToImpersonator( client: AxiosInstance, basePath: string ): Promise<AccountImpersonationResult>"
+        },
+        {
+          "name": "sessionHeartbeat",
+          "kind": "function",
+          "signature": "async function sessionHeartbeat( client: AxiosInstance, basePath: string ): Promise<void>"
+        },
+        {
+          "name": "deleteAccount",
+          "kind": "function",
+          "signature": "async function deleteAccount( client: AxiosInstance, basePath: string, request: AccountDeleteRequest ): Promise<void>"
+        }
+      ]
+    },
     {
       "name": "@granit/ai",
       "description": "AI workspace management, chat completion, embedding generation, and usage tracking types and API functions — mirrors Granit.AI.Endpoints .NET",
@@ -591,6 +627,17 @@
       ]
     },
     {
+      "name": "@granit/openiddict-admin",
+      "description": "OpenIddict admin management types and API functions — mirrors Granit.OpenIddict.Endpoints .NET contract",
+      "exports": [
+        {
+          "name": "openIddictAdminKeys",
+          "kind": "const",
+          "signature": "const openIddictAdminKeys"
+        }
+      ]
+    },
+    {
       "name": "@granit/privacy",
       "description": "GDPR privacy types and API — data export, deletion, legal agreements — mirrors Granit.Privacy .NET contract",
       "exports": []
@@ -644,6 +691,76 @@
           "name": "serializeQueryRequest",
           "kind": "function",
           "signature": "function serializeQueryRequest(params: QueryRequest): string"
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-account",
+      "description": "React hooks for account self-service — useProfile, useRegister, useChangePassword, useTwoFactorStatus, usePasskeys",
+      "exports": [
+        {
+          "name": "AccountConfig",
+          "kind": "interface",
+          "signature": "interface AccountConfig",
+          "members": []
+        },
+        {
+          "name": "AccountProviderProps",
+          "kind": "interface",
+          "signature": "interface AccountProviderProps",
+          "members": []
+        },
+        {
+          "name": "useProfile",
+          "kind": "function",
+          "signature": "function useProfile(): UseQueryResult<AccountProfileResponse>"
+        },
+        {
+          "name": "useUpdateProfile",
+          "kind": "function",
+          "signature": "function useUpdateProfile(): UseMutationResult< AccountProfileResponse, Error, AccountProfileUpdateRequest >"
+        },
+        {
+          "name": "useConfirmEmail",
+          "kind": "function",
+          "signature": "function useConfirmEmail(): UseMutationResult<void, Error, ConfirmEmailVariables>"
+        },
+        {
+          "name": "useRegister",
+          "kind": "function",
+          "signature": "function useRegister(): UseMutationResult< AccountRegisterResponse, Error, AccountRegisterRequest >"
+        },
+        {
+          "name": "useResendConfirmation",
+          "kind": "function",
+          "signature": "function useResendConfirmation(): UseMutationResult<void, Error, void>"
+        },
+        {
+          "name": "ConfirmEmailVariables",
+          "kind": "interface",
+          "signature": "interface ConfirmEmailVariables",
+          "members": []
+        },
+        {
+          "name": "RenamePasskeyVariables",
+          "kind": "interface",
+          "signature": "interface RenamePasskeyVariables",
+          "members": []
+        },
+        {
+          "name": "useBackToImpersonator",
+          "kind": "function",
+          "signature": "function useBackToImpersonator(): UseMutationResult< AccountImpersonationResult, Error, void >"
+        },
+        {
+          "name": "useSessionHeartbeat",
+          "kind": "function",
+          "signature": "function useSessionHeartbeat(): UseMutationResult<void, Error, void>"
+        },
+        {
+          "name": "useDeleteAccount",
+          "kind": "function",
+          "signature": "function useDeleteAccount(): UseMutationResult<void, Error, AccountDeleteRequest>"
         }
       ]
     },
@@ -1642,6 +1759,11 @@
           "members": []
         }
       ]
+    },
+    {
+      "name": "@granit/react-openiddict-admin",
+      "description": "React hooks for OpenIddict admin management — useAdminUsers, useAdminRoles, useOidcApplications, useOidcScopes",
+      "exports": []
     },
     {
       "name": "@granit/react-privacy",

@@ -12,6 +12,8 @@
 
 | Package                                   | Purpose                                                                                                                                                                                                                                       |
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@granit/account`                         | Account self-service types and API: registration, profile, password, 2FA/TOTP, external logins, passkeys/WebAuthn, session, deletion — mirrors `Granit.OpenIddict.Endpoints` .NET contract                                                    |
+| `@granit/react-account`                   | React hooks for `@granit/account`: `AccountProvider`, `useProfile`, `useRegister`, `useChangePassword`, `useTwoFactorStatus`, `usePasskeys`, `useExternalLogins`, `useSessionHeartbeat`, `useDeleteAccount`                                   |
 | `@granit/logger`                          | Configurable logger factory (`createLogger(prefix)`)                                                                                                                                                                                          |
 | `@granit/utils`                           | Shared utilities (`cn`, `formatDate`, `formatNumber`, …)                                                                                                                                                                                      |
 | `@granit/api-client`                      | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`ProblemDetails`), error classes (`HttpError`, `ValidationError`, `TimeoutError`)                                                                                 |
@@ -36,6 +38,8 @@
 | `@granit/react-notifications-web-push`    | React hooks for `@granit/notifications-web-push`: `useWebPush` (permission, subscribe, unsubscribe)                                                                                                                                           |
 | `@granit/notifications-mobile-push`       | Mobile Push (FCM/APNs) device token registration: `registerDeviceToken`, `unregisterDeviceToken`, `fetchDeviceTokens`                                                                                                                         |
 | `@granit/react-notifications-mobile-push` | React hooks for `@granit/notifications-mobile-push`: `useMobilePush`, `useDeviceTokens`                                                                                                                                                       |
+| `@granit/openiddict-admin`                | OpenIddict admin management types and API: user/role/group CRUD, OIDC application/scope/authorization management — mirrors `Granit.OpenIddict.Endpoints` .NET                                                                                 |
+| `@granit/react-openiddict-admin`          | React hooks for `@granit/openiddict-admin`: `OpenIddictAdminProvider`, `useAdminUsers`, `useAdminRoles`, `useAdminGroups`, `useOidcApplications`, `useOidcScopes`, `useOidcAuthorizations`                                                    |
 | `@granit/querying`                        | Data grid types and utilities: `QueryParams`, `FilterEntry`, `QueryMetadata`, `SavedView` — types mirroring `Granit.Querying` .NET contract                                                                                                   |
 | `@granit/react-querying`                  | React bindings for `@granit/querying`: `QueryProvider`, `useQueryEndpoint`, `useQueryMeta`, `useSavedViews`, `useSmartFilter`, `usePagination`, `useInfiniteScroll`                                                                           |
 | `@granit/data-exchange`                   | Tabular data exchange types and API: export/import types mirroring `Granit.DataExchange` .NET contract                                                                                                                                        |
@@ -133,6 +137,8 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
 - **`@granit/authentication` base interface**: `BaseAuthContextType` is the shared base
   — apps extend it with their own fields (`register` in front, `hasAdminRole` in admin)
 - **Peer dep matrix** (actual `peerDependencies` from each `package.json`):
+  - `@granit/account` → `axios`
+  - `@granit/react-account` → `react`, `@tanstack/react-query`, `axios`, `@granit/account`
   - `@granit/utils` → `clsx`, `tailwind-merge`, `date-fns`
   - `@granit/api-client` → `axios`
   - `@granit/blob-storage` → `axios`
@@ -156,6 +162,8 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/react-notifications-web-push` → `react`, `axios`, `@granit/notifications-web-push`
   - `@granit/notifications-mobile-push` → `axios`
   - `@granit/react-notifications-mobile-push` → `react`, `axios`, `@capacitor/push-notifications`, `@granit/notifications-mobile-push`, `@tanstack/react-query`
+  - `@granit/openiddict-admin` → `@granit/querying`, `axios`
+  - `@granit/react-openiddict-admin` → `react`, `@tanstack/react-query`, `axios`, `@granit/openiddict-admin`
   - `@granit/querying` → `@granit/utils`, `axios`
   - `@granit/react-querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/querying`, `@granit/utils`
   - `@granit/data-exchange` → `@granit/querying`, `@granit/utils`, `axios`

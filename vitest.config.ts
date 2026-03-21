@@ -11,6 +11,7 @@ export default defineConfig({
       ),
       '@granit/api-client': path.resolve(__dirname, 'packages/@granit/api-client/src/index.ts'),
       '@granit/audit-log': path.resolve(__dirname, 'packages/@granit/audit-log/src/index.ts'),
+      '@granit/account': path.resolve(__dirname, 'packages/@granit/account/src/index.ts'),
       '@granit/ai': path.resolve(__dirname, 'packages/@granit/ai/src/index.ts'),
       '@granit/background-jobs': path.resolve(
         __dirname,
@@ -52,6 +53,10 @@ export default defineConfig({
         'packages/@granit/multi-tenancy/src/index.ts'
       ),
       '@granit/logger-otlp': path.resolve(__dirname, 'packages/@granit/logger-otlp/src/index.ts'),
+      '@granit/openiddict-admin': path.resolve(
+        __dirname,
+        'packages/@granit/openiddict-admin/src/index.ts'
+      ),
       '@granit/notifications-mobile-push': path.resolve(
         __dirname,
         'packages/@granit/notifications-mobile-push/src/index.ts'
@@ -72,6 +77,7 @@ export default defineConfig({
         __dirname,
         'packages/@granit/notifications/src/index.ts'
       ),
+      '@granit/privacy': path.resolve(__dirname, 'packages/@granit/privacy/src/index.ts'),
       '@granit/querying': path.resolve(__dirname, 'packages/@granit/querying/src/index.ts'),
       '@granit/validation': path.resolve(__dirname, 'packages/@granit/validation/src/index.ts'),
       '@granit/react-reference-data': path.resolve(
@@ -86,6 +92,10 @@ export default defineConfig({
       '@granit/react-audit-log': path.resolve(
         __dirname,
         'packages/@granit/react-audit-log/src/index.ts'
+      ),
+      '@granit/react-account': path.resolve(
+        __dirname,
+        'packages/@granit/react-account/src/index.ts'
       ),
       '@granit/react-authentication-api-keys': path.resolve(
         __dirname,
@@ -135,6 +145,10 @@ export default defineConfig({
         __dirname,
         'packages/@granit/react-localization/src/index.ts'
       ),
+      '@granit/react-openiddict-admin': path.resolve(
+        __dirname,
+        'packages/@granit/react-openiddict-admin/src/index.ts'
+      ),
       '@granit/react-notifications': path.resolve(
         __dirname,
         'packages/@granit/react-notifications/src/index.ts'
@@ -146,6 +160,10 @@ export default defineConfig({
       '@granit/react-notifications-web-push': path.resolve(
         __dirname,
         'packages/@granit/react-notifications-web-push/src/index.ts'
+      ),
+      '@granit/react-privacy': path.resolve(
+        __dirname,
+        'packages/@granit/react-privacy/src/index.ts'
       ),
       '@granit/react-querying': path.resolve(
         __dirname,
