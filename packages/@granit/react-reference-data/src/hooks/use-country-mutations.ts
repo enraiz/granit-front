@@ -1,3 +1,9 @@
+import {
+  createCountry as createCountryApi,
+  updateCountry as updateCountryApi,
+  deactivateCountry as deactivateCountryApi,
+  reactivateCountry as reactivateCountryApi,
+} from '@granit/reference-data';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { countryKeys } from './use-country.js';
@@ -43,10 +49,8 @@ export function useCreateCountry(
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: CreateCountryPayload) => {
-      const response = await client.post<Country>(basePath, payload);
-      return response.data;
-    },
+    mutationFn: async (payload: CreateCountryPayload) =>
+      createCountryApi(client, basePath, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: countryKeys.all }).catch(() => undefined);
     },
@@ -71,10 +75,8 @@ export function useUpdateCountry(
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ code, data }: UpdateCountryPayload) => {
-      const response = await client.put<Country>(`${basePath}/${code}`, data);
-      return response.data;
-    },
+    mutationFn: async ({ code, data }: UpdateCountryPayload) =>
+      updateCountryApi(client, basePath, code, data),
     onSuccess: (_data, { code }) => {
       queryClient.invalidateQueries({ queryKey: countryKeys.all }).catch(() => undefined);
       queryClient.invalidateQueries({ queryKey: countryKeys.detail(code) }).catch(() => undefined);
@@ -100,9 +102,7 @@ export function useDeactivateCountry(
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (code: string) => {
-      await client.delete(`${basePath}/${code}`);
-    },
+    mutationFn: async (code: string) => deactivateCountryApi(client, basePath, code),
     onSuccess: (_data, code) => {
       queryClient.invalidateQueries({ queryKey: countryKeys.all }).catch(() => undefined);
       queryClient.invalidateQueries({ queryKey: countryKeys.detail(code) }).catch(() => undefined);
@@ -128,10 +128,7 @@ export function useReactivateCountry(
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (code: string) => {
-      const response = await client.put<Country>(`${basePath}/${code}`, { isActive: true });
-      return response.data;
-    },
+    mutationFn: async (code: string) => reactivateCountryApi(client, basePath, code),
     onSuccess: (_data, code) => {
       queryClient.invalidateQueries({ queryKey: countryKeys.all }).catch(() => undefined);
       queryClient.invalidateQueries({ queryKey: countryKeys.detail(code) }).catch(() => undefined);

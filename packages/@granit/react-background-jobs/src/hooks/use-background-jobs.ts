@@ -1,4 +1,10 @@
-import { fetchBackgroundJobs } from '@granit/background-jobs';
+import {
+  fetchBackgroundJob,
+  fetchBackgroundJobs,
+  pauseJob,
+  resumeJob,
+  triggerJob,
+} from '@granit/background-jobs';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { BackgroundJobListParams, BackgroundJobStatus } from '@granit/background-jobs';
@@ -68,12 +74,7 @@ export function useBackgroundJob(
 
   return useQuery({
     queryKey: backgroundJobKeys.job(name),
-    queryFn: async () => {
-      const { data } = await client.get<BackgroundJobStatus>(
-        `${basePath}/${encodeURIComponent(name)}`
-      );
-      return data;
-    },
+    queryFn: () => fetchBackgroundJob(client, basePath, name),
     refetchInterval: 15_000,
     enabled: name.length > 0,
   });
@@ -98,7 +99,7 @@ export function usePauseJob(
 
   return useMutation({
     mutationFn: async (jobName: string) => {
-      await client.post(`${basePath}/${encodeURIComponent(jobName)}/pause`);
+      await pauseJob(client, basePath, jobName);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.all });
@@ -125,7 +126,7 @@ export function useResumeJob(
 
   return useMutation({
     mutationFn: async (jobName: string) => {
-      await client.post(`${basePath}/${encodeURIComponent(jobName)}/resume`);
+      await resumeJob(client, basePath, jobName);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.all });
@@ -152,7 +153,7 @@ export function useTriggerJob(
 
   return useMutation({
     mutationFn: async (jobName: string) => {
-      await client.post(`${basePath}/${encodeURIComponent(jobName)}/trigger`);
+      await triggerJob(client, basePath, jobName);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: backgroundJobKeys.all });

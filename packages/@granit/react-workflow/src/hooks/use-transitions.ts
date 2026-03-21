@@ -13,7 +13,7 @@ export interface UseTransitionsOptions {
 }
 
 export interface UseTransitionsReturn {
-  transitions: TransitionDto[];
+  transitions: readonly TransitionDto[];
   loading: boolean;
   error: Error | null;
   refetch: () => Promise<void>;
@@ -22,7 +22,7 @@ export interface UseTransitionsReturn {
 export function useTransitions({ currentState }: UseTransitionsOptions): UseTransitionsReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
-  const [transitions, setTransitions] = useState<TransitionDto[]>([]);
+  const [transitions, setTransitions] = useState<readonly TransitionDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-20T21:12:34.146938+00:00",
+  "generatedAt": "2026-03-21T00:14:50.862451+00:00",
   "repo": "granit-front",
   "packages": [
     {
@@ -66,48 +66,6 @@
           ]
         },
         {
-          "name": "ProblemDetails",
-          "kind": "interface",
-          "signature": "interface ProblemDetails",
-          "members": [
-            {
-              "name": "type",
-              "kind": "property",
-              "signature": "type?: string"
-            },
-            {
-              "name": "title",
-              "kind": "property",
-              "signature": "title: string"
-            },
-            {
-              "name": "status",
-              "kind": "property",
-              "signature": "status: number"
-            },
-            {
-              "name": "detail",
-              "kind": "property",
-              "signature": "detail?: string"
-            },
-            {
-              "name": "instance",
-              "kind": "property",
-              "signature": "instance?: string"
-            },
-            {
-              "name": "traceId",
-              "kind": "property",
-              "signature": "traceId?: string"
-            },
-            {
-              "name": "errorCode",
-              "kind": "property",
-              "signature": "errorCode?: string"
-            }
-          ]
-        },
-        {
           "name": "setTokenGetter",
           "kind": "function",
           "signature": "function setTokenGetter(getter: () => Promise<string | undefined>): void"
@@ -136,6 +94,12 @@
           "name": "createMutator",
           "kind": "function",
           "signature": "function createMutator(instance: AxiosInstance)"
+        },
+        {
+          "name": "ProblemDetails",
+          "kind": "interface",
+          "signature": "interface ProblemDetailsPayload",
+          "members": []
         },
         {
           "name": "HttpError",
@@ -206,16 +170,6 @@
           "kind": "interface",
           "signature": "interface BackgroundJobStatus",
           "members": []
-        },
-        {
-          "name": "fetchBackgroundJob",
-          "kind": "function",
-          "signature": "async function fetchBackgroundJob( client: AxiosInstance, basePath: string, name: string ): Promise<BackgroundJobStatus>"
-        },
-        {
-          "name": "fetchBackgroundJobs",
-          "kind": "function",
-          "signature": "async function fetchBackgroundJobs( client: AxiosInstance, basePath: string, params?: BackgroundJobListParams ): Promise<PagedResult<BackgroundJobStatus>>"
         }
       ]
     },
@@ -2349,7 +2303,7 @@
             {
               "name": "transitions",
               "kind": "property",
-              "signature": "transitions: TransitionDto[]"
+              "signature": "transitions: readonly TransitionDto[]"
             },
             {
               "name": "loading",
@@ -2435,7 +2389,7 @@
     },
     {
       "name": "@granit/storage",
-      "description": "File upload and storage management hooks",
+      "description": "Typed localStorage/sessionStorage wrapper with JSON serialization",
       "exports": [
         {
           "name": "createStorage",

@@ -15,7 +15,7 @@ export interface UseWorkflowStatusOptions {
 
 export interface UseWorkflowStatusReturn {
   currentState: string | null;
-  transitions: TransitionDto[];
+  transitions: readonly TransitionDto[];
   loading: boolean;
   error: Error | null;
   refetch: () => Promise<void>;
@@ -28,7 +28,7 @@ export function useWorkflowStatus({
   const { apiClient, basePath } = useWorkflowConfig();
 
   const [currentState, setCurrentState] = useState<string | null>(null);
-  const [transitions, setTransitions] = useState<TransitionDto[]>([]);
+  const [transitions, setTransitions] = useState<readonly TransitionDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

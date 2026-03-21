@@ -243,9 +243,6 @@ importers:
 
   packages/@granit/data-exchange:
     dependencies:
-      '@granit/api-client':
-        specifier: workspace:*
-        version: link:../api-client
       '@granit/querying':
         specifier: workspace:*
         version: link:../querying
@@ -331,10 +328,6 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
-    devDependencies:
-      '@granit/api-client':
-        specifier: workspace:*
-        version: link:../api-client
 
   packages/@granit/notifications-mobile-push:
     dependencies:
@@ -547,12 +540,13 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.2.4
+    devDependencies:
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
 
   packages/@granit/react-data-exchange:
     dependencies:
-      '@granit/api-client':
-        specifier: workspace:*
-        version: link:../api-client
       '@granit/data-exchange':
         specifier: workspace:*
         version: link:../data-exchange
@@ -879,6 +873,9 @@ importers:
 
   packages/@granit/react-timeline:
     dependencies:
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
       '@granit/querying':
         specifier: workspace:*
         version: link:../querying
@@ -947,7 +944,7 @@ importers:
         specifier: workspace:*
         version: link:../validation
       axios:
-        specifier: '>=1.0.0'
+        specifier: '*'
         version: 1.13.6
       react:
         specifier: ^19.0.0
@@ -984,6 +981,12 @@ importers:
 
   packages/@granit/react-workflow:
     dependencies:
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       '@granit/workflow':
         specifier: workspace:*
         version: link:../workflow
@@ -1009,6 +1012,9 @@ importers:
       '@granit/querying':
         specifier: workspace:*
         version: link:../querying
+      axios:
+        specifier: '*'
+        version: 1.13.6
 
   packages/@granit/settings:
     dependencies:
@@ -1065,6 +1071,9 @@ importers:
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.0
+      '@opentelemetry/instrumentation':
+        specifier: '>=0.50.0'
+        version: 0.213.0(@opentelemetry/api@1.9.0)
 
   packages/@granit/utils:
     dependencies:
@@ -1081,7 +1090,7 @@ importers:
   packages/@granit/validation:
     dependencies:
       axios:
-        specifier: '>=1.0.0'
+        specifier: '*'
         version: 1.13.6
     devDependencies:
       '@granit/testing':

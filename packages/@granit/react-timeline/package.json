@@ -19,6 +19,7 @@
     "@granit/react-testing": "workspace:*"
   },
   "peerDependencies": {
+    "@granit/logger": "workspace:*",
     "@granit/querying": "workspace:*",
     "@granit/react-querying": "workspace:*",
     "@granit/timeline": "workspace:*",

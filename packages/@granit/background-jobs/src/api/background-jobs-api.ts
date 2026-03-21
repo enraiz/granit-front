@@ -29,3 +29,42 @@ export async function fetchBackgroundJob(
   const { data } = await client.get<BackgroundJobStatus>(`${basePath}/${encodeURIComponent(name)}`);
   return data;
 }
+
+/**
+ * Pause a background job.
+ *
+ * `POST {basePath}/{name}/pause`
+ */
+export async function pauseJob(
+  client: AxiosInstance,
+  basePath: string,
+  name: string
+): Promise<void> {
+  await client.post(`${basePath}/${encodeURIComponent(name)}/pause`);
+}
+
+/**
+ * Resume a paused background job.
+ *
+ * `POST {basePath}/{name}/resume`
+ */
+export async function resumeJob(
+  client: AxiosInstance,
+  basePath: string,
+  name: string
+): Promise<void> {
+  await client.post(`${basePath}/${encodeURIComponent(name)}/resume`);
+}
+
+/**
+ * Manually trigger a background job.
+ *
+ * `POST {basePath}/{name}/trigger`
+ */
+export async function triggerJob(
+  client: AxiosInstance,
+  basePath: string,
+  name: string
+): Promise<void> {
+  await client.post(`${basePath}/${encodeURIComponent(name)}/trigger`);
+}

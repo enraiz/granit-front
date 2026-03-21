@@ -8,7 +8,7 @@ import type { LanguageInfo } from './types.js';
  * Resolve the initial locale before backend data is available.
  *
  * Detection cascade:
- * 1. Read `gr:locale` from localStorage → if present, return it
+ * 1. Read `dd:locale` from localStorage → if present, return it
  * 2. `userLocale` from user settings (backend) → if provided, return it
  * 3. Read `navigator.language` → try exact match (e.g. "pt-BR"), then base code (e.g. "pt")
  * 4. If `languages` provided → return the one with `isDefault === true`

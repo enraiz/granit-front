@@ -10,60 +10,74 @@
 
 ## Packages
 
-| Package                                 | Purpose                                                                                                                                                                                                                                       |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@granit/logger`                        | Configurable logger factory (`createLogger(prefix)`)                                                                                                                                                                                          |
-| `@granit/utils`                         | Shared utilities (`cn`, `formatDate`, `formatNumber`, …)                                                                                                                                                                                      |
-| `@granit/api-client`                    | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`PaginatedResponse`, `ProblemDetails`)                                                                                                                            |
-| `@granit/blob-storage`                  | Blob storage types and API functions: `initiateUpload`, `confirmUpload`, `getDownloadUrl`, `deleteBlob`, `getBlob`, `cleanupOrphans` — mirrors `Granit.BlobStorage` .NET contract                                                             |
-| `@granit/react-blob-storage`            | React hooks for `@granit/blob-storage`: `useBlob`, `useInitiateUpload`, `useConfirmUpload`, `useDeleteBlob`, `useDownloadUrl`, `useCleanupOrphans`, `useBlobUpload` (orchestration)                                                           |
-| `@granit/authentication`                | Keycloak/OIDC authentication types: `BaseAuthContextType`, `KeycloakUserInfo`, `KeycloakCoreConfig`, `LoginOptions`, `LogoutOptions` — mirrors `Granit.Authentication` .NET                                                                   |
-| `@granit/react-authentication`          | React bindings for `@granit/authentication`: `useKeycloakInit`, `createAuthContext`, `createMockProvider`                                                                                                                                     |
-| `@granit/authorization`                 | Permission/role authorization types: `PermissionsResponse`, `PermissionDefinitionDto`, `PermissionGroupDto`, `PermissionGrantDto` — mirrors `Granit.Authorization` .NET                                                                       |
-| `@granit/react-authorization`           | React hooks for `@granit/authorization`: `usePermissions`, `usePermissionDefinitions`, `useRolePermissions`, `usePermissionGrant`                                                                                                             |
-| `@granit/timeline`                      | Unified activity feed: API functions (`fetchStream`, `createEntry`, `deleteEntry`), types mirroring `Granit.Timeline` .NET contract                                                                                                           |
-| `@granit/react-timeline`                | React bindings for `@granit/timeline`: `TimelineProvider`, `useTimeline`, `useTimelineActions`, `useTimelineFollowers`                                                                                                                        |
-| `@granit/cookies`                       | Cookie consent abstraction: types (`CookieConsentProvider` interface, `CookieCategory`, `ConsentState`)                                                                                                                                       |
-| `@granit/react-cookies`                 | React bindings for `@granit/cookies`: `CookieConsentProvider`, `useCookieConsent`                                                                                                                                                             |
-| `@granit/cookies-klaro`                 | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory                                                                                                                                                                                 |
-| `@granit/workflow`                      | Workflow lifecycle: API functions, types mirroring `Granit.Workflow` .NET contract                                                                                                                                                            |
-| `@granit/react-workflow`                | React bindings for `@granit/workflow`: `WorkflowProvider`, `useWorkflowStatus`, `useWorkflowTransition`, `useWorkflowHistory`                                                                                                                 |
-| `@granit/notifications`                 | Notification core: API functions, `NotificationTransport` interface, extensible `NotificationChannels` constants, types — no React                                                                                                            |
-| `@granit/react-notifications`           | React bindings for `@granit/notifications`: `NotificationProvider`, `useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`                                                   |
-| `@granit/notifications-signalr`         | SignalR transport adapter: `createSignalRTransport` factory implementing `NotificationTransport`                                                                                                                                              |
-| `@granit/notifications-sse`             | SSE transport adapter: `createSseTransport` factory implementing `NotificationTransport` via `@microsoft/fetch-event-source`                                                                                                                  |
-| `@granit/notifications-web-push`        | Web Push VAPID subscription management: `useWebPush` hook (permission, subscribe, unsubscribe)                                                                                                                                                |
-| `@granit/notifications-mobile-push`     | Mobile Push (FCM/APNs) device token registration via Capacitor: `useMobilePush` hook                                                                                                                                                          |
-| `@granit/querying`                      | Data grid types and utilities: `QueryParams`, `FilterEntry`, `QueryMetadata`, `SavedView` — types mirroring `Granit.Querying` .NET contract                                                                                                   |
-| `@granit/react-querying`                | React bindings for `@granit/querying`: `QueryProvider`, `useQueryEndpoint`, `useQueryMeta`, `useSavedViews`, `useSmartFilter`, `usePagination`, `useInfiniteScroll`                                                                           |
-| `@granit/data-exchange`                 | Tabular data exchange types and API: export/import types mirroring `Granit.DataExchange` .NET contract                                                                                                                                        |
-| `@granit/react-data-exchange`           | React bindings for `@granit/data-exchange`: `ExportProvider`, `ImportProvider`, hooks (`useExportJob`, `useImportJob`, etc.)                                                                                                                  |
-| `@granit/tracing`                       | Distributed tracing: OpenTelemetry types, `getTraceContext` (non-React, for logger-otlp integration)                                                                                                                                          |
-| `@granit/react-tracing`                 | React bindings for `@granit/tracing`: `TracingProvider` (WebTracerProvider + OTLP), `useTracer`, `useSpan`                                                                                                                                    |
-| `@granit/identity`                      | Identity provider capabilities: types (`IdentityProviderCapabilities`) and API (`fetchIdentityCapabilities`) mirroring `Granit.Identity` .NET contract                                                                                        |
-| `@granit/react-identity`                | React bindings for `@granit/identity`: `IdentityProvider`, `useIdentityCapabilities`                                                                                                                                                          |
-| `@granit/multi-tenancy`                 | Multi-tenancy types and tenant resolver abstraction: `TenantInfo`, `CurrentTenant`, `MultiTenancyOptions`, `TenantResolver` interface, `resolveTenant` pipeline, `createJwtClaimTenantResolver` — mirrors `Granit.MultiTenancy` .NET contract |
-| `@granit/react-multi-tenancy`           | React bindings for `@granit/multi-tenancy`: `TenantProvider`, `useTenant`, `useKeycloakTenantResolvers` — auto-wires `X-Tenant-Id` header via `@granit/api-client`                                                                            |
-| `@granit/error-boundary`                | Error capture types: `ErrorContextConfig`, `Breadcrumb`, `ErrorContextValue`                                                                                                                                                                  |
-| `@granit/react-error-boundary`          | React bindings for `@granit/error-boundary`: `GranitErrorBoundary`, `GlobalErrorCapture`, `ErrorContextProvider`, `useBreadcrumb`                                                                                                             |
-| `@granit/background-jobs`               | Background job monitoring types: `BackgroundJobStatus` — mirrors `Granit.BackgroundJobs` .NET                                                                                                                                                 |
-| `@granit/react-background-jobs`         | React hooks for `@granit/background-jobs`: `useBackgroundJobs`, `usePauseJob`, `useResumeJob`, `useTriggerJob`                                                                                                                                |
-| `@granit/authentication-api-keys`       | API key management types: `ApiKeyResponse`, `ApiKeyCreateRequest`, `ApiKeyCreateResponse`, `ApiKeyRotateResponse` — mirrors `Granit.Authentication.ApiKeys` .NET                                                                              |
-| `@granit/react-authentication-api-keys` | React hooks for `@granit/authentication-api-keys`: `useApiKeys`, `useApiKey`, `useCreateApiKey`, `useRevokeApiKey`, `useRotateApiKey`, `useUpdateApiKeyScopes`                                                                                |
-| `@granit/reference-data`                | Reference data types: `Country`, `CountriesListParams` — mirrors `Granit.ReferenceData` .NET                                                                                                                                                  |
-| `@granit/react-reference-data`          | React hooks for `@granit/reference-data`: `useCountry`, `useCountries`, `useCreateCountry`, `useUpdateCountry`, `useDeactivateCountry`, `useReactivateCountry`                                                                                |
-| `@granit/templating`                    | Template management types and API functions: `getTemplates`, `saveDraft`, `publishTemplate`, types — mirrors `Granit.Templating` .NET                                                                                                         |
-| `@granit/react-templating`              | React bindings for `@granit/templating`: `TemplatingProvider`, `useTemplate`, `useTemplates`, `useTemplateMutations`, `useTemplateCategories`, `useTemplatePreview`, `useTemplateVariables`                                                   |
-| `@granit/settings`                      | Application settings types — mirrors `Granit.Settings` .NET                                                                                                                                                                                   |
-| `@granit/react-settings`                | React bindings for `@granit/settings`: `SettingsProvider`, `useSetting`, `useUpdateSetting`                                                                                                                                                   |
-| `@granit/storage`                       | Storage abstraction: `createStorage<T>` factory (localStorage wrapper with JSON serialization)                                                                                                                                                |
-| `@granit/react-storage`                 | React bindings for `@granit/storage`: `useStorage` hook (`useSyncExternalStore`-based)                                                                                                                                                        |
-| `@granit/localization`                  | Localization setup: `createLocalization` factory (i18next configuration)                                                                                                                                                                      |
-| `@granit/react-localization`            | React bindings for `@granit/localization`: `useLocale` hook (locale management + persistence)                                                                                                                                                 |
-| `@granit/logger-otlp`                   | OpenTelemetry log transport: `createOtlpTransport` for `@granit/logger`                                                                                                                                                                       |
-| `@granit/webhooks`                      | Webhook subscription management types and API functions: CRUD, lifecycle (activate/suspend/deactivate), secret rotation, test ping, stats — mirrors `Granit.Webhooks` .NET                                                                    |
-| `@granit/react-webhooks`                | React hooks for `@granit/webhooks`: `useSubscription`, `useCreateSubscription`, `useDeleteSubscription`, `useActivateSubscription`, `useRotateSecret`, `useTestPing`, `useDeliveries`, `useWebhookStats`                                      |
-| `@granit/idempotency`                   | Idempotency key generation: `createIdempotencyKey` — mirrors `Granit.Idempotency` .NET                                                                                                                                                        |
+| Package                                   | Purpose                                                                                                                                                                                                                                       |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@granit/logger`                          | Configurable logger factory (`createLogger(prefix)`)                                                                                                                                                                                          |
+| `@granit/utils`                           | Shared utilities (`cn`, `formatDate`, `formatNumber`, …)                                                                                                                                                                                      |
+| `@granit/api-client`                      | Axios factory (`createApiClient`, `setTokenGetter`), shared response types (`ProblemDetails`), error classes (`HttpError`, `ValidationError`, `TimeoutError`)                                                                                 |
+| `@granit/blob-storage`                    | Blob storage types and API functions: `initiateUpload`, `confirmUpload`, `getDownloadUrl`, `deleteBlob`, `getBlob`, `cleanupOrphans` — mirrors `Granit.BlobStorage` .NET contract                                                             |
+| `@granit/react-blob-storage`              | React hooks for `@granit/blob-storage`: `useBlob`, `useInitiateUpload`, `useConfirmUpload`, `useDeleteBlob`, `useDownloadUrl`, `useCleanupOrphans`, `useBlobUpload` (orchestration)                                                           |
+| `@granit/authentication`                  | Keycloak/OIDC authentication types: `BaseAuthContextType`, `KeycloakUserInfo`, `KeycloakCoreConfig`, `LoginOptions`, `LogoutOptions` — mirrors `Granit.Authentication` .NET                                                                   |
+| `@granit/react-authentication`            | React bindings for `@granit/authentication`: `useKeycloakInit`, `createAuthContext`, `createMockProvider`                                                                                                                                     |
+| `@granit/authorization`                   | Permission/role authorization types: `PermissionsResponse`, `PermissionDefinitionDto`, `PermissionGroupDto`, `PermissionGrantDto` — mirrors `Granit.Authorization` .NET                                                                       |
+| `@granit/react-authorization`             | React hooks for `@granit/authorization`: `usePermissions`, `usePermissionDefinitions`, `useRolePermissions`, `usePermissionGrant`                                                                                                             |
+| `@granit/timeline`                        | Unified activity feed: API functions (`fetchStream`, `createEntry`, `deleteEntry`), types mirroring `Granit.Timeline` .NET contract                                                                                                           |
+| `@granit/react-timeline`                  | React bindings for `@granit/timeline`: `TimelineProvider`, `useTimeline`, `useTimelineActions`, `useTimelineFollowers`                                                                                                                        |
+| `@granit/cookies`                         | Cookie consent abstraction: types (`CookieConsentProvider` interface, `CookieCategory`, `ConsentState`)                                                                                                                                       |
+| `@granit/react-cookies`                   | React bindings for `@granit/cookies`: `CookieConsentProvider`, `useCookieConsent`                                                                                                                                                             |
+| `@granit/cookies-klaro`                   | Klaro CMP adapter: `createKlaroCookieConsentProvider` factory                                                                                                                                                                                 |
+| `@granit/workflow`                        | Workflow lifecycle: API functions, types mirroring `Granit.Workflow` .NET contract                                                                                                                                                            |
+| `@granit/react-workflow`                  | React bindings for `@granit/workflow`: `WorkflowProvider`, `useWorkflowStatus`, `useWorkflowTransition`, `useWorkflowHistory`                                                                                                                 |
+| `@granit/notifications`                   | Notification core: API functions, `NotificationTransport` interface, extensible `NotificationChannels` constants, types — no React                                                                                                            |
+| `@granit/react-notifications`             | React bindings for `@granit/notifications`: `NotificationProvider`, `useNotifications`, `useUnreadCount`, `useRealTimeNotifications`, `useEntityActivityFeed`, `useNotificationPreferences`                                                   |
+| `@granit/notifications-signalr`           | SignalR transport adapter: `createSignalRTransport` factory implementing `NotificationTransport`                                                                                                                                              |
+| `@granit/notifications-sse`               | SSE transport adapter: `createSseTransport` factory implementing `NotificationTransport` via `@microsoft/fetch-event-source`                                                                                                                  |
+| `@granit/notifications-web-push`          | Web Push VAPID subscription management: `registerPushSubscription`, `unregisterPushSubscription`, `urlBase64ToUint8Array`                                                                                                                     |
+| `@granit/react-notifications-web-push`    | React hooks for `@granit/notifications-web-push`: `useWebPush` (permission, subscribe, unsubscribe)                                                                                                                                           |
+| `@granit/notifications-mobile-push`       | Mobile Push (FCM/APNs) device token registration: `registerDeviceToken`, `unregisterDeviceToken`, `fetchDeviceTokens`                                                                                                                         |
+| `@granit/react-notifications-mobile-push` | React hooks for `@granit/notifications-mobile-push`: `useMobilePush`, `useDeviceTokens`                                                                                                                                                       |
+| `@granit/querying`                        | Data grid types and utilities: `QueryParams`, `FilterEntry`, `QueryMetadata`, `SavedView` — types mirroring `Granit.Querying` .NET contract                                                                                                   |
+| `@granit/react-querying`                  | React bindings for `@granit/querying`: `QueryProvider`, `useQueryEndpoint`, `useQueryMeta`, `useSavedViews`, `useSmartFilter`, `usePagination`, `useInfiniteScroll`                                                                           |
+| `@granit/data-exchange`                   | Tabular data exchange types and API: export/import types mirroring `Granit.DataExchange` .NET contract                                                                                                                                        |
+| `@granit/react-data-exchange`             | React bindings for `@granit/data-exchange`: `ExportProvider`, `ImportProvider`, hooks (`useExportJob`, `useImportJob`, etc.)                                                                                                                  |
+| `@granit/tracing`                         | Distributed tracing: OpenTelemetry types, `getTraceContext` (non-React, for logger-otlp integration)                                                                                                                                          |
+| `@granit/react-tracing`                   | React bindings for `@granit/tracing`: `TracingProvider` (WebTracerProvider + OTLP), `useTracer`, `useSpan`                                                                                                                                    |
+| `@granit/identity`                        | Identity provider capabilities: types (`IdentityProviderCapabilities`) and API (`fetchIdentityCapabilities`) mirroring `Granit.Identity` .NET contract                                                                                        |
+| `@granit/react-identity`                  | React bindings for `@granit/identity`: `IdentityProvider`, `useIdentityCapabilities`                                                                                                                                                          |
+| `@granit/multi-tenancy`                   | Multi-tenancy types and tenant resolver abstraction: `TenantInfo`, `CurrentTenant`, `MultiTenancyOptions`, `TenantResolver` interface, `resolveTenant` pipeline, `createJwtClaimTenantResolver` — mirrors `Granit.MultiTenancy` .NET contract |
+| `@granit/react-multi-tenancy`             | React bindings for `@granit/multi-tenancy`: `TenantProvider`, `useTenant`, `useKeycloakTenantResolvers` — auto-wires `X-Tenant-Id` header via `@granit/api-client`                                                                            |
+| `@granit/error-boundary`                  | Error capture types: `ErrorContextConfig`, `Breadcrumb`, `ErrorContextValue`                                                                                                                                                                  |
+| `@granit/react-error-boundary`            | React bindings for `@granit/error-boundary`: `GranitErrorBoundary`, `GlobalErrorCapture`, `ErrorContextProvider`, `useBreadcrumb`                                                                                                             |
+| `@granit/background-jobs`                 | Background job monitoring types: `BackgroundJobStatus` — mirrors `Granit.BackgroundJobs` .NET                                                                                                                                                 |
+| `@granit/react-background-jobs`           | React hooks for `@granit/background-jobs`: `useBackgroundJobs`, `usePauseJob`, `useResumeJob`, `useTriggerJob`                                                                                                                                |
+| `@granit/authentication-api-keys`         | API key management types: `ApiKeyResponse`, `ApiKeyCreateRequest`, `ApiKeyCreateResponse`, `ApiKeyRotateResponse` — mirrors `Granit.Authentication.ApiKeys` .NET                                                                              |
+| `@granit/react-authentication-api-keys`   | React hooks for `@granit/authentication-api-keys`: `useApiKeys`, `useApiKey`, `useCreateApiKey`, `useRevokeApiKey`, `useRotateApiKey`, `useUpdateApiKeyScopes`                                                                                |
+| `@granit/reference-data`                  | Reference data types: `Country`, `CountriesListParams` — mirrors `Granit.ReferenceData` .NET                                                                                                                                                  |
+| `@granit/react-reference-data`            | React hooks for `@granit/reference-data`: `useCountry`, `useCountries`, `useCreateCountry`, `useUpdateCountry`, `useDeactivateCountry`, `useReactivateCountry`                                                                                |
+| `@granit/templating`                      | Template management types and API functions: `getTemplates`, `saveDraft`, `publishTemplate`, types — mirrors `Granit.Templating` .NET                                                                                                         |
+| `@granit/react-templating`                | React bindings for `@granit/templating`: `TemplatingProvider`, `useTemplate`, `useTemplates`, `useTemplateMutations`, `useTemplateCategories`, `useTemplatePreview`, `useTemplateVariables`                                                   |
+| `@granit/settings`                        | Application settings types — mirrors `Granit.Settings` .NET                                                                                                                                                                                   |
+| `@granit/react-settings`                  | React bindings for `@granit/settings`: `SettingsProvider`, `useSetting`, `useUpdateSetting`                                                                                                                                                   |
+| `@granit/storage`                         | Storage abstraction: `createStorage<T>` factory (localStorage wrapper with JSON serialization)                                                                                                                                                |
+| `@granit/react-storage`                   | React bindings for `@granit/storage`: `useStorage` hook (`useSyncExternalStore`-based)                                                                                                                                                        |
+| `@granit/localization`                    | Localization setup: `createLocalization` factory (i18next configuration)                                                                                                                                                                      |
+| `@granit/react-localization`              | React bindings for `@granit/localization`: `useLocale` hook (locale management + persistence)                                                                                                                                                 |
+| `@granit/logger-otlp`                     | OpenTelemetry log transport: `createOtlpTransport` for `@granit/logger`                                                                                                                                                                       |
+| `@granit/webhooks`                        | Webhook subscription management types and API functions: CRUD, lifecycle (activate/suspend/deactivate), secret rotation, test ping, stats — mirrors `Granit.Webhooks` .NET                                                                    |
+| `@granit/react-webhooks`                  | React hooks for `@granit/webhooks`: `useSubscription`, `useCreateSubscription`, `useDeleteSubscription`, `useActivateSubscription`, `useRotateSecret`, `useTestPing`, `useDeliveries`, `useWebhookStats`                                      |
+| `@granit/ai`                              | AI workspace management, chat completion (sync + streaming), embedding generation, usage tracking — mirrors `Granit.AI` .NET                                                                                                                  |
+| `@granit/react-ai`                        | React bindings for `@granit/ai`: `AIProvider`, `useAIWorkspaces`, `useAIChat`, `useAIChatStream`, `useAIEmbeddings`                                                                                                                           |
+| `@granit/audit-log`                       | Audit log types and API: `fetchAuditLogEntries`, `fetchAuditLogEntry`, `fetchEntityAuditTrail` — mirrors `Granit.AuditLog` .NET                                                                                                               |
+| `@granit/react-audit-log`                 | React bindings for `@granit/audit-log`: `AuditLogProvider`, `useAuditLogEntries`, `useAuditLogEntry`, `useEntityAuditTrail`                                                                                                                   |
+| `@granit/diagnostics`                     | Monitoring health types and API: `fetchMonitoringHealth`, `ServiceHealth`, `MonitoringHealthResponse` — mirrors `Granit.Diagnostics` .NET                                                                                                     |
+| `@granit/react-diagnostics`               | React hooks for `@granit/diagnostics`: `useMonitoringHealth`                                                                                                                                                                                  |
+| `@granit/features`                        | Feature management types and API: `fetchFeatureDefinitions`, `fetchFeatureValues`, `setFeatureOverride`, `deleteFeatureOverride` — mirrors `Granit.Features` .NET                                                                             |
+| `@granit/react-features`                  | React bindings for `@granit/features`: `FeaturesProvider`, `useFeatureFlag`, `useFeatureValue`, `useFeatureDefinitions`, `useSetFeatureOverride`                                                                                              |
+| `@granit/validation`                      | OpenAPI constraint extraction, field validation, input prop generation, server-side validation API — mirrors `Granit.Validation` .NET                                                                                                         |
+| `@granit/react-validation`                | React bindings for `@granit/validation`: `createConstraintsResolver`, `useFieldProps`, `useServerValidation`                                                                                                                                  |
+| `@granit/testing`                         | Shared test utilities: `createMockClient`, `axiosResponse`, `createMockLogger`                                                                                                                                                                |
+| `@granit/react-testing`                   | React test utilities: `createTestQueryClient`, `createQueryWrapper` (re-exports `@granit/testing`)                                                                                                                                            |
+| `@granit/idempotency`                     | Idempotency key generation: `createIdempotencyKey` — mirrors `Granit.Idempotency` .NET                                                                                                                                                        |
 
 ## Stack & versions
 
@@ -128,50 +142,62 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
   - `@granit/authorization` → `axios`
   - `@granit/react-authorization` → `react`, `axios`, `@tanstack/react-query`, `@granit/authorization`
   - `@granit/cookies` → _(no peer dependencies)_
-  - `@granit/react-cookies` → `react`, `@granit/cookies`
+  - `@granit/react-cookies` → `react`, `@granit/cookies`, `@granit/logger`
   - `@granit/cookies-klaro` → `klaro`, `@granit/cookies`
-  - `@granit/timeline` → `axios`
-  - `@granit/react-timeline` → `react`, `@granit/timeline`, `@granit/react-querying`
-  - `@granit/workflow` → `axios`
-  - `@granit/react-workflow` → `react`, `axios`, `@granit/workflow`
-  - `@granit/notifications` → `axios`
+  - `@granit/timeline` → `@granit/querying`, `axios`
+  - `@granit/react-timeline` → `react`, `axios`, `@granit/logger`, `@granit/querying`, `@granit/react-querying`, `@granit/timeline`
+  - `@granit/workflow` → `@granit/querying`, `axios`
+  - `@granit/react-workflow` → `react`, `axios`, `@granit/logger`, `@granit/querying`, `@granit/workflow`
+  - `@granit/notifications` → `@granit/querying`, `axios`
   - `@granit/react-notifications` → `react`, `axios`, `@granit/notifications`, `@granit/querying`, `@granit/react-querying`
   - `@granit/notifications-signalr` → `@granit/notifications`, `@microsoft/signalr`
   - `@granit/notifications-sse` → `@granit/notifications`, `@microsoft/fetch-event-source`
-  - `@granit/notifications-web-push` → `axios`, `@granit/notifications`
-  - `@granit/notifications-mobile-push` → `axios`, `@granit/notifications`, `@capacitor/push-notifications`
-  - `@granit/react-notifications-web-push` → `react`, `axios`, `@granit/notifications`
-  - `@granit/react-notifications-mobile-push` → `react`, `axios`, `@granit/notifications`, `@capacitor/push-notifications`
-  - `@granit/querying` → `axios`, `@granit/utils`
-  - `@granit/react-querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/querying`
-  - `@granit/data-exchange` → `axios`, `@granit/utils`
-  - `@granit/react-data-exchange` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/data-exchange`
-  - `@granit/tracing` → `@opentelemetry/api`
-  - `@granit/react-tracing` → `react`, `@opentelemetry/api`, `@opentelemetry/sdk-trace-web`, `@opentelemetry/exporter-trace-otlp-http`, `@opentelemetry/instrumentation-fetch`, `@opentelemetry/instrumentation-xml-http-request`, `@opentelemetry/instrumentation-document-load`, `@opentelemetry/resources`, `@opentelemetry/semantic-conventions`, `@opentelemetry/context-zone`
-  - `@granit/identity` → `axios`
+  - `@granit/notifications-web-push` → `axios`
+  - `@granit/react-notifications-web-push` → `react`, `axios`, `@granit/notifications-web-push`
+  - `@granit/notifications-mobile-push` → `axios`
+  - `@granit/react-notifications-mobile-push` → `react`, `axios`, `@capacitor/push-notifications`, `@granit/notifications-mobile-push`, `@tanstack/react-query`
+  - `@granit/querying` → `@granit/utils`, `axios`
+  - `@granit/react-querying` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/querying`, `@granit/utils`
+  - `@granit/data-exchange` → `@granit/querying`, `@granit/utils`, `axios`
+  - `@granit/react-data-exchange` → `react`, `react-dom`, `axios`, `@tanstack/react-query`, `@granit/data-exchange`, `@granit/querying`, `@granit/utils`
+  - `@granit/tracing` → `@opentelemetry/api`, `@opentelemetry/instrumentation`
+  - `@granit/react-tracing` → `react`, `@granit/tracing`, `@opentelemetry/api`, `@opentelemetry/sdk-trace-web`, `@opentelemetry/exporter-trace-otlp-http`, `@opentelemetry/instrumentation-fetch`, `@opentelemetry/instrumentation-xml-http-request`, `@opentelemetry/instrumentation-document-load`, `@opentelemetry/resources`, `@opentelemetry/semantic-conventions`, `@opentelemetry/context-zone`
+  - `@granit/identity` → `@granit/querying`, `axios`
   - `@granit/react-identity` → `react`, `axios`, `@tanstack/react-query`, `@granit/identity`
   - `@granit/multi-tenancy` → _(no peer dependencies)_
   - `@granit/react-multi-tenancy` → `react`, `@granit/multi-tenancy`, `@granit/api-client`
   - `@granit/error-boundary` → _(no peer dependencies)_
   - `@granit/react-error-boundary` → `react`, `@granit/logger`, `@granit/error-boundary`
-  - `@granit/background-jobs` → _(no peer dependencies)_
-  - `@granit/react-background-jobs` → `react`, `axios`, `@tanstack/react-query`, `@granit/background-jobs`
+  - `@granit/background-jobs` → `@granit/querying`, `axios`
+  - `@granit/react-background-jobs` → `react`, `axios`, `@tanstack/react-query`, `@granit/background-jobs`, `@granit/querying`
   - `@granit/authentication-api-keys` → _(no peer dependencies)_
   - `@granit/react-authentication-api-keys` → `react`, `axios`, `@tanstack/react-query`, `@granit/authentication-api-keys`
-  - `@granit/reference-data` → _(no peer dependencies)_
+  - `@granit/reference-data` → `@granit/querying`, `axios`
   - `@granit/react-reference-data` → `react`, `axios`, `@tanstack/react-query`, `@granit/reference-data`
-  - `@granit/templating` → `axios`
+  - `@granit/templating` → `@granit/querying`, `axios`
   - `@granit/react-templating` → `react`, `axios`, `@tanstack/react-query`, `@granit/templating`
-  - `@granit/settings` → _(no peer dependencies)_
+  - `@granit/settings` → `axios`
   - `@granit/react-settings` → `react`, `axios`, `@tanstack/react-query`, `@granit/settings`
   - `@granit/storage` → _(no peer dependencies)_
   - `@granit/react-storage` → `react`, `@granit/storage`
-  - `@granit/localization` → `i18next`
-  - `@granit/react-localization` → `react`, `react-i18next`, `@granit/localization`, `@granit/storage`
-  - `@granit/logger-otlp` → `@granit/logger`, `@opentelemetry/api`
+  - `@granit/localization` → `@granit/storage`, `i18next`
+  - `@granit/react-localization` → `react`, `react-i18next`, `i18next`, `@granit/localization`, `@granit/storage`
+  - `@granit/logger-otlp` → `@granit/logger`
   - `@granit/webhooks` → `axios`
   - `@granit/react-webhooks` → `react`, `axios`, `@tanstack/react-query`, `@granit/webhooks`
-  - `@granit/idempotency` → _(no peer dependencies)_
+  - `@granit/idempotency` → `@granit/api-client`, `axios`
+  - `@granit/ai` → `axios`
+  - `@granit/react-ai` → `react`, `axios`, `@tanstack/react-query`, `@granit/ai`
+  - `@granit/audit-log` → `@granit/querying`, `axios`
+  - `@granit/react-audit-log` → `react`, `axios`, `@tanstack/react-query`, `@granit/audit-log`
+  - `@granit/diagnostics` → `axios`
+  - `@granit/react-diagnostics` → `react`, `axios`, `@tanstack/react-query`, `@granit/diagnostics`
+  - `@granit/features` → `axios`
+  - `@granit/react-features` → `react`, `axios`, `@tanstack/react-query`, `@granit/features`
+  - `@granit/validation` → `axios`
+  - `@granit/react-validation` → `react`, `axios`, `@granit/validation`
+  - `@granit/testing` → `axios`, `vitest`
+  - `@granit/react-testing` → `react`, `vitest`, `@tanstack/react-query`, `@granit/testing`
 
 ## GitHub issues
 
@@ -282,6 +308,18 @@ Two persona registries:
 - **NEVER** introduce a new persona without user validation and registry update
 - **NEVER** use hybrid roles (`SRE / DevOps`) — choose the primary persona
 - Context (on-call, audit, incident) belongs in the story body, not in the persona
+
+## Code index (`.mcp-front-index.json`)
+
+A pre-commit hook regenerates `.mcp-front-index.json` when TypeScript files
+in `packages/@granit/*/src/` are staged. This file is consumed by the
+`granit-mcp` Worker for code navigation tools (`search_code`,
+`get_public_api`, `get_project_graph`).
+
+- **Script:** `python3 scripts/generate-front-index.py` (Python 3.8+, no deps)
+- **Hook:** `.husky/pre-commit` — runs automatically on `@granit/*` source changes
+- **CI:** drift check validates the file is up to date
+- **NEVER edit `.mcp-front-index.json` manually** — always regenerate
 
 **Infra/governance personas:** SRE, Ingénieur DevOps, Développeur, Architecte, DBA,
 RSSI, DPO, CTO, Direction, Directeur juridique, Auditeur interne, Auditeur externe,

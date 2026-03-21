@@ -12,7 +12,7 @@ function buildUrl(
   entityId: string,
   ...segments: string[]
 ): string {
-  const base = `${basePath}/${entityType}/${entityId}`;
+  const base = `${basePath}/${encodeURIComponent(entityType)}/${encodeURIComponent(entityId)}`;
   return segments.length > 0 ? `${base}/${segments.join('/')}` : base;
 }
 

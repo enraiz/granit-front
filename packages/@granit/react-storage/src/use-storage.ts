@@ -1,5 +1,5 @@
 import { createStorage } from '@granit/storage';
-import { useCallback, useRef, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 
 import type { StorageOptions } from '@granit/storage';
 
@@ -22,7 +22,7 @@ export function useStorage<T>(
   defaultValue: T,
   options?: StorageOptions<T>
 ): [T, (value: T) => void] {
-  const storage = createStorage<T>(key, options);
+  const storage = useMemo(() => createStorage<T>(key, options), [key, options?.storage]);
 
   // Cache the raw string + parsed value to keep referential stability.
   // useSyncExternalStore requires getSnapshot to return the same reference

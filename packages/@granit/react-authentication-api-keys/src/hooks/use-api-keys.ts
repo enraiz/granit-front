@@ -1,14 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { ApiKeyResponse } from '@granit/authentication-api-keys';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { AxiosInstance } from 'axios';
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-const DEFAULT_BASE_PATH = '/api/v1/api-keys';
 
 // ---------------------------------------------------------------------------
 // Types

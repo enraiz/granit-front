@@ -80,10 +80,6 @@ export function usePermissions(options: UsePermissionsOptions): UsePermissionsRe
     [permissionSet]
   );
 
-  const refetch = React.useCallback(async () => {
-    await query.refetch();
-  }, [query.refetch]);
-
   return {
     permissions: permissionSet,
     hasPermission,
@@ -91,6 +87,6 @@ export function usePermissions(options: UsePermissionsOptions): UsePermissionsRe
     hasAllPermissions,
     isLoading: query.isLoading,
     error: query.error,
-    refetch,
+    refetch: query.refetch,
   };
 }

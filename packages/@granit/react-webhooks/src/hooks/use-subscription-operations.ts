@@ -1,14 +1,14 @@
 import { rotateSecret, testPing, webhooksKeys } from '@granit/webhooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { WebhooksOptions } from './use-subscription.js';
 import type {
   WebhookSubscriptionRotateSecretResponse,
   WebhookSubscriptionTestPingResponse,
 } from '@granit/webhooks';
 import type { UseMutationResult } from '@tanstack/react-query';
-
-const DEFAULT_BASE_PATH = '/api/v1/webhooks/subscriptions';
 
 /**
  * Mutation hook to rotate the signing secret of a subscription.

@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import { apiKeyKeys } from './use-api-keys.js';
 
 import type { ApiKeyHookOptions } from './use-api-keys.js';
 import type { ApiKeyResponse } from '@granit/authentication-api-keys';
 import type { UseQueryResult } from '@tanstack/react-query';
-
-const DEFAULT_BASE_PATH = '/api/v1/api-keys';
 
 /**
  * Fetches a single API key by ID.

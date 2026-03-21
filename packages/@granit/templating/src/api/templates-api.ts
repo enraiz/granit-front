@@ -209,7 +209,7 @@ export async function updateCategory(
   request: UpdateTemplateCategoryRequest
 ): Promise<TemplateCategory> {
   const { data } = await client.put<TemplateCategory>(
-    `${basePath}/templates/categories/${id}`,
+    `${basePath}/templates/categories/${encodeURIComponent(id)}`,
     request
   );
   return data;
@@ -220,5 +220,5 @@ export async function deleteCategory(
   basePath: string,
   id: string
 ): Promise<void> {
-  await client.delete(`${basePath}/templates/categories/${id}`);
+  await client.delete(`${basePath}/templates/categories/${encodeURIComponent(id)}`);
 }

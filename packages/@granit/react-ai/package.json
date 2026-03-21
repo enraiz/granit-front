@@ -2,7 +2,7 @@
   "name": "@granit/react-ai",
   "description": "React bindings for @granit/ai — AIProvider, useAIWorkspaces, useAIChat, useAIChatStream, useAIEmbeddings, workspace CRUD mutations",
   "version": "0.2.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -25,7 +25,8 @@
         "types": "./dist/index.d.ts",
         "import": "./dist/index.js"
       }
-    }
+    },
+    "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
     "@granit/testing": "workspace:*",

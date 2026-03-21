@@ -15,7 +15,11 @@
   },
   "peerDependencies": {
     "@granit/cookies": "workspace:*",
+    "@granit/logger": "workspace:*",
     "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@granit/logger": "workspace:*"
   },
   "publishConfig": {
     "exports": {
@@ -23,6 +27,7 @@
         "types": "./dist/index.d.ts",
         "import": "./dist/index.js"
       }
-    }
+    },
+    "registry": "https://npm.pkg.github.com"
   }
 }

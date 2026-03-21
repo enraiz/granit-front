@@ -1,11 +1,11 @@
 import { blobStorageKeys, getBlob } from '@granit/blob-storage';
 import { useQuery } from '@tanstack/react-query';
 
+import { DEFAULT_BASE_PATH } from '../constants.js';
+
 import type { BlobDescriptorResponse } from '@granit/blob-storage';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { AxiosInstance } from 'axios';
-
-const DEFAULT_BASE_PATH = '/api/v1/blobs';
 
 /** Options accepted by all blob-storage hooks. */
 export interface BlobStorageOptions {

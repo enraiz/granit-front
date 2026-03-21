@@ -18,17 +18,11 @@ export interface ApiClientConfig {
 // RFC 7807 Problem Details — standard error format from Granit .NET backend.
 // See: Granit.ExceptionHandling (400 BusinessException, 404 NotFoundException,
 // 403 ForbiddenException, 409 ConflictException, 422 ValidationException, 500).
-export interface ProblemDetails {
-  type?: string;
-  title: string;
-  status: number;
-  detail?: string;
-  instance?: string;
-  /** OpenTelemetry trace ID for correlation in Grafana/Loki/Tempo */
-  traceId?: string;
-  /** Domain error code (e.g. "Appointment:SlotUnavailable") from IHasErrorCode */
-  errorCode?: string;
-}
+//
+// Re-exported from errors.ts as ProblemDetailsPayload (readonly variant for
+// error classes). This mutable variant is kept for backward compatibility
+// with consumers that import `ProblemDetails` from `@granit/api-client`.
+export type { ProblemDetailsPayload as ProblemDetails } from './errors.js';
 
 // Global async token getter — shared across all createApiClient instances.
 // Call setTokenGetter() from the auth provider after Keycloak initializes.
