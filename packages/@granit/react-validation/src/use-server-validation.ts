@@ -61,14 +61,10 @@ export function useServerValidation(options: UseServerValidationOptions): Server
       return;
     }
 
-    // Empty value on non-required field — skip
-    if (isEmpty(value) && !constraint.required) {
-      setState(IDLE);
-      return;
-    }
+    const validatorKey = constraint.granitValidator;
 
-    // Empty value on required field — let client resolver handle it
-    if (isEmpty(value) && constraint.required) {
+    // Empty value — skip (required or not, let client resolver handle it)
+    if (isEmpty(value)) {
       setState(IDLE);
       return;
     }
@@ -87,7 +83,7 @@ export function useServerValidation(options: UseServerValidationOptions): Server
 
       setState(VALIDATING);
 
-      validateFieldServer(client, constraint.granitValidator!, value, basePath, controller.signal)
+      validateFieldServer(client, validatorKey, value, basePath, controller.signal)
         .then((status) => {
           if (controller.signal.aborted) return;
 
@@ -96,7 +92,7 @@ export function useServerValidation(options: UseServerValidationOptions): Server
           } else if (status === 'Invalid') {
             setState({
               status: 'invalid',
-              message: t(constraint.granitValidator!, { nsSeparator: false }),
+              message: t(validatorKey, { nsSeparator: false }),
             });
           } else {
             // ValidatorNotFound — no server validator available

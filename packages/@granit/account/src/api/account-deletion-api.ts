@@ -1,0 +1,15 @@
+import type { AccountDeleteRequest } from '../types/index.js';
+import type { AxiosInstance } from 'axios';
+
+/**
+ * Request account deletion (GDPR Art. 17). Deletion is asynchronous.
+ *
+ * `POST {basePath}/delete`
+ */
+export async function deleteAccount(
+  client: AxiosInstance,
+  basePath: string,
+  request: AccountDeleteRequest
+): Promise<void> {
+  await client.post(`${basePath}/delete`, request);
+}

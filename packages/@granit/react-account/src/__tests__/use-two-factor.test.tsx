@@ -1,0 +1,214 @@
+import { createTestQueryClient } from '@granit/react-testing';
+import { createMockClient } from '@granit/testing';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
+import * as React from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import {
+  useAuthenticatorKey,
+  useDisableTwoFactor,
+  useEnableTwoFactor,
+  useGenerateRecoveryCodes,
+  useTwoFactorStatus,
+} from '../hooks/use-two-factor.js';
+import { AccountProvider } from '../providers/account-provider.js';
+
+import type { AccountConfig } from '../providers/account-provider.js';
+import type {
+  AccountAuthenticatorKeyResponse,
+  AccountRecoveryCodesResponse,
+  AccountTwoFactorEnableResponse,
+  AccountTwoFactorStatusResponse,
+} from '@granit/account';
+import type { AxiosInstance } from 'axios';
+import type { ReactNode } from 'react';
+
+vi.mock('@granit/account', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return {
+    ...actual,
+    getTwoFactorStatus: vi.fn(),
+    getAuthenticatorKey: vi.fn(),
+    enableTwoFactor: vi.fn(),
+    disableTwoFactor: vi.fn(),
+    generateRecoveryCodes: vi.fn(),
+  };
+});
+
+const {
+  getTwoFactorStatus,
+  getAuthenticatorKey,
+  enableTwoFactor,
+  disableTwoFactor,
+  generateRecoveryCodes,
+} = await import('@granit/account');
+
+function createWrapper(client: AxiosInstance) {
+  return function Wrapper({ children }: { children: ReactNode }) {
+    const queryClient = createTestQueryClient();
+    const config: AccountConfig = { client };
+    return React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      <AccountProvider config={config}>{children}</AccountProvider>
+    );
+  };
+}
+
+function createWrapperWithQueryClient(client: AxiosInstance) {
+  const queryClient = createTestQueryClient();
+  const config: AccountConfig = { client };
+  return {
+    wrapper: ({ children }: { children: ReactNode }) =>
+      React.createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        <AccountProvider config={config}>{children}</AccountProvider>
+      ),
+    queryClient,
+  };
+}
+
+const mockStatus: AccountTwoFactorStatusResponse = {
+  isEnabled: false,
+  hasAuthenticatorApp: false,
+  recoveryCodesLeft: 0,
+};
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
+describe('useTwoFactorStatus', () => {
+  it('should fetch two-factor status', async () => {
+    const client = createMockClient();
+    vi.mocked(getTwoFactorStatus).mockResolvedValue(mockStatus);
+
+    const { result } = renderHook(() => useTwoFactorStatus(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(getTwoFactorStatus).toHaveBeenCalledWith(client, '/api/account');
+    expect(result.current.data).toEqual(mockStatus);
+  });
+
+  it('should handle fetch error', async () => {
+    const client = createMockClient();
+    vi.mocked(getTwoFactorStatus).mockRejectedValue(new Error('Unauthorized'));
+
+    const { result } = renderHook(() => useTwoFactorStatus(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.error?.message).toBe('Unauthorized');
+  });
+});
+
+describe('useAuthenticatorKey', () => {
+  it('should fetch authenticator key', async () => {
+    const client = createMockClient();
+    const mockKey: AccountAuthenticatorKeyResponse = {
+      sharedKey: 'ABCD1234',
+      qrCodeUri: 'otpauth://totp/app:user@example.com?secret=ABCD1234',
+    };
+    vi.mocked(getAuthenticatorKey).mockResolvedValue(mockKey);
+
+    const { result } = renderHook(() => useAuthenticatorKey(), {
+      wrapper: createWrapper(client),
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(getAuthenticatorKey).toHaveBeenCalledWith(client, '/api/account');
+    expect(result.current.data).toEqual(mockKey);
+  });
+});
+
+describe('useEnableTwoFactor', () => {
+  it('should call enableTwoFactor and invalidate two-factor query on success', async () => {
+    const client = createMockClient();
+    const response: AccountTwoFactorEnableResponse = {
+      recoveryCodes: ['CODE1', 'CODE2', 'CODE3'],
+    };
+    vi.mocked(enableTwoFactor).mockResolvedValue(response);
+
+    const { wrapper, queryClient } = createWrapperWithQueryClient(client);
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
+
+    const { result } = renderHook(() => useEnableTwoFactor(), { wrapper });
+
+    result.current.mutate({ code: '123456' });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(enableTwoFactor).toHaveBeenCalledWith(client, '/api/account', { code: '123456' });
+    expect(result.current.data).toEqual(response);
+    expect(invalidateSpy).toHaveBeenCalledWith({
+      queryKey: ['account', 'two-factor'],
+    });
+  });
+
+  it('should handle invalid code error', async () => {
+    const client = createMockClient();
+    vi.mocked(enableTwoFactor).mockRejectedValue(new Error('Bad Request'));
+
+    const { result } = renderHook(() => useEnableTwoFactor(), {
+      wrapper: createWrapper(client),
+    });
+
+    result.current.mutate({ code: '000000' });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.error?.message).toBe('Bad Request');
+  });
+});
+
+describe('useDisableTwoFactor', () => {
+  it('should call disableTwoFactor and invalidate two-factor query on success', async () => {
+    const client = createMockClient();
+    vi.mocked(disableTwoFactor).mockResolvedValue(undefined);
+
+    const { wrapper, queryClient } = createWrapperWithQueryClient(client);
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
+
+    const { result } = renderHook(() => useDisableTwoFactor(), { wrapper });
+
+    result.current.mutate();
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(disableTwoFactor).toHaveBeenCalledWith(client, '/api/account');
+    expect(invalidateSpy).toHaveBeenCalledWith({
+      queryKey: ['account', 'two-factor'],
+    });
+  });
+});
+
+describe('useGenerateRecoveryCodes', () => {
+  it('should call generateRecoveryCodes and invalidate two-factor query on success', async () => {
+    const client = createMockClient();
+    const response: AccountRecoveryCodesResponse = {
+      recoveryCodes: ['NEW1', 'NEW2', 'NEW3'],
+    };
+    vi.mocked(generateRecoveryCodes).mockResolvedValue(response);
+
+    const { wrapper, queryClient } = createWrapperWithQueryClient(client);
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
+
+    const { result } = renderHook(() => useGenerateRecoveryCodes(), { wrapper });
+
+    result.current.mutate();
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(generateRecoveryCodes).toHaveBeenCalledWith(client, '/api/account');
+    expect(result.current.data).toEqual(response);
+    expect(invalidateSpy).toHaveBeenCalledWith({
+      queryKey: ['account', 'two-factor'],
+    });
+  });
+});
