@@ -96,6 +96,8 @@ export interface GroupByField {
 export interface PaginationMeta {
   readonly defaultPageSize: number;
   readonly maxPageSize: number;
+  /** Maximum number of items for export streaming. */
+  readonly maxStreamSize: number;
   readonly supportsCursor: boolean;
 }
 
