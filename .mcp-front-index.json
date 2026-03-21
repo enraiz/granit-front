@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-21T11:55:56.504968+00:00",
+  "generatedAt": "2026-03-21T15:53:25.873425+00:00",
   "repo": "granit-front",
   "packages": [
     {
@@ -589,6 +589,11 @@
           "signature": "function urlBase64ToUint8Array(base64String: string): Uint8Array"
         }
       ]
+    },
+    {
+      "name": "@granit/privacy",
+      "description": "GDPR privacy types and API — data export, deletion, legal agreements — mirrors Granit.Privacy .NET contract",
+      "exports": []
     },
     {
       "name": "@granit/querying",
@@ -1639,6 +1644,29 @@
       ]
     },
     {
+      "name": "@granit/react-privacy",
+      "description": "React hooks for GDPR privacy — data export, deletion, legal agreements",
+      "exports": [
+        {
+          "name": "PrivacyConfig",
+          "kind": "interface",
+          "signature": "interface PrivacyConfig",
+          "members": []
+        },
+        {
+          "name": "PrivacyProviderProps",
+          "kind": "interface",
+          "signature": "interface PrivacyProviderProps",
+          "members": []
+        },
+        {
+          "name": "useRequestDeletion",
+          "kind": "function",
+          "signature": "function useRequestDeletion(): UseMutationResult<void, Error, PrivacyDeletionRequest>"
+        }
+      ]
+    },
+    {
       "name": "@granit/react-querying",
       "description": "",
       "exports": [
@@ -2313,16 +2341,6 @@
           "name": "useWorkflowHistory",
           "kind": "function",
           "signature": "function useWorkflowHistory("
-        },
-        {
-          "name": "useWorkflowStatus",
-          "kind": "function",
-          "signature": "function useWorkflowStatus("
-        },
-        {
-          "name": "useWorkflowTransition",
-          "kind": "function",
-          "signature": "function useWorkflowTransition("
         }
       ]
     },

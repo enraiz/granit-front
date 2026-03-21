@@ -51,20 +51,6 @@ describe('useIdentityRgpd', () => {
     expect(client.delete).toHaveBeenCalledWith('/identity/users/user-1');
   });
 
-  it('pseudonymize mutation pseudonymizes user cache', async () => {
-    const client = createMockClient();
-    vi.mocked(client.patch).mockResolvedValue({ data: undefined });
-
-    const { result } = renderHook(() => useIdentityRgpd(), {
-      wrapper: createWrapper(client),
-    });
-
-    result.current.pseudonymize.mutate('user-1');
-
-    await waitFor(() => expect(result.current.pseudonymize.isSuccess).toBe(true));
-    expect(client.patch).toHaveBeenCalledWith('/identity/users/user-1/pseudonymize');
-  });
-
   it('uses custom basePath', async () => {
     const client = createMockClient();
     vi.mocked(client.delete).mockResolvedValue({ data: undefined });
@@ -91,19 +77,5 @@ describe('useIdentityRgpd', () => {
 
     await waitFor(() => expect(result.current.erase.isError).toBe(true));
     expect(result.current.erase.error?.message).toBe('Forbidden');
-  });
-
-  it('exposes error state on pseudonymize failure', async () => {
-    const client = createMockClient();
-    vi.mocked(client.patch).mockRejectedValue(new Error('Not found'));
-
-    const { result } = renderHook(() => useIdentityRgpd(), {
-      wrapper: createWrapper(client),
-    });
-
-    result.current.pseudonymize.mutate('user-1');
-
-    await waitFor(() => expect(result.current.pseudonymize.isError).toBe(true));
-    expect(result.current.pseudonymize.error?.message).toBe('Not found');
   });
 });

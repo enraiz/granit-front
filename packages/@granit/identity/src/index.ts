@@ -26,7 +26,6 @@ export {
   eraseUserCache,
   getCacheStats,
   getUserById,
-  pseudonymizeUserCache,
   searchUsers,
   syncAllUsers,
   syncStaleUsers,

@@ -43,7 +43,7 @@ describe('notification-api', () => {
   // -----------------------------------------------------------------------
   // markAsRead
   // -----------------------------------------------------------------------
-  it('should send PATCH to the correct URL (markAsRead)', async () => {
+  it('should send POST to the correct URL (markAsRead)', async () => {
     const notification: UserNotification = {
       id: 'n-1',
       title: 'Test',
@@ -56,11 +56,11 @@ describe('notification-api', () => {
       readAt: '2026-01-01T00:01:00Z',
     };
     const client = createMockClient();
-    vi.mocked(client.patch).mockResolvedValue(axiosResponse(notification));
+    vi.mocked(client.post).mockResolvedValue(axiosResponse(notification));
 
     const result = await markAsRead(client, '/api/v1', 'n-1');
 
-    expect(client.patch).toHaveBeenCalledWith('/api/v1/notifications/n-1/read');
+    expect(client.post).toHaveBeenCalledWith('/api/v1/notifications/n-1/read');
     expect(result.isRead).toBe(true);
   });
 
@@ -85,7 +85,7 @@ describe('notification-api', () => {
 
     const result = await fetchUnreadCount(client, '/api/v1');
 
-    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications/unread-count');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications/unread/count');
     expect(result).toBe(42);
   });
 
@@ -102,7 +102,7 @@ describe('notification-api', () => {
       pageSize: 5,
     });
 
-    expect(client.get).toHaveBeenCalledWith('/api/v1/activity-feed/Patient/p-1', {
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications/entity/Patient/p-1', {
       params: { page: 1, pageSize: 5 },
     });
     expect(result).toEqual(page);
@@ -118,7 +118,7 @@ describe('notification-api', () => {
 
     const result = await fetchPreferences(client, '/api/v1');
 
-    expect(client.get).toHaveBeenCalledWith('/api/v1/notification-preferences');
+    expect(client.get).toHaveBeenCalledWith('/api/v1/notifications/preferences');
     expect(result).toEqual([]);
   });
 
@@ -136,10 +136,7 @@ describe('notification-api', () => {
 
     const result = await updatePreference(client, '/api/v1', pref);
 
-    expect(client.put).toHaveBeenCalledWith(
-      '/api/v1/notification-preferences/AppointmentReminder',
-      pref
-    );
+    expect(client.put).toHaveBeenCalledWith('/api/v1/notifications/preferences', pref);
     expect(result).toEqual(pref);
   });
 });

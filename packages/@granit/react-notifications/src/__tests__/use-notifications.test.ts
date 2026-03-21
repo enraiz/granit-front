@@ -50,7 +50,7 @@ describe('useNotifications', () => {
   it('should mark a notification as read', async () => {
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(MOCK_PAGE));
-    vi.mocked(client.patch).mockResolvedValue(
+    vi.mocked(client.post).mockResolvedValue(
       axiosResponse({ ...MOCK_NOTIFICATION, isRead: true, readAt: '2026-01-15T10:05:00Z' })
     );
 
@@ -229,7 +229,7 @@ describe('useNotifications', () => {
     };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
-    vi.mocked(client.patch).mockResolvedValue(
+    vi.mocked(client.post).mockResolvedValue(
       axiosResponse({ ...MOCK_NOTIFICATION, isRead: true, readAt: '2026-01-15T10:05:00Z' })
     );
 

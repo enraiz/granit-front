@@ -71,7 +71,7 @@ describe('useCreateCountry', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.post).toHaveBeenCalledWith('/api/v1/admin/reference-data/countries', payload);
+    expect(client.post).toHaveBeenCalledWith('/api/v1/reference-data/countries', payload);
     expect(result.current.data).toEqual(mockCountry);
   });
 
@@ -131,7 +131,7 @@ describe('useUpdateCountry', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith('/api/v1/admin/reference-data/countries/BE', {
+    expect(client.put).toHaveBeenCalledWith('/api/v1/reference-data/countries/BE', {
       labelFr: 'Belgique (MAJ)',
     });
     expect(result.current.data?.labelFr).toBe('Belgique (MAJ)');
@@ -174,7 +174,7 @@ describe('useDeactivateCountry', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.delete).toHaveBeenCalledWith('/api/v1/admin/reference-data/countries/BE');
+    expect(client.delete).toHaveBeenCalledWith('/api/v1/reference-data/countries/BE');
   });
 
   it('exposes error state on failure', async () => {
@@ -215,7 +215,7 @@ describe('useReactivateCountry', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(client.put).toHaveBeenCalledWith('/api/v1/admin/reference-data/countries/BE', {
+    expect(client.put).toHaveBeenCalledWith('/api/v1/reference-data/countries/BE', {
       isActive: true,
     });
     expect(result.current.data?.isActive).toBe(true);

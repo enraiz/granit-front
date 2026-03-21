@@ -208,17 +208,20 @@ export async function getStats(
 // ── Delivery audit trail ────────────────────────────────────────────────────
 
 /**
- * Get delivery attempts for a specific subscription.
+ * Query webhook delivery attempts.
  *
- * `GET {basePath}/{id}/deliveries`
+ * `GET {basePath}/deliveries/query`
+ *
+ * @param basePath - The webhooks root path (e.g. `/api/v1/webhooks`), **not** the subscriptions path.
  */
 export async function getDeliveries(
   client: AxiosInstance,
   basePath: string,
-  id: string
+  params?: { subscriptionId?: string }
 ): Promise<WebhookDeliveryAttemptResponse[]> {
   const { data } = await client.get<WebhookDeliveryAttemptResponse[]>(
-    `${basePath}/${encodeURIComponent(id)}/deliveries`
+    `${basePath}/deliveries/query`,
+    { params }
   );
   return data;
 }

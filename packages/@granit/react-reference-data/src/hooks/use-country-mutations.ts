@@ -16,11 +16,11 @@ import type { AxiosInstance } from 'axios';
 export interface ReferenceDataMutationOptions {
   /** Axios instance used for HTTP requests. */
   client: AxiosInstance;
-  /** Base path for country admin endpoints. Defaults to '/api/v1/admin/reference-data/countries'. */
+  /** Base path for country admin endpoints. Defaults to '/api/v1/reference-data/countries'. */
   basePath?: string;
 }
 
-const DEFAULT_ADMIN_BASE_PATH = '/api/v1/admin/reference-data/countries';
+const DEFAULT_ADMIN_BASE_PATH = '/api/v1/reference-data/countries';
 
 /** Payload for creating a country. */
 export type CreateCountryPayload = Omit<Country, 'createdAt' | 'updatedAt'>;

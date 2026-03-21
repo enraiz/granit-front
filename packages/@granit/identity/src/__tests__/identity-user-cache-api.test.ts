@@ -6,7 +6,6 @@ import {
   eraseUserCache,
   getCacheStats,
   getUserById,
-  pseudonymizeUserCache,
   searchUsers,
   syncAllUsers,
   syncStaleUsers,
@@ -182,28 +181,6 @@ describe('identity-user-cache-api', () => {
 
       expect(client.delete).toHaveBeenCalledWith(
         `${basePath}/${encodeURIComponent('user/special@id')}`
-      );
-    });
-  });
-
-  describe('pseudonymizeUserCache', () => {
-    it('should PATCH {basePath}/{userId}/pseudonymize', async () => {
-      const client = createMockClient();
-      vi.mocked(client.patch).mockResolvedValue(axiosResponse(undefined));
-
-      await pseudonymizeUserCache(client, basePath, 'user-1');
-
-      expect(client.patch).toHaveBeenCalledWith(`${basePath}/user-1/pseudonymize`);
-    });
-
-    it('should encode userId with special characters', async () => {
-      const client = createMockClient();
-      vi.mocked(client.patch).mockResolvedValue(axiosResponse(undefined));
-
-      await pseudonymizeUserCache(client, basePath, 'user/special@id');
-
-      expect(client.patch).toHaveBeenCalledWith(
-        `${basePath}/${encodeURIComponent('user/special@id')}/pseudonymize`
       );
     });
   });
