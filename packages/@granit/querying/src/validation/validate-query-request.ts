@@ -14,6 +14,33 @@ function serializeSortString(sort: readonly SortEntry[]): string {
   return sort.map((s) => (s.direction === 'desc' ? `-${s.field}` : s.field)).join(',');
 }
 
+function truncateString(value: string | undefined, maxLength: number): string | undefined {
+  return value ? value.slice(0, maxLength) : value;
+}
+
+function clampPagination(result: Record<string, unknown>, params: QueryRequest): void {
+  if (params.cursor && params.page != null) {
+    delete result.page;
+  }
+  if (result.page != null) {
+    result.page = Math.max(QUERY_LIMITS.PAGE_MIN, result.page as number);
+  }
+  if (params.pageSize != null) {
+    result.pageSize = Math.min(
+      QUERY_LIMITS.PAGE_SIZE_MAX,
+      Math.max(QUERY_LIMITS.PAGE_SIZE_MIN, params.pageSize)
+    );
+  }
+}
+
+function clampSort(sort: readonly SortEntry[]): readonly SortEntry[] {
+  let clamped = [...sort];
+  while (clamped.length > 0 && serializeSortString(clamped).length > QUERY_LIMITS.SORT_MAX_LENGTH) {
+    clamped = clamped.slice(0, -1);
+  }
+  return clamped;
+}
+
 /**
  * Validate and clamp a QueryRequest to server-enforced limits.
  *
@@ -27,36 +54,12 @@ function serializeSortString(sort: readonly SortEntry[]): string {
 export function validateQueryRequest(params: QueryRequest): QueryRequest {
   const result: Record<string, unknown> = { ...params };
 
-  // Page / cursor mutual exclusion — cursor wins
-  if (params.cursor && params.page != null) {
-    delete result.page;
-  }
+  clampPagination(result, params);
 
-  // Page clamping
-  if (result.page != null) {
-    result.page = Math.max(QUERY_LIMITS.PAGE_MIN, result.page as number);
-  }
+  result.search = truncateString(params.search, QUERY_LIMITS.SEARCH_MAX_LENGTH);
+  result.cursor = truncateString(params.cursor, QUERY_LIMITS.CURSOR_MAX_LENGTH);
+  result.groupBy = truncateString(params.groupBy, QUERY_LIMITS.GROUP_BY_MAX_LENGTH);
 
-  // PageSize clamping
-  if (params.pageSize != null) {
-    result.pageSize = Math.min(
-      QUERY_LIMITS.PAGE_SIZE_MAX,
-      Math.max(QUERY_LIMITS.PAGE_SIZE_MIN, params.pageSize)
-    );
-  }
-
-  // String truncation
-  if (params.search) {
-    result.search = params.search.slice(0, QUERY_LIMITS.SEARCH_MAX_LENGTH);
-  }
-  if (params.cursor) {
-    result.cursor = params.cursor.slice(0, QUERY_LIMITS.CURSOR_MAX_LENGTH);
-  }
-  if (params.groupBy) {
-    result.groupBy = params.groupBy.slice(0, QUERY_LIMITS.GROUP_BY_MAX_LENGTH);
-  }
-
-  // Array slicing
   if (params.filters && params.filters.length > QUERY_LIMITS.FILTERS_MAX_COUNT) {
     result.filters = params.filters.slice(0, QUERY_LIMITS.FILTERS_MAX_COUNT);
   }
@@ -64,7 +67,6 @@ export function validateQueryRequest(params: QueryRequest): QueryRequest {
     result.quickFilters = params.quickFilters.slice(0, QUERY_LIMITS.QUICK_FILTERS_MAX_COUNT);
   }
 
-  // Presets: keep first N entries
   if (params.presets) {
     const entries = Object.entries(params.presets);
     if (entries.length > QUERY_LIMITS.PRESETS_MAX_ENTRIES) {
@@ -72,13 +74,8 @@ export function validateQueryRequest(params: QueryRequest): QueryRequest {
     }
   }
 
-  // Sort: drop trailing entries until serialized length fits
   if (params.sort && params.sort.length > 0) {
-    let sort = [...params.sort];
-    while (sort.length > 0 && serializeSortString(sort).length > QUERY_LIMITS.SORT_MAX_LENGTH) {
-      sort = sort.slice(0, -1);
-    }
-    result.sort = sort;
+    result.sort = clampSort(params.sort);
   }
 
   return result as QueryRequest;
