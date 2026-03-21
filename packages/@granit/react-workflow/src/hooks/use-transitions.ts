@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useWorkflowConfig } from '../providers/workflow-provider.js';
 
-import type { TransitionDto } from '@granit/workflow';
+import type { WorkflowTransition } from '@granit/workflow';
 
 const logger = createLogger('workflow:transitions');
 
@@ -13,7 +13,7 @@ export interface UseTransitionsOptions {
 }
 
 export interface UseTransitionsReturn {
-  transitions: readonly TransitionDto[];
+  transitions: readonly WorkflowTransition[];
   loading: boolean;
   error: Error | null;
   refetch: () => Promise<void>;
@@ -22,7 +22,7 @@ export interface UseTransitionsReturn {
 export function useTransitions({ currentState }: UseTransitionsOptions): UseTransitionsReturn {
   const { apiClient, basePath } = useWorkflowConfig();
 
-  const [transitions, setTransitions] = useState<readonly TransitionDto[]>([]);
+  const [transitions, setTransitions] = useState<readonly WorkflowTransition[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

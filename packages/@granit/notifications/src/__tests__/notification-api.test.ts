@@ -12,10 +12,10 @@ import {
 } from '../api/notification-api.js';
 
 import type {
-  ActivityFeedPageDto,
-  NotificationDto,
-  NotificationPageDto,
-  NotificationPreferenceDto,
+  ActivityFeedPage,
+  UserNotification,
+  UserNotificationPage,
+  NotificationPreference,
 } from '../types/index.js';
 
 describe('notification-api', () => {
@@ -23,7 +23,7 @@ describe('notification-api', () => {
   // fetchNotifications
   // -----------------------------------------------------------------------
   it('should send GET with pagination params (fetchNotifications)', async () => {
-    const page: NotificationPageDto = {
+    const page: UserNotificationPage = {
       items: [],
       totalCount: 0,
       nextCursor: null,
@@ -44,7 +44,7 @@ describe('notification-api', () => {
   // markAsRead
   // -----------------------------------------------------------------------
   it('should send PATCH to the correct URL (markAsRead)', async () => {
-    const notification: NotificationDto = {
+    const notification: UserNotification = {
       id: 'n-1',
       title: 'Test',
       body: null,
@@ -93,7 +93,7 @@ describe('notification-api', () => {
   // fetchEntityActivityFeed
   // -----------------------------------------------------------------------
   it('should send GET with entity path (fetchEntityActivityFeed)', async () => {
-    const page: ActivityFeedPageDto = { items: [], totalCount: 0, nextCursor: null };
+    const page: ActivityFeedPage = { items: [], totalCount: 0, nextCursor: null };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
@@ -112,7 +112,7 @@ describe('notification-api', () => {
   // fetchPreferences
   // -----------------------------------------------------------------------
   it('should send GET for preferences (fetchPreferences)', async () => {
-    const prefs: NotificationPreferenceDto[] = [];
+    const prefs: NotificationPreference[] = [];
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(prefs));
 
@@ -126,7 +126,7 @@ describe('notification-api', () => {
   // updatePreference
   // -----------------------------------------------------------------------
   it('should send PUT with preference data (updatePreference)', async () => {
-    const pref: NotificationPreferenceDto = {
+    const pref: NotificationPreference = {
       notificationType: 'AppointmentReminder',
       label: 'Rappel de rendez-vous',
       channels: { inApp: true, email: false, push: true },

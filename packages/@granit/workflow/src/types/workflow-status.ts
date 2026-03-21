@@ -1,7 +1,7 @@
-import type { TransitionDto } from './transition.js';
+import type { WorkflowTransition } from './transition.js';
 
 /** Current workflow status of an entity. */
-export interface WorkflowStatusDto {
+export interface WorkflowStatus {
   readonly currentState: string;
-  readonly availableTransitions: readonly TransitionDto[];
+  readonly availableTransitions: readonly WorkflowTransition[];
 }

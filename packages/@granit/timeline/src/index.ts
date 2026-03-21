@@ -2,8 +2,8 @@
 export {
   TimelineEntryType,
   type TimelineEntryTypeValue,
-  type TimelineStreamEntry,
-  type TimelineStreamPage,
+  type TimelineEntry,
+  type TimelineEntryPage,
   type CreateTimelineEntryRequest,
   type TimelineQueryParams,
   type TimelineConfig,

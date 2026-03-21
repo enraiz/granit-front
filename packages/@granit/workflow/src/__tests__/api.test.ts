@@ -10,9 +10,9 @@ import {
 } from '../api/workflow-api.js';
 
 import type {
-  TransitionHistoryDto,
-  TransitionResultDto,
-  WorkflowStatusDto,
+  TransitionHistory,
+  WorkflowTransitionResult,
+  WorkflowStatus,
 } from '../types/index.js';
 
 describe('workflow api', () => {
@@ -22,7 +22,7 @@ describe('workflow api', () => {
 
   it('should call GET with correct URL for fetchStatus', async () => {
     const client = createMockClient();
-    const status: WorkflowStatusDto = {
+    const status: WorkflowStatus = {
       currentState: 'Draft',
       availableTransitions: [
         { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
@@ -38,7 +38,7 @@ describe('workflow api', () => {
 
   it('should call POST with correct URL and body for executeTransition', async () => {
     const client = createMockClient();
-    const transitionResult: TransitionResultDto = {
+    const transitionResult: WorkflowTransitionResult = {
       succeeded: true,
       resultingState: 'Published',
       outcome: 'Completed',
@@ -59,7 +59,7 @@ describe('workflow api', () => {
 
   it('should call GET with correct URL for fetchHistory', async () => {
     const client = createMockClient();
-    const historyItems: TransitionHistoryDto[] = [
+    const historyItems: TransitionHistory[] = [
       {
         previousState: 'Draft',
         newState: 'Published',
@@ -82,7 +82,7 @@ describe('workflow api', () => {
 
   it('should call GET with query param for fetchTransitions', async () => {
     const client = createMockClient();
-    const status: WorkflowStatusDto = {
+    const status: WorkflowStatus = {
       currentState: 'Draft',
       availableTransitions: [
         { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
@@ -101,7 +101,7 @@ describe('workflow api', () => {
 
   it('should call POST with query param and body for executeStateMachineTransition', async () => {
     const client = createMockClient();
-    const transitionResult: TransitionResultDto = {
+    const transitionResult: WorkflowTransitionResult = {
       succeeded: true,
       resultingState: 'Published',
       outcome: 'Completed',
@@ -123,7 +123,7 @@ describe('workflow api', () => {
 
   it('should pass pagination params to fetchHistory when provided', async () => {
     const client = createMockClient();
-    const historyItems: TransitionHistoryDto[] = [
+    const historyItems: TransitionHistory[] = [
       {
         previousState: 'Draft',
         newState: 'Published',

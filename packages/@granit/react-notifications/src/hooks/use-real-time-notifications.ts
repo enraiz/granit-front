@@ -1,9 +1,9 @@
 import { useNotificationContext } from '../providers/notification-provider.js';
 
-import type { ConnectionState, NotificationDto } from '@granit/notifications';
+import type { ConnectionState, UserNotification } from '@granit/notifications';
 
 export interface UseRealTimeNotificationsReturn {
-  lastNotification: NotificationDto | null;
+  lastNotification: UserNotification | null;
   connectionState: ConnectionState;
 }
 

@@ -1,14 +1,14 @@
 export { DocumentFormat, TemplateLifecycleStatus } from './template-types.js';
 
 export type {
-  CreateTemplateCategoryRequest,
   DocumentFormatValue,
+  SaveTemplateCategoryRequest,
   SaveTemplateRequest,
   TemplateCategory,
   TemplateDetail,
   TemplateHistory,
   TemplateKey,
-  TemplateLifecycleInfo,
+  TemplateLifecycle,
   TemplateLifecycleStatusValue,
   TemplateListItem,
   TemplateListParams,
@@ -20,5 +20,4 @@ export type {
   TemplateVariable,
   TemplateVariables,
   TemplatingConfig,
-  UpdateTemplateCategoryRequest,
 } from './template-types.js';

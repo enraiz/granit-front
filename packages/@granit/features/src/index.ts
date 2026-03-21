@@ -1,11 +1,11 @@
 // Types
 export type {
   FeatureDefinition,
-  FeatureGroupDefinition,
+  FeatureGroup,
   FeatureValueResponse,
   FeatureValueType,
   FeatureValuesMap,
-  NumericConstraint,
+  FeatureNumericConstraint,
   SelectionValues,
   SetFeatureOverrideRequest,
 } from './types/index.js';

@@ -6,7 +6,7 @@
 export type {
   CreateExportJobRequest,
   ExportDefinitionResponse,
-  ExportFieldDescriptor,
+  ExportField,
   ExportJobListParams,
   ExportJobResponse,
   ExportJobStatus,

@@ -190,3 +190,18 @@ export async function getDeliveries(
   );
   return data;
 }
+
+/**
+ * Retry a previously failed webhook delivery attempt.
+ *
+ * `POST {basePath}/deliveries/{deliveryId}/retry`
+ *
+ * @param basePath - The webhooks root path (e.g. `/api/v1/webhooks`), **not** the subscriptions path.
+ */
+export async function retryDelivery(
+  client: AxiosInstance,
+  basePath: string,
+  deliveryId: string
+): Promise<void> {
+  await client.post(`${basePath}/deliveries/${encodeURIComponent(deliveryId)}/retry`);
+}

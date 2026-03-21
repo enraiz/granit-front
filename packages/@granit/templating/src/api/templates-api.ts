@@ -1,17 +1,16 @@
 import type {
-  CreateTemplateCategoryRequest,
+  SaveTemplateCategoryRequest,
   SaveTemplateRequest,
   TemplateCategory,
   TemplateDetail,
   TemplateHistory,
-  TemplateLifecycleInfo,
+  TemplateLifecycle,
   TemplateListItem,
   TemplateListParams,
   TemplatePreviewRequest,
   TemplatePreviewResponse,
   TemplateRevision,
   TemplateVariables,
-  UpdateTemplateCategoryRequest,
 } from '../types/index.js';
 import type { PagedResult, PaginationParams } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
@@ -103,11 +102,10 @@ export async function getLifecycleInfo(
   basePath: string,
   name: string,
   culture?: string
-): Promise<TemplateLifecycleInfo> {
-  const { data } = await client.get<TemplateLifecycleInfo>(
-    templateUrl(basePath, name, 'lifecycle'),
-    { params: { culture } }
-  );
+): Promise<TemplateLifecycle> {
+  const { data } = await client.get<TemplateLifecycle>(templateUrl(basePath, name, 'lifecycle'), {
+    params: { culture },
+  });
   return data;
 }
 
@@ -196,7 +194,7 @@ export async function getCategories(
 export async function createCategory(
   client: AxiosInstance,
   basePath: string,
-  request: CreateTemplateCategoryRequest
+  request: SaveTemplateCategoryRequest
 ): Promise<TemplateCategory> {
   const { data } = await client.post<TemplateCategory>(`${basePath}/templates/categories`, request);
   return data;
@@ -206,7 +204,7 @@ export async function updateCategory(
   client: AxiosInstance,
   basePath: string,
   id: string,
-  request: UpdateTemplateCategoryRequest
+  request: SaveTemplateCategoryRequest
 ): Promise<TemplateCategory> {
   const { data } = await client.put<TemplateCategory>(
     `${basePath}/templates/categories/${encodeURIComponent(id)}`,

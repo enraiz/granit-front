@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 import { useTimelineConfig } from '../providers/timeline-provider.js';
 
-import type { TimelineStreamEntry } from '@granit/timeline';
+import type { TimelineEntry } from '@granit/timeline';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -15,7 +15,7 @@ export interface UseTimelineOptions {
 }
 
 export interface UseTimelineReturn {
-  entries: readonly TimelineStreamEntry[];
+  entries: readonly TimelineEntry[];
   totalCount: number | null;
   loading: boolean;
   loadingMore: boolean;
@@ -23,7 +23,7 @@ export interface UseTimelineReturn {
   hasMore: boolean;
   loadMore: () => void;
   refresh: () => void;
-  addOptimisticEntry: (entry: TimelineStreamEntry) => void;
+  addOptimisticEntry: (entry: TimelineEntry) => void;
   removeOptimisticEntry: (entryId: string) => void;
 }
 
@@ -56,10 +56,10 @@ export function useTimeline({
     hasMore,
     loadMore,
     refresh,
-  } = useInfiniteScroll<TimelineStreamEntry>({ fetcher, pageSize });
+  } = useInfiniteScroll<TimelineEntry>({ fetcher, pageSize });
 
   const addOptimisticEntry = useCallback(
-    (entry: TimelineStreamEntry) => {
+    (entry: TimelineEntry) => {
       setEntries((prev) => [entry, ...prev]);
     },
     [setEntries]

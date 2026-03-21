@@ -4,21 +4,21 @@ import { useCallback, useState } from 'react';
 
 import { useWorkflowConfig } from '../providers/workflow-provider.js';
 
-import type { TransitionResultDto } from '@granit/workflow';
+import type { WorkflowTransitionResult } from '@granit/workflow';
 
 const logger = createLogger('workflow:transition');
 
 export interface UseWorkflowTransitionOptions {
   entityType: string;
   entityId: string;
-  onSuccess?: (result: TransitionResultDto) => void;
+  onSuccess?: (result: WorkflowTransitionResult) => void;
   onError?: (error: Error) => void;
 }
 
 export interface UseWorkflowTransitionReturn {
-  transition: (targetState: string, comment?: string) => Promise<TransitionResultDto | null>;
+  transition: (targetState: string, comment?: string) => Promise<WorkflowTransitionResult | null>;
   loading: boolean;
-  result: TransitionResultDto | null;
+  result: WorkflowTransitionResult | null;
   error: Error | null;
 }
 
@@ -31,11 +31,11 @@ export function useWorkflowTransition({
   const { apiClient, basePath } = useWorkflowConfig();
 
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<TransitionResultDto | null>(null);
+  const [result, setResult] = useState<WorkflowTransitionResult | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   const transition = useCallback(
-    async (targetState: string, comment?: string): Promise<TransitionResultDto | null> => {
+    async (targetState: string, comment?: string): Promise<WorkflowTransitionResult | null> => {
       setLoading(true);
       setError(null);
 

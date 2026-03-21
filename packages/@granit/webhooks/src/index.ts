@@ -26,6 +26,7 @@ export {
   getDeliveries,
   getStats,
   getSubscription,
+  retryDelivery,
   rotateSecret,
   suspendSubscription,
   testPing,

@@ -4,12 +4,12 @@ import { useCallback, useState } from 'react';
 
 import { useWorkflowConfig } from '../providers/workflow-provider.js';
 
-import type { TransitionResultDto } from '@granit/workflow';
+import type { WorkflowTransitionResult } from '@granit/workflow';
 
 const logger = createLogger('workflow:execute-transition');
 
 export interface UseExecuteTransitionOptions {
-  onSuccess?: (result: TransitionResultDto) => void;
+  onSuccess?: (result: WorkflowTransitionResult) => void;
   onError?: (error: Error) => void;
 }
 
@@ -18,9 +18,9 @@ export interface UseExecuteTransitionReturn {
     currentState: string,
     targetState: string,
     comment?: string
-  ) => Promise<TransitionResultDto | null>;
+  ) => Promise<WorkflowTransitionResult | null>;
   loading: boolean;
-  result: TransitionResultDto | null;
+  result: WorkflowTransitionResult | null;
   error: Error | null;
 }
 
@@ -30,7 +30,7 @@ export function useExecuteTransition(
   const { apiClient, basePath } = useWorkflowConfig();
 
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<TransitionResultDto | null>(null);
+  const [result, setResult] = useState<WorkflowTransitionResult | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   const transition = useCallback(
@@ -38,7 +38,7 @@ export function useExecuteTransition(
       currentState: string,
       targetState: string,
       comment?: string
-    ): Promise<TransitionResultDto | null> => {
+    ): Promise<WorkflowTransitionResult | null> => {
       setLoading(true);
       setError(null);
 

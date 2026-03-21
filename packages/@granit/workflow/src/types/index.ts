@@ -5,12 +5,12 @@ export { WorkflowLifecycleStatus } from './lifecycle-status.js';
 export type { WorkflowLifecycleStatusValue } from './lifecycle-status.js';
 
 export type {
-  TransitionDto,
-  TransitionHistoryDto,
-  TransitionRequestDto,
-  TransitionResultDto,
+  WorkflowTransition,
+  TransitionHistory,
+  WorkflowTransitionRequest,
+  WorkflowTransitionResult,
 } from './transition.js';
 
-export type { WorkflowStatusDto } from './workflow-status.js';
+export type { WorkflowStatus } from './workflow-status.js';
 
 export type { WorkflowConfig } from './config.js';

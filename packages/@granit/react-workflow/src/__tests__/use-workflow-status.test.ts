@@ -5,12 +5,12 @@ import { useWorkflowStatus } from '../hooks/use-workflow-status.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { WorkflowStatusDto } from '@granit/workflow';
+import type { WorkflowStatus } from '@granit/workflow';
 
 describe('useWorkflowStatus', () => {
   it('should load status on mount', async () => {
     const client = createMockClient();
-    const status: WorkflowStatusDto = {
+    const status: WorkflowStatus = {
       currentState: 'Draft',
       availableTransitions: [
         { targetState: 'Published', name: 'Publier', allowed: true, requiresApproval: false },
@@ -119,11 +119,11 @@ describe('useWorkflowStatus', () => {
 
   it('should refetch when refetch is called', async () => {
     const client = createMockClient();
-    const status1: WorkflowStatusDto = {
+    const status1: WorkflowStatus = {
       currentState: 'Draft',
       availableTransitions: [],
     };
-    const status2: WorkflowStatusDto = {
+    const status2: WorkflowStatus = {
       currentState: 'Published',
       availableTransitions: [],
     };

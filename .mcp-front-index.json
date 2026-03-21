@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-21T00:14:50.862451+00:00",
+  "generatedAt": "2026-03-21T09:48:03.438367+00:00",
   "repo": "granit-front",
   "packages": [
     {
@@ -592,7 +592,7 @@
         {
           "name": "getAvailableChannels",
           "kind": "function",
-          "signature": "function getAvailableChannels(preferences: readonly NotificationPreferenceDto[]): string[]"
+          "signature": "function getAvailableChannels(preferences: readonly NotificationPreference[]): string[]"
         },
         {
           "name": "NotificationChannels",
@@ -1449,7 +1449,7 @@
             {
               "name": "lastNotification",
               "kind": "property",
-              "signature": "lastNotification: NotificationDto | null"
+              "signature": "lastNotification: UserNotification | null"
             },
             {
               "name": "connectionState",
@@ -1517,7 +1517,7 @@
             {
               "name": "notifications",
               "kind": "property",
-              "signature": "notifications: readonly NotificationDto[]"
+              "signature": "notifications: readonly UserNotification[]"
             },
             {
               "name": "totalCount",
@@ -1584,7 +1584,7 @@
             {
               "name": "preferences",
               "kind": "property",
-              "signature": "preferences: NotificationPreferenceDto[]"
+              "signature": "preferences: NotificationPreference[]"
             },
             {
               "name": "loading",
@@ -2059,7 +2059,7 @@
             {
               "name": "entries",
               "kind": "property",
-              "signature": "entries: readonly TimelineStreamEntry[]"
+              "signature": "entries: readonly TimelineEntry[]"
             },
             {
               "name": "totalCount",
@@ -2099,7 +2099,7 @@
             {
               "name": "addOptimisticEntry",
               "kind": "method",
-              "signature": "addOptimisticEntry: (entry: TimelineStreamEntry) => void"
+              "signature": "addOptimisticEntry: (entry: TimelineEntry) => void"
             },
             {
               "name": "removeOptimisticEntry",
@@ -2225,6 +2225,11 @@
           "signature": "function useDeliveries( subscriptionId: string, options: WebhooksOptions ): UseQueryResult<WebhookDeliveryAttemptResponse[]>"
         },
         {
+          "name": "useRetryDelivery",
+          "kind": "function",
+          "signature": "function useRetryDelivery( options: RetryDeliveryOptions ): UseMutationResult<void, Error,"
+        },
+        {
           "name": "useWebhookStats",
           "kind": "function",
           "signature": "function useWebhookStats( options: WebhooksOptions ): UseQueryResult<WebhookSubscriptionStatsResponse>"
@@ -2233,6 +2238,12 @@
           "name": "WebhooksOptions",
           "kind": "interface",
           "signature": "interface WebhooksOptions",
+          "members": []
+        },
+        {
+          "name": "RetryDeliveryOptions",
+          "kind": "interface",
+          "signature": "interface RetryDeliveryOptions",
           "members": []
         }
       ]
@@ -2303,7 +2314,7 @@
             {
               "name": "transitions",
               "kind": "property",
-              "signature": "transitions: readonly TransitionDto[]"
+              "signature": "transitions: readonly WorkflowTransition[]"
             },
             {
               "name": "loading",
@@ -2596,7 +2607,7 @@
         {
           "name": "WorkflowHistoryPage",
           "kind": "type",
-          "signature": "type WorkflowHistoryPage = PagedResult<TransitionHistoryDto>"
+          "signature": "type WorkflowHistoryPage = PagedResult<TransitionHistory>"
         }
       ]
     }

@@ -10,7 +10,7 @@ import {
   unfollowEntity,
 } from '../api/timeline-api.js';
 
-import type { CreateTimelineEntryRequest, TimelineStreamPage } from '../types/index.js';
+import type { CreateTimelineEntryRequest, TimelineEntryPage } from '../types/index.js';
 import type { AxiosInstance } from 'axios';
 
 const BASE_PATH = '/api/v1/timeline';
@@ -24,7 +24,7 @@ describe('timeline API', () => {
 
   describe('fetchStream', () => {
     it('should call GET /{entityType}/{entityId} with query params', async () => {
-      const page: TimelineStreamPage = { items: [], totalCount: 0, nextCursor: null };
+      const page: TimelineEntryPage = { items: [], totalCount: 0, nextCursor: null };
       vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
       const result = await fetchStream(client, BASE_PATH, 'Patient', 'p-1', {

@@ -5,12 +5,12 @@ import { useExecuteTransition } from '../hooks/use-execute-transition.js';
 
 import { axiosResponse, createMockClient, createWrapper } from './test-utils.tsx';
 
-import type { TransitionResultDto } from '@granit/workflow';
+import type { WorkflowTransitionResult } from '@granit/workflow';
 
 describe('useExecuteTransition', () => {
   it('should execute a transition successfully', async () => {
     const client = createMockClient();
-    const transitionResult: TransitionResultDto = {
+    const transitionResult: WorkflowTransitionResult = {
       succeeded: true,
       resultingState: 'Published',
       outcome: 'Completed',
@@ -22,7 +22,7 @@ describe('useExecuteTransition', () => {
       wrapper: createWrapper(client),
     });
 
-    let returned: TransitionResultDto | null = null;
+    let returned: WorkflowTransitionResult | null = null;
     await act(async () => {
       returned = await result.current.transition('Draft', 'Published', 'Approved');
     });
@@ -47,7 +47,7 @@ describe('useExecuteTransition', () => {
       wrapper: createWrapper(client),
     });
 
-    let returned: TransitionResultDto | null = null;
+    let returned: WorkflowTransitionResult | null = null;
     await act(async () => {
       returned = await result.current.transition('Draft', 'Published');
     });
@@ -103,7 +103,7 @@ describe('useExecuteTransition', () => {
       wrapper: createWrapper(client),
     });
 
-    let returned: TransitionResultDto | null = null;
+    let returned: WorkflowTransitionResult | null = null;
     await act(async () => {
       returned = await result.current.transition('Draft', 'Published');
     });
@@ -117,7 +117,7 @@ describe('useExecuteTransition', () => {
 
   it('should handle approval-requested outcome', async () => {
     const client = createMockClient();
-    const transitionResult: TransitionResultDto = {
+    const transitionResult: WorkflowTransitionResult = {
       succeeded: true,
       resultingState: 'PendingReview',
       outcome: 'ApprovalRequested',
@@ -128,7 +128,7 @@ describe('useExecuteTransition', () => {
       wrapper: createWrapper(client),
     });
 
-    let returned: TransitionResultDto | null = null;
+    let returned: WorkflowTransitionResult | null = null;
     await act(async () => {
       returned = await result.current.transition('Draft', 'Published');
     });

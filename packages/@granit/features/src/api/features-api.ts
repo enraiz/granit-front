@@ -1,5 +1,5 @@
 import type {
-  FeatureGroupDefinition,
+  FeatureGroup,
   FeatureValueResponse,
   FeatureValuesMap,
   SetFeatureOverrideRequest,
@@ -14,8 +14,8 @@ import type { AxiosInstance } from 'axios';
 export async function fetchFeatureDefinitions(
   client: AxiosInstance,
   basePath: string
-): Promise<FeatureGroupDefinition[]> {
-  const response = await client.get<FeatureGroupDefinition[]>(`${basePath}/features/definitions`);
+): Promise<FeatureGroup[]> {
+  const response = await client.get<FeatureGroup[]>(`${basePath}/features/definitions`);
   return response.data;
 }
 

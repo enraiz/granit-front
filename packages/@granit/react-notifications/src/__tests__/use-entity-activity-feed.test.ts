@@ -10,9 +10,9 @@ import {
   createWrapperWithoutBasePath,
 } from './test-utils.js';
 
-import type { ActivityFeedPageDto } from '@granit/notifications';
+import type { ActivityFeedPage } from '@granit/notifications';
 
-const MOCK_FEED: ActivityFeedPageDto = {
+const MOCK_FEED: ActivityFeedPage = {
   items: [
     {
       id: 'a-1',
@@ -68,7 +68,7 @@ describe('useEntityActivityFeed', () => {
   });
 
   it('should report hasMore correctly', async () => {
-    const page: ActivityFeedPageDto = {
+    const page: ActivityFeedPage = {
       items: [MOCK_FEED.items[0]],
       totalCount: 25,
       nextCursor: null,
@@ -92,13 +92,13 @@ describe('useEntityActivityFeed', () => {
   });
 
   it('should load more entries when loadMore is called', async () => {
-    const page1: ActivityFeedPageDto = {
+    const page1: ActivityFeedPage = {
       items: [MOCK_FEED.items[0]],
       totalCount: 2,
       nextCursor: null,
     };
     const entry2 = { ...MOCK_FEED.items[0], id: 'a-2', title: 'Deuxième entrée' };
-    const page2: ActivityFeedPageDto = {
+    const page2: ActivityFeedPage = {
       items: [entry2],
       totalCount: 2,
       nextCursor: null,
@@ -168,7 +168,7 @@ describe('useEntityActivityFeed', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const updatedFeed: ActivityFeedPageDto = {
+    const updatedFeed: ActivityFeedPage = {
       items: [{ ...MOCK_FEED.items[0], title: 'Mis à jour' }],
       totalCount: 1,
       nextCursor: null,
@@ -202,7 +202,7 @@ describe('useEntityActivityFeed', () => {
   });
 
   it('should report hasMore as false when all entries are loaded', async () => {
-    const page: ActivityFeedPageDto = {
+    const page: ActivityFeedPage = {
       items: [MOCK_FEED.items[0]],
       totalCount: 1,
       nextCursor: null,

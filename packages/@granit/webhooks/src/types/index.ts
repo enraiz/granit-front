@@ -95,4 +95,6 @@ export interface WebhookDeliveryAttemptResponse {
   readonly durationMs: number;
   readonly errorMessage: string | null;
   readonly isSuccess: boolean;
+  /** Serialized JSON body. `null` when `WebhooksOptions.StorePayload` is `false` (default). */
+  readonly payload: string | null;
 }

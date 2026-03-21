@@ -89,7 +89,7 @@ export type SaveTemplateRequest = {
 
 // ── Lifecycle ──
 
-export type TemplateLifecycleInfo = {
+export type TemplateLifecycle = {
   readonly name: string;
   readonly culture?: string;
   readonly currentStatus: TemplateLifecycleStatusValue;
@@ -146,18 +146,11 @@ export type TemplateCategory = {
   readonly templateCount: number;
 };
 
-export type CreateTemplateCategoryRequest = {
+export type SaveTemplateCategoryRequest = {
   readonly name: string;
   readonly description?: string;
   readonly icon?: string;
   readonly sortOrder?: number;
-};
-
-export type UpdateTemplateCategoryRequest = {
-  readonly name: string;
-  readonly description?: string;
-  readonly icon?: string;
-  readonly sortOrder: number;
 };
 
 // ── History (paginated) ──

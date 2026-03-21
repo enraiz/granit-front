@@ -7,14 +7,14 @@ export { TransitionOutcome } from './types/index.js';
 export { WorkflowLifecycleStatus } from './types/index.js';
 
 export type {
-  TransitionDto,
-  TransitionHistoryDto,
+  WorkflowTransition,
+  TransitionHistory,
   TransitionOutcomeValue,
-  TransitionRequestDto,
-  TransitionResultDto,
+  WorkflowTransitionRequest,
+  WorkflowTransitionResult,
   WorkflowConfig,
   WorkflowLifecycleStatusValue,
-  WorkflowStatusDto,
+  WorkflowStatus,
 } from './types/index.js';
 
 // API

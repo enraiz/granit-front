@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type {
   ConnectionState,
   NotificationConfig,
-  NotificationDto,
+  UserNotification,
   NotificationTransport,
 } from '@granit/notifications';
 
@@ -14,7 +14,7 @@ import type {
 interface NotificationContextValue {
   config: NotificationConfig;
   connectionState: ConnectionState;
-  lastNotification: NotificationDto | null;
+  lastNotification: UserNotification | null;
   unreadCount: number;
   setUnreadCount: (count: number | ((prev: number) => number)) => void;
 }
@@ -50,7 +50,7 @@ export function NotificationProvider({
   transport,
 }: Readonly<NotificationProviderProps>) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
-  const [lastNotification, setLastNotification] = useState<NotificationDto | null>(null);
+  const [lastNotification, setLastNotification] = useState<UserNotification | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {

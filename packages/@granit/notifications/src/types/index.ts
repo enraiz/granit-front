@@ -2,12 +2,12 @@ import type { PagedResult } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 // ---------------------------------------------------------------------------
-// Notification DTOs — aligned with Granit .NET backend contracts
+// Notification types — aligned with Granit.Notifications .NET backend
 // ---------------------------------------------------------------------------
 
 export type NotificationSeverity = 'info' | 'success' | 'warning' | 'error';
 
-export interface NotificationDto {
+export interface UserNotification {
   id: string;
   title: string;
   body: string | null;
@@ -19,7 +19,7 @@ export interface NotificationDto {
   readAt: string | null;
 }
 
-export type NotificationPageDto = PagedResult<NotificationDto> & {
+export type UserNotificationPage = PagedResult<UserNotification> & {
   readonly unreadCount: number;
 };
 
@@ -27,7 +27,7 @@ export type NotificationPageDto = PagedResult<NotificationDto> & {
 // Activity feed
 // ---------------------------------------------------------------------------
 
-export interface ActivityFeedEntryDto {
+export interface ActivityFeedEntry {
   id: string;
   title: string;
   body: string | null;
@@ -37,7 +37,7 @@ export interface ActivityFeedEntryDto {
   userDisplayName: string | null;
 }
 
-export type ActivityFeedPageDto = PagedResult<ActivityFeedEntryDto>;
+export type ActivityFeedPage = PagedResult<ActivityFeedEntry>;
 
 // ---------------------------------------------------------------------------
 // Channels — extensible string type with well-known constants
@@ -75,7 +75,7 @@ export const NotificationChannels = {
 // Preferences
 // ---------------------------------------------------------------------------
 
-export interface NotificationPreferenceDto {
+export interface NotificationPreference {
   notificationType: string;
   label: string;
   channels: Record<string, boolean>;
@@ -108,7 +108,7 @@ export interface NotificationTransport {
    * Subscribes to incoming notifications.
    * Returns an unsubscribe function.
    */
-  onNotification(callback: (notification: NotificationDto) => void): () => void;
+  onNotification(callback: (notification: UserNotification) => void): () => void;
 
   /**
    * Subscribes to connection state changes.
@@ -134,7 +134,7 @@ export interface NotificationConfig {
  * Extracts the list of available channels from a preferences response.
  * Useful for dynamically rendering a preferences matrix without hardcoding channels.
  */
-export function getAvailableChannels(preferences: readonly NotificationPreferenceDto[]): string[] {
+export function getAvailableChannels(preferences: readonly NotificationPreference[]): string[] {
   if (preferences.length === 0) return [];
   return Object.keys(preferences[0].channels);
 }

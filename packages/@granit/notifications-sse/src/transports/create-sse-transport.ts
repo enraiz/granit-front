@@ -2,7 +2,7 @@ import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event
 
 import type {
   ConnectionState,
-  NotificationDto,
+  UserNotification,
   NotificationTransport,
 } from '@granit/notifications';
 
@@ -38,7 +38,7 @@ export function createSseTransport(config: SseTransportConfig): NotificationTran
   const heartbeatType = config.heartbeatTypeName ?? '__heartbeat__';
   let abortController: AbortController | null = null;
   let currentState: ConnectionState = 'disconnected';
-  const notificationListeners = new Set<(notification: NotificationDto) => void>();
+  const notificationListeners = new Set<(notification: UserNotification) => void>();
   const stateListeners = new Set<(state: ConnectionState) => void>();
 
   function setState(state: ConnectionState) {
@@ -75,7 +75,7 @@ export function createSseTransport(config: SseTransportConfig): NotificationTran
           if (event.event === heartbeatType || !event.data) return;
 
           try {
-            const notification = JSON.parse(event.data) as NotificationDto;
+            const notification = JSON.parse(event.data) as UserNotification;
             for (const listener of notificationListeners) {
               listener(notification);
             }

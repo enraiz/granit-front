@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { NotificationDto } from '@granit/notifications';
+import type { UserNotification } from '@granit/notifications';
 
 let capturedUrl: string | null = null;
 let capturedOptions: Record<string, unknown> | null = null;
@@ -60,7 +60,7 @@ describe('createSseTransport', () => {
       event: string;
       data: string;
     }) => void;
-    const mockNotif: NotificationDto = {
+    const mockNotif: UserNotification = {
       id: 'n-1',
       title: 'SSE Notification',
       body: null,

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createSignalRTransport } from '../transports/create-signalr-transport.js';
 
-import type { NotificationDto } from '@granit/notifications';
+import type { UserNotification } from '@granit/notifications';
 
 let lastConnection: {
   start: ReturnType<typeof vi.fn>;
@@ -119,9 +119,9 @@ describe('createSignalRTransport', () => {
     const receiveCall = lastConnection.on.mock.calls.find(
       (call: unknown[]) => call[0] === 'ReceiveNotification'
     );
-    const handler = receiveCall![1] as (n: NotificationDto) => void;
+    const handler = receiveCall![1] as (n: UserNotification) => void;
 
-    const mockNotif: NotificationDto = {
+    const mockNotif: UserNotification = {
       id: 'n-1',
       title: 'Test',
       body: null,
@@ -183,7 +183,7 @@ describe('createSignalRTransport', () => {
     const receiveCall = lastConnection.on.mock.calls.find(
       (call: unknown[]) => call[0] === 'ReceiveNotification'
     );
-    const handler = receiveCall![1] as (n: NotificationDto) => void;
+    const handler = receiveCall![1] as (n: UserNotification) => void;
 
     handler({
       id: 'n-1',

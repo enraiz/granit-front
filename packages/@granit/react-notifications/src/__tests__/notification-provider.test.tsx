@@ -10,7 +10,7 @@ import { createMockClient } from './test-utils.js';
 
 import type {
   NotificationConfig,
-  NotificationDto,
+  UserNotification,
   NotificationTransport,
 } from '@granit/notifications';
 import type { AxiosInstance } from 'axios';
@@ -106,7 +106,7 @@ describe('NotificationProvider', () => {
   });
 
   it('should handle incoming notifications from transport', async () => {
-    let notificationCallback: ((n: NotificationDto) => void) | null = null;
+    let notificationCallback: ((n: UserNotification) => void) | null = null;
 
     const transport = createMockTransport({
       onNotification: vi.fn((cb) => {
@@ -121,7 +121,7 @@ describe('NotificationProvider', () => {
 
     await waitFor(() => expect(result.current.connectionState).toBe('connected'));
 
-    const mockNotif: NotificationDto = {
+    const mockNotif: UserNotification = {
       id: 'n-99',
       title: 'Real-time notification',
       body: null,
