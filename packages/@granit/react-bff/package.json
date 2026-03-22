@@ -1,0 +1,29 @@
+{
+  "name": "@granit/react-bff",
+  "description": "React bindings for @granit/bff — BffProvider, useAuth, useCsrf, useBffFetch, BffGuard",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@granit/bff": "workspace:*",
+    "react": "^19.0.0"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "registry": "https://npm.pkg.github.com"
+  }
+}

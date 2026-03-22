@@ -230,6 +230,8 @@ importers:
         specifier: workspace:*
         version: link:../testing
 
+  packages/@granit/bff: {}
+
   packages/@granit/blob-storage:
     dependencies:
       axios:
@@ -568,6 +570,15 @@ importers:
       '@granit/testing':
         specifier: workspace:*
         version: link:../testing
+
+  packages/@granit/react-bff:
+    dependencies:
+      '@granit/bff':
+        specifier: workspace:*
+        version: link:../bff
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
 
   packages/@granit/react-blob-storage:
     dependencies:

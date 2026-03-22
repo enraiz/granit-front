@@ -84,6 +84,16 @@
       "description": "Axios factory with Bearer token interceptor and shared response types",
       "exports": [
         {
+          "name": "ApiClientMode",
+          "kind": "type",
+          "signature": "type ApiClientMode = 'bearer' | 'bff'"
+        },
+        {
+          "name": "CsrfTokenGetter",
+          "kind": "type",
+          "signature": "type CsrfTokenGetter = () => string | null"
+        },
+        {
           "name": "ApiClientConfig",
           "kind": "interface",
           "signature": "interface ApiClientConfig",
@@ -97,6 +107,16 @@
               "name": "timeout",
               "kind": "property",
               "signature": "timeout?: number"
+            },
+            {
+              "name": "mode",
+              "kind": "property",
+              "signature": "mode?: ApiClientMode"
+            },
+            {
+              "name": "csrfTokenGetter",
+              "kind": "property",
+              "signature": "csrfTokenGetter?: CsrfTokenGetter"
             }
           ]
         },
@@ -205,6 +225,35 @@
           "kind": "interface",
           "signature": "interface BackgroundJobStatus",
           "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/bff",
+      "description": "BFF authentication types and CSRF manager — TypeScript mirror of Granit.Bff .NET",
+      "exports": [
+        {
+          "name": "BffConfig",
+          "kind": "interface",
+          "signature": "interface BffConfig",
+          "members": []
+        },
+        {
+          "name": "BffUnauthenticated",
+          "kind": "interface",
+          "signature": "interface BffUnauthenticated",
+          "members": []
+        },
+        {
+          "name": "BffUser",
+          "kind": "interface",
+          "signature": "interface BffUser",
+          "members": []
+        },
+        {
+          "name": "BffUserResponse",
+          "kind": "type",
+          "signature": "type BffUserResponse = BffUser | BffUnauthenticated"
         }
       ]
     },
@@ -1126,6 +1175,60 @@
           "name": "BackgroundJobsOptions",
           "kind": "interface",
           "signature": "interface BackgroundJobsOptions",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-bff",
+      "description": "React bindings for @granit/bff — BffProvider, useAuth, useCsrf, useBffFetch, BffGuard",
+      "exports": [
+        {
+          "name": "BffProvider",
+          "kind": "function",
+          "signature": "function BffProvider("
+        },
+        {
+          "name": "useBffContext",
+          "kind": "function",
+          "signature": "function useBffContext(): BffContextType"
+        },
+        {
+          "name": "BffContextType",
+          "kind": "interface",
+          "signature": "interface BffContextType",
+          "members": []
+        },
+        {
+          "name": "BffProviderProps",
+          "kind": "interface",
+          "signature": "interface BffProviderProps",
+          "members": []
+        },
+        {
+          "name": "useBffAuth",
+          "kind": "function",
+          "signature": "function useBffAuth()"
+        },
+        {
+          "name": "useBffCsrf",
+          "kind": "function",
+          "signature": "function useBffCsrf()"
+        },
+        {
+          "name": "useBffFetch",
+          "kind": "function",
+          "signature": "function useBffFetch()"
+        },
+        {
+          "name": "BffGuard",
+          "kind": "function",
+          "signature": "function BffGuard("
+        },
+        {
+          "name": "BffGuardProps",
+          "kind": "interface",
+          "signature": "interface BffGuardProps",
           "members": []
         }
       ]
