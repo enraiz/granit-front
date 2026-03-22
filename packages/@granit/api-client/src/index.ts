@@ -5,10 +5,29 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios';
 
+/** Authentication mode for the API client. */
+export type ApiClientMode = 'bearer' | 'bff';
+
+/** Getter that returns the current CSRF token, or null if unavailable. */
+export type CsrfTokenGetter = () => string | null;
+
 export interface ApiClientConfig {
   baseURL: string;
   /** Request timeout in milliseconds. Default: 10_000 */
   timeout?: number;
+  /**
+   * Authentication mode. Default: `'bearer'`.
+   *
+   * - `'bearer'` — Injects `Authorization: Bearer <token>` via the global token getter.
+   * - `'bff'` — Uses `withCredentials` (cookies) and injects `X-CSRF-Token` on mutations.
+   *   No Authorization header is sent (the BFF YARP proxy adds it server-side).
+   */
+  mode?: ApiClientMode;
+  /**
+   * CSRF token getter for BFF mode. Required when `mode` is `'bff'`.
+   * Typically obtained from `CsrfManager.getToken` in `@granit/bff`.
+   */
+  csrfTokenGetter?: CsrfTokenGetter;
 }
 
 // ---------------------------------------------------------------------------
@@ -75,15 +94,24 @@ export function setIdempotencyKeyGenerator(
   _idempotencyKeyGenerator = generator;
 }
 
+const MUTATION_METHODS = new Set(['post', 'put', 'delete', 'patch']);
+
 /**
- * Create a pre-configured Axios instance with Bearer token injection,
- * optional X-Tenant-Id header, and a 401 response interceptor that
- * triggers the `onUnauthorized` callback (if registered via {@link setOnUnauthorized}).
+ * Create a pre-configured Axios instance.
+ *
+ * - **Bearer mode** (default): injects `Authorization: Bearer <token>` via the global token getter.
+ * - **BFF mode**: uses `withCredentials` (cookies) and injects `X-CSRF-Token` on mutations.
+ *
+ * Both modes support optional `X-Tenant-Id`, idempotency keys, and a 401 response interceptor.
  */
 export function createApiClient(config: ApiClientConfig): AxiosInstance {
+  const mode = config.mode ?? 'bearer';
+  const isBff = mode === 'bff';
+
   const instance = axios.create({
     baseURL: config.baseURL,
     timeout: config.timeout ?? 10_000,
+    withCredentials: isBff,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -91,10 +119,21 @@ export function createApiClient(config: ApiClientConfig): AxiosInstance {
 
   instance.interceptors.request.use(
     async (req: InternalAxiosRequestConfig) => {
-      if (_tokenGetter) {
-        const token = await _tokenGetter();
-        if (token) {
-          req.headers.Authorization = `Bearer ${token}`;
+      if (isBff) {
+        // BFF mode: inject CSRF token on mutation methods
+        if (config.csrfTokenGetter && MUTATION_METHODS.has(req.method ?? '')) {
+          const csrfToken = config.csrfTokenGetter();
+          if (csrfToken) {
+            req.headers['X-CSRF-Token'] = csrfToken;
+          }
+        }
+      } else {
+        // Bearer mode: inject Authorization header
+        if (_tokenGetter) {
+          const token = await _tokenGetter();
+          if (token) {
+            req.headers.Authorization = `Bearer ${token}`;
+          }
         }
       }
       if (_tenantGetter) {

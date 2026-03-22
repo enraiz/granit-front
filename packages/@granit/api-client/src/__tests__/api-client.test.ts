@@ -10,7 +10,12 @@ import type {
 
 // Dynamic import type to get fresh module state per test
 interface ApiClientModule {
-  createApiClient: (config: ApiClientConfig) => AxiosInstance;
+  createApiClient: (
+    config: ApiClientConfig & {
+      mode?: 'bearer' | 'bff';
+      csrfTokenGetter?: () => string | null;
+    }
+  ) => AxiosInstance;
   setTokenGetter: (getter: () => Promise<string | undefined>) => void;
   setTenantGetter: (getter: () => string | undefined) => void;
   setOnUnauthorized: (callback: () => void) => void;
@@ -353,5 +358,143 @@ describe('401 response interceptor', () => {
 
     const response = await client.get('/test');
     expect(response.status).toBe(200);
+  });
+});
+
+describe('BFF mode', () => {
+  let mod: ApiClientModule;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    mod = await import('../index.ts');
+  });
+
+  it('should set withCredentials to true in BFF mode', () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+    });
+    expect(client.defaults.withCredentials).toBe(true);
+  });
+
+  it('should not set withCredentials in bearer mode', () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bearer',
+    });
+    expect(client.defaults.withCredentials).toBe(false);
+  });
+
+  it('should not set withCredentials when mode is omitted (default bearer)', () => {
+    const client = mod.createApiClient({ baseURL: 'https://api.example.com' });
+    expect(client.defaults.withCredentials).toBe(false);
+  });
+
+  it('should inject X-CSRF-Token on POST requests in BFF mode', async () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+      csrfTokenGetter: () => 'csrf-123',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.post('/test', {});
+    expect(response.config.headers['X-CSRF-Token']).toBe('csrf-123');
+  });
+
+  it('should inject X-CSRF-Token on PUT requests in BFF mode', async () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+      csrfTokenGetter: () => 'csrf-put',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.put('/test', {});
+    expect(response.config.headers['X-CSRF-Token']).toBe('csrf-put');
+  });
+
+  it('should inject X-CSRF-Token on DELETE requests in BFF mode', async () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+      csrfTokenGetter: () => 'csrf-del',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.delete('/test');
+    expect(response.config.headers['X-CSRF-Token']).toBe('csrf-del');
+  });
+
+  it('should inject X-CSRF-Token on PATCH requests in BFF mode', async () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+      csrfTokenGetter: () => 'csrf-patch',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.patch('/test', {});
+    expect(response.config.headers['X-CSRF-Token']).toBe('csrf-patch');
+  });
+
+  it('should NOT inject X-CSRF-Token on GET requests in BFF mode', async () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+      csrfTokenGetter: () => 'csrf-get',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.get('/test');
+    expect(response.config.headers['X-CSRF-Token']).toBeUndefined();
+  });
+
+  it('should NOT inject X-CSRF-Token when csrfTokenGetter returns null', async () => {
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+      csrfTokenGetter: () => null,
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.post('/test', {});
+    expect(response.config.headers['X-CSRF-Token']).toBeUndefined();
+  });
+
+  it('should NOT inject Authorization header in BFF mode', async () => {
+    mod.setTokenGetter(() => Promise.resolve('should-not-appear'));
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.get('/test');
+    expect(response.config.headers.Authorization).toBeUndefined();
+  });
+
+  it('should still inject X-Tenant-Id in BFF mode', async () => {
+    mod.setTenantGetter(() => 'tenant-bff');
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.get('/test');
+    expect(response.config.headers['X-Tenant-Id']).toBe('tenant-bff');
+  });
+
+  it('should still inject Idempotency-Key in BFF mode', async () => {
+    mod.setIdempotencyKeyGenerator(() => 'idem-bff');
+    const client = mod.createApiClient({
+      baseURL: 'https://api.example.com',
+      mode: 'bff',
+    });
+    client.defaults.adapter = captureAdapter;
+
+    const response = await client.post('/test', {});
+    expect(response.config.headers['Idempotency-Key']).toBe('idem-bff');
   });
 });
