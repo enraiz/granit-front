@@ -16,8 +16,20 @@ export type PrivacyExportStatusResponse = {
 
 // ── Data Deletion (GDPR Art. 17) ─────────────────────────────────────────────
 
+export type DeletionStatusValue = 'Deferred' | 'Executed' | 'Cancelled';
+
 export type PrivacyDeletionRequest = {
   readonly reason: string;
+  readonly defer?: boolean;
+};
+
+export type PrivacyDeletionResponse = {
+  readonly requestId: string;
+  readonly status: DeletionStatusValue;
+  readonly reason: string;
+  readonly requestedAt: string;
+  readonly scheduledDeletionAt?: string;
+  readonly cancelledAt?: string;
 };
 
 // ── Legal Agreements (GDPR Art. 7) ───────────────────────────────────────────

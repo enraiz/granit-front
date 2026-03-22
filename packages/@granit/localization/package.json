@@ -17,6 +17,9 @@
     "@granit/storage": "workspace:*",
     "i18next": "^25.0.0"
   },
+  "devDependencies": {
+    "@granit/testing": "workspace:*"
+  },
   "publishConfig": {
     "exports": {
       ".": {
