@@ -17,7 +17,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
+
 from pathlib import Path
 
 
@@ -387,7 +387,6 @@ def main() -> None:
             print(f"  {pkg['name']}: {len(exports)} exports")
 
     index = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
         "repo": "granit-front",
         "packages": result,
     }
