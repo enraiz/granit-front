@@ -63,6 +63,23 @@ export async function updateReferenceDataEntry(
 }
 
 /**
+ * Fetch the direct children of a hierarchical reference data entry.
+ *
+ * `GET {basePath}/{code}/children`
+ *
+ * Returns active children ordered by sortOrder, then code.
+ * Throws 404 if the parent code does not exist.
+ */
+export async function fetchReferenceDataChildren<T extends ReferenceDataEntry>(
+  client: AxiosInstance,
+  basePath: string,
+  code: string
+): Promise<T[]> {
+  const { data } = await client.get<T[]>(`${basePath}/${encodeURIComponent(code)}/children`);
+  return data;
+}
+
+/**
  * Deactivate a reference data entry (soft delete).
  *
  * `DELETE {basePath}/{code}`

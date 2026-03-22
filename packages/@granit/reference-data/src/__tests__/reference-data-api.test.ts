@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createReferenceDataEntry,
   deactivateReferenceDataEntry,
+  fetchReferenceDataChildren,
   fetchReferenceDataEntry,
   fetchReferenceDataList,
   updateReferenceDataEntry,
@@ -34,6 +35,8 @@ const mockEntry: ReferenceDataEntry = {
   sortOrder: 1,
   validFrom: null,
   validTo: null,
+  parentCode: null,
+  extraProperties: null,
   createdAt: '2024-01-01T00:00:00Z',
   createdBy: 'system',
   modifiedAt: null,
@@ -149,6 +152,42 @@ describe('updateReferenceDataEntry', () => {
     });
 
     expect(result).toBeUndefined();
+  });
+});
+
+describe('fetchReferenceDataChildren', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('sends GET to basePath/{code}/children', async () => {
+    const client = createMockClient();
+    const children = [{ ...mockEntry, code: 'CHILD-1', parentCode: 'BE' }];
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(children));
+
+    const result = await fetchReferenceDataChildren(client, BASE_PATH, 'BE');
+
+    expect(client.get).toHaveBeenCalledWith(`${BASE_PATH}/BE/children`);
+    expect(result).toHaveLength(1);
+    expect(result[0].parentCode).toBe('BE');
+  });
+
+  it('encodes special characters in parent code', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
+
+    await fetchReferenceDataChildren(client, BASE_PATH, 'A/B');
+
+    expect(client.get).toHaveBeenCalledWith(`${BASE_PATH}/A%2FB/children`);
+  });
+
+  it('returns an empty array when no children exist', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
+
+    const result = await fetchReferenceDataChildren(client, BASE_PATH, 'LEAF');
+
+    expect(result).toEqual([]);
   });
 });
 

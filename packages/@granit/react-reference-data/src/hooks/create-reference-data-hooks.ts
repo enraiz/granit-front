@@ -1,6 +1,7 @@
 import {
   createReferenceDataEntry,
   deactivateReferenceDataEntry,
+  fetchReferenceDataChildren,
   fetchReferenceDataEntry,
   fetchReferenceDataList,
   updateReferenceDataEntry,
@@ -49,6 +50,16 @@ export interface ReferenceDataEntryHookOptions {
   readonly enabled?: boolean;
 }
 
+/** Options for the children hook (hierarchical types). */
+export interface ReferenceDataChildrenHookOptions {
+  /** Axios instance used for HTTP requests. */
+  readonly client: AxiosInstance;
+  /** Override the base path for this hook call. */
+  readonly basePath?: string;
+  /** Whether the query is enabled. Default: true. */
+  readonly enabled?: boolean;
+}
+
 /** Options for mutation hooks. */
 export interface ReferenceDataMutationHookOptions {
   /** Axios instance used for HTTP requests. */
@@ -70,6 +81,7 @@ export interface ReferenceDataKeys {
   readonly list: (params?: ReferenceDataQuery) => readonly unknown[];
   readonly details: () => readonly unknown[];
   readonly detail: (code: string) => readonly unknown[];
+  readonly children: (parentCode: string) => readonly unknown[];
 }
 
 // ---------------------------------------------------------------------------
@@ -116,6 +128,7 @@ export function createReferenceDataHooks<T extends ReferenceDataEntry>(
     list: (params?: ReferenceDataQuery) => [...keys.lists(), params],
     details: () => [...keys.all, 'detail'],
     detail: (code: string) => [...keys.details(), code],
+    children: (parentCode: string) => [...keys.all, 'children', parentCode],
   };
 
   // -- Query hooks ----------------------------------------------------------
@@ -137,6 +150,19 @@ export function createReferenceDataHooks<T extends ReferenceDataEntry>(
       queryKey: keys.detail(code),
       queryFn: async () => fetchReferenceDataEntry<T>(client, basePath, code),
       enabled: enabled && code.length > 0,
+    });
+  }
+
+  function useChildren(
+    parentCode: string,
+    options: ReferenceDataChildrenHookOptions
+  ): UseQueryResult<T[]> {
+    const { client, basePath = defaultBasePath, enabled = true } = options;
+
+    return useQuery({
+      queryKey: keys.children(parentCode),
+      queryFn: async () => fetchReferenceDataChildren<T>(client, basePath, parentCode),
+      enabled: enabled && parentCode.length > 0,
     });
   }
 
@@ -188,5 +214,5 @@ export function createReferenceDataHooks<T extends ReferenceDataEntry>(
     });
   }
 
-  return { keys, useList, useEntry, useCreate, useUpdate, useDeactivate };
+  return { keys, useList, useEntry, useChildren, useCreate, useUpdate, useDeactivate };
 }

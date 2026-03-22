@@ -32,6 +32,8 @@ const mockEntry: TestEntity = {
   sortOrder: 1,
   validFrom: null,
   validTo: null,
+  parentCode: null,
+  extraProperties: null,
   createdAt: '2024-01-01T00:00:00Z',
   createdBy: 'system',
   modifiedAt: null,
@@ -39,7 +41,7 @@ const mockEntry: TestEntity = {
   extra: 'test-value',
 };
 
-const { keys, useList, useEntry, useCreate, useUpdate, useDeactivate } =
+const { keys, useList, useEntry, useChildren, useCreate, useUpdate, useDeactivate } =
   createReferenceDataHooks<TestEntity>('test-entity');
 
 // ---------------------------------------------------------------------------
@@ -62,6 +64,15 @@ describe('keys', () => {
 
   it('builds detail keys with code', () => {
     expect(keys.detail('BE')).toEqual(['reference-data', 'test-entity', 'detail', 'BE']);
+  });
+
+  it('builds children keys with parent code', () => {
+    expect(keys.children('ELECTRONICS')).toEqual([
+      'reference-data',
+      'test-entity',
+      'children',
+      'ELECTRONICS',
+    ]);
   });
 
   it('isolates keys between entity types', () => {
@@ -217,6 +228,80 @@ describe('useEntry', () => {
     vi.mocked(client.get).mockRejectedValue(new Error('Not found'));
 
     const { result } = renderHook(() => useEntry('XX', { client }), {
+      wrapper: createQueryWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(result.current.error?.message).toBe('Not found');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useChildren
+// ---------------------------------------------------------------------------
+
+describe('useChildren', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('fetches children of a parent code', async () => {
+    const client = createMockClient();
+    const children = [{ ...mockEntry, code: 'CHILD-1', parentCode: 'BE' }];
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(children));
+
+    const { result } = renderHook(() => useChildren('BE', { client }), {
+      wrapper: createQueryWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/api/v1/reference-data/test-entity/BE/children');
+    expect(result.current.data).toHaveLength(1);
+    expect(result.current.data?.[0].parentCode).toBe('BE');
+  });
+
+  it('uses custom basePath', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
+
+    const { result } = renderHook(() => useChildren('BE', { client, basePath: '/custom' }), {
+      wrapper: createQueryWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(client.get).toHaveBeenCalledWith('/custom/BE/children');
+  });
+
+  it('does not fetch when enabled is false', () => {
+    const client = createMockClient();
+
+    const { result } = renderHook(() => useChildren('BE', { client, enabled: false }), {
+      wrapper: createQueryWrapper(),
+    });
+
+    expect(result.current.isFetching).toBe(false);
+    expect(client.get).not.toHaveBeenCalled();
+  });
+
+  it('does not fetch when parent code is empty', () => {
+    const client = createMockClient();
+
+    const { result } = renderHook(() => useChildren('', { client }), {
+      wrapper: createQueryWrapper(),
+    });
+
+    expect(result.current.isFetching).toBe(false);
+    expect(client.get).not.toHaveBeenCalled();
+  });
+
+  it('exposes error state on failure', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockRejectedValue(new Error('Not found'));
+
+    const { result } = renderHook(() => useChildren('XX', { client }), {
       wrapper: createQueryWrapper(),
     });
 
