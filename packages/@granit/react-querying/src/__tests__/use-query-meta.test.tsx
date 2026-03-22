@@ -1,7 +1,7 @@
 import { createTestQueryClient } from '@granit/react-testing';
 import { QueryClientProvider } from '@tanstack/react-query';
-import axios from 'axios';
 import { renderHook, waitFor } from '@testing-library/react';
+import axios from 'axios';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { useQueryMeta } from '../hooks/use-query-meta.js';
