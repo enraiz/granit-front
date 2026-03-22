@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-21T22:57:29.878558+00:00",
+  "generatedAt": "2026-03-22T14:09:29.131110+00:00",
   "repo": "granit-front",
   "packages": [
     {
@@ -1780,11 +1780,6 @@
           "kind": "interface",
           "signature": "interface PrivacyProviderProps",
           "members": []
-        },
-        {
-          "name": "useRequestDeletion",
-          "kind": "function",
-          "signature": "function useRequestDeletion(): UseMutationResult<void, Error, PrivacyDeletionRequest>"
         }
       ]
     },
@@ -1881,39 +1876,12 @@
     },
     {
       "name": "@granit/react-reference-data",
-      "description": "React hooks for @granit/reference-data — useCountry, useCountries, useCreateCountry, useUpdateCountry, useDeactivateCountry, useReactivateCountry",
+      "description": "React hooks factory for @granit/reference-data — createReferenceDataHooks",
       "exports": [
         {
-          "name": "countryKeys",
-          "kind": "const",
-          "signature": "const countryKeys"
-        },
-        {
-          "name": "useCountries",
+          "name": "createReferenceDataHooks",
           "kind": "function",
-          "signature": "function useCountries( options: ReferenceDataHookOptions &"
-        },
-        {
-          "name": "useCountry",
-          "kind": "function",
-          "signature": "function useCountry( code: string, options: ReferenceDataHookOptions &"
-        },
-        {
-          "name": "ReferenceDataHookOptions",
-          "kind": "interface",
-          "signature": "interface ReferenceDataHookOptions",
-          "members": [
-            {
-              "name": "client",
-              "kind": "property",
-              "signature": "client: AxiosInstance"
-            },
-            {
-              "name": "basePath",
-              "kind": "property",
-              "signature": "basePath?: string"
-            }
-          ]
+          "signature": "function createReferenceDataHooks<T extends ReferenceDataEntry>( entityName: string, factoryOptions?: CreateReferenceDataHooksOptions )"
         }
       ]
     },
@@ -2468,20 +2436,8 @@
     },
     {
       "name": "@granit/reference-data",
-      "description": "Reference data types — Country and related types mirroring Granit.ReferenceData .NET",
-      "exports": [
-        {
-          "name": "Country",
-          "kind": "interface",
-          "signature": "interface Country",
-          "members": []
-        },
-        {
-          "name": "CountriesListParams",
-          "kind": "type",
-          "signature": "type CountriesListParams = PaginationParams & { readonly search?: string; readonly sortBy?: string; readonly desc?: boolean; readonly region?: string; readonly isActive?: boolean; }"
-        }
-      ]
+      "description": "Generic reference data types and API — mirrors Granit.ReferenceData .NET",
+      "exports": []
     },
     {
       "name": "@granit/settings",

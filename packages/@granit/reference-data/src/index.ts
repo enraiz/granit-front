@@ -1,12 +1,17 @@
 // Types
-export type { Country, CountriesListParams } from './types/index.js';
+export type {
+  ReferenceDataCreateRequest,
+  ReferenceDataEntry,
+  ReferenceDataLabels,
+  ReferenceDataQuery,
+  ReferenceDataUpdateRequest,
+} from './types/index.js';
 
 // API
 export {
-  fetchCountries,
-  fetchCountry,
-  createCountry,
-  updateCountry,
-  deactivateCountry,
-  reactivateCountry,
+  createReferenceDataEntry,
+  deactivateReferenceDataEntry,
+  fetchReferenceDataEntry,
+  fetchReferenceDataList,
+  updateReferenceDataEntry,
 } from './api/reference-data-api.js';

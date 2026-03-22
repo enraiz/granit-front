@@ -1,6 +1,6 @@
 {
   "name": "@granit/reference-data",
-  "description": "Reference data types — Country and related types mirroring Granit.ReferenceData .NET",
+  "description": "Generic reference data types and API — mirrors Granit.ReferenceData .NET",
   "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",
@@ -16,6 +16,9 @@
   "peerDependencies": {
     "@granit/querying": "workspace:*",
     "axios": "*"
+  },
+  "devDependencies": {
+    "@granit/testing": "workspace:*"
   },
   "publishConfig": {
     "exports": {

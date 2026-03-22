@@ -1,88 +1,76 @@
-import type { Country, CountriesListParams } from '../types/index.js';
+import type {
+  ReferenceDataCreateRequest,
+  ReferenceDataEntry,
+  ReferenceDataQuery,
+  ReferenceDataUpdateRequest,
+} from '../types/index.js';
+import type { PagedResult } from '@granit/querying';
 import type { AxiosInstance } from 'axios';
 
 /**
- * Fetch all countries with optional filters.
+ * Fetch a paginated list of reference data entries.
  *
- * `GET {basePath}?search=&region=&isActive=`
+ * `GET {basePath}?activeOnly=&search=&sortBy=&descending=&page=&pageSize=`
  */
-export async function fetchCountries(
+export async function fetchReferenceDataList<T extends ReferenceDataEntry>(
   client: AxiosInstance,
   basePath: string,
-  params?: CountriesListParams
-): Promise<Country[]> {
-  const { data } = await client.get<Country[]>(basePath, { params });
+  params?: ReferenceDataQuery
+): Promise<PagedResult<T>> {
+  const { data } = await client.get<PagedResult<T>>(basePath, { params });
   return data;
 }
 
 /**
- * Fetch a single country by its ISO 3166-1 alpha-2 code.
+ * Fetch a single reference data entry by its unique code.
  *
  * `GET {basePath}/{code}`
  */
-export async function fetchCountry(
+export async function fetchReferenceDataEntry<T extends ReferenceDataEntry>(
   client: AxiosInstance,
   basePath: string,
   code: string
-): Promise<Country> {
-  const { data } = await client.get<Country>(`${basePath}/${encodeURIComponent(code)}`);
+): Promise<T> {
+  const { data } = await client.get<T>(`${basePath}/${encodeURIComponent(code)}`);
   return data;
 }
 
 /**
- * Create a new country.
+ * Create a new reference data entry.
  *
  * `POST {basePath}`
  */
-export async function createCountry(
+export async function createReferenceDataEntry(
   client: AxiosInstance,
   basePath: string,
-  payload: Omit<Country, 'createdAt' | 'updatedAt'>
-): Promise<Country> {
-  const { data } = await client.post<Country>(basePath, payload);
-  return data;
+  payload: ReferenceDataCreateRequest
+): Promise<void> {
+  await client.post(basePath, payload);
 }
 
 /**
- * Update an existing country.
+ * Update an existing reference data entry.
  *
  * `PUT {basePath}/{code}`
  */
-export async function updateCountry(
+export async function updateReferenceDataEntry(
   client: AxiosInstance,
   basePath: string,
   code: string,
-  payload: Partial<Omit<Country, 'code' | 'createdAt' | 'updatedAt'>>
-): Promise<Country> {
-  const { data } = await client.put<Country>(`${basePath}/${encodeURIComponent(code)}`, payload);
-  return data;
+  payload: ReferenceDataUpdateRequest
+): Promise<void> {
+  await client.put(`${basePath}/${encodeURIComponent(code)}`, payload);
 }
 
 /**
- * Deactivate a country (soft delete).
+ * Deactivate a reference data entry (soft delete).
  *
  * `DELETE {basePath}/{code}`
  */
-export async function deactivateCountry(
+export async function deactivateReferenceDataEntry(
   client: AxiosInstance,
   basePath: string,
   code: string
 ): Promise<void> {
   await client.delete(`${basePath}/${encodeURIComponent(code)}`);
-}
-
-/**
- * Reactivate a previously deactivated country.
- *
- * `PUT {basePath}/{code}`
- */
-export async function reactivateCountry(
-  client: AxiosInstance,
-  basePath: string,
-  code: string
-): Promise<Country> {
-  const { data } = await client.put<Country>(`${basePath}/${encodeURIComponent(code)}`, {
-    isActive: true,
-  });
-  return data;
 }

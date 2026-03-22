@@ -3,10 +3,13 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   acceptAgreement,
+  cancelDeletion,
   getAgreementDocuments,
   getAgreementHistory,
   getAgreementStatuses,
+  getDeletionStatus,
   getExportStatus,
+  listDeletions,
   listExports,
   requestDeletion,
   requestExport,
@@ -16,6 +19,7 @@ import type {
   AgreementHistoryEntry,
   AgreementStatus,
   LegalDocument,
+  PrivacyDeletionResponse,
   PrivacyExportStatusResponse,
 } from '../types/index.js';
 
@@ -73,13 +77,96 @@ describe('privacy-api', () => {
   describe('requestDeletion', () => {
     it('sends POST to /deletion with reason', async () => {
       const client = createMockClient();
-      vi.mocked(client.post).mockResolvedValueOnce({ data: undefined });
+      const response: PrivacyDeletionResponse = {
+        requestId: 'del-1',
+        status: 'Executed',
+        reason: 'User requested account deletion',
+        requestedAt: '2026-03-22T10:00:00Z',
+      };
+      vi.mocked(client.post).mockResolvedValueOnce({ data: response });
 
-      await requestDeletion(client, BASE, { reason: 'User requested account deletion' });
+      const result = await requestDeletion(client, BASE, {
+        reason: 'User requested account deletion',
+      });
 
       expect(client.post).toHaveBeenCalledWith(`${BASE}/deletion`, {
         reason: 'User requested account deletion',
       });
+      expect(result).toEqual(response);
+    });
+
+    it('sends POST to /deletion with defer flag', async () => {
+      const client = createMockClient();
+      const response: PrivacyDeletionResponse = {
+        requestId: 'del-2',
+        status: 'Deferred',
+        reason: 'Closing account',
+        requestedAt: '2026-03-22T10:00:00Z',
+        scheduledDeletionAt: '2026-04-21T10:00:00Z',
+      };
+      vi.mocked(client.post).mockResolvedValueOnce({ data: response });
+
+      const result = await requestDeletion(client, BASE, {
+        reason: 'Closing account',
+        defer: true,
+      });
+
+      expect(client.post).toHaveBeenCalledWith(`${BASE}/deletion`, {
+        reason: 'Closing account',
+        defer: true,
+      });
+      expect(result).toEqual(response);
+    });
+  });
+
+  describe('listDeletions', () => {
+    it('sends GET to /deletion', async () => {
+      const client = createMockClient();
+      const response: PrivacyDeletionResponse[] = [
+        {
+          requestId: 'del-1',
+          status: 'Deferred',
+          reason: 'Closing account',
+          requestedAt: '2026-03-22T10:00:00Z',
+          scheduledDeletionAt: '2026-04-21T10:00:00Z',
+        },
+      ];
+      vi.mocked(client.get).mockResolvedValueOnce({ data: response });
+
+      const result = await listDeletions(client, BASE);
+
+      expect(client.get).toHaveBeenCalledWith(`${BASE}/deletion`);
+      expect(result).toEqual(response);
+    });
+  });
+
+  describe('getDeletionStatus', () => {
+    it('sends GET to /deletion/{requestId}', async () => {
+      const client = createMockClient();
+      const response: PrivacyDeletionResponse = {
+        requestId: 'del-1',
+        status: 'Deferred',
+        reason: 'Closing account',
+        requestedAt: '2026-03-22T10:00:00Z',
+        scheduledDeletionAt: '2026-04-21T10:00:00Z',
+      };
+      vi.mocked(client.get).mockResolvedValueOnce({ data: response });
+
+      const result = await getDeletionStatus(client, BASE, 'del-1');
+
+      expect(client.get).toHaveBeenCalledWith(`${BASE}/deletion/del-1`);
+      expect(result).toEqual(response);
+    });
+  });
+
+  describe('cancelDeletion', () => {
+    it('sends POST to /deletion/{requestId}/cancel', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValueOnce({ data: undefined });
+
+      await cancelDeletion(client, BASE, 'del-1');
+
+      expect(client.post).toHaveBeenCalledWith(`${BASE}/deletion/del-1/cancel`);
     });
   });
 

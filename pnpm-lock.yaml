@@ -319,6 +319,10 @@ importers:
       i18next:
         specifier: ^25.0.0
         version: 25.8.13(typescript@5.9.3)
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/logger: {}
 
@@ -875,6 +879,9 @@ importers:
 
   packages/@granit/react-reference-data:
     dependencies:
+      '@granit/querying':
+        specifier: workspace:*
+        version: link:../querying
       '@granit/reference-data':
         specifier: workspace:*
         version: link:../reference-data
@@ -1114,6 +1121,10 @@ importers:
       axios:
         specifier: '*'
         version: 1.13.6
+    devDependencies:
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/settings:
     dependencies:

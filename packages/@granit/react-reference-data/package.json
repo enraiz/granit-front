@@ -1,6 +1,6 @@
 {
   "name": "@granit/react-reference-data",
-  "description": "React hooks for @granit/reference-data — useCountry, useCountries, useCreateCountry, useUpdateCountry, useDeactivateCountry, useReactivateCountry",
+  "description": "React hooks factory for @granit/reference-data — createReferenceDataHooks",
   "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",
@@ -14,6 +14,7 @@
     "build": "tsup"
   },
   "peerDependencies": {
+    "@granit/querying": "workspace:*",
     "@granit/reference-data": "workspace:*",
     "@tanstack/react-query": "^5.0.0",
     "axios": "*",

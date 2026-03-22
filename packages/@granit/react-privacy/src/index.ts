@@ -14,7 +14,12 @@ export {
 } from './hooks/use-privacy-export.js';
 
 // Hooks — Data deletion
-export { useRequestDeletion } from './hooks/use-privacy-deletion.js';
+export {
+  useCancelDeletion,
+  useDeletionRequests,
+  useDeletionStatus,
+  useRequestDeletion,
+} from './hooks/use-privacy-deletion.js';
 
 // Hooks — Legal agreements
 export {

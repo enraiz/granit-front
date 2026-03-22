@@ -4,6 +4,7 @@ import type {
   AgreementStatus,
   LegalDocument,
   PrivacyDeletionRequest,
+  PrivacyDeletionResponse,
   PrivacyExportRequestResponse,
   PrivacyExportStatusResponse,
 } from '../types/index.js';
@@ -56,7 +57,10 @@ export async function listExports(
 // ── Data Deletion (GDPR Art. 17) ─────────────────────────────────────────────
 
 /**
- * Request deletion of all personal data. Returns 202 (fire-and-forget).
+ * Request deletion of all personal data.
+ *
+ * When `defer` is `true`, the deletion is scheduled after a cooling-off
+ * period and can be cancelled via {@link cancelDeletion}.
  *
  * `POST {basePath}/deletion`
  */
@@ -64,8 +68,53 @@ export async function requestDeletion(
   client: AxiosInstance,
   basePath: string,
   request: PrivacyDeletionRequest
+): Promise<PrivacyDeletionResponse> {
+  const { data } = await client.post<PrivacyDeletionResponse>(`${basePath}/deletion`, request);
+  return data;
+}
+
+/**
+ * List all deletion requests for the current user.
+ *
+ * `GET {basePath}/deletion`
+ */
+export async function listDeletions(
+  client: AxiosInstance,
+  basePath: string
+): Promise<PrivacyDeletionResponse[]> {
+  const { data } = await client.get<PrivacyDeletionResponse[]>(`${basePath}/deletion`);
+  return data;
+}
+
+/**
+ * Get the status of a specific deletion request.
+ *
+ * `GET {basePath}/deletion/{requestId}`
+ */
+export async function getDeletionStatus(
+  client: AxiosInstance,
+  basePath: string,
+  requestId: string
+): Promise<PrivacyDeletionResponse> {
+  const { data } = await client.get<PrivacyDeletionResponse>(
+    `${basePath}/deletion/${encodeURIComponent(requestId)}`
+  );
+  return data;
+}
+
+/**
+ * Cancel a deferred deletion request during the cooling-off period.
+ *
+ * Returns 409 if the request is already executed or already cancelled.
+ *
+ * `POST {basePath}/deletion/{requestId}/cancel`
+ */
+export async function cancelDeletion(
+  client: AxiosInstance,
+  basePath: string,
+  requestId: string
 ): Promise<void> {
-  await client.post(`${basePath}/deletion`, request);
+  await client.post(`${basePath}/deletion/${encodeURIComponent(requestId)}/cancel`);
 }
 
 // ── Legal Agreements (GDPR Art. 7) ───────────────────────────────────────────
