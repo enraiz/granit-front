@@ -31,6 +31,10 @@ export interface ReferenceDataEntry extends ReferenceDataLabels {
   readonly sortOrder: number;
   readonly validFrom: string | null;
   readonly validTo: string | null;
+  /** Parent code for hierarchical types (null for root entries). */
+  readonly parentCode: string | null;
+  /** Custom properties bag (all values are strings). */
+  readonly extraProperties: Record<string, string> | null;
   readonly createdAt: string;
   readonly createdBy: string;
   readonly modifiedAt: string | null;
@@ -49,6 +53,8 @@ export interface ReferenceDataCreateRequest extends Partial<ReferenceDataLabels>
   readonly sortOrder?: number;
   readonly validFrom?: string | null;
   readonly validTo?: string | null;
+  readonly parentCode?: string | null;
+  readonly extraProperties?: Record<string, string> | null;
 }
 
 /**
@@ -63,6 +69,8 @@ export interface ReferenceDataUpdateRequest extends Partial<ReferenceDataLabels>
   readonly isActive?: boolean;
   readonly validFrom?: string | null;
   readonly validTo?: string | null;
+  readonly parentCode?: string | null;
+  readonly extraProperties?: Record<string, string> | null;
 }
 
 /**

@@ -11,6 +11,7 @@ export type {
 export {
   createReferenceDataEntry,
   deactivateReferenceDataEntry,
+  fetchReferenceDataChildren,
   fetchReferenceDataEntry,
   fetchReferenceDataList,
   updateReferenceDataEntry,

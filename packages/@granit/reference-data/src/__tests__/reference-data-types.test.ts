@@ -43,6 +43,17 @@ describe('@granit/reference-data types', () => {
       expectTypeOf<ReferenceDataEntry['validTo']>().toEqualTypeOf<string | null>();
     });
 
+    it('should have hierarchical parent code', () => {
+      expectTypeOf<ReferenceDataEntry['parentCode']>().toEqualTypeOf<string | null>();
+    });
+
+    it('should have extra properties bag', () => {
+      expectTypeOf<ReferenceDataEntry['extraProperties']>().toEqualTypeOf<Record<
+        string,
+        string
+      > | null>();
+    });
+
     it('should have audit trail fields', () => {
       expectTypeOf<ReferenceDataEntry['createdAt']>().toBeString();
       expectTypeOf<ReferenceDataEntry['createdBy']>().toBeString();
@@ -82,6 +93,15 @@ describe('@granit/reference-data types', () => {
       >();
     });
 
+    it('should have optional parentCode and extraProperties', () => {
+      expectTypeOf<ReferenceDataCreateRequest['parentCode']>().toEqualTypeOf<
+        string | null | undefined
+      >();
+      expectTypeOf<ReferenceDataCreateRequest['extraProperties']>().toEqualTypeOf<
+        Record<string, string> | null | undefined
+      >();
+    });
+
     it('should not have isActive (always true on creation)', () => {
       expectTypeOf<ReferenceDataCreateRequest>().not.toHaveProperty('isActive');
     });
@@ -98,6 +118,15 @@ describe('@granit/reference-data types', () => {
 
     it('should have optional isActive for reactivation', () => {
       expectTypeOf<ReferenceDataUpdateRequest['isActive']>().toEqualTypeOf<boolean | undefined>();
+    });
+
+    it('should have optional parentCode and extraProperties', () => {
+      expectTypeOf<ReferenceDataUpdateRequest['parentCode']>().toEqualTypeOf<
+        string | null | undefined
+      >();
+      expectTypeOf<ReferenceDataUpdateRequest['extraProperties']>().toEqualTypeOf<
+        Record<string, string> | null | undefined
+      >();
     });
   });
 
