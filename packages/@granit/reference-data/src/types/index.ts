@@ -1,32 +1,85 @@
-import type { PaginationParams } from '@granit/querying';
-
-/** Country reference data entry. Mirrors Granit.ReferenceData.Country .NET. */
-export interface Country {
-  readonly code: string;
-  readonly alpha3: string;
-  readonly numericCode: string;
+/** The 14 multilingual labels supported by Granit reference data. */
+export interface ReferenceDataLabels {
   readonly labelEn: string;
   readonly labelFr: string;
   readonly labelNl: string;
   readonly labelDe: string;
-  readonly officialName: string;
-  readonly nativeName: string;
-  readonly region: string;
-  readonly subRegion: string;
-  readonly phoneCode: string;
-  readonly sortOrder: number;
+  readonly labelEs: string;
+  readonly labelIt: string;
+  readonly labelPt: string;
+  readonly labelZh: string;
+  readonly labelJa: string;
+  readonly labelPl: string;
+  readonly labelTr: string;
+  readonly labelKo: string;
+  readonly labelSv: string;
+  readonly labelCs: string;
+}
+
+/**
+ * Base interface for all reference data entries.
+ * Mirrors Granit.ReferenceData.Domain.ReferenceDataEntity (.NET).
+ *
+ * Concrete entity types (Country, Currency, Language, etc.) extend this
+ * interface with domain-specific fields in the consuming application.
+ */
+export interface ReferenceDataEntry extends ReferenceDataLabels {
+  readonly code: string;
+  /** Resolved label for the current UI culture (server-computed, not persisted). */
+  readonly label: string;
   readonly isActive: boolean;
+  readonly sortOrder: number;
   readonly validFrom: string | null;
   readonly validTo: string | null;
   readonly createdAt: string;
-  readonly updatedAt: string;
+  readonly createdBy: string;
+  readonly modifiedAt: string | null;
+  readonly modifiedBy: string | null;
 }
 
-/** Parameters for listing countries. */
-export type CountriesListParams = PaginationParams & {
-  readonly search?: string;
-  readonly sortBy?: string;
-  readonly desc?: boolean;
-  readonly region?: string;
+/**
+ * Request body for creating a new reference data entry.
+ * Mirrors Granit.ReferenceData.Endpoints.Dtos.ReferenceDataCreateRequest (.NET).
+ *
+ * Only `code` and `labelEn` are required. `isActive` is always `true` on creation.
+ */
+export interface ReferenceDataCreateRequest extends Partial<ReferenceDataLabels> {
+  readonly code: string;
+  readonly labelEn: string;
+  readonly sortOrder?: number;
+  readonly validFrom?: string | null;
+  readonly validTo?: string | null;
+}
+
+/**
+ * Request body for updating an existing reference data entry.
+ * Mirrors Granit.ReferenceData.Endpoints.Dtos.ReferenceDataUpdateRequest (.NET).
+ *
+ * `code` is immutable and passed as a path parameter, not in the body.
+ */
+export interface ReferenceDataUpdateRequest extends Partial<ReferenceDataLabels> {
+  readonly labelEn: string;
+  readonly sortOrder?: number;
   readonly isActive?: boolean;
-};
+  readonly validFrom?: string | null;
+  readonly validTo?: string | null;
+}
+
+/**
+ * Query parameters for listing reference data entries.
+ * Mirrors Granit.ReferenceData.Endpoints.Dtos.ReferenceDataQueryParameters (.NET).
+ */
+export interface ReferenceDataQuery {
+  /** When true, only active entries are returned. Default: true. */
+  readonly activeOnly?: boolean;
+  /** Free-text search on code and labels. */
+  readonly search?: string;
+  /** Property to sort by (e.g., 'SortOrder', 'Code', 'Label'). Default: 'SortOrder'. */
+  readonly sortBy?: string;
+  /** Sort in descending order. Default: false. */
+  readonly descending?: boolean;
+  /** One-based page number. Default: 1. */
+  readonly page?: number;
+  /** Items per page. Default: 20. */
+  readonly pageSize?: number;
+}
