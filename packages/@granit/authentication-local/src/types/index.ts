@@ -1,1 +1,6 @@
-export type { AccountLoginRequest, AccountLoginResponse } from './account-login.js';
+export type {
+  AccountLoginRequest,
+  AccountLoginResponse,
+  AccountPasskeyAssertionCompleteRequest,
+  AccountTwoFactorLoginRequest,
+} from './account-login.js';

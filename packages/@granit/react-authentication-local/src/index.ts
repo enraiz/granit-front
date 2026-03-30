@@ -8,4 +8,6 @@ export type { LocalAuthConfig, LocalAuthProviderProps } from './providers/local-
 
 // Hooks
 export { useLogin } from './hooks/use-login.js';
+export { useVerifyTwoFactorLogin } from './hooks/use-verify-two-factor-login.js';
 export { useBeginPasskeyAssertion } from './hooks/use-begin-passkey-assertion.js';
+export { useCompletePasskeyAssertion } from './hooks/use-complete-passkey-assertion.js';
