@@ -1,9 +1,14 @@
+import type { EntityId, ISODateString } from '@granit/types';
+
+/** Branded session identifier for identity provider sessions. */
+export type IdentitySessionId = EntityId<'IdentitySession'>;
+
 /** Active session from the identity provider — mirrors Granit.Identity.IdentitySession .NET record. */
 export type IdentitySession = {
-  readonly sessionId: string;
+  readonly sessionId: IdentitySessionId;
   readonly ipAddress: string | null;
-  readonly startedAt: string;
-  readonly lastAccess: string;
+  readonly startedAt: ISODateString;
+  readonly lastAccess: ISODateString;
   readonly rememberMe: boolean;
   readonly clients: readonly string[];
 };
@@ -11,7 +16,7 @@ export type IdentitySession = {
 /** Device activity from the identity provider — mirrors Granit.Identity.IdentityDeviceActivity .NET record. */
 export type IdentityDeviceActivity = {
   readonly ipAddress: string | null;
-  readonly lastAccess: string;
+  readonly lastAccess: ISODateString;
   readonly device: string | null;
   readonly os: string | null;
   readonly osVersion: string | null;

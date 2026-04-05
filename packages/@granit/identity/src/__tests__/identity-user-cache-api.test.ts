@@ -1,4 +1,5 @@
 import { axiosResponse, createMockClient } from '@granit/testing';
+import { toEntityId, toISODateString } from '@granit/types';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -21,7 +22,7 @@ import type {
 } from '../types/index.js';
 
 const sampleUser: IdentityUser = {
-  userId: 'user-1',
+  userId: toEntityId<'User'>('user-1'),
   username: 'jdoe',
   email: 'jdoe@example.com',
   firstName: 'John',
@@ -73,7 +74,7 @@ describe('identity-user-cache-api', () => {
       const client = createMockClient();
       vi.mocked(client.get).mockResolvedValue(axiosResponse(sampleUser));
 
-      const result = await getUserById(client, basePath, 'user-1');
+      const result = await getUserById(client, basePath, toEntityId<'User'>('user-1'));
 
       expect(client.get).toHaveBeenCalledWith(`${basePath}/user-1`);
       expect(result).toEqual(sampleUser);
@@ -83,7 +84,7 @@ describe('identity-user-cache-api', () => {
       const client = createMockClient();
       vi.mocked(client.get).mockResolvedValue(axiosResponse(sampleUser));
 
-      await getUserById(client, basePath, 'user/special@id');
+      await getUserById(client, basePath, toEntityId<'User'>('user/special@id'));
 
       expect(client.get).toHaveBeenCalledWith(
         `${basePath}/${encodeURIComponent('user/special@id')}`
@@ -97,10 +98,10 @@ describe('identity-user-cache-api', () => {
       const users = [sampleUser];
       vi.mocked(client.post).mockResolvedValue(axiosResponse(users));
 
-      const result = await batchResolveUsers(client, basePath, ['user-1']);
+      const result = await batchResolveUsers(client, basePath, [toEntityId<'User'>('user-1')]);
 
       expect(client.post).toHaveBeenCalledWith(`${basePath}/batch`, {
-        userIds: ['user-1'],
+        userIds: [toEntityId<'User'>('user-1')],
       });
       expect(result).toEqual(users);
     });
@@ -112,8 +113,8 @@ describe('identity-user-cache-api', () => {
       const stats: IdentityUserCacheStats = {
         totalEntries: 42,
         staleEntries: 3,
-        oldestSyncAt: '2026-01-01T00:00:00Z',
-        newestSyncAt: '2026-03-17T12:00:00Z',
+        oldestSyncAt: toISODateString('2026-01-01T00:00:00Z'),
+        newestSyncAt: toISODateString('2026-03-17T12:00:00Z'),
       };
       vi.mocked(client.get).mockResolvedValue(axiosResponse(stats));
 
@@ -129,10 +130,13 @@ describe('identity-user-cache-api', () => {
       const client = createMockClient();
       vi.mocked(client.post).mockResolvedValue(axiosResponse(undefined));
 
-      await syncUsers(client, basePath, ['user-1', 'user-2']);
+      await syncUsers(client, basePath, [
+        toEntityId<'User'>('user-1'),
+        toEntityId<'User'>('user-2'),
+      ]);
 
       expect(client.post).toHaveBeenCalledWith(`${basePath}/sync`, {
-        userIds: ['user-1', 'user-2'],
+        userIds: [toEntityId<'User'>('user-1'), toEntityId<'User'>('user-2')],
       });
     });
   });
@@ -168,7 +172,7 @@ describe('identity-user-cache-api', () => {
       const client = createMockClient();
       vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
-      await eraseUserCache(client, basePath, 'user-1');
+      await eraseUserCache(client, basePath, toEntityId<'User'>('user-1'));
 
       expect(client.delete).toHaveBeenCalledWith(`${basePath}/user-1`);
     });
@@ -177,7 +181,7 @@ describe('identity-user-cache-api', () => {
       const client = createMockClient();
       vi.mocked(client.delete).mockResolvedValue(axiosResponse(undefined));
 
-      await eraseUserCache(client, basePath, 'user/special@id');
+      await eraseUserCache(client, basePath, toEntityId<'User'>('user/special@id'));
 
       expect(client.delete).toHaveBeenCalledWith(
         `${basePath}/${encodeURIComponent('user/special@id')}`

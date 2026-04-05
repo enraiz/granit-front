@@ -6,6 +6,9 @@ export {
 } from './providers/account-provider.js';
 export type { AccountConfig, AccountProviderProps } from './providers/account-provider.js';
 
+// Hooks — Settings
+export { useAccountSettings } from './hooks/use-account-settings.js';
+
 // Hooks — Profile
 export { useProfile, useUpdateProfile } from './hooks/use-profile.js';
 

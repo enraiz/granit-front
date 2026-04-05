@@ -1,5 +1,6 @@
 import { createTestQueryClient } from '@granit/react-testing';
 import { TemplateLifecycleStatus } from '@granit/templating';
+import { toEntityId, toISODateString } from '@granit/types';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -62,7 +63,7 @@ describe('useTemplates', () => {
           layoutName: 'Layout.Email',
           currentStatus: TemplateLifecycleStatus.Draft,
           mimeType: 'text/html',
-          lastModifiedAt: '2026-03-01T10:00:00Z',
+          lastModifiedAt: toISODateString('2026-03-01T10:00:00Z'),
           lastModifiedBy: 'admin',
           hasPublishedVersion: false,
         },
@@ -85,7 +86,10 @@ describe('useTemplates', () => {
       axiosResponse({ items: [], total: 0, page: 1, pageSize: 20 })
     );
 
-    const params = { status: TemplateLifecycleStatus.Published, categoryId: 'billing' };
+    const params = {
+      status: TemplateLifecycleStatus.Published,
+      categoryId: toEntityId<'TemplateCategory'>('billing'),
+    };
     renderHook(() => useTemplates(params), {
       wrapper: createWrapper(client),
     });
@@ -122,12 +126,12 @@ describe('useTemplate', () => {
       name: 'Billing.Invoice',
       layoutName: 'Layout.Email',
       draft: {
-        revisionId: 'rev-1',
+        revisionId: toEntityId<'TemplateRevision'>('rev-1'),
         content: '<p>Hello</p>',
         mimeType: 'text/html',
         status: TemplateLifecycleStatus.Draft,
         layoutName: 'Layout.Email',
-        createdAt: '2026-03-01T10:00:00Z',
+        createdAt: toISODateString('2026-03-01T10:00:00Z'),
         createdBy: 'admin',
       },
     };
@@ -477,14 +481,14 @@ describe('useTemplateRevision', () => {
   it('should fetch a specific revision', async () => {
     const client = createMockClient();
     const revision: TemplateRevision = {
-      revisionId: 'rev-1',
+      revisionId: toEntityId<'TemplateRevision'>('rev-1'),
       content: '<p>Hello</p>',
       mimeType: 'text/html',
       status: TemplateLifecycleStatus.Published,
       layoutName: null,
-      createdAt: '2026-03-01T10:00:00Z',
+      createdAt: toISODateString('2026-03-01T10:00:00Z'),
       createdBy: 'admin',
-      publishedAt: '2026-03-02T10:00:00Z',
+      publishedAt: toISODateString('2026-03-02T10:00:00Z'),
       publishedBy: 'admin',
     };
     vi.mocked(client.get).mockResolvedValue(axiosResponse(revision));
@@ -544,7 +548,7 @@ describe('useTemplatePreview', () => {
     const client = createMockClient();
     const response: TemplatePreviewResponse = {
       html: '<p>Rendered</p>',
-      revisionId: 'rev-1',
+      revisionId: toEntityId<'TemplateRevision'>('rev-1'),
       renderTimeMs: 42,
     };
     vi.mocked(client.post).mockResolvedValue(axiosResponse(response));
@@ -678,7 +682,12 @@ describe('useTemplateCategories', () => {
   it('should fetch categories', async () => {
     const client = createMockClient();
     const categories: TemplateCategory[] = [
-      { id: 'cat-1', name: 'Billing', sortOrder: 1, templateCount: 5 },
+      {
+        id: toEntityId<'TemplateCategory'>('cat-1'),
+        name: 'Billing',
+        sortOrder: 1,
+        templateCount: 5,
+      },
     ];
     vi.mocked(client.get).mockResolvedValue(axiosResponse(categories));
 
@@ -751,7 +760,7 @@ describe('useTemplateCategoryMutations', () => {
   it('should create a category', async () => {
     const client = createMockClient();
     const created: TemplateCategory = {
-      id: 'cat-2',
+      id: toEntityId<'TemplateCategory'>('cat-2'),
       name: 'Legal',
       sortOrder: 2,
       templateCount: 0,
@@ -775,7 +784,7 @@ describe('useTemplateCategoryMutations', () => {
   it('should update a category', async () => {
     const client = createMockClient();
     const updated: TemplateCategory = {
-      id: 'cat-1',
+      id: toEntityId<'TemplateCategory'>('cat-1'),
       name: 'Billing Updated',
       sortOrder: 1,
       templateCount: 5,
@@ -830,7 +839,7 @@ describe('useTemplateCategoryMutations', () => {
   it('should invalidate categories cache after create', async () => {
     const client = createMockClient();
     const created: TemplateCategory = {
-      id: 'cat-2',
+      id: toEntityId<'TemplateCategory'>('cat-2'),
       name: 'Legal',
       sortOrder: 2,
       templateCount: 0,
@@ -853,7 +862,7 @@ describe('useTemplateCategoryMutations', () => {
   it('should invalidate categories cache after update', async () => {
     const client = createMockClient();
     const updated: TemplateCategory = {
-      id: 'cat-1',
+      id: toEntityId<'TemplateCategory'>('cat-1'),
       name: 'Billing v2',
       sortOrder: 1,
       templateCount: 5,

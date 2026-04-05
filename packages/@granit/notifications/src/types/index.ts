@@ -1,4 +1,5 @@
 import type { PagedResult } from '@granit/query-engine';
+import type { EntityId, ISODateString, UserId } from '@granit/types';
 import type { AxiosInstance } from 'axios';
 
 // ---------------------------------------------------------------------------
@@ -12,18 +13,24 @@ export type NotificationSeverity = 'Info' | 'Success' | 'Warning' | 'Error' | 'F
  */
 export type UserNotificationState = 'Unread' | 'Read';
 
+/** Branded user notification identifier. */
+export type UserNotificationId = EntityId<'UserNotification'>;
+
+/** Branded notification identifier. */
+export type NotificationId = EntityId<'Notification'>;
+
 export interface UserNotification {
-  readonly id: string;
-  readonly notificationId: string;
+  readonly id: UserNotificationId;
+  readonly notificationId: NotificationId;
   readonly notificationTypeName: string;
   readonly severity: NotificationSeverity;
   readonly data: unknown;
-  readonly recipientUserId: string;
+  readonly recipientUserId: UserId;
   readonly relatedEntityType: string | null;
   readonly relatedEntityId: string | null;
   readonly state: UserNotificationState;
-  readonly createdAt: string;
-  readonly readAt: string | null;
+  readonly createdAt: ISODateString;
+  readonly readAt: ISODateString | null;
 }
 
 export type UserNotificationPage = PagedResult<UserNotification> & {
@@ -39,26 +46,29 @@ export type UserNotificationPage = PagedResult<UserNotification> & {
  * This is distinct from `UserNotification` which is the REST API response shape.
  */
 export interface NotificationTransportMessage {
-  readonly notificationId: string;
+  readonly notificationId: NotificationId;
   readonly notificationTypeName: string;
   readonly severity: NotificationSeverity;
   readonly data: unknown;
   readonly relatedEntityType: string | null;
   readonly relatedEntityId: string | null;
-  readonly occurredAt: string;
+  readonly occurredAt: ISODateString;
 }
 
 // ---------------------------------------------------------------------------
 // Activity feed
 // ---------------------------------------------------------------------------
 
+/** Branded activity feed entry identifier. */
+export type ActivityFeedEntryId = EntityId<'ActivityFeedEntry'>;
+
 export interface ActivityFeedEntry {
-  id: string;
+  id: ActivityFeedEntryId;
   title: string;
   body: string | null;
   severity: NotificationSeverity;
-  createdAt: string;
-  userId: string | null;
+  createdAt: ISODateString;
+  userId: UserId | null;
   userDisplayName: string | null;
 }
 
@@ -101,9 +111,12 @@ export const NotificationChannels = {
 // Preferences — flat row matching NotificationPreferenceResponse from .NET
 // ---------------------------------------------------------------------------
 
+/** Branded notification preference identifier. */
+export type NotificationPreferenceId = EntityId<'NotificationPreference'>;
+
 export interface NotificationPreference {
-  readonly id: string;
-  readonly userId: string;
+  readonly id: NotificationPreferenceId;
+  readonly userId: UserId;
   readonly notificationTypeName: string;
   readonly channelName: string;
   readonly isEnabled: boolean;

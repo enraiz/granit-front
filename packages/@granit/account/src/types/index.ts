@@ -26,11 +26,14 @@ export type {
   AccountPasskeyInfo,
   AccountPasskeyRegistrationRequest,
   AccountPasskeyRenameRequest,
+  PasskeyId,
 } from './account-passkey.js';
 
 export type { AccountImpersonationResult } from './account-session.js';
 
 export type { AccountDeleteRequest } from './account-deletion.js';
+
+export type { AccountSettingsResponse } from './account-settings.js';
 
 export type {
   AccountChangeEmailRequest,

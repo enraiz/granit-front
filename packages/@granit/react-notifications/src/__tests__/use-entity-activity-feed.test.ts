@@ -1,3 +1,4 @@
+import { toEntityId, toISODateString } from '@granit/types';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -15,12 +16,12 @@ import type { ActivityFeedPage } from '@granit/notifications';
 const MOCK_FEED: ActivityFeedPage = {
   items: [
     {
-      id: 'a-1',
+      id: toEntityId<'ActivityFeedEntry'>('a-1'),
       title: 'Consultation ajoutée',
       body: null,
       severity: 'Info',
-      createdAt: '2026-01-15T10:00:00Z',
-      userId: 'u-1',
+      createdAt: toISODateString('2026-01-15T10:00:00Z'),
+      userId: toEntityId<'User'>('u-1'),
       userDisplayName: 'Dr. Martin',
     },
   ],
@@ -97,7 +98,11 @@ describe('useEntityActivityFeed', () => {
       totalCount: 2,
       nextCursor: null,
     };
-    const entry2 = { ...MOCK_FEED.items[0]!, id: 'a-2', title: 'Deuxième entrée' };
+    const entry2 = {
+      ...MOCK_FEED.items[0]!,
+      id: toEntityId<'ActivityFeedEntry'>('a-2'),
+      title: 'Deuxième entrée',
+    };
     const page2: ActivityFeedPage = {
       items: [entry2],
       totalCount: 2,

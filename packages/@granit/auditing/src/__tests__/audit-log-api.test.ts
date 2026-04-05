@@ -1,4 +1,5 @@
 import { axiosResponse, createMockClient } from '@granit/testing';
+import { toEntityId, toISODateString } from '@granit/types';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -47,9 +48,9 @@ describe('audit-log-api', () => {
     it('should call GET with encoded id', async () => {
       const client = createMockClient();
       const entry: AuditEntryDetail = {
-        id: 'abc-123',
-        timestamp: '2026-03-17T10:00:00Z',
-        userId: 'user-1',
+        id: toEntityId<'AuditEntry'>('abc-123'),
+        timestamp: toISODateString('2026-03-17T10:00:00Z'),
+        userId: toEntityId<'User'>('user-1'),
         userName: 'admin',
         category: AuditCategory.DataMutation,
         ipAddress: '127.0.0.1',

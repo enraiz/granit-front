@@ -1,4 +1,5 @@
 import type { PagedResult, PaginationParams } from '@granit/query-engine';
+import type { CorrelationId, EntityId, ISODateString, TenantId, UserId } from '@granit/types';
 
 // ---------------------------------------------------------------------------
 // Audit log types — mirrors Granit.Auditing .NET contracts
@@ -24,6 +25,9 @@ export const AuditChangeType = {
 
 export type AuditChangeTypeValue = (typeof AuditChangeType)[keyof typeof AuditChangeType];
 
+/** Branded audit entry identifier. */
+export type AuditEntryId = EntityId<'AuditEntry'>;
+
 /** Property-level change within an entity. */
 export type AuditPropertyChange = {
   readonly propertyName: string;
@@ -41,27 +45,27 @@ export type AuditEntityChange = {
 
 /** Audit log entry summary (list view) — mirrors `AuditEntryResponse`. */
 export type AuditEntry = {
-  readonly id: string;
-  readonly timestamp: string;
-  readonly userId: string;
+  readonly id: AuditEntryId;
+  readonly timestamp: ISODateString;
+  readonly userId: UserId;
   readonly userName: string | null;
   readonly category: AuditCategoryValue;
   readonly ipAddress: string | null;
-  readonly tenantId: string | null;
-  readonly correlationId: string | null;
+  readonly tenantId: TenantId | null;
+  readonly correlationId: CorrelationId | null;
   readonly entityChangeCount: number;
 };
 
 /** Audit log entry with full entity change details — mirrors `AuditEntryDetailResponse`. */
 export type AuditEntryDetail = {
-  readonly id: string;
-  readonly timestamp: string;
-  readonly userId: string;
+  readonly id: AuditEntryId;
+  readonly timestamp: ISODateString;
+  readonly userId: UserId;
   readonly userName: string | null;
   readonly category: AuditCategoryValue;
   readonly ipAddress: string | null;
-  readonly tenantId: string | null;
-  readonly correlationId: string | null;
+  readonly tenantId: TenantId | null;
+  readonly correlationId: CorrelationId | null;
   readonly entityChanges: readonly AuditEntityChange[];
 };
 
@@ -71,8 +75,8 @@ export type AuditListParams = PaginationParams & {
   readonly entityType?: string;
   readonly entityId?: string;
   readonly category?: AuditCategoryValue;
-  readonly from?: string;
-  readonly to?: string;
+  readonly from?: ISODateString;
+  readonly to?: ISODateString;
 };
 
 /** Paginated response for audit log entries. */

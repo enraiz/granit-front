@@ -1,5 +1,6 @@
 import { createTestQueryClient } from '@granit/react-testing';
 import { createMockClient } from '@granit/testing';
+import { toEntityId, toISODateString } from '@granit/types';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
@@ -21,28 +22,28 @@ function createWrapper() {
 
 const mockDeliveries: WebhookDeliveryAttemptResponse[] = [
   {
-    deliveryId: 'del-001',
-    subscriptionId: 'sub-001',
+    deliveryId: toEntityId<'WebhookDelivery'>('del-001'),
+    subscriptionId: toEntityId<'WebhookSubscription'>('sub-001'),
     tenantId: null,
     eventType: 'document.uploaded',
     targetUrl: 'https://example.com/webhook',
     httpStatusCode: 200,
     payloadHash: 'a'.repeat(64),
-    occurredAt: '2026-03-20T10:00:00Z',
+    occurredAt: toISODateString('2026-03-20T10:00:00Z'),
     durationMs: 142,
     errorMessage: null,
     isSuccess: true,
     payload: null,
   },
   {
-    deliveryId: 'del-002',
-    subscriptionId: 'sub-001',
+    deliveryId: toEntityId<'WebhookDelivery'>('del-002'),
+    subscriptionId: toEntityId<'WebhookSubscription'>('sub-001'),
     tenantId: null,
     eventType: 'document.uploaded',
     targetUrl: 'https://example.com/webhook',
     httpStatusCode: 500,
     payloadHash: 'b'.repeat(64),
-    occurredAt: '2026-03-20T10:05:00Z',
+    occurredAt: toISODateString('2026-03-20T10:05:00Z'),
     durationMs: 3021,
     errorMessage: 'Internal Server Error',
     isSuccess: false,

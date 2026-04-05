@@ -22,9 +22,11 @@ export type {
   AccountPasskeyInfo,
   AccountPasskeyRegistrationRequest,
   AccountPasskeyRenameRequest,
+  PasskeyId,
 } from './types/index.js';
 export type { AccountImpersonationResult } from './types/index.js';
 export type { AccountDeleteRequest } from './types/index.js';
+export type { AccountSettingsResponse } from './types/index.js';
 export type { AccountChangeEmailRequest, AccountConfirmEmailChangeRequest } from './types/index.js';
 
 // Query keys
@@ -71,6 +73,9 @@ export {
 
 // API — Session
 export { backToImpersonator, sessionHeartbeat } from './api/account-session-api.js';
+
+// API — Settings
+export { getAccountSettings } from './api/account-settings-api.js';
 
 // API — Email change
 export { changeEmail, confirmEmailChange } from './api/account-email-api.js';

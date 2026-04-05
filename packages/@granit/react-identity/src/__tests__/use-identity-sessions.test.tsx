@@ -1,5 +1,6 @@
 import { createTestQueryClient } from '@granit/react-testing';
 import { createMockClient } from '@granit/testing';
+import { toEntityId, toISODateString } from '@granit/types';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
@@ -19,17 +20,17 @@ import type { AxiosInstance } from 'axios';
 import type { ReactNode } from 'react';
 
 const sampleSession: IdentitySession = {
-  sessionId: 'session-1',
+  sessionId: toEntityId<'IdentitySession'>('session-1'),
   ipAddress: '192.168.1.1',
-  startedAt: '2026-03-20T10:00:00Z',
-  lastAccess: '2026-03-20T12:00:00Z',
+  startedAt: toISODateString('2026-03-20T10:00:00Z'),
+  lastAccess: toISODateString('2026-03-20T12:00:00Z'),
   rememberMe: false,
   clients: ['web-app'],
 };
 
 const sampleDevice: IdentityDeviceActivity = {
   ipAddress: '192.168.1.1',
-  lastAccess: '2026-03-20T12:00:00Z',
+  lastAccess: toISODateString('2026-03-20T12:00:00Z'),
   device: 'Desktop',
   os: 'Windows',
   osVersion: '11',
@@ -61,7 +62,7 @@ describe('use-identity-sessions', () => {
       const client = createMockClient();
       vi.mocked(client.get).mockResolvedValue({ data: [sampleSession] });
 
-      const { result } = renderHook(() => useUserSessions('user-1'), {
+      const { result } = renderHook(() => useUserSessions(toEntityId<'User'>('user-1')), {
         wrapper: createWrapper(client),
       });
 
@@ -73,7 +74,7 @@ describe('use-identity-sessions', () => {
     it('is disabled when userId is empty', async () => {
       const client = createMockClient();
 
-      const { result } = renderHook(() => useUserSessions(''), {
+      const { result } = renderHook(() => useUserSessions(toEntityId<'User'>('')), {
         wrapper: createWrapper(client),
       });
 
@@ -87,7 +88,7 @@ describe('use-identity-sessions', () => {
       const client = createMockClient();
       vi.mocked(client.get).mockResolvedValue({ data: [sampleDevice] });
 
-      const { result } = renderHook(() => useUserDeviceActivity('user-1'), {
+      const { result } = renderHook(() => useUserDeviceActivity(toEntityId<'User'>('user-1')), {
         wrapper: createWrapper(client),
       });
 
@@ -99,7 +100,7 @@ describe('use-identity-sessions', () => {
     it('is disabled when userId is empty', async () => {
       const client = createMockClient();
 
-      const { result } = renderHook(() => useUserDeviceActivity(''), {
+      const { result } = renderHook(() => useUserDeviceActivity(toEntityId<'User'>('')), {
         wrapper: createWrapper(client),
       });
 
@@ -116,7 +117,10 @@ describe('use-identity-sessions', () => {
         wrapper: createWrapper(client),
       });
 
-      result.current.mutate({ userId: 'user-1', sessionId: 'session-1' });
+      result.current.mutate({
+        userId: toEntityId<'User'>('user-1'),
+        sessionId: toEntityId<'IdentitySession'>('session-1'),
+      });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
       expect(client.delete).toHaveBeenCalledWith(
@@ -134,7 +138,7 @@ describe('use-identity-sessions', () => {
         wrapper: createWrapper(client),
       });
 
-      result.current.mutate('user-1');
+      result.current.mutate(toEntityId<'User'>('user-1'));
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
       expect(client.delete).toHaveBeenCalledWith('/identity/provider/users/user-1/sessions');
@@ -148,7 +152,7 @@ describe('use-identity-sessions', () => {
         wrapper: createWrapper(client),
       });
 
-      result.current.mutate('user-1');
+      result.current.mutate(toEntityId<'User'>('user-1'));
 
       await waitFor(() => expect(result.current.isError).toBe(true));
       expect(result.current.error?.message).toBe('Not Implemented');

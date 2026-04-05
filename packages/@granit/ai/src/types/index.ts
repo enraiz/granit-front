@@ -1,3 +1,5 @@
+import type { EntityId, ISODateString, TenantId, UserId } from '@granit/types';
+
 // ---------------------------------------------------------------------------
 // Types mirroring Granit.AI and Granit.AI.Endpoints .NET contracts.
 // Property names match the camelCase JSON serialization from the backend.
@@ -105,17 +107,20 @@ export interface AIEmbeddingResponse {
 
 // -- Usage tracking ----------------------------------------------------------
 
+/** Branded AI usage record identifier. */
+export type AIUsageRecordId = EntityId<'AIUsageRecord'>;
+
 /** AI usage record for querying. Mirrors `Granit.AI.AIUsageRecord`. */
 export interface AIUsageRecord {
-  readonly id: string;
-  readonly tenantId: string | null;
-  readonly userId: string | null;
+  readonly id: AIUsageRecordId;
+  readonly tenantId: TenantId | null;
+  readonly userId: UserId | null;
   readonly workspaceName: string;
   readonly provider: string;
   readonly model: string;
   readonly inputTokens: number;
   readonly outputTokens: number;
   readonly estimatedCostUsd: number | null;
-  readonly timestamp: string;
+  readonly timestamp: ISODateString;
   readonly duration: string | null;
 }

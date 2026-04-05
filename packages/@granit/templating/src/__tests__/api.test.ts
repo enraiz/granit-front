@@ -1,4 +1,5 @@
 import { axiosResponse, createMockClient } from '@granit/api-client/test-utils';
+import { toEntityId, toISODateString } from '@granit/types';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -47,7 +48,7 @@ describe('templates-api', () => {
             layoutName: 'Layout.Email',
             currentStatus: TemplateLifecycleStatus.Draft,
             mimeType: 'text/html',
-            lastModifiedAt: '2026-03-01T10:00:00Z',
+            lastModifiedAt: toISODateString('2026-03-01T10:00:00Z'),
             lastModifiedBy: 'admin',
             hasPublishedVersion: false,
           },
@@ -84,12 +85,12 @@ describe('templates-api', () => {
         category: 'billing',
         layoutName: 'Layout.Email',
         draft: {
-          revisionId: 'rev-1',
+          revisionId: toEntityId<'TemplateRevision'>('rev-1'),
           content: '<p>Hello</p>',
           mimeType: 'text/html',
           status: TemplateLifecycleStatus.Draft,
           layoutName: 'Layout.Email',
-          createdAt: '2026-03-01T10:00:00Z',
+          createdAt: toISODateString('2026-03-01T10:00:00Z'),
           createdBy: 'admin',
         },
       };
@@ -220,14 +221,14 @@ describe('templates-api', () => {
     it('should call GET /templates/{name}/history/{revisionId}', async () => {
       const client = createMockClient();
       const revision: TemplateRevision = {
-        revisionId: 'rev-1',
+        revisionId: toEntityId<'TemplateRevision'>('rev-1'),
         content: '<p>Hello</p>',
         mimeType: 'text/html',
         status: TemplateLifecycleStatus.Published,
         layoutName: null,
-        createdAt: '2026-03-01T10:00:00Z',
+        createdAt: toISODateString('2026-03-01T10:00:00Z'),
         createdBy: 'admin',
-        publishedAt: '2026-03-02T10:00:00Z',
+        publishedAt: toISODateString('2026-03-02T10:00:00Z'),
         publishedBy: 'admin',
       };
       vi.mocked(client.get).mockResolvedValue(axiosResponse(revision));
@@ -244,7 +245,7 @@ describe('templates-api', () => {
       const client = createMockClient();
       const response: TemplatePreviewResponse = {
         html: '<p>Rendered</p>',
-        revisionId: 'rev-1',
+        revisionId: toEntityId<'TemplateRevision'>('rev-1'),
         renderTimeMs: 42,
       };
       vi.mocked(client.post).mockResolvedValue(axiosResponse(response));
@@ -303,7 +304,12 @@ describe('templates-api', () => {
     it('should call GET /template-categories', async () => {
       const client = createMockClient();
       const categories: TemplateCategory[] = [
-        { id: 'cat-1', name: 'Billing', sortOrder: 1, templateCount: 5 },
+        {
+          id: toEntityId<'TemplateCategory'>('cat-1'),
+          name: 'Billing',
+          sortOrder: 1,
+          templateCount: 5,
+        },
       ];
       vi.mocked(client.get).mockResolvedValue(axiosResponse(categories));
 
@@ -317,7 +323,7 @@ describe('templates-api', () => {
       const client = createMockClient();
       const request = { name: 'Billing', sortOrder: 1 };
       const category: TemplateCategory = {
-        id: 'cat-1',
+        id: toEntityId<'TemplateCategory'>('cat-1'),
         name: 'Billing',
         sortOrder: 1,
         templateCount: 0,
@@ -334,7 +340,7 @@ describe('templates-api', () => {
       const client = createMockClient();
       const request = { name: 'Updated', sortOrder: 2 };
       const category: TemplateCategory = {
-        id: 'cat-1',
+        id: toEntityId<'TemplateCategory'>('cat-1'),
         name: 'Updated',
         sortOrder: 2,
         templateCount: 5,
