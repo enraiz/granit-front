@@ -3,14 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   deleteExportPreset,
-  fetchExportPresets,
+  listExportPresets,
   saveExportPreset,
 } from '../../export/api/preset-api.js';
 
 const BASE = '/api/v1/data-exchange';
 
 describe('preset-api', () => {
-  it('fetchExportPresets calls GET /presets/{definitionName}', async () => {
+  it('listExportPresets calls GET /metadata/presets/{definitionName}', async () => {
     const client = createMockClient();
     const presets = [
       {
@@ -22,12 +22,12 @@ describe('preset-api', () => {
       },
     ];
     vi.mocked(client.get).mockResolvedValueOnce({ data: presets });
-    const result = await fetchExportPresets(client, BASE, 'Test');
+    const result = await listExportPresets(client, BASE, 'Test');
     expect(client.get).toHaveBeenCalledWith(`${BASE}/metadata/presets/Test`);
     expect(result).toEqual(presets);
   });
 
-  it('saveExportPreset calls POST /presets', async () => {
+  it('saveExportPreset calls POST /metadata/presets', async () => {
     const client = createMockClient();
     const request = {
       definitionName: 'Test',
@@ -40,7 +40,7 @@ describe('preset-api', () => {
     expect(client.post).toHaveBeenCalledWith(`${BASE}/metadata/presets`, request);
   });
 
-  it('deleteExportPreset calls DELETE /presets/{definitionName}/{presetName}', async () => {
+  it('deleteExportPreset calls DELETE /metadata/presets/{definitionName}/{presetName}', async () => {
     const client = createMockClient();
     await deleteExportPreset(client, BASE, 'Test', 'Monthly');
     expect(client.delete).toHaveBeenCalledWith(`${BASE}/metadata/presets/Test/Monthly`);

@@ -309,12 +309,12 @@ let importJobCounter = 0;
  * Create stateful MSW handlers for data exchange (import/export) endpoints.
  *
  * @param metadataBase   - Export metadata base path (default: `/api/v1/data-exchange/metadata`)
- * @param importBase     - Import base path (default: `/api/v1/data-exchange`)
+ * @param importBase     - Import base path (default: `/api/v1/data-exchange/import`)
  * @param exportJobsBase - Export jobs base path (default: `/api/v1/data-exchange/export/jobs`)
  */
 export function createDataExchangeHandlers(
   metadataBase = `${DEFAULT_BASE_PATH}/metadata`,
-  importBase = DEFAULT_BASE_PATH,
+  importBase = `${DEFAULT_BASE_PATH}/import`,
   exportJobsBase = `${DEFAULT_BASE_PATH}/export/jobs`
 ) {
   return [
