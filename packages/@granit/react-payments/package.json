@@ -1,7 +1,7 @@
 {
   "name": "@granit/react-payments",
   "description": "React bindings for @granit/payments — PaymentsProvider and hooks",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -19,6 +19,7 @@
     "@granit/types": "workspace:*",
     "@tanstack/react-query": "^5.0.0",
     "axios": "*",
+    "lucide-react": "^1.0.0",
     "msw": "^2.12.0",
     "react": "^19.0.0"
   },

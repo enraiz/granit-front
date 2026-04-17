@@ -2,15 +2,20 @@ import { axiosResponse, createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  activatePaymentMethod,
   attachPaymentMethod,
   createCheckoutSession,
+  deactivatePaymentMethod,
   detachPaymentMethod,
   getAvailablePaymentMethods,
+  getPaymentProviderCatalog,
   getPaymentTransaction,
   initiatePaymentCharge,
+  listPaymentMethodConfigurations,
   listPaymentMethods,
   listPaymentTransactions,
   requestPaymentRefund,
+  resyncPaymentMethodConfiguration,
 } from '../api/payments-api.js';
 
 import type {
@@ -19,7 +24,11 @@ import type {
   PaymentChargeRequest,
   PaymentCheckoutRequest,
   PaymentCheckoutSessionResponse,
+  PaymentMethodCapabilityResponse,
+  PaymentMethodConfigurationItem,
   PaymentMethodResponse,
+  PaymentProviderCatalogResponse,
+  PaymentProviderConfiguration,
   PaymentRefundRequest,
   PaymentRefundResponse,
   PaymentTransactionResponse,
@@ -74,11 +83,54 @@ const sampleMethod: PaymentMethodResponse = {
   tenantId: null,
 };
 
+const sampleCapability: PaymentMethodCapabilityResponse = {
+  supportedCountries: ['BE', 'NL'],
+  supportedCurrencies: ['EUR'],
+  supportedSequenceTypes: ['oneoff', 'recurring'],
+  amountBounds: [{ currencyCode: 'EUR', minAmount: 1, maxAmount: 1000000 }],
+};
+
 const sampleAvailableMethod: PaymentAvailableMethodResponse = {
   methodType: 'card',
   category: 'Card',
   providerName: 'Stripe',
   displayLabel: 'Credit / Debit Card',
+  capability: sampleCapability,
+};
+
+const sampleConfigurationItem: PaymentMethodConfigurationItem = {
+  methodType: 'bancontact',
+  displayLabel: 'Bancontact',
+  category: 1,
+  isActive: true,
+  capabilitySnapshot: sampleCapability,
+};
+
+const sampleProviderCatalog: PaymentProviderCatalogResponse = {
+  providerName: 'mollie',
+  methods: [
+    {
+      methodType: 'bancontact',
+      category: 1,
+      displayLabel: 'Bancontact',
+      capability: sampleCapability,
+      isActive: true,
+      hasSnapshot: true,
+    },
+    {
+      methodType: 'ideal',
+      category: 1,
+      displayLabel: 'iDEAL',
+      capability: {
+        supportedCountries: ['NL'],
+        supportedCurrencies: ['EUR'],
+        supportedSequenceTypes: ['oneoff'],
+        amountBounds: [],
+      },
+      isActive: false,
+      hasSnapshot: false,
+    },
+  ],
 };
 
 describe('payments-api', () => {
@@ -187,14 +239,156 @@ describe('payments-api', () => {
   });
 
   describe('getAvailablePaymentMethods', () => {
-    it('should GET {basePath}/methods/available', async () => {
+    it('should GET {basePath}/methods/available without params when no context', async () => {
       const client = createMockClient();
       vi.mocked(client.get).mockResolvedValue(axiosResponse([sampleAvailableMethod]));
 
       const result = await getAvailablePaymentMethods(client, basePath);
 
-      expect(client.get).toHaveBeenCalledWith(`${basePath}/methods/available`);
+      expect(client.get).toHaveBeenCalledWith(`${basePath}/methods/available`, undefined);
       expect(result).toEqual([sampleAvailableMethod]);
+    });
+
+    it('should send only defined context axes as query params', async () => {
+      const client = createMockClient();
+      vi.mocked(client.get).mockResolvedValue(axiosResponse([sampleAvailableMethod]));
+
+      await getAvailablePaymentMethods(client, basePath, {
+        country: 'BE',
+        currency: 'EUR',
+      });
+
+      expect(client.get).toHaveBeenCalledWith(`${basePath}/methods/available`, {
+        params: { country: 'BE', currency: 'EUR' },
+      });
+    });
+
+    it('should serialize amount as number and sequenceType as-is', async () => {
+      const client = createMockClient();
+      vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
+
+      await getAvailablePaymentMethods(client, basePath, {
+        amount: 4999,
+        sequenceType: 'recurring',
+      });
+
+      expect(client.get).toHaveBeenCalledWith(`${basePath}/methods/available`, {
+        params: { amount: 4999, sequenceType: 'recurring' },
+      });
+    });
+
+    it('should not send params when context object is empty', async () => {
+      const client = createMockClient();
+      vi.mocked(client.get).mockResolvedValue(axiosResponse([]));
+
+      await getAvailablePaymentMethods(client, basePath, {});
+
+      expect(client.get).toHaveBeenCalledWith(`${basePath}/methods/available`, undefined);
+    });
+  });
+
+  describe('getPaymentProviderCatalog', () => {
+    it('should GET {basePath}/configuration/catalog with providerName param', async () => {
+      const client = createMockClient();
+      vi.mocked(client.get).mockResolvedValue(axiosResponse(sampleProviderCatalog));
+
+      const result = await getPaymentProviderCatalog(client, basePath, 'mollie');
+
+      expect(client.get).toHaveBeenCalledWith(`${basePath}/configuration/catalog`, {
+        params: { providerName: 'mollie' },
+      });
+      expect(result).toEqual(sampleProviderCatalog);
+      expect(result.methods[0]?.hasSnapshot).toBe(true);
+      expect(result.methods[1]?.isActive).toBe(false);
+    });
+  });
+
+  describe('listPaymentMethodConfigurations', () => {
+    it('should GET {basePath}/configuration', async () => {
+      const client = createMockClient();
+      const payload: readonly PaymentProviderConfiguration[] = [
+        { providerName: 'mollie', methods: [sampleConfigurationItem] },
+      ];
+      vi.mocked(client.get).mockResolvedValue(axiosResponse(payload));
+
+      const result = await listPaymentMethodConfigurations(client, basePath);
+
+      expect(client.get).toHaveBeenCalledWith(`${basePath}/configuration`);
+      expect(result).toEqual(payload);
+    });
+  });
+
+  describe('activatePaymentMethod', () => {
+    it('should POST {basePath}/configuration/{provider}/{method}/activate', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(sampleConfigurationItem));
+
+      const result = await activatePaymentMethod(client, basePath, 'mollie', 'bancontact');
+
+      expect(client.post).toHaveBeenCalledWith(
+        `${basePath}/configuration/mollie/bancontact/activate`
+      );
+      expect(result).toEqual(sampleConfigurationItem);
+    });
+
+    it('should encode providerName and methodType with special characters', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(sampleConfigurationItem));
+
+      await activatePaymentMethod(client, basePath, 'sepa/provider', 'bank debit');
+
+      expect(client.post).toHaveBeenCalledWith(
+        `${basePath}/configuration/${encodeURIComponent('sepa/provider')}/${encodeURIComponent('bank debit')}/activate`
+      );
+    });
+  });
+
+  describe('deactivatePaymentMethod', () => {
+    it('should POST {basePath}/configuration/{provider}/{method}/deactivate', async () => {
+      const client = createMockClient();
+      const deactivated: PaymentMethodConfigurationItem = {
+        ...sampleConfigurationItem,
+        isActive: false,
+      };
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(deactivated));
+
+      const result = await deactivatePaymentMethod(client, basePath, 'mollie', 'bancontact');
+
+      expect(client.post).toHaveBeenCalledWith(
+        `${basePath}/configuration/mollie/bancontact/deactivate`
+      );
+      expect(result.isActive).toBe(false);
+    });
+  });
+
+  describe('resyncPaymentMethodConfiguration', () => {
+    it('should POST {basePath}/configuration/{provider}/{method}/resync with no body', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(sampleConfigurationItem));
+
+      const result = await resyncPaymentMethodConfiguration(
+        client,
+        basePath,
+        'mollie',
+        'bancontact'
+      );
+
+      expect(client.post).toHaveBeenCalledWith(
+        `${basePath}/configuration/mollie/bancontact/resync`
+      );
+      expect(vi.mocked(client.post).mock.calls[0]?.length).toBe(1);
+      expect(result).toEqual(sampleConfigurationItem);
+    });
+
+    it('should encode providerName and methodType with special characters', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValue(axiosResponse(sampleConfigurationItem));
+
+      await resyncPaymentMethodConfiguration(client, basePath, 'sepa/provider', 'bank debit');
+
+      expect(client.post).toHaveBeenCalledWith(
+        `${basePath}/configuration/${encodeURIComponent('sepa/provider')}/${encodeURIComponent('bank debit')}/resync`
+      );
     });
   });
 

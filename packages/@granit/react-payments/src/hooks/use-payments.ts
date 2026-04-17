@@ -1,13 +1,18 @@
 import {
+  activatePaymentMethod,
   attachPaymentMethod,
   createCheckoutSession,
+  deactivatePaymentMethod,
   detachPaymentMethod,
   getAvailablePaymentMethods,
+  getPaymentProviderCatalog,
   getPaymentTransaction,
   initiatePaymentCharge,
+  listPaymentMethodConfigurations,
   listPaymentMethods,
   listPaymentTransactions,
   requestPaymentRefund,
+  resyncPaymentMethodConfiguration,
 } from '@granit/payments';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -15,11 +20,15 @@ import { buildPaymentsQueryKey, usePaymentsConfig } from '../providers/payments-
 
 import type {
   PaymentAttachMethodRequest,
+  PaymentAvailabilityContext,
   PaymentAvailableMethodResponse,
   PaymentChargeRequest,
   PaymentCheckoutRequest,
   PaymentCheckoutSessionResponse,
+  PaymentMethodConfigurationItem,
   PaymentMethodResponse,
+  PaymentProviderCatalogResponse,
+  PaymentProviderConfiguration,
   PaymentRefundRequest,
   PaymentRefundResponse,
   PaymentTransactionResponse,
@@ -168,22 +177,37 @@ export function usePaymentMethods(): UseQueryResult<readonly PaymentMethodRespon
 }
 
 /**
- * Get available payment methods for the current provider.
+ * Get available payment methods, optionally filtered by a runtime `context`
+ * (country / currency / amount / sequence type).
+ *
+ * The query key includes the serialized `context` so that distinct filter
+ * combinations maintain independent caches and do not cross-contaminate.
+ * Omit `context` to fetch all available methods (unfiltered).
  *
  * @example
  * ```tsx
- * const { data: available } = useAvailablePaymentMethods();
+ * // Unfiltered
+ * const { data: all } = useAvailablePaymentMethods();
+ *
+ * // Filtered by checkout context
+ * const { data: eligible } = useAvailablePaymentMethods({
+ *   country: 'BE',
+ *   currency: 'EUR',
+ *   amount: 4999,
+ * });
  * ```
  */
-export function useAvailablePaymentMethods(): UseQueryResult<
-  readonly PaymentAvailableMethodResponse[]
-> {
+export function useAvailablePaymentMethods(
+  context?: PaymentAvailabilityContext
+): UseQueryResult<readonly PaymentAvailableMethodResponse[]> {
   const config = usePaymentsConfig();
   const basePath = config.basePath!;
+  const baseKey = buildPaymentsQueryKey(config, 'methods', 'available');
+  const queryKey = context ? [...baseKey, context] : baseKey;
 
   return useQuery({
-    queryKey: buildPaymentsQueryKey(config, 'methods', 'available'),
-    queryFn: () => getAvailablePaymentMethods(config.client, basePath),
+    queryKey,
+    queryFn: () => getAvailablePaymentMethods(config.client, basePath, context),
   });
 }
 
@@ -237,6 +261,163 @@ export function useDetachPaymentMethod(): UseMutationResult<void, Error, string>
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: buildPaymentsQueryKey(config, 'methods'),
+      });
+    },
+  });
+}
+
+interface PaymentMethodToggleArgs {
+  readonly providerName: string;
+  readonly methodType: string;
+}
+
+/**
+ * List platform-level payment method configurations (host admin).
+ * Returns the fused view of all payment methods declared by installed providers,
+ * grouped by provider, with their activation state.
+ *
+ * @example
+ * ```tsx
+ * const { data: providers } = usePaymentMethodConfigurations();
+ * ```
+ */
+export function usePaymentMethodConfigurations(): UseQueryResult<
+  readonly PaymentProviderConfiguration[]
+> {
+  const config = usePaymentsConfig();
+  const basePath = config.basePath!;
+
+  return useQuery({
+    queryKey: buildPaymentsQueryKey(config, 'configuration'),
+    queryFn: () => listPaymentMethodConfigurations(config.client, basePath),
+  });
+}
+
+/**
+ * Activate a payment method for the platform (idempotent).
+ * Invalidates configuration and available-methods queries on success.
+ *
+ * @example
+ * ```tsx
+ * const activate = useActivatePaymentMethod();
+ * await activate.mutateAsync({ providerName: 'stripe', methodType: 'card' });
+ * ```
+ */
+export function useActivatePaymentMethod(): UseMutationResult<
+  PaymentMethodConfigurationItem,
+  Error,
+  PaymentMethodToggleArgs
+> {
+  const config = usePaymentsConfig();
+  const queryClient = useQueryClient();
+  const basePath = config.basePath!;
+
+  return useMutation({
+    mutationFn: ({ providerName, methodType }: PaymentMethodToggleArgs) =>
+      activatePaymentMethod(config.client, basePath, providerName, methodType),
+    onSuccess: (_data, { providerName }) => {
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'configuration'),
+      });
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'methods', 'available'),
+      });
+      // Activation flips isActive + hasSnapshot on the catalog row for this provider.
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'catalog', providerName),
+      });
+    },
+  });
+}
+
+/**
+ * Deactivate a payment method for the platform (idempotent).
+ * Invalidates configuration and available-methods queries on success.
+ *
+ * @example
+ * ```tsx
+ * const deactivate = useDeactivatePaymentMethod();
+ * await deactivate.mutateAsync({ providerName: 'stripe', methodType: 'card' });
+ * ```
+ */
+export function useDeactivatePaymentMethod(): UseMutationResult<
+  PaymentMethodConfigurationItem,
+  Error,
+  PaymentMethodToggleArgs
+> {
+  const config = usePaymentsConfig();
+  const queryClient = useQueryClient();
+  const basePath = config.basePath!;
+
+  return useMutation({
+    mutationFn: ({ providerName, methodType }: PaymentMethodToggleArgs) =>
+      deactivatePaymentMethod(config.client, basePath, providerName, methodType),
+    onSuccess: (_data, { providerName }) => {
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'configuration'),
+      });
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'methods', 'available'),
+      });
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'catalog', providerName),
+      });
+    },
+  });
+}
+
+/**
+ * Fetch the live catalog of payment methods advertised by a provider.
+ *
+ * The query is automatically disabled when `providerName` is empty.
+ *
+ * @example
+ * ```tsx
+ * const { data: catalog } = useProviderCatalog(selectedProvider);
+ * ```
+ */
+export function useProviderCatalog(
+  providerName: string
+): UseQueryResult<PaymentProviderCatalogResponse> {
+  const config = usePaymentsConfig();
+  const basePath = config.basePath!;
+
+  return useQuery({
+    queryKey: buildPaymentsQueryKey(config, 'catalog', providerName),
+    queryFn: () => getPaymentProviderCatalog(config.client, basePath, providerName),
+    enabled: providerName.length > 0,
+  });
+}
+
+/**
+ * Re-fetch the provider catalog and overwrite the stored capability snapshot
+ * for an already-activated method. Invalidates the configuration list and the
+ * provider catalog on success so UI badges and status columns refresh.
+ *
+ * @example
+ * ```tsx
+ * const resync = useResyncPaymentMethod();
+ * await resync.mutateAsync({ providerName: 'mollie', methodType: 'bancontact' });
+ * ```
+ */
+export function useResyncPaymentMethod(): UseMutationResult<
+  PaymentMethodConfigurationItem,
+  Error,
+  PaymentMethodToggleArgs
+> {
+  const config = usePaymentsConfig();
+  const queryClient = useQueryClient();
+  const basePath = config.basePath!;
+
+  return useMutation({
+    mutationFn: ({ providerName, methodType }: PaymentMethodToggleArgs) =>
+      resyncPaymentMethodConfiguration(config.client, basePath, providerName, methodType),
+    onSuccess: (_data, { providerName }) => {
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'configuration'),
+      });
+      queryClient.invalidateQueries({
+        queryKey: buildPaymentsQueryKey(config, 'catalog', providerName),
       });
     },
   });
