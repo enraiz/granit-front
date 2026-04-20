@@ -56,7 +56,7 @@ Full frontend conventions: `../granit-dotnet/docs/guide/conventions/frontend/`
     (`@granit/api-client`) to inherit interceptors (CSRF, auth, tenant headers).
     For streaming endpoints, use `adapter: 'fetch'` with `responseType: 'stream'`.
   - **Native `fetch` is allowed only** in infrastructure layers that sit
-    *below* the Axios client in the dependency graph:
+    _below_ the Axios client in the dependency graph:
     - `@granit/bff` — auth bootstrap (session check, CSRF token fetch)
     - `@granit/react-bff` — BFF provider initialization
     - Telemetry transports (`@granit/logger-otlp`, `@granit/react-tracing`)
