@@ -3,8 +3,8 @@ import { useMemo, useState } from 'react';
 import { useLookupResolve } from '../hooks/use-lookup-resolve.js';
 import { useLookup } from '../hooks/use-lookup.js';
 
+import type { AxiosInstance } from '@granit/api-client';
 import type { LookupDescriptor, LookupItem } from '@granit/data-lookup';
-import type { AxiosInstance } from 'axios';
 import type { ReactElement } from 'react';
 
 /** Render-prop signature for custom UIs. Callers bring their own combobox primitive. */
@@ -40,7 +40,7 @@ export interface LookupSelectProps {
   readonly scope?: Readonly<Record<string, string | null | undefined>>;
   /** Current UI culture — passed to both hooks so caches are per-language. */
   readonly culture?: string;
-  /** Override the base path. Defaults to `/api/granit/lookups`. */
+  /** Override the base path. Defaults to `/lookups`. */
   readonly basePath?: string;
   /** Page size passed to the search query. Default: `25`. */
   readonly pageSize?: number;

@@ -1,9 +1,9 @@
 import { findMissingScopeKey, searchLookup } from '@granit/data-lookup';
 import { useQuery } from '@tanstack/react-query';
 
+import type { AxiosInstance } from '@granit/api-client';
 import type { LookupDescriptor, LookupQueryParams, LookupResult } from '@granit/data-lookup';
 import type { UseQueryResult } from '@tanstack/react-query';
-import type { AxiosInstance } from 'axios';
 
 /** Options accepted by {@link useLookup}. */
 export interface UseLookupOptions {
@@ -33,7 +33,7 @@ export type UseLookupResult = UseQueryResult<LookupResult> & {
 };
 
 /**
- * Fetches a page of items from a lookup source via `GET /api/granit/lookups/{name}`.
+ * Fetches a page of items from a lookup source via `GET /lookups/{name}`.
  *
  * **Empty Scope Trap mitigation** — when the descriptor declares
  * `scopeKeys: ["tenantId"]` and the provided `scope` is missing the value,
