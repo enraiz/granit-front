@@ -26,6 +26,8 @@ export type {
   MarkdownWidgetDefinition,
   MetricDatasource,
   QueryAggregateDatasource,
+  RefreshHint,
+  ResolvedPeriod,
   TelemetryAggregation,
   TelemetryDatasource,
   TextWidgetDefinition,
@@ -38,3 +40,10 @@ export type {
   WidgetDefinitionBase,
   WidgetSize,
 } from './types/index.js';
+
+// Rendering — wire contracts for the dashboard render pipeline (B3-1, ADR-039).
+export type {
+  WidgetSnapshotEnvelope,
+  WidgetSnapshotEnvelopeOf,
+  WidgetSnapshotStatus,
+} from './rendering/index.js';
