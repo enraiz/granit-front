@@ -2693,11 +2693,6 @@
           "members": []
         },
         {
-          "name": "MapTileLayerKind",
-          "kind": "type",
-          "signature": "type MapTileLayerKind ="
-        },
-        {
           "name": "MapTileProvider",
           "kind": "interface",
           "signature": "interface MapTileProvider",
