@@ -71,10 +71,18 @@ export interface EntityDetailProps {
    * `field.component` and ignore this map.
    *
    * Component ids belong to the same ADR-041 catalog as
-   * `EntityFormFieldManifest.component` — there is no separate
-   * "format" concept on the wire. `component: 'money'` +
+   * `EntityFormFieldManifest.component` — there is **no separate
+   * "format" concept** on the wire. `component: 'money'` +
    * `config: { currencyCode }` covers what other libraries call
-   * `format: 'currency'`.
+   * `format: 'currency'`; the framework dispatches via the component
+   * id in both edit (`<EntityForm />`) and read (`<EntityDetail />`)
+   * contexts.
+   *
+   * When `formVariants` is supplied, `<EntityDetail />` auto-derives a
+   * `(propertyName → component)` map from the form variants' fields
+   * and uses it as the fallback. The explicit `propertyComponents`
+   * prop, when provided, is **merged on top** of the auto-derived map
+   * per key — apps override only the entries they care about.
    *
    * @example
    * ```tsx
@@ -106,7 +114,7 @@ export interface EntityDetailProps {
  * surprise readers.
  *
  * Values are displayed via `String(value)`, with `null` / `undefined`
- * collapsed to `'—'`. A read-mode widget catalog (currency / date / link
+ * collapsed to `'—'`. A read-mode component catalog (currency / date / link
  * formatting) is a follow-up.
  */
 export function EntityDetail({
@@ -127,6 +135,10 @@ export function EntityDetail({
   const sortedSidePanels = useMemo(
     () => [...variant.sidePanels].sort((a, b) => a.order - b.order),
     [variant.sidePanels]
+  );
+  const resolvedPropertyComponents = useMemo(
+    () => composePropertyComponents(formVariants, propertyComponents),
+    [formVariants, propertyComponents]
   );
   const groupedRelations = useMemo(() => groupRelationsByDisplay(relations ?? []), [relations]);
   const allDisplayedNames = useMemo(
@@ -178,7 +190,7 @@ export function EntityDetail({
             section={section}
             values={values}
             formVariants={formVariants}
-            propertyComponents={propertyComponents}
+            propertyComponents={resolvedPropertyComponents}
           />
         ))}
       </div>
@@ -343,6 +355,42 @@ function EntityDetailSidePanelSlot({
       {canRender ? <Renderer entityName={entityName} entityId={entityId} /> : null}
     </div>
   );
+}
+
+/**
+ * Auto-derives a `(propertyName → component)` map from the supplied form
+ * variants and merges any explicit `propertyComponents` override on top.
+ *
+ * - Walks every form variant + every section + every field, recording
+ *   `field.component` keyed by `field.propertyName`. Last form wins on
+ *   conflicts (subsequent variants tend to be more specialised).
+ * - The explicit override map merges per-key so apps can correct
+ *   individual entries without rebuilding the whole map.
+ *
+ * Returns `undefined` (not an empty object) when neither input yields
+ * any mapping, so the renderer can keep its "no propertyComponents"
+ * code path simple.
+ */
+function composePropertyComponents(
+  formVariants: readonly EntityFormManifest[] | undefined,
+  override: Readonly<Record<string, string>> | undefined
+): Readonly<Record<string, string>> | undefined {
+  const derived: Record<string, string> = {};
+  for (const variant of formVariants ?? []) {
+    for (const section of variant.sections) {
+      for (const field of section.fields) {
+        if (field.component) {
+          derived[field.propertyName] = field.component;
+        }
+      }
+    }
+  }
+  if (override) {
+    for (const [key, component] of Object.entries(override)) {
+      derived[key] = component;
+    }
+  }
+  return Object.keys(derived).length > 0 ? derived : undefined;
 }
 
 /**
