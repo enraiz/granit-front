@@ -2422,6 +2422,16 @@
           "signature": "function useBffFetch()"
         },
         {
+          "name": "resolveBffTenantId",
+          "kind": "function",
+          "signature": "function resolveBffTenantId(user: BffUser | null): string | undefined"
+        },
+        {
+          "name": "useBffTenantGetter",
+          "kind": "function",
+          "signature": "function useBffTenantGetter(): () => string | undefined"
+        },
+        {
           "name": "BffGuard",
           "kind": "function",
           "signature": "function BffGuard("
@@ -4038,6 +4048,11 @@
           "name": "useClearQueriesOnTenantChange",
           "kind": "function",
           "signature": "function useClearQueriesOnTenantChange(): void"
+        },
+        {
+          "name": "useClearQueriesOnUserChange",
+          "kind": "function",
+          "signature": "function useClearQueriesOnUserChange(userId: string | undefined): void"
         }
       ]
     },
