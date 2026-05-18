@@ -799,6 +799,69 @@
       ]
     },
     {
+      "name": "@granit/csp",
+      "description": "Content Security Policy + Trusted Types helpers for Granit apps. Idempotent installers for the core `granit` policy plus a per-package registry, and helpers to build the `trusted-types` directive from the policies the app actually installs.",
+      "exports": [
+        {
+          "name": "installPolicy",
+          "kind": "function",
+          "signature": "function installPolicy(): InstallResult"
+        },
+        {
+          "name": "GRANIT_CORE_POLICY_NAME",
+          "kind": "const",
+          "signature": "const GRANIT_CORE_POLICY_NAME"
+        },
+        {
+          "name": "getCspTrustedTypesDirective",
+          "kind": "function",
+          "signature": "function getCspTrustedTypesDirective(): string"
+        },
+        {
+          "name": "listInstalledGranitPolicies",
+          "kind": "function",
+          "signature": "function listInstalledGranitPolicies(): readonly GranitPolicyName[]"
+        },
+        {
+          "name": "installNamedPolicy",
+          "kind": "function",
+          "signature": "function installNamedPolicy( name: GranitPolicyName, options: TrustedTypePolicyOptions ): InstallResult"
+        },
+        {
+          "name": "GranitPolicyName",
+          "kind": "type",
+          "signature": "type GranitPolicyName ="
+        },
+        {
+          "name": "InstallResult",
+          "kind": "type",
+          "signature": "type InstallResult ="
+        },
+        {
+          "name": "TrustedTypePolicyOptions",
+          "kind": "interface",
+          "signature": "interface TrustedTypePolicyOptions",
+          "members": [
+            {
+              "name": "createHTML",
+              "kind": "method",
+              "signature": "createHTML?: (input: string) => string"
+            },
+            {
+              "name": "createScript",
+              "kind": "method",
+              "signature": "createScript?: (input: string) => string"
+            },
+            {
+              "name": "createScriptURL",
+              "kind": "method",
+              "signature": "createScriptURL?: (input: string) => string"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "@granit/customer-balance",
       "description": "Customer balance and credits — types and API functions",
       "exports": [
