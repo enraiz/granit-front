@@ -129,14 +129,15 @@ export function TagManager({
       id: tag.id,
       request: {
         name: patch.name,
-        color: patch.color as HexColor | undefined,
+        color: patch.color,
         hideOnEntityCard: patch.hideOnEntityCard,
       },
     });
   }
 
   function confirmDelete(tag: TagResponse): void {
-    if (typeof window !== 'undefined' && !window.confirm(labelStrings.deleteConfirm)) return;
+    if (typeof globalThis.window !== 'undefined' && !globalThis.confirm(labelStrings.deleteConfirm))
+      return;
     deleteTag.mutate(tag.id);
   }
 
