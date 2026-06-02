@@ -1,5 +1,8 @@
-// Types
+// ─── Types ───────────────────────────────────────────────────────────────────
 export type {
+  // Shared
+  PagedResponse,
+  // Blocks
   BatchResolveDocumentsRequest,
   BlockCatalogEntry,
   BlockCatalogResponse,
@@ -10,39 +13,111 @@ export type {
   BlockFieldKind,
   BlockFieldOption,
   BlockRenderSide,
-  DraftPagePreviewResponse,
-  EffectiveSeoResponse,
-  Hreflang,
-  MintPreviewTokenRequest,
-  MintPreviewTokenResponse,
-  MenuTargetKind,
-  OgImage,
-  OpenGraph,
-  OpenGraphArticle,
-  PublishedPageResponse,
-  RedirectResolveResponse,
   ResolveDocumentItem,
   ResolvedDocumentResponse,
+  // Pages — public
+  DraftPagePreviewResponse,
+  MintPreviewTokenRequest,
+  MintPreviewTokenResponse,
+  PublishedPageResponse,
+  // Pages admin
+  CreatePageRequest,
+  MovePageRequest,
+  PageDraftConflictResponse,
+  PageResponse,
+  PageTranslation,
+  PageTreeNodeResponse,
+  PageVersionSummaryResponse,
+  SaveDraftRequest,
+  UpdatePageRequest,
+  UpdatePageTranslationRequest,
+  // Menus — public
+  MenuTargetKind,
   ResolvedMenu,
   ResolvedMenuItem,
-  RobotsDirective,
-  TwitterCard,
+  // Menus admin
+  CreateMenuRequest,
+  MenuItemRequest,
+  MenuItemResponse,
+  MenuResponse,
+  UpdateMenuRequest,
+  // Sites
+  CreateSiteRequest,
+  SiteResponse,
+  UpdateSiteRequest,
+  // Releases
+  AddReleaseActionRequest,
+  CreateReleaseRequest,
+  ReleaseActionResponse,
+  ReleaseActionStatus,
+  ReleaseActionType,
+  ReleaseResponse,
+  ReleaseSchedule,
+  ReleaseStatus,
+  ScheduleReleaseRequest,
+  UpdateReleaseRequest,
 } from './types/index.js';
 
-// API — Pages
+// ─── API — Public renderer ────────────────────────────────────────────────────
+
+// Pages
 export { getPageByPath, mintPreviewToken, resolvePreview } from './api/pages.js';
 
-// API — Blocks
+// Blocks
 export { getBlockCatalog, resolveBlockData } from './api/blocks.js';
 
-// API — Menus
+// Menus
 export { resolveMenu } from './api/menus.js';
 
-// API — Redirects
-export { resolveRedirect } from './api/redirects.js';
-
-// API — SEO
-export { getEffectiveSeo } from './api/seo.js';
-
-// API — Document Resolution
+// Document Resolution
 export { batchResolveDocuments } from './api/documents.js';
+
+// ─── API — Admin ──────────────────────────────────────────────────────────────
+
+// Sites
+export { createSite, deleteSite, getSite, listSites, updateSite } from './api/sites.js';
+export type { ListSitesParams } from './api/sites.js';
+
+// Pages admin
+export {
+  createPage,
+  deletePage,
+  getPage,
+  getPageTree,
+  listPageVersions,
+  listPages,
+  movePage,
+  publishPage,
+  rollbackPage,
+  saveDraft,
+  unpublishPage,
+  updatePage,
+  updatePageTranslation,
+} from './api/pages-admin.js';
+export type { ListPagesParams, SaveDraftResult } from './api/pages-admin.js';
+
+// Menus admin
+export {
+  createMenu,
+  deleteMenu,
+  getMenu,
+  listMenus,
+  updateMenu,
+} from './api/menus-admin.js';
+export type { ListMenusParams } from './api/menus-admin.js';
+
+// Releases
+export {
+  addReleaseAction,
+  cancelRelease,
+  createRelease,
+  deleteRelease,
+  getRelease,
+  listReleases,
+  publishRelease,
+  removeReleaseAction,
+  scheduleRelease,
+  updateRelease,
+} from './api/releases.js';
+export type { ListReleasesParams } from './api/releases.js';
+
