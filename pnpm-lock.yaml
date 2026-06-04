@@ -13,6 +13,7 @@ overrides:
   picomatch: '>=4.0.4'
   react: 19.2.7
   react-dom: 19.2.7
+  uuid: ^11.1.1
 
 importers:
 
@@ -263,6 +264,9 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/query-engine':
+        specifier: workspace:*
+        version: link:../query-engine
       '@granit/testing':
         specifier: workspace:*
         version: link:../testing
@@ -1055,12 +1059,6 @@ importers:
       '@granit/authentication-api-keys':
         specifier: workspace:*
         version: link:../authentication-api-keys
-      '@granit/query-engine':
-        specifier: workspace:*
-        version: link:../query-engine
-      '@granit/react-query-engine':
-        specifier: workspace:*
-        version: link:../react-query-engine
       '@tanstack/react-query':
         specifier: 5.100.14
         version: 5.100.14(react@19.2.7)
@@ -1074,6 +1072,9 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/query-engine':
+        specifier: workspace:*
+        version: link:../query-engine
       '@granit/react-testing':
         specifier: workspace:*
         version: link:../react-testing
@@ -1127,6 +1128,9 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
 
   packages/@granit/react-authentication-google-cloud:
     dependencies:
@@ -1270,6 +1274,9 @@ importers:
       '@granit/bff':
         specifier: workspace:*
         version: link:../bff
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -7180,9 +7187,8 @@ packages:
     peerDependencies:
       react: 19.2.7
 
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+  uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
     hasBin: true
 
   vanilla-cookieconsent@3.1.0:
@@ -8785,7 +8791,7 @@ snapshots:
       react: 19.2.7
       react-hotkeys-hook: 4.6.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       use-debounce: 9.0.4(react@19.2.7)
-      uuid: 9.0.1
+      uuid: 11.1.1
       zustand: 5.0.14(@types/react@19.2.16)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     transitivePeerDependencies:
       - '@floating-ui/dom'
@@ -11674,7 +11680,7 @@ snapshots:
     dependencies:
       react: 19.2.7
 
-  uuid@9.0.1: {}
+  uuid@11.1.1: {}
 
   vanilla-cookieconsent@3.1.0: {}
 
