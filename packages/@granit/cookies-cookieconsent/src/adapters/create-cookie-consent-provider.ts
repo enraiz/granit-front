@@ -82,7 +82,7 @@ export function createCookieConsentProvider(
         // Derive which optional categories are actually in use from the service list.
         // Categories absent from the service list are still registered so the
         // cookie schema stays consistent with the backend defaults.
-        const activeCategories = new Set(config.services.map((s) => s.category));
+        const activeCategories = new Set((config.services ?? []).map((s) => s.category));
         const categoryMap: Partial<Record<CookieCategory, string>> = {
           preferences: resolvedNames.preferences,
           analytics: resolvedNames.analytics,

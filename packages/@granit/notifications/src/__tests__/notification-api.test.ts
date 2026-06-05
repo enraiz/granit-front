@@ -1,5 +1,4 @@
 import { axiosResponse, createMockClient } from '@granit/api-client/test-utils';
-import { toEntityId } from '@granit/types';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -13,9 +12,9 @@ import {
 } from '../api/notification-api';
 
 import type {
-  ActivityFeedPage,
   UserNotificationPage,
   NotificationPreference,
+  NotificationPreferenceUpdateRequest,
 } from '../types/index';
 
 describe('notification-api', () => {
@@ -27,7 +26,6 @@ describe('notification-api', () => {
       items: [],
       totalCount: 0,
       nextCursor: null,
-      unreadCount: 0,
     };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
@@ -81,7 +79,7 @@ describe('notification-api', () => {
   // getEntityActivityFeed
   // -----------------------------------------------------------------------
   it('should send GET with entity path (getEntityActivityFeed)', async () => {
-    const page: ActivityFeedPage = { items: [], totalCount: 0, nextCursor: null };
+    const page: UserNotificationPage = { items: [], totalCount: 0, nextCursor: null };
     const client = createMockClient();
     vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
 
@@ -114,19 +112,16 @@ describe('notification-api', () => {
   // updatePreference
   // -----------------------------------------------------------------------
   it('should send PUT with preference data (updatePreference)', async () => {
-    const pref: NotificationPreference = {
-      id: toEntityId<'NotificationPreference'>('pref-1'),
-      userId: toEntityId<'User'>('u-1'),
+    const request: NotificationPreferenceUpdateRequest = {
       notificationTypeName: 'AppointmentReminder',
       channelName: 'InApp',
       isEnabled: true,
     };
     const client = createMockClient();
-    vi.mocked(client.put).mockResolvedValue(axiosResponse(pref));
+    vi.mocked(client.put).mockResolvedValue(axiosResponse(undefined));
 
-    const result = await updatePreference(client, '/api/v1', pref);
+    await updatePreference(client, '/api/v1', request);
 
-    expect(client.put).toHaveBeenCalledWith('/api/v1/notifications/preferences', pref);
-    expect(result).toEqual(pref);
+    expect(client.put).toHaveBeenCalledWith('/api/v1/notifications/preferences', request);
   });
 });

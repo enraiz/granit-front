@@ -5640,7 +5640,7 @@
             {
               "name": "preferences",
               "kind": "property",
-              "signature": "preferences: NotificationPreference[]"
+              "signature": "preferences: readonly NotificationPreference[]"
             },
             {
               "name": "loading",
