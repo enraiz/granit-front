@@ -8,6 +8,7 @@
 // (countries, document-types, …) and full base URL.
 // ---------------------------------------------------------------------------
 
+import { applyStringFilter, created } from '@granit/testing/msw';
 import { toEntityId } from '@granit/types';
 import { http, HttpResponse } from 'msw';
 
@@ -57,28 +58,6 @@ function safeFieldString(value: unknown): string {
   if (typeof value === 'string') return value;
   if (typeof value === 'number' || typeof value === 'boolean') return String(value);
   return '';
-}
-
-function applyStringFilter(value: string, operator: string, filterValue: string): boolean {
-  const v = value.toLowerCase();
-  const f = filterValue.toLowerCase();
-  switch (operator) {
-    case 'Eq':
-      return v === f;
-    case 'Contains':
-      return v.includes(f);
-    case 'StartsWith':
-      return v.startsWith(f);
-    case 'EndsWith':
-      return v.endsWith(f);
-    case 'In':
-      return f
-        .split(',')
-        .map((s) => s.trim().toLowerCase())
-        .includes(v);
-    default:
-      return true;
-  }
 }
 
 function applyAdvancedFilters<T>(items: T[], filters: ParsedFilter[]): T[] {
@@ -210,7 +189,7 @@ export function createReferenceDataHandlers<T extends ReferenceDataEntry>(
       }
       const newEntry = config.createEntry(body);
       store = [...store, newEntry];
-      return HttpResponse.json(newEntry, { status: 201 });
+      return created(newEntry);
     }),
 
     http.put(`${BASE}/:code`, async ({ params, request }) => {

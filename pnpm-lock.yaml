@@ -2093,6 +2093,9 @@ importers:
       '@granit/types':
         specifier: workspace:*
         version: link:../types
+      '@granit/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/@granit/react-map:
     dependencies:
@@ -2207,6 +2210,9 @@ importers:
       '@granit/react-api-client':
         specifier: workspace:*
         version: link:../react-api-client
+      '@granit/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/@granit/react-notifications:
     dependencies:
@@ -2751,6 +2757,9 @@ importers:
       '@tanstack/react-query':
         specifier: 5.100.14
         version: 5.100.14(react@19.2.7)
+      '@testing-library/react':
+        specifier: ^16.0.0
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.16))(@types/react@19.2.16)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -2908,6 +2917,9 @@ importers:
       '@granit/workflow':
         specifier: workspace:*
         version: link:../workflow
+      '@tanstack/react-query':
+        specifier: 5.100.14
+        version: 5.100.14(react@19.2.7)
       msw:
         specifier: ^2.14.6
         version: 2.14.6(@types/node@25.9.1)(typescript@6.0.3)
@@ -3066,6 +3078,9 @@ importers:
       '@granit/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@granit/logger':
+        specifier: workspace:*
+        version: link:../logger
 
   packages/@granit/timeline:
     devDependencies:

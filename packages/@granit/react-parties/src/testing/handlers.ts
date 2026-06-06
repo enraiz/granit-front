@@ -1,5 +1,6 @@
 import { ENUM_OPERATORS, STRING_OPERATORS } from '@granit/query-engine';
 import { createQueryMetaHandler } from '@granit/react-query-engine/testing';
+import { created, pagedResponse } from '@granit/testing/msw';
 import { toEntityId } from '@granit/types';
 import { http, HttpResponse } from 'msw';
 
@@ -30,8 +31,7 @@ import type {
   PartyUpdateRequest,
 } from '@granit/parties';
 import type { QueryMetadata } from '@granit/query-engine';
-
-type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+import type { Mutable } from '@granit/testing';
 
 const PARTY_KINDS = ['Individual', 'Company', 'Department'];
 const PARTY_STATUSES = ['Active', 'Suspended', 'Archived'];
@@ -212,7 +212,7 @@ export function createPartiesHandlers(baseUrl = DEFAULT_BASE_PATH) {
       const pending = sampleDuplicates.filter((d) => d.dismissedAt == null);
       const start = (page - 1) * pageSize;
       const items = pending.slice(start, start + pageSize);
-      return HttpResponse.json({ items, totalCount: pending.length });
+      return pagedResponse(items, pending.length);
     }),
 
     // ── Duplicate candidates: per-party flat list ────────────────────
@@ -331,7 +331,7 @@ export function createPartiesHandlers(baseUrl = DEFAULT_BASE_PATH) {
         internalNotes: body.internalNotes ?? null,
       };
       sampleParties.push(newParty);
-      return HttpResponse.json(newParty, { status: 201 });
+      return created(newParty);
     }),
 
     // ── PATCH identity ───────────────────────────────────────────────
@@ -404,7 +404,7 @@ export function createPartiesHandlers(baseUrl = DEFAULT_BASE_PATH) {
           state: body.state ?? null,
         },
       ];
-      return HttpResponse.json(party, { status: 201 });
+      return created(party);
     }),
     http.delete(`${baseUrl}/:id/addresses/:addressId`, ({ params }) => {
       const party = findById(params.id as string);
@@ -431,7 +431,7 @@ export function createPartiesHandlers(baseUrl = DEFAULT_BASE_PATH) {
           label: body.label ?? null,
         },
       ];
-      return HttpResponse.json(party, { status: 201 });
+      return created(party);
     }),
     http.delete(`${baseUrl}/:id/emails/:emailId`, ({ params }) => {
       const party = findById(params.id as string);
@@ -459,7 +459,7 @@ export function createPartiesHandlers(baseUrl = DEFAULT_BASE_PATH) {
           label: body.label ?? null,
         },
       ];
-      return HttpResponse.json(party, { status: 201 });
+      return created(party);
     }),
     http.delete(`${baseUrl}/:id/phones/:phoneId`, ({ params }) => {
       const party = findById(params.id as string);
@@ -487,7 +487,7 @@ export function createPartiesHandlers(baseUrl = DEFAULT_BASE_PATH) {
           externalId: body.externalId,
         },
       ];
-      return HttpResponse.json(party, { status: 201 });
+      return created(party);
     }),
     http.delete(`${baseUrl}/:id/external-mappings/:providerName`, ({ params }) => {
       const party = findById(params.id as string);
