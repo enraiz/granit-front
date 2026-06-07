@@ -562,8 +562,7 @@ function DocumentsListBody({
       className={className}
     >
       {viewMode === 'list' ? (
-        // role="application" + roving tabindex is the correct WAI-ARIA pattern for a document browser
-        <div role="application" tabIndex={0} onKeyDown={handleKeyDown}>
+        <div role="grid" tabIndex={0} onKeyDown={handleKeyDown}>
           <table data-granit-documents-list-table="">
             <thead>
               <tr>
@@ -675,17 +674,17 @@ function DocumentsListBody({
           </table>
         </div>
       ) : (
-        <div role="application" tabIndex={0} onKeyDown={handleKeyDown}>
-          <ul
+        <div role="grid" tabIndex={0} onKeyDown={handleKeyDown}>
+          <div
             data-granit-documents-list-grid=""
             // tile size becomes a CSS custom property the host stylesheet picks
             // up to drive the grid column track + tile dimensions.
             style={{ ['--granit-documents-tile-size' as string]: `${String(tileSize)}px` }}
           >
             {itemRenderState.map(({ document, isSelected, isFocused, mode, kind, badge }) => (
-              // NOSONAR: roving tabindex on <li> is correct for grid keyboard navigation
-              <li
+              <div
                 key={document.id}
+                role="row"
                 data-granit-documents-list-tile=""
                 data-granit-document-id={document.id}
                 data-granit-document-kind={kind}
@@ -770,9 +769,9 @@ function DocumentsListBody({
                     )}
                   </div>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
       <nav data-granit-documents-list-pagination="" aria-label="Pagination">
