@@ -26,6 +26,12 @@ import type { ReactNode } from 'react';
  * extra app code. Unknown values stay `undefined` → the picker suppresses the
  * request and shows the missing-scope placeholder.
  */
+function coerceScopeValue(raw: unknown): string | undefined {
+  if (raw === null || raw === undefined) return undefined;
+  if (typeof raw === 'object') return JSON.stringify(raw);
+  return String(raw);
+}
+
 function deriveScopeFromValues(
   scopeKeys: readonly string[] | undefined,
   values: Readonly<Record<string, unknown>> | undefined
@@ -35,8 +41,7 @@ function deriveScopeFromValues(
   for (const [key, val] of Object.entries(values)) lowerToValue.set(key.toLowerCase(), val);
   const scope: Record<string, string | undefined> = {};
   for (const key of scopeKeys) {
-    const raw = lowerToValue.get(key.toLowerCase());
-    scope[key] = raw === null || raw === undefined ? undefined : String(raw);
+    scope[key] = coerceScopeValue(lowerToValue.get(key.toLowerCase()));
   }
   return scope;
 }
@@ -146,6 +151,7 @@ function LookupCombobox({
       {value != null && selectedItem ? (
         <span data-granit-lookup-selected="">{selectedItem.label}</span>
       ) : null}
+      {/* NOSONAR: custom combobox listbox — native <select> cannot support the required UX */}
       <ul id={listboxId} role="listbox" data-loading={isLoading ? '' : undefined}>
         {items.map((item) => (
           <li
