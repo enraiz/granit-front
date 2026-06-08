@@ -9,7 +9,6 @@ export type {
   LegalDocumentDetailResponse,
   // Legal document admin — shared
   DeletionState,
-  DeletionStatusValue,
   LegalDocumentCreateRequest,
   LegalDocumentLifecycleStatus,
   LegalDocumentListParams,
@@ -76,3 +75,5 @@ export { getApplicableRegulation, listProcessingPurposes } from './api/privacy-a
 export { getOptOutStatus, requestOptOut } from './api/privacy-api';
 
 export { PrivacyPermissions } from './permissions';
+export { PRIVACY_REGULATIONS } from './regulations';
+export type { PrivacyRegulationCode } from './regulations';
