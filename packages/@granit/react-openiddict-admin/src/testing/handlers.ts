@@ -14,12 +14,13 @@ import {
 
 import type {
   AdminOidcApplication,
+  AdminOidcAuthorizationCreateRequest,
   AdminOidcScope,
   AdminOidcScopeUpdateRequest,
 } from '@granit/openiddict-admin';
 import type { QueryMetadata } from '@granit/query-engine';
 
-const OIDC_APPLICATION_TYPES = ['public', 'confidential'];
+const OIDC_APPLICATION_TYPES = ['web', 'native'];
 const OIDC_AUTHORIZATION_STATUSES = ['valid', 'revoked', 'inactive'];
 const OIDC_AUTHORIZATION_TYPES = ['permanent', 'ad-hoc'];
 
@@ -358,6 +359,13 @@ export function createOpenIddictAdminHandlers(baseUrl = DEFAULT_BASE_PATH) {
 
     http.get(`${baseUrl}/oidc/applications`, () => HttpResponse.json(mockOidcApplications)),
 
+    http.get(`${baseUrl}/oidc/applications/:clientId`, ({ params }) => {
+      const app = mockOidcApplications.find(
+        (a) => a.clientId === decodeURIComponent(params.clientId as string)
+      );
+      return app ? HttpResponse.json(app) : notFound();
+    }),
+
     http.post(`${baseUrl}/oidc/applications`, async ({ request }) => {
       const body = (await request.json()) as Partial<AdminOidcApplication>;
       const newApp: (typeof mockOidcApplications)[number] = {
@@ -447,6 +455,22 @@ export function createOpenIddictAdminHandlers(baseUrl = DEFAULT_BASE_PATH) {
     }),
 
     // ── OIDC Authorizations ───────────────────────────────────────────────────
+
+    http.post(`${baseUrl}/oidc/authorizations`, async ({ request }) => {
+      const body = (await request.json()) as AdminOidcAuthorizationCreateRequest;
+      const app = mockOidcApplications.find((a) => a.clientId === body.clientId);
+      if (!app) return notFound();
+      const newAuth = {
+        id: `auth_new_${mockOidcAuthorizations.length + 1}`,
+        clientId: body.clientId,
+        subject: body.subject,
+        status: 'valid',
+        type: 'permanent',
+        scopes: [...body.scopes],
+      };
+      mockOidcAuthorizations.push(newAuth);
+      return created(newAuth);
+    }),
 
     http.get(`${baseUrl}/oidc/authorizations`, ({ request }) => {
       const url = new URL(request.url);

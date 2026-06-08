@@ -1885,24 +1885,6 @@
           "members": []
         },
         {
-          "name": "AdminTenant",
-          "kind": "interface",
-          "signature": "interface AdminTenant",
-          "members": []
-        },
-        {
-          "name": "CreateTenantRequest",
-          "kind": "interface",
-          "signature": "interface CreateTenantRequest",
-          "members": []
-        },
-        {
-          "name": "UpdateTenantRequest",
-          "kind": "interface",
-          "signature": "interface UpdateTenantRequest",
-          "members": []
-        },
-        {
           "name": "DEFAULT_MULTI_TENANCY_OPTIONS",
           "kind": "const",
           "signature": "const DEFAULT_MULTI_TENANCY_OPTIONS: Required<MultiTenancyOptions>"
@@ -5854,6 +5836,22 @@
           "name": "useImpersonateUser",
           "kind": "function",
           "signature": "function useImpersonateUser(): UseMutationResult<AdminImpersonationResult, Error, string>"
+        },
+        {
+          "name": "useConsentFlow",
+          "kind": "function",
+          "signature": "function useConsentFlow(returnUrl: string | null, subject: string | null): ConsentFlowState"
+        },
+        {
+          "name": "ConsentFlowState",
+          "kind": "interface",
+          "signature": "interface ConsentFlowState",
+          "members": []
+        },
+        {
+          "name": "useDeviceVerification",
+          "kind": "function",
+          "signature": "function useDeviceVerification(verifyEndpoint = '/connect/verify'): DeviceVerificationState"
         },
         {
           "name": "openIddictAdminKeys",

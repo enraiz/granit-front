@@ -2,12 +2,13 @@ import { createMockClient } from '@granit/testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  createAuthorization,
   listAuthorizations,
   revokeAuthorization,
   revokeUserAuthorizations,
 } from '../api/admin-oidc-authorization-api';
 
-import type { AdminOidcAuthorization } from '../types/index';
+import type { AdminOidcAuthorization, AdminOidcAuthorizationCreateRequest } from '../types/index';
 
 const BASE = '/admin';
 
@@ -17,11 +18,31 @@ const mockAuthorization: AdminOidcAuthorization = {
   subject: 'user-001',
   type: 'permanent',
   status: 'valid',
+  scopes: ['openid', 'profile'],
 };
 
 const mockAuthorizations: readonly AdminOidcAuthorization[] = [mockAuthorization];
 
 describe('admin-oidc-authorization-api', () => {
+  // ── Create ────────────────────────────────────────────────────────────────
+
+  describe('createAuthorization', () => {
+    it('sends POST to /oidc/authorizations with request body', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockResolvedValueOnce({ data: mockAuthorization });
+
+      const request: AdminOidcAuthorizationCreateRequest = {
+        subject: 'user-001',
+        clientId: 'my-spa',
+        scopes: ['openid', 'profile'],
+      };
+      const result = await createAuthorization(client, BASE, request);
+
+      expect(client.post).toHaveBeenCalledWith(`${BASE}/oidc/authorizations`, request);
+      expect(result).toEqual(mockAuthorization);
+    });
+  });
+
   // ── List ──────────────────────────────────────────────────────────────────
 
   describe('listAuthorizations', () => {

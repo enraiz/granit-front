@@ -6,6 +6,7 @@ export type {
   AdminOidcApplicationSecretResponse,
   AdminOidcApplicationUpdateRequest,
   AdminOidcAuthorization,
+  AdminOidcAuthorizationCreateRequest,
   AdminOidcAuthorizationListParams,
   AdminOidcScope,
   AdminOidcScopeCreateRequest,
@@ -24,6 +25,7 @@ export { impersonateUser, listUsers } from './api/admin-user-api';
 export {
   createApplication,
   deleteApplication,
+  getApplication,
   listApplications,
   rotateApplicationSecret,
   updateApplication,
@@ -34,6 +36,7 @@ export { createScope, deleteScope, listScopes, updateScope } from './api/admin-o
 
 // API — OIDC Authorizations
 export {
+  createAuthorization,
   listAuthorizations,
   revokeAuthorization,
   revokeUserAuthorizations,

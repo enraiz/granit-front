@@ -25,3 +25,9 @@ export interface AdminOidcScopeUpdateRequest {
   /** `null` leaves resources unchanged; `[]` clears all resources. */
   readonly resources?: string[] | null;
 }
+
+/** Request body for `PUT /oidc/scopes/{scopeName}`. All fields optional — `null` clears the field. */
+export interface AdminOidcScopeUpdateRequest {
+  readonly displayName?: string | null;
+  readonly description?: string | null;
+}

@@ -7,6 +7,7 @@ export type {
 
 export type {
   AdminOidcAuthorization,
+  AdminOidcAuthorizationCreateRequest,
   AdminOidcAuthorizationListParams,
 } from './admin-oidc-authorization';
 

@@ -16,6 +16,7 @@ export { useAdminUsers, useImpersonateUser } from './hooks/use-admin-users';
 export {
   useCreateOidcApplication,
   useDeleteOidcApplication,
+  useOidcApplication,
   useOidcApplications,
   useRotateApplicationSecret,
   useUpdateOidcApplication,
@@ -31,10 +32,20 @@ export {
 
 // Hooks — OIDC Authorizations
 export {
+  useCreateOidcAuthorization,
   useOidcAuthorizations,
   useRevokeAuthorization,
   useRevokeUserAuthorizations,
 } from './hooks/use-oidc-authorizations';
+
+// Hooks — Auth flows
+export { useConsentFlow } from './hooks/use-consent-flow';
+export type { ConsentFlowState } from './hooks/use-consent-flow';
+export { useDeviceVerification } from './hooks/use-device-verification';
+export type {
+  DeviceVerificationState,
+  DeviceVerificationStatus,
+} from './hooks/use-device-verification';
 
 // Query keys
 export { openIddictAdminKeys } from './hooks/query-keys';

@@ -15,4 +15,12 @@ export interface AdminOidcAuthorization {
   readonly subject: string;
   readonly status: string;
   readonly type: string;
+  readonly scopes: readonly string[];
+}
+
+/** Request body for `POST /oidc/authorizations` (admin consent grant). All fields required. */
+export interface AdminOidcAuthorizationCreateRequest {
+  readonly subject: string;
+  readonly clientId: string;
+  readonly scopes: readonly string[];
 }
