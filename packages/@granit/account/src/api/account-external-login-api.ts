@@ -1,3 +1,5 @@
+import { HttpError, isAxiosError } from '@granit/api-client';
+
 import type {
   AccountExternalLoginCallbackResponse,
   AccountExternalLoginInfo,
@@ -23,13 +25,37 @@ export async function getExternalLogins(
  * Initiate an OAuth challenge with an external provider.
  *
  * `POST {basePath}/external-logins/challenge/{provider}`
+ *
+ * @throws {HttpError} status 400 — provider unknown / not configured in the registry
+ * @throws {HttpError} status 500 — provider configured but authentication handler not registered
  */
 export async function challengeExternalLogin(
   client: AxiosInstance,
   basePath: string,
   provider: string
 ): Promise<void> {
-  await client.post(`${basePath}/external-logins/challenge/${encodeURIComponent(provider)}`);
+  try {
+    await client.post(`${basePath}/external-logins/challenge/${encodeURIComponent(provider)}`);
+  } catch (err) {
+    if (isAxiosError(err)) {
+      const status = err.response?.status;
+      if (status === 400) {
+        throw new HttpError(
+          `External login provider "${provider}" is not configured.`,
+          400,
+          err.response?.data
+        );
+      }
+      if (status === 500) {
+        throw new HttpError(
+          `External login provider "${provider}" is unavailable: the authentication handler is not registered.`,
+          500,
+          err.response?.data
+        );
+      }
+    }
+    throw err;
+  }
 }
 
 /**

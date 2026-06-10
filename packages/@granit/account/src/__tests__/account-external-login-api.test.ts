@@ -13,6 +13,13 @@ import type {
   AccountExternalLoginInfo,
 } from '../types/index';
 
+function makeAxiosError(status: number) {
+  return Object.assign(new Error(`Request failed with status code ${status}`), {
+    isAxiosError: true,
+    response: { status, data: { title: 'Error', status } },
+  });
+}
+
 const BASE = '/api/account';
 
 const mockLogins: readonly AccountExternalLoginInfo[] = [
@@ -50,6 +57,29 @@ describe('account-external-login-api', () => {
       await challengeExternalLogin(client, BASE, 'provider/name');
 
       expect(client.post).toHaveBeenCalledWith(`${BASE}/external-logins/challenge/provider%2Fname`);
+    });
+
+    it('throws HttpError(400) when provider is not configured', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockRejectedValueOnce(makeAxiosError(400));
+
+      await expect(challengeExternalLogin(client, BASE, 'Unknown')).rejects.toMatchObject({
+        name: 'HttpError',
+        status: 400,
+        message: 'External login provider "Unknown" is not configured.',
+      });
+    });
+
+    it('throws HttpError(500) when provider handler is not registered', async () => {
+      const client = createMockClient();
+      vi.mocked(client.post).mockRejectedValueOnce(makeAxiosError(500));
+
+      await expect(challengeExternalLogin(client, BASE, 'Apple')).rejects.toMatchObject({
+        name: 'HttpError',
+        status: 500,
+        message:
+          'External login provider "Apple" is unavailable: the authentication handler is not registered.',
+      });
     });
   });
 
