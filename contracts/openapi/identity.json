@@ -581,8 +581,8 @@
     "/identity/webhook": {
       "post": {
         "tags": ["Identity - Webhook"],
-        "summary": "Receives identity provider webhook events (user created/updated/deleted).",
-        "description": "Webhook receiver for identity provider event notifications. Validates the HMAC signature (if configured) and processes user_created, user_updated, and user_deleted events by refreshing or removing the corresponding cache entries. No bearer authentication — security relies on HMAC signature validation in the handler.",
+        "summary": "Receives identity provider webhook events (user created/updated/deleted, login).",
+        "description": "Webhook receiver for identity provider event notifications. Validates the HMAC signature (if configured) and processes user_created, user_updated, and user_deleted events by refreshing or removing the corresponding cache entries, and login events by announcing a UserSessionCreatedEto so anomaly detection runs off the login path (the IdP's push channel for session-created — used by Keycloak via its event SPI). No bearer authentication — security relies on HMAC signature validation in the handler.",
         "operationId": "IdentityWebhook",
         "responses": {
           "200": {
@@ -634,10 +634,10 @@
     },
     "/sessions": {
       "get": {
-        "tags": ["User Sessions"],
+        "tags": ["Identity - User Sessions"],
         "summary": "Lists the caller's active sessions.",
         "description": "Returns the authenticated user's active sessions across the configured backend (BFF, OpenIddict or Keycloak), each enriched with its approximate location and persisted risk level. The current session is flagged. Raw IP addresses are never returned.",
-        "operationId": "ListUserSessions",
+        "operationId": "ListMyUserSessions",
         "responses": {
           "200": {
             "description": "OK",
@@ -685,10 +685,10 @@
         }
       },
       "delete": {
-        "tags": ["User Sessions"],
+        "tags": ["Identity - User Sessions"],
         "summary": "Revokes all of the caller's sessions except the current one.",
         "description": "Revokes every session of the authenticated user except the one making the request, and returns how many were revoked.",
-        "operationId": "RevokeOtherUserSessions",
+        "operationId": "RevokeMyOtherUserSessions",
         "responses": {
           "200": {
             "description": "OK",
@@ -735,10 +735,10 @@
     },
     "/sessions/{sessionId}": {
       "delete": {
-        "tags": ["User Sessions"],
+        "tags": ["Identity - User Sessions"],
         "summary": "Revokes one of the caller's sessions by ID.",
         "description": "Revokes the specified session of the authenticated user. Returns 404 when no such session exists.",
-        "operationId": "RevokeUserSession",
+        "operationId": "RevokeMyUserSession",
         "parameters": [
           {
             "name": "sessionId",
@@ -799,10 +799,10 @@
     },
     "/devices": {
       "get": {
-        "tags": ["User Sessions"],
+        "tags": ["Identity - User Sessions"],
         "summary": "Lists the caller's devices.",
         "description": "Returns the devices the authenticated user has signed in from — device type, OS, browser, last activity and approximate location — aggregated across the configured session backend.",
-        "operationId": "ListUserDevices",
+        "operationId": "ListMyUserDevices",
         "responses": {
           "200": {
             "description": "OK",
@@ -1135,6 +1135,7 @@
           "createdAt",
           "lastAccessedAt",
           "userAgent",
+          "ipAddress",
           "location",
           "riskLevel",
           "riskReasons"
@@ -1156,6 +1157,9 @@
             "format": "date-time"
           },
           "userAgent": {
+            "type": ["null", "string"]
+          },
+          "ipAddress": {
             "type": ["null", "string"]
           },
           "location": {
@@ -1206,10 +1210,10 @@
       "name": "Identity - User Cache"
     },
     {
-      "name": "Identity - Webhook"
+      "name": "Identity - User Sessions"
     },
     {
-      "name": "User Sessions"
+      "name": "Identity - Webhook"
     }
   ]
 }
