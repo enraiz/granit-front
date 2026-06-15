@@ -105,6 +105,17 @@
       ]
     },
     {
+      "name": "@granit/ai-chat",
+      "description": "Agentic AI chat — conversation CRUD and the SSE message stream types and API functions. Mirrors Granit.AI.Chat.Endpoints .NET",
+      "exports": [
+        {
+          "name": "AIChatPermissions",
+          "kind": "const",
+          "signature": "const AIChatPermissions"
+        }
+      ]
+    },
+    {
       "name": "@granit/analytics",
       "description": "Framework-agnostic types for Granit.Analytics — MetricResponse runtime envelopes plus KPI / Chart / Table / Pivot widget definitions consumed by @granit/dashboards",
       "exports": [
@@ -2647,6 +2658,168 @@
               "signature": "request: AIEmbeddingRequest"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-ai-chat",
+      "description": "React bindings for @granit/ai-chat — AIChatProvider, useChatStream (SSE), conversation CRUD hooks, and headless chat UI (thread, composer with / and @ pickers, attachments, suggested actions, clarifications)",
+      "exports": [
+        {
+          "name": "AIChatProvider",
+          "kind": "function",
+          "signature": "function AIChatProvider("
+        },
+        {
+          "name": "useAIChatConfig",
+          "kind": "function",
+          "signature": "function useAIChatConfig(): ResolvedAIChatConfig"
+        },
+        {
+          "name": "conversationKeys",
+          "kind": "const",
+          "signature": "const conversationKeys"
+        },
+        {
+          "name": "useConversations",
+          "kind": "function",
+          "signature": "function useConversations(options?:"
+        },
+        {
+          "name": "useConversation",
+          "kind": "function",
+          "signature": "function useConversation( id: ConversationId | null, options?:"
+        },
+        {
+          "name": "useChatWorkspaces",
+          "kind": "function",
+          "signature": "function useChatWorkspaces(options?:"
+        },
+        {
+          "name": "useCreateConversation",
+          "kind": "function",
+          "signature": "function useCreateConversation(): UseCreateConversationReturn"
+        },
+        {
+          "name": "UseCreateConversationReturn",
+          "kind": "interface",
+          "signature": "interface UseCreateConversationReturn",
+          "members": []
+        },
+        {
+          "name": "useRenameConversation",
+          "kind": "function",
+          "signature": "function useRenameConversation(): UseRenameConversationReturn"
+        },
+        {
+          "name": "useDeleteConversation",
+          "kind": "function",
+          "signature": "function useDeleteConversation(): UseDeleteConversationReturn"
+        },
+        {
+          "name": "UseDeleteConversationReturn",
+          "kind": "interface",
+          "signature": "interface UseDeleteConversationReturn",
+          "members": []
+        },
+        {
+          "name": "useChatStream",
+          "kind": "function",
+          "signature": "function useChatStream(): UseChatStreamReturn"
+        },
+        {
+          "name": "ChatStreamUsage",
+          "kind": "interface",
+          "signature": "interface ChatStreamUsage",
+          "members": []
+        },
+        {
+          "name": "UseChatStreamReturn",
+          "kind": "interface",
+          "signature": "interface UseChatStreamReturn",
+          "members": []
+        },
+        {
+          "name": "ChatMessage",
+          "kind": "function",
+          "signature": "function ChatMessage("
+        },
+        {
+          "name": "ChatMessageProps",
+          "kind": "interface",
+          "signature": "interface ChatMessageProps",
+          "members": []
+        },
+        {
+          "name": "ConversationThread",
+          "kind": "function",
+          "signature": "function ConversationThread("
+        },
+        {
+          "name": "ConversationThreadProps",
+          "kind": "interface",
+          "signature": "interface ConversationThreadProps",
+          "members": []
+        },
+        {
+          "name": "SuggestedActions",
+          "kind": "function",
+          "signature": "function SuggestedActions("
+        },
+        {
+          "name": "SuggestedActionsProps",
+          "kind": "interface",
+          "signature": "interface SuggestedActionsProps",
+          "members": []
+        },
+        {
+          "name": "ClarificationPrompt",
+          "kind": "function",
+          "signature": "function ClarificationPrompt("
+        },
+        {
+          "name": "ClarificationPromptProps",
+          "kind": "interface",
+          "signature": "interface ClarificationPromptProps",
+          "members": []
+        },
+        {
+          "name": "AttachmentChips",
+          "kind": "function",
+          "signature": "function AttachmentChips("
+        },
+        {
+          "name": "ChatComposer",
+          "kind": "function",
+          "signature": "function ChatComposer("
+        },
+        {
+          "name": "ChatComposerProps",
+          "kind": "interface",
+          "signature": "interface ChatComposerProps",
+          "members": []
+        },
+        {
+          "name": "ComposerSuggestions",
+          "kind": "function",
+          "signature": "function ComposerSuggestions<T>("
+        },
+        {
+          "name": "ComposerSuggestionsProps",
+          "kind": "interface",
+          "signature": "interface ComposerSuggestionsProps<T>",
+          "members": []
+        },
+        {
+          "name": "detectTrigger",
+          "kind": "function",
+          "signature": "function detectTrigger(text: string, caret: number): ActiveTrigger | null"
+        },
+        {
+          "name": "ActiveTrigger",
+          "kind": "interface",
+          "signature": "interface ActiveTrigger",
+          "members": []
         }
       ]
     },
