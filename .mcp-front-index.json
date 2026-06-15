@@ -116,6 +116,32 @@
       ]
     },
     {
+      "name": "@granit/ai-prompts",
+      "description": "AI prompt catalogue — prompt CRUD, the chat picker, and copy-on-customise types and API functions. Mirrors Granit.AI.Prompts.Endpoints .NET",
+      "exports": [
+        {
+          "name": "GENERAL_CATEGORY_NAME",
+          "kind": "const",
+          "signature": "const GENERAL_CATEGORY_NAME"
+        },
+        {
+          "name": "ICON_COLOR_PATTERN",
+          "kind": "const",
+          "signature": "const ICON_COLOR_PATTERN"
+        },
+        {
+          "name": "PROMPT_LIMITS",
+          "kind": "const",
+          "signature": "const PROMPT_LIMITS"
+        },
+        {
+          "name": "AIPromptsPermissions",
+          "kind": "const",
+          "signature": "const AIPromptsPermissions"
+        }
+      ]
+    },
+    {
       "name": "@granit/analytics",
       "description": "Framework-agnostic types for Granit.Analytics — MetricResponse runtime envelopes plus KPI / Chart / Table / Pivot widget definitions consumed by @granit/dashboards",
       "exports": [
@@ -2819,6 +2845,153 @@
           "name": "ActiveTrigger",
           "kind": "interface",
           "signature": "interface ActiveTrigger",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "@granit/react-ai-prompts",
+      "description": "React bindings for @granit/ai-prompts — AIPromptsProvider, prompt catalogue CRUD + customise hooks, the / picker hook + popover, an icon picker, and the catalogue manager UI",
+      "exports": [
+        {
+          "name": "AIPromptsProvider",
+          "kind": "function",
+          "signature": "function AIPromptsProvider("
+        },
+        {
+          "name": "useAIPromptsConfig",
+          "kind": "function",
+          "signature": "function useAIPromptsConfig(): ResolvedAIPromptsConfig"
+        },
+        {
+          "name": "promptKeys",
+          "kind": "const",
+          "signature": "const promptKeys"
+        },
+        {
+          "name": "usePrompts",
+          "kind": "function",
+          "signature": "function usePrompts(options?:"
+        },
+        {
+          "name": "usePrompt",
+          "kind": "function",
+          "signature": "function usePrompt( id: PromptId | null, options?:"
+        },
+        {
+          "name": "usePromptPicker",
+          "kind": "function",
+          "signature": "function usePromptPicker(options?:"
+        },
+        {
+          "name": "useCreatePrompt",
+          "kind": "function",
+          "signature": "function useCreatePrompt(): UseCreatePromptReturn"
+        },
+        {
+          "name": "UseCreatePromptReturn",
+          "kind": "interface",
+          "signature": "interface UseCreatePromptReturn",
+          "members": []
+        },
+        {
+          "name": "useUpdatePrompt",
+          "kind": "function",
+          "signature": "function useUpdatePrompt(): UseUpdatePromptReturn"
+        },
+        {
+          "name": "UpdatePromptVariables",
+          "kind": "interface",
+          "signature": "interface UpdatePromptVariables",
+          "members": []
+        },
+        {
+          "name": "UseUpdatePromptReturn",
+          "kind": "interface",
+          "signature": "interface UseUpdatePromptReturn",
+          "members": []
+        },
+        {
+          "name": "useDeletePrompt",
+          "kind": "function",
+          "signature": "function useDeletePrompt(): UseDeletePromptReturn"
+        },
+        {
+          "name": "UseDeletePromptReturn",
+          "kind": "interface",
+          "signature": "interface UseDeletePromptReturn",
+          "members": []
+        },
+        {
+          "name": "useCustomisePrompt",
+          "kind": "function",
+          "signature": "function useCustomisePrompt(): UseCustomisePromptReturn"
+        },
+        {
+          "name": "UseCustomisePromptReturn",
+          "kind": "interface",
+          "signature": "interface UseCustomisePromptReturn",
+          "members": []
+        },
+        {
+          "name": "PromptIcon",
+          "kind": "function",
+          "signature": "function PromptIcon("
+        },
+        {
+          "name": "PromptIconProps",
+          "kind": "interface",
+          "signature": "interface PromptIconProps",
+          "members": []
+        },
+        {
+          "name": "IconPicker",
+          "kind": "function",
+          "signature": "function IconPicker("
+        },
+        {
+          "name": "IconPickerProps",
+          "kind": "interface",
+          "signature": "interface IconPickerProps",
+          "members": []
+        },
+        {
+          "name": "PromptForm",
+          "kind": "function",
+          "signature": "function PromptForm("
+        },
+        {
+          "name": "PromptFormProps",
+          "kind": "interface",
+          "signature": "interface PromptFormProps",
+          "members": []
+        },
+        {
+          "name": "PromptFormValues",
+          "kind": "interface",
+          "signature": "interface PromptFormValues",
+          "members": []
+        },
+        {
+          "name": "PromptCatalogue",
+          "kind": "function",
+          "signature": "function PromptCatalogue("
+        },
+        {
+          "name": "PromptCatalogueProps",
+          "kind": "interface",
+          "signature": "interface PromptCatalogueProps",
+          "members": []
+        },
+        {
+          "name": "PromptPicker",
+          "kind": "function",
+          "signature": "function PromptPicker("
+        },
+        {
+          "name": "PromptPickerProps",
+          "kind": "interface",
+          "signature": "interface PromptPickerProps",
           "members": []
         }
       ]
