@@ -1,7 +1,7 @@
 import { SEND_MESSAGE_LIMITS } from '@granit/ai-chat';
 import { createLogger } from '@granit/logger';
 import { cn } from '@granit/utils';
-import { Paperclip, Send, Square } from 'lucide-react';
+import { ArrowUp, Paperclip, Sparkles, Square } from 'lucide-react';
 import { useCallback, useId, useMemo, useRef, useState } from 'react';
 
 import { defaultChatLabels } from '../locales/index';
@@ -9,6 +9,7 @@ import { defaultChatLabels } from '../locales/index';
 import { AttachmentChips } from './attachment-chips';
 import { ComposerSuggestions } from './composer-suggestions';
 import { detectTrigger } from './detect-trigger';
+import { WorkspaceSelector } from './workspace-selector';
 
 import type { ComposerAttachment } from './attachment-chips';
 import type {
@@ -17,11 +18,12 @@ import type {
   SearchMentions,
   StagedMention,
   UploadAttachment,
+  WorkspaceOption,
 } from './composer-types';
 import type { ActiveTrigger } from './detect-trigger';
 import type { ChatTranslations } from '../locales/index';
 import type { SendMessageRequest } from '@granit/ai-chat';
-import type { ChangeEvent, KeyboardEvent } from 'react';
+import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react';
 
 const logger = createLogger('react-ai-chat');
 
@@ -40,8 +42,20 @@ export interface ChatComposerProps {
   readonly uploadAttachment?: UploadAttachment;
   /** Selectable workspaces (`Auto` first); omit to hide the selector. */
   readonly workspaces?: readonly string[];
+  /**
+   * Rich workspace/model options (leading mark, capability glyphs, provider
+   * grouping). When supplied, drives the picker instead of {@link workspaces};
+   * brand-agnostic — the host owns every glyph.
+   */
+  readonly workspaceOptions?: readonly WorkspaceOption[];
   readonly workspace?: string;
   readonly onWorkspaceChange?: (workspace: string) => void;
+  /**
+   * Optional leading glyph for the workspace chip when the selected option has
+   * no `icon` of its own. Defaults to a generic `Sparkles` icon — the framework
+   * stays brand-agnostic; apps may inject their own model/provider mark here.
+   */
+  readonly workspaceIcon?: ReactNode;
   readonly labels?: ChatTranslations['Composer'];
   readonly pickerLabels?: ChatTranslations['Pickers'];
   readonly disabled?: boolean;
@@ -62,8 +76,10 @@ export function ChatComposer({
   searchMentions,
   uploadAttachment,
   workspaces,
+  workspaceOptions,
   workspace,
   onWorkspaceChange,
+  workspaceIcon,
   labels = defaultChatLabels.Composer,
   pickerLabels = defaultChatLabels.Pickers,
   disabled = false,
@@ -178,6 +194,12 @@ export function ChatComposer({
 
   const hasUploading = attachments.some((a) => a.status === 'uploading');
   const canSend = text.trim().length > 0 && !hasUploading && !disabled;
+
+  // Rich options win; otherwise derive plain options from the workspace names.
+  const resolvedWorkspaceOptions = useMemo<readonly WorkspaceOption[]>(() => {
+    if (workspaceOptions && workspaceOptions.length > 0) return workspaceOptions;
+    return (workspaces ?? []).map((ws) => ({ value: ws }));
+  }, [workspaceOptions, workspaces]);
 
   const submit = useCallback(() => {
     if (!canSend) return;
@@ -295,7 +317,7 @@ export function ChatComposer({
             <li
               key={badge.id}
               data-slot="prompt-badge"
-              className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
+              className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
             >
               <span>/{badge.name}</span>
               <button
@@ -315,7 +337,13 @@ export function ChatComposer({
 
       <AttachmentChips attachments={attachments} labels={labels} onRemove={removeAttachment} />
 
-      <div className="relative">
+      <div
+        data-slot="composer-card"
+        className={cn(
+          'border-border bg-background relative flex flex-col gap-2 rounded-2xl border px-3 py-2 shadow-sm transition-colors',
+          'focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]'
+        )}
+      >
         {showSuggestions && trigger?.kind === '/' ? (
           <ComposerSuggestions<PromptOption>
             title={pickerLabels.Prompts}
@@ -380,70 +408,69 @@ export function ChatComposer({
           }
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          className="border-input bg-background w-full resize-none rounded-md border px-3 py-2 text-sm"
+          className="placeholder:text-muted-foreground w-full resize-none bg-transparent px-1 text-sm outline-none disabled:opacity-50"
         />
-      </div>
 
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          {workspaces && workspaces.length > 0 ? (
-            <select
-              data-slot="composer-workspace"
-              aria-label={labels.Workspace}
-              value={workspace ?? workspaces[0]}
-              disabled={disabled}
-              onChange={(event) => onWorkspaceChange?.(event.target.value)}
-              className="border-input bg-background rounded-md border px-2 py-1 text-xs"
-            >
-              {workspaces.map((ws) => (
-                <option key={ws} value={ws}>
-                  {ws}
-                </option>
-              ))}
-            </select>
-          ) : null}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1">
+            {uploadAttachment ? (
+              <label
+                data-slot="composer-attach"
+                className="text-muted-foreground hover:bg-accent hover:text-foreground inline-flex size-8 cursor-pointer items-center justify-center rounded-full transition-colors"
+                title={labels.Attach}
+              >
+                <Paperclip className="size-4" aria-hidden />
+                <span className="sr-only">{labels.Attach}</span>
+                <input
+                  type="file"
+                  multiple
+                  className="hidden"
+                  disabled={disabled}
+                  onChange={handleFiles}
+                />
+              </label>
+            ) : null}
 
-          {uploadAttachment ? (
-            <label
-              data-slot="composer-attach"
-              className="hover:bg-accent inline-flex cursor-pointer items-center rounded-md p-1.5"
-              title={labels.Attach}
-            >
-              <Paperclip className="size-4" aria-hidden />
-              <span className="sr-only">{labels.Attach}</span>
-              <input
-                type="file"
-                multiple
-                className="hidden"
+            {resolvedWorkspaceOptions.length > 0 ? (
+              <WorkspaceSelector
+                options={resolvedWorkspaceOptions}
+                value={workspace}
+                onChange={(next) => onWorkspaceChange?.(next)}
+                label={labels.Workspace}
+                searchPlaceholder={labels.SearchWorkspaces}
+                emptyLabel={pickerLabels.NoResults}
+                fallbackIcon={workspaceIcon ?? <Sparkles className="size-3.5" aria-hidden />}
                 disabled={disabled}
-                onChange={handleFiles}
               />
-            </label>
-          ) : null}
-        </div>
+            ) : null}
+          </div>
 
-        {isStreaming ? (
-          <button
-            type="button"
-            data-slot="composer-stop"
-            onClick={onStop}
-            className="bg-muted text-foreground inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm"
-          >
-            <Square className="size-3.5" aria-hidden />
-            {labels.Stop}
-          </button>
-        ) : (
-          <button
-            type="button"
-            data-slot="composer-send"
-            disabled={!canSend}
-            onClick={submit}
-            className="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm disabled:opacity-50"
-          >
-            <Send className="size-3.5" aria-hidden />
-            {labels.Send}
-          </button>
-        )}
+          {isStreaming ? (
+            <button
+              type="button"
+              data-slot="composer-stop"
+              onClick={onStop}
+              aria-label={labels.Stop}
+              className="bg-primary text-primary-foreground inline-flex size-8 items-center justify-center rounded-full transition-colors"
+            >
+              <Square className="size-4" aria-hidden />
+            </button>
+          ) : (
+            <button
+              type="button"
+              data-slot="composer-send"
+              disabled={!canSend}
+              onClick={submit}
+              aria-label={labels.Send}
+              className={cn(
+                'inline-flex size-8 items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed',
+                canSend ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+              )}
+            >
+              <ArrowUp className="size-4" aria-hidden />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

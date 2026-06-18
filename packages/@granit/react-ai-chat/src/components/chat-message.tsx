@@ -1,7 +1,7 @@
 import { cn } from '@granit/utils';
 
 import type { ChatMessageRole } from '@granit/ai-chat';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 export interface ChatMessageProps {
   readonly role: ChatMessageRole;
@@ -30,6 +30,13 @@ export function ChatMessage({
   className,
 }: Readonly<ChatMessageProps>) {
   const isUser = role === 'user';
+  // Flatten the emitter-side bottom corner into a speech-bubble tail. Done
+  // inline rather than with per-corner Tailwind utilities: those classes are
+  // novel here and get purged by the consuming app's Tailwind scan, whereas an
+  // inline style always renders and reliably wins over the `rounded-2xl` base.
+  const tailStyle: CSSProperties = isUser
+    ? { borderBottomRightRadius: 0 }
+    : { borderBottomLeftRadius: 0 };
   return (
     <div
       data-slot="chat-message"
@@ -40,9 +47,11 @@ export function ChatMessage({
         <span className="text-muted-foreground text-xs font-medium">{authorLabel}</span>
       ) : null}
       <div
+        data-slot="chat-bubble"
+        style={tailStyle}
         className={cn(
-          'max-w-[80%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap',
-          isUser ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'
+          'max-w-[80%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap',
+          isUser ? 'bg-primary text-primary-foreground' : 'bg-muted/50 text-foreground'
         )}
       >
         {content}
