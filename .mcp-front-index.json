@@ -2868,6 +2868,11 @@
           "signature": "function useConversation( id: ConversationId | null, options?:"
         },
         {
+          "name": "useConversationMessages",
+          "kind": "function",
+          "signature": "function useConversationMessages( id: ConversationId | null, options: UseConversationMessagesOptions ="
+        },
+        {
           "name": "useChatWorkspaces",
           "kind": "function",
           "signature": "function useChatWorkspaces(options?:"
@@ -2941,6 +2946,17 @@
           "name": "UseStickToBottomReturn",
           "kind": "interface",
           "signature": "interface UseStickToBottomReturn<S extends HTMLElement, C extends HTMLElement>",
+          "members": []
+        },
+        {
+          "name": "useReverseInfiniteScroll",
+          "kind": "function",
+          "signature": "function useReverseInfiniteScroll("
+        },
+        {
+          "name": "UseReverseInfiniteScrollParams",
+          "kind": "interface",
+          "signature": "interface UseReverseInfiniteScrollParams",
           "members": []
         },
         {
@@ -6884,6 +6900,11 @@
           "name": "usePagination",
           "kind": "function",
           "signature": "function usePagination<T, P extends PaginationPage<T> = PaginationPage<T>>( options: UsePaginationOptions<T, P> ): UsePaginationReturn<T>"
+        },
+        {
+          "name": "usePagedInfiniteQuery",
+          "kind": "function",
+          "signature": "function usePagedInfiniteQuery<T, TPage extends InfinitePageResult<T>, TPageParam>( options: UsePagedInfiniteQueryOptions<T, TPage, TPageParam> ): UsePagedInfiniteQueryReturn<T>"
         },
         {
           "name": "useQueryEndpoint",

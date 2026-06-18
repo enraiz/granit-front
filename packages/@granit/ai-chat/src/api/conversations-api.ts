@@ -14,11 +14,13 @@ import type {
   ConversationSummaryResponse,
   CreateConversationRequest,
   MessageId,
+  MessageResponse,
   RenameConversationRequest,
   ReportMessageRequest,
   SendMessageRequest,
 } from '../types/index';
 import type { AxiosInstance } from '@granit/api-client';
+import type { PagedResult } from '@granit/query-engine';
 
 const logger = createLogger('ai-chat');
 
@@ -46,6 +48,41 @@ export async function getConversation(
   id: ConversationId
 ): Promise<ConversationResponse> {
   const response = await client.get<ConversationResponse>(`${basePath}/${encodeURIComponent(id)}`);
+  return response.data;
+}
+
+/**
+ * Fetch one page of a conversation's messages, reusing the framework's generic
+ * **keyset (cursor) pagination** — the same `PagedResult` + opaque `cursor`
+ * contract the query-engine exposes (no bespoke shape). The server sorts newest
+ * first (`-createdAt`), so:
+ *
+ * - No `cursor` → the newest `pageSize` messages.
+ * - `cursor` → the `pageSize` messages immediately OLDER than that opaque cursor.
+ *
+ * Walk further back with {@link PagedResult.nextCursor} until it comes back
+ * `null`. `pageSize` defaults to 30 server-side and is capped at 100. The cursor
+ * is opaque — never parse it. `totalCount` is `null` in cursor mode. A
+ * conversation outside the caller's own is reported as `404`.
+ *
+ * `GET {basePath}/{id}/messages?cursor={opaque}&pageSize={N}`
+ */
+export async function getConversationMessages(
+  client: AxiosInstance,
+  basePath: string,
+  id: ConversationId,
+  params: { cursor?: string; pageSize?: number } = {},
+  signal?: AbortSignal
+): Promise<PagedResult<MessageResponse>> {
+  const query: string[] = [];
+  if (params.pageSize != null) query.push(`pageSize=${encodeURIComponent(params.pageSize)}`);
+  if (params.cursor != null) query.push(`cursor=${encodeURIComponent(params.cursor)}`);
+  const suffix = query.length > 0 ? `?${query.join('&')}` : '';
+  const url = `${basePath}/${encodeURIComponent(id)}/messages${suffix}`;
+  const response = await client.get<PagedResult<MessageResponse>>(
+    url,
+    signal ? { signal } : undefined
+  );
   return response.data;
 }
 

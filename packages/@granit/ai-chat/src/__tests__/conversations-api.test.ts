@@ -5,6 +5,7 @@ import {
   createConversation,
   deleteConversation,
   getConversation,
+  getConversationMessages,
   listChatWorkspaces,
   listConversations,
   renameConversation,
@@ -13,7 +14,13 @@ import {
 } from '../api/conversations-api';
 import { MESSAGE_REPORT_CATEGORIES } from '../types/index';
 
-import type { ConversationId, ConversationResponse, MessageId } from '../types/index';
+import type {
+  ConversationId,
+  ConversationResponse,
+  MessageId,
+  MessageResponse,
+} from '../types/index';
+import type { PagedResult } from '@granit/query-engine';
 
 const BASE = '/api/v1/conversations';
 const ID = 'a1111111-1111-1111-1111-111111111111' as ConversationId;
@@ -51,6 +58,38 @@ describe('conversations-api', () => {
 
     expect(client.get).toHaveBeenCalledWith(`${BASE}/${ID}`);
     expect(result).toEqual(CONVERSATION);
+  });
+
+  it('getConversationMessages GETs the newest page with no query when no params', async () => {
+    const client = createMockClient();
+    const page: PagedResult<MessageResponse> = { items: [], totalCount: null, nextCursor: null };
+    vi.mocked(client.get).mockResolvedValue(axiosResponse(page));
+
+    const result = await getConversationMessages(client, BASE, ID);
+
+    expect(client.get).toHaveBeenCalledWith(`${BASE}/${ID}/messages`, undefined);
+    expect(result).toEqual(page);
+  });
+
+  it('getConversationMessages builds pageSize + url-encoded cursor, and threads the signal', async () => {
+    const client = createMockClient();
+    vi.mocked(client.get).mockResolvedValue(
+      axiosResponse<PagedResult<MessageResponse>>({ items: [], totalCount: null, nextCursor: null })
+    );
+    const controller = new AbortController();
+
+    await getConversationMessages(
+      client,
+      BASE,
+      ID,
+      { pageSize: 50, cursor: 'a+b/c=' },
+      controller.signal
+    );
+
+    expect(client.get).toHaveBeenCalledWith(
+      `${BASE}/${ID}/messages?pageSize=50&cursor=a%2Bb%2Fc%3D`,
+      { signal: controller.signal }
+    );
   });
 
   it('createConversation POSTs to the base path with the title body', async () => {

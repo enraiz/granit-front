@@ -2,15 +2,23 @@ import { http, HttpResponse } from 'msw';
 
 import { DEFAULT_BASE_PATH } from '../constants';
 
-import { mockChatWorkspaces, mockConversation, mockConversationSummaries } from './data';
+import {
+  mockChatWorkspaces,
+  mockConversation,
+  mockConversationSummaries,
+  mockLongConversationId,
+  mockLongConversationMessages,
+} from './data';
 
 import type {
   ConversationResponse,
   ConversationSummaryResponse,
   CreateConversationRequest,
+  MessageResponse,
   RenameConversationRequest,
   SetConversationFavoriteRequest,
 } from '@granit/ai-chat';
+import type { PagedResult } from '@granit/query-engine';
 import type { Mutable } from '@granit/testing';
 
 /** One SSE frame line for the conversations stream (flat ChatStreamEvent JSON). */
@@ -35,6 +43,35 @@ export function createAIChatHandlers(baseUrl = DEFAULT_BASE_PATH) {
 
     // GET /conversations — list summaries, newest first.
     http.get(baseUrl, () => HttpResponse.json(summaries)),
+
+    // GET /conversations/:id/messages — one keyset page (generic PagedResult +
+    // cursor contract). Server sorts -createdAt → items returned newest-first;
+    // `nextCursor` (the opaque id of the page's oldest item) walks OLDER, null at
+    // the start of history. Declared before `/:id` so it is not shadowed.
+    http.get(`${baseUrl}/:id/messages`, ({ params, request }) => {
+      const id = params.id as string;
+      // Source fixture is ascending (oldest-first).
+      const all: readonly MessageResponse[] =
+        id === mockLongConversationId ? mockLongConversationMessages : mockConversation.messages;
+
+      const url = new URL(request.url);
+      const pageSize = Math.min(Math.max(Number(url.searchParams.get('pageSize')) || 30, 1), 100);
+      const cursor = url.searchParams.get('cursor');
+
+      let end = all.length;
+      if (cursor) {
+        const idx = all.findIndex((m) => m.id === cursor);
+        if (idx !== -1) end = idx;
+      }
+      const start = Math.max(0, end - pageSize);
+      const items = [...all.slice(start, end)].reverse(); // newest-first
+      const nextCursor = start > 0 ? (all[start]?.id ?? null) : null;
+      return HttpResponse.json<PagedResult<MessageResponse>>({
+        items,
+        totalCount: null,
+        nextCursor,
+      });
+    }),
 
     // GET /conversations/:id — full conversation.
     http.get(`${baseUrl}/:id`, ({ params }) => {

@@ -40,6 +40,7 @@ export {
   createConversation,
   deleteConversation,
   getConversation,
+  getConversationMessages,
   listChatWorkspaces,
   listConversations,
   renameConversation,
