@@ -37,6 +37,7 @@ export type { MessageReportCategory, ReportMessageRequest } from '@granit/ai-cha
 // Hooks — streaming
 export { useChatStream } from './hooks/use-chat-stream';
 export type {
+  ChatErrorKind,
   ChatStreamUsage,
   ToolCallActivity,
   ToolCallStatus,
@@ -56,6 +57,8 @@ export { ConversationScrollArea } from './components/conversation-scroll-area';
 export type { ConversationScrollAreaProps } from './components/conversation-scroll-area';
 export { ScrollToBottomButton } from './components/scroll-to-bottom-button';
 export type { ScrollToBottomButtonProps } from './components/scroll-to-bottom-button';
+export { SystemMessage } from './components/system-message';
+export type { SystemMessageProps, SystemMessageVariant } from './components/system-message';
 export { SuggestedActions } from './components/suggested-actions';
 export type { SuggestedActionsProps } from './components/suggested-actions';
 export { ClarificationPrompt } from './components/clarification-prompt';
