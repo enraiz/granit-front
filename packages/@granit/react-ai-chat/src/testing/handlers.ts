@@ -102,6 +102,7 @@ export function createAIChatHandlers(baseUrl = DEFAULT_BASE_PATH) {
           isFavorite: created.isFavorite,
           createdAt: created.createdAt,
           modifiedAt: created.modifiedAt,
+          workspaceKey: created.workspaceKey,
         },
         ...summaries,
       ];

@@ -18,6 +18,7 @@ export const mockConversation: ConversationResponse = {
   isFavorite: false,
   createdAt: toISODateString('2026-06-15T09:00:00.000Z'),
   modifiedAt: toISODateString('2026-06-15T09:05:00.000Z'),
+  workspaceKey: null,
 };
 
 /**
@@ -30,12 +31,14 @@ export const mockConversationMessages: readonly MessageResponse[] = [
     id: toEntityId<'Message'>('c3333333-3333-3333-3333-333333333331'),
     role: 'user',
     content: 'What changed on invoice 42 last week?',
+    workspaceKey: null,
     createdAt: toISODateString('2026-06-15T09:00:00.000Z'),
   },
   {
     id: toEntityId<'Message'>('c3333333-3333-3333-3333-333333333332'),
     role: 'assistant',
     content: 'The total was revised from €1,200 to €1,350 and the due date moved to June 30.',
+    workspaceKey: null,
     createdAt: toISODateString('2026-06-15T09:00:08.000Z'),
   },
 ];
@@ -57,6 +60,7 @@ export const mockLongConversationMessages: readonly MessageResponse[] = Array.fr
       id: toEntityId<'Message'>(`d4444444-4444-4444-4444-${String(i).padStart(12, '0')}`),
       role: isUser ? 'user' : 'assistant',
       content: isUser ? `Question ${Math.floor(i / 2) + 1}` : `Answer ${Math.floor(i / 2) + 1}`,
+      workspaceKey: null,
       createdAt: toISODateString(
         new Date(Date.parse('2026-06-10T08:00:00.000Z') + i * 60_000).toISOString()
       ),
@@ -72,6 +76,7 @@ export const mockConversationSummaries: ConversationSummaryResponse[] = [
     isFavorite: false,
     createdAt: toISODateString('2026-06-15T09:00:00.000Z'),
     modifiedAt: toISODateString('2026-06-15T09:05:00.000Z'),
+    workspaceKey: null,
   },
   {
     id: toEntityId<'Conversation'>('a1111111-1111-1111-1111-111111111112'),
@@ -79,6 +84,7 @@ export const mockConversationSummaries: ConversationSummaryResponse[] = [
     isFavorite: true,
     createdAt: toISODateString('2026-06-14T07:30:00.000Z'),
     modifiedAt: null,
+    workspaceKey: null,
   },
 ];
 
