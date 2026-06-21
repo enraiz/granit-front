@@ -7167,6 +7167,11 @@
       ]
     },
     {
+      "name": "@granit/react-shell-core",
+      "description": "React bindings for @granit/shell-core — the shell-agnostic substrate (colour-theme store provider/hook, theme provider, navigation model, auth context, router helpers) shared by every Granit React app shell (admin, mobile, site).",
+      "exports": []
+    },
+    {
       "name": "@granit/react-storage",
       "description": "React bindings for @granit/storage — hooks for synchronized browser storage",
       "exports": [
@@ -7731,6 +7736,21 @@
       ]
     },
     {
+      "name": "@granit/react-ui",
+      "description": "Granit admin React UI primitives — shadcn/ui components (Button, Input, Dialog, Table, Select, Sidebar, …) styled with the @granit/ui-theme token contract. Presentational only: no data fetching, no business logic.",
+      "exports": []
+    },
+    {
+      "name": "@granit/react-ui-admin-kit",
+      "description": "Granit admin React building blocks — cross-cutting data-grid, querying (smart filter bar, sort/group-by/column-visibility, server-paginated tables), form dialogs and view switcher. Composes @granit/react-ui with @granit/react-query-engine; not tied to any single domain.",
+      "exports": []
+    },
+    {
+      "name": "@granit/react-ui-shell-admin",
+      "description": "Granit admin app shell (chrome): the AppShell layout (sidebar + topbar + content + right rail), AppSidebar with workspace-driven navigation, user menu, command palette and header. App-specific data (auth, navigation, languages, logger) is injected via ShellChromeProvider; feature widgets are passed as header slots.",
+      "exports": []
+    },
+    {
       "name": "@granit/react-validation",
       "description": "React hooks for @granit/validation — resolver factory for react-hook-form, useFieldProps",
       "exports": [
@@ -8008,6 +8028,11 @@
           "signature": "const SettingsPermissions"
         }
       ]
+    },
+    {
+      "name": "@granit/shell-core",
+      "description": "Framework-agnostic substrate shared by every Granit app shell (admin, mobile, site) and any UI framework. Headless logic only: colour-theme store, navigation model + permission filtering, API client / query-client factory config. No React.",
+      "exports": []
     },
     {
       "name": "@granit/storage",
@@ -8321,6 +8346,27 @@
           "name": "TimeZoneId",
           "kind": "type",
           "signature": "type TimeZoneId = string & { readonly __brand: 'TimeZoneId' }"
+        }
+      ]
+    },
+    {
+      "name": "@granit/ui-theme",
+      "description": "Granit admin design tokens — CSS custom properties for colour palettes, dark mode, per-app colour themes, typography, shadows and sidebar variables. Import the base stylesheet and override the CSS variables to re-brand any consuming app.",
+      "exports": [
+        {
+          "name": "COLOR_THEMES",
+          "kind": "const",
+          "signature": "const COLOR_THEMES"
+        },
+        {
+          "name": "ColorTheme",
+          "kind": "type",
+          "signature": "type ColorTheme = (typeof COLOR_THEMES)[number]"
+        },
+        {
+          "name": "DEFAULT_COLOR_THEME",
+          "kind": "const",
+          "signature": "const DEFAULT_COLOR_THEME: ColorTheme"
         }
       ]
     },
