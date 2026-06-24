@@ -1,6 +1,6 @@
 import { useTranslation } from '@granit/react-localization';
 import { Badge, Spinner } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { cn } from '@granit/utils';
 import { ChevronRight } from 'lucide-react';
 import * as React from 'react';

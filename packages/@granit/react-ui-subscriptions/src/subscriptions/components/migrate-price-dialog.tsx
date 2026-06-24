@@ -21,7 +21,6 @@ import { toEntityId } from '@granit/types';
 import { formatCurrency } from '@granit/utils';
 import { useState } from 'react';
 
-
 import type { PlanPriceResponse, SubscriptionId } from '@granit/subscriptions';
 
 interface MigratePriceDialogProps {

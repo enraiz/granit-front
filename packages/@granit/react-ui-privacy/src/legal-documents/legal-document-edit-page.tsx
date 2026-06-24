@@ -1,7 +1,7 @@
 import { useTranslation } from '@granit/react-localization';
 import { useLegalDocument, useUpdateLegalDocument } from '@granit/react-privacy';
 import { toast, Button, Separator } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';

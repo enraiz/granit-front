@@ -10,7 +10,7 @@ import {
   Spinner,
   toast,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { Link2Off } from 'lucide-react';
 
 import { logger } from '../logger';

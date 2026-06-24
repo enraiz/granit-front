@@ -2,8 +2,8 @@ import { useGranitClient } from '@granit/react-api-client';
 import { useRoleMetadata, useRoleMetadataMeta } from '@granit/react-authorization';
 import { useDateFormatter, useTranslation } from '@granit/react-localization';
 import { Badge, Input, Spinner } from '@granit/react-ui';
-import { QueryDataTable } from '@granit/react-ui-admin-kit';
-import { useDebouncedValue } from '@granit/react-ui-admin-kit';
+import { QueryDataTable } from '@granit/react-ui-kit';
+import { useDebouncedValue } from '@granit/react-ui-kit';
 import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 

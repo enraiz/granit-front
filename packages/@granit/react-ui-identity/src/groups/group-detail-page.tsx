@@ -26,7 +26,7 @@ import {
   TableRow,
   toast,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { ArrowLeft, Plus, X } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

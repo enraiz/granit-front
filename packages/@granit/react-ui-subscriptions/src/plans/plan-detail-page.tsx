@@ -9,13 +9,12 @@ import {
   Separator,
   Skeleton,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { toEntityId } from '@granit/types';
 import { formatCurrency } from '@granit/utils';
 import { AlertCircle, Archive, ArrowLeft, Pencil, PlusCircle, Rocket } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-
 
 import { ArchivePlanDialog } from './components/archive-plan-dialog';
 import { CreatePriceDialog } from './components/create-price-dialog';

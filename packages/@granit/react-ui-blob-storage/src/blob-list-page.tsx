@@ -20,7 +20,7 @@ import {
   GroupBySelector,
   QueryEndpointDataTable,
   SortSelector,
-} from '@granit/react-ui-admin-kit';
+} from '@granit/react-ui-kit';
 import { formatBytes } from '@granit/utils';
 import { Download, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';

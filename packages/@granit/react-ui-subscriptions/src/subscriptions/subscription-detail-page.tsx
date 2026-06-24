@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { toEntityId } from '@granit/types';
 import { AlertCircle, ArrowLeft, Ban, RefreshCw, ArrowRightLeft, UserPlus } from 'lucide-react';
 import { useState } from 'react';

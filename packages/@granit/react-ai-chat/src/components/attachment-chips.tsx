@@ -23,7 +23,6 @@ export interface AttachmentChipsProps {
   readonly className?: string;
 }
 
-
 /** Renders the staged attachments as removable chips with upload status. */
 export function AttachmentChips({
   attachments,

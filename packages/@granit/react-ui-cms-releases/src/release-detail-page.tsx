@@ -22,7 +22,7 @@ import {
   TableRow,
   toast,
 } from '@granit/react-ui';
-import { TimezonePicker } from '@granit/react-ui-admin-kit';
+import { TimezonePicker } from '@granit/react-ui-kit';
 import { createConstraintsResolver } from '@granit/react-validation';
 import { ArrowLeft } from 'lucide-react';
 import { useEffect } from 'react';

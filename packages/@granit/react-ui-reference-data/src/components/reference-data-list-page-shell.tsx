@@ -8,7 +8,12 @@ import {
 } from '@granit/react-query-engine';
 import { toast, Button, Card, CardContent, Skeleton, Spinner } from '@granit/react-ui';
 import {
-  EmptyState,
+  ExportButton,
+  ExportDialog,
+  ImportButton,
+  ImportDialog,
+} from '@granit/react-ui-data-exchange';
+import {
   FilterPresets,
   GroupBySelector,
   QueryDataTable,
@@ -17,13 +22,7 @@ import {
   ViewSwitcher,
   useOperatorLabels,
   useSmartFilterSync,
-} from '@granit/react-ui-admin-kit';
-import {
-  ExportButton,
-  ExportDialog,
-  ImportButton,
-  ImportDialog,
-} from '@granit/react-ui-data-exchange';
+} from '@granit/react-ui-kit';
 import { Plus } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +34,7 @@ import { ReferenceDataDeactivateDialog } from './reference-data-deactivate-dialo
 import type { ReferenceDataEntry } from './types';
 import type { QueryConfig } from '@granit/query-engine';
 import type { DataExchangeConfig } from '@granit/react-data-exchange';
-import type { ViewMode } from '@granit/react-ui-admin-kit';
+import type { ViewMode } from '@granit/react-ui-kit';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { ReactNode } from 'react';
 
@@ -266,8 +265,8 @@ function ListPageContent<T extends ReferenceDataEntry>({
           {!queryEndpoint.query.isLoading &&
             (queryEndpoint.query.data?.items ?? []).length === 0 && (
               <Card>
-                <CardContent>
-                  <EmptyState />
+                <CardContent className="py-8 text-center text-muted-foreground">
+                  {t('Common.NoResults')}
                 </CardContent>
               </Card>
             )}

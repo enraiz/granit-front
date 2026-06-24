@@ -25,7 +25,7 @@ import {
   Spinner,
   toast,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { fromBase64Url } from '@granit/react-ui-authentication-local';
 import { Fingerprint, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';

@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { toEntityId } from '@granit/types';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { ArrowLeft, RotateCcw } from 'lucide-react';

@@ -30,7 +30,7 @@ import {
   Label,
   Spinner,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { ScheduledActionStatus, SchedulingPermissions } from '@granit/scheduling';
 import { toEntityId, toISODateString } from '@granit/types';
 import { ArrowLeft, Ban, CalendarClock } from 'lucide-react';

@@ -8,11 +8,7 @@ import {
   useUpdateTenant,
 } from '@granit/react-multi-tenancy';
 import { toast, Badge, Button, Separator } from '@granit/react-ui';
-import {
-  DetailAsideLayout,
-  DetailAsideMobileTrigger,
-  EmptyState,
-} from '@granit/react-ui-admin-kit';
+import { DetailAsideLayout, DetailAsideMobileTrigger } from '@granit/react-ui-kit';
 import { useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Loader2, Network } from 'lucide-react';
 import { useState } from 'react';
@@ -97,7 +93,9 @@ function TenantEditContent({ renderActivityAside, activityAsideTitle }: TenantEd
   }
 
   if (!tenant) {
-    return <EmptyState message={t('Tenants.NotFound')} />;
+    return (
+      <div className="py-8 text-center text-sm text-muted-foreground">{t('Tenants.NotFound')}</div>
+    );
   }
 
   return (

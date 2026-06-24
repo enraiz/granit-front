@@ -38,7 +38,7 @@ import {
   AlertDialogTitle,
   toast,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { Globe, Pencil, Pin, PinOff, Star, Trash2, Users } from 'lucide-react';
 import { useState } from 'react';
 

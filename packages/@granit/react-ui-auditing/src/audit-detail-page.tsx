@@ -9,7 +9,7 @@ import {
   Separator,
   Spinner,
 } from '@granit/react-ui';
-import { EmptyState } from '@granit/react-ui-admin-kit';
+import { EmptyState } from '@granit/react-ui-kit';
 import { toEntityId } from '@granit/types';
 import { ArrowLeft } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';

@@ -18,7 +18,7 @@ import {
   Spinner,
   Switch,
 } from '@granit/react-ui';
-import { useDebouncedValue } from '@granit/react-ui-admin-kit';
+import { useDebouncedValue } from '@granit/react-ui-kit';
 import { KeyRound, Plus, Search } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
