@@ -20,6 +20,7 @@ import type {
   PrivacyUserAgreementResponse,
 } from '../types/index';
 import type { AxiosInstance } from '@granit/api-client';
+import type { PagedResult } from '@granit/query-engine';
 
 // ── Data Export (GDPR Art. 15/20) ────────────────────────────────────────────
 
@@ -231,7 +232,7 @@ export async function getLegalDocument(
 }
 
 /**
- * List legal document versions, optionally filtered by document ID.
+ * List legal document versions via the query engine. Optionally filter by document ID.
  *
  * `GET {basePath}/legal-documents`
  */
@@ -239,10 +240,15 @@ export async function listLegalDocuments(
   client: AxiosInstance,
   basePath: string,
   params?: LegalDocumentListParams
-): Promise<LegalDocumentDetailResponse[]> {
-  const { data } = await client.get<LegalDocumentDetailResponse[]>(`${basePath}/legal-documents`, {
-    params,
-  });
+): Promise<PagedResult<LegalDocumentDetailResponse>> {
+  const queryParams: Record<string, string> = {};
+  if (params?.documentId) {
+    queryParams['filter[documentId.eq]'] = params.documentId;
+  }
+  const { data } = await client.get<PagedResult<LegalDocumentDetailResponse>>(
+    `${basePath}/legal-documents`,
+    { params: Object.keys(queryParams).length > 0 ? queryParams : undefined }
+  );
   return data;
 }
 
