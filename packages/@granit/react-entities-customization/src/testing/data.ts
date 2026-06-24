@@ -1,11 +1,11 @@
+import type { SchemaField } from '../layout/apply-deltas';
 import type {
   EntityCustomizationResponse,
   LayoutDelta,
   WorkspaceCustomizationResponse,
 } from '@granit/entities-customization';
-import type { SchemaField } from '../layout/apply-deltas';
-import type { ISODateString } from '@granit/types';
 import type { Mutable } from '@granit/testing';
+import type { ISODateString } from '@granit/types';
 
 /**
  * Schema fields for the `Quote` form layout, before any deltas apply.

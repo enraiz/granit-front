@@ -1,10 +1,11 @@
 import { listDeviceTokens } from '@granit/notifications-mobile-push';
-import { mockMobilePushTokens } from '@granit/react-notifications-mobile-push/testing';
 import { createTestQueryClient } from '@granit/react-testing';
 import { createMockClient } from '@granit/testing';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+
+import { mockMobilePushTokens } from '@granit/react-notifications-mobile-push/testing';
 
 import { deviceTokenKeys, useDeviceTokens } from '../hooks/use-device-tokens';
 import { MobilePushProvider } from '../providers/mobile-push-provider';

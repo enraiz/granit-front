@@ -6809,20 +6809,7 @@
     {
       "name": "@granit/react-payments",
       "description": "React bindings for @granit/payments — PaymentsProvider and hooks",
-      "exports": [
-        {
-          "name": "PaymentsConfig",
-          "kind": "interface",
-          "signature": "interface PaymentsConfig",
-          "members": []
-        },
-        {
-          "name": "PaymentsProviderProps",
-          "kind": "interface",
-          "signature": "interface PaymentsProviderProps",
-          "members": []
-        }
-      ]
+      "exports": []
     },
     {
       "name": "@granit/react-payments-sepa-direct-debit",
@@ -11785,6 +11772,11 @@
           "name": "DEFAULT_COLOR_THEME",
           "kind": "const",
           "signature": "const DEFAULT_COLOR_THEME: ColorTheme"
+        },
+        {
+          "name": "COLOR_THEME_SWATCHES",
+          "kind": "const",
+          "signature": "const COLOR_THEME_SWATCHES: Record<ColorTheme, string>"
         }
       ]
     },
