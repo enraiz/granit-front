@@ -2584,14 +2584,13 @@
         {
           "name": "AccountConfig",
           "kind": "interface",
-          "signature": "interface AccountConfig",
+          "signature": "interface AccountConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "AccountProviderProps",
-          "kind": "interface",
-          "signature": "interface AccountProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type AccountProviderProps = GranitProviderProps<AccountConfig>"
         },
         {
           "name": "useAccountSettings",
@@ -2806,25 +2805,24 @@
       "exports": [
         {
           "name": "AIProvider",
-          "kind": "function",
-          "signature": "function AIProvider("
+          "kind": "const",
+          "signature": "const AIProvider"
         },
         {
           "name": "useAIConfig",
-          "kind": "function",
-          "signature": "function useAIConfig(): ResolvedAIConfig"
+          "kind": "const",
+          "signature": "const useAIConfig"
         },
         {
           "name": "AIConfig",
           "kind": "interface",
-          "signature": "interface AIConfig",
+          "signature": "interface AIConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "AIProviderProps",
-          "kind": "interface",
-          "signature": "interface AIProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type AIProviderProps = GranitProviderProps<AIConfig>"
         },
         {
           "name": "ResolvedAIConfig",
@@ -3257,13 +3255,13 @@
       "exports": [
         {
           "name": "AIPromptsProvider",
-          "kind": "function",
-          "signature": "function AIPromptsProvider("
+          "kind": "const",
+          "signature": "const AIPromptsProvider"
         },
         {
           "name": "useAIPromptsConfig",
-          "kind": "function",
-          "signature": "function useAIPromptsConfig(): ResolvedAIPromptsConfig"
+          "kind": "const",
+          "signature": "const useAIPromptsConfig"
         },
         {
           "name": "promptKeys",
@@ -3863,25 +3861,23 @@
       "exports": [
         {
           "name": "LocalAuthProvider",
-          "kind": "function",
-          "signature": "function LocalAuthProvider("
+          "kind": "const",
+          "signature": "const LocalAuthProvider"
         },
         {
           "name": "useLocalAuthConfig",
-          "kind": "function",
-          "signature": "function useLocalAuthConfig(): ResolvedLocalAuthConfig"
+          "kind": "const",
+          "signature": "const useLocalAuthConfig"
         },
         {
           "name": "LocalAuthConfig",
-          "kind": "interface",
-          "signature": "interface LocalAuthConfig",
-          "members": []
+          "kind": "type",
+          "signature": "type LocalAuthConfig = GranitProviderConfig"
         },
         {
           "name": "LocalAuthProviderProps",
-          "kind": "interface",
-          "signature": "interface LocalAuthProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type LocalAuthProviderProps = GranitProviderProps<LocalAuthConfig>"
         },
         {
           "name": "useLogin",
@@ -4068,13 +4064,13 @@
       "exports": [
         {
           "name": "BlobStorageProvider",
-          "kind": "function",
-          "signature": "function BlobStorageProvider("
+          "kind": "const",
+          "signature": "const BlobStorageProvider"
         },
         {
           "name": "useBlobStorageConfig",
-          "kind": "function",
-          "signature": "function useBlobStorageConfig(): ResolvedBlobStorageConfig"
+          "kind": "const",
+          "signature": "const useBlobStorageConfig"
         },
         {
           "name": "BlobImage",
@@ -4326,18 +4322,18 @@
         },
         {
           "name": "CmsProvider",
-          "kind": "function",
-          "signature": "function CmsProvider("
+          "kind": "const",
+          "signature": "const CmsProvider"
         },
         {
           "name": "useCmsConfig",
-          "kind": "function",
-          "signature": "function useCmsConfig(): ResolvedCmsConfig"
+          "kind": "const",
+          "signature": "const useCmsConfig"
         },
         {
           "name": "CmsConfig",
           "kind": "interface",
-          "signature": "interface CmsConfig",
+          "signature": "interface CmsConfig extends GranitProviderConfig",
           "members": []
         },
         {
@@ -4348,9 +4344,8 @@
         },
         {
           "name": "CmsProviderProps",
-          "kind": "interface",
-          "signature": "interface CmsProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type CmsProviderProps = GranitProviderProps<CmsConfig>"
         },
         {
           "name": "cmsKeys",
@@ -4455,13 +4450,13 @@
       "exports": [
         {
           "name": "CmsHostnamesProvider",
-          "kind": "function",
-          "signature": "function CmsHostnamesProvider("
+          "kind": "const",
+          "signature": "const CmsHostnamesProvider"
         },
         {
           "name": "useCmsHostnamesConfig",
-          "kind": "function",
-          "signature": "function useCmsHostnamesConfig(): ResolvedCmsHostnamesConfig"
+          "kind": "const",
+          "signature": "const useCmsHostnamesConfig"
         },
         {
           "name": "cmsHostnamesKeys",
@@ -4486,13 +4481,13 @@
       "exports": [
         {
           "name": "CmsRedirectsProvider",
-          "kind": "function",
-          "signature": "function CmsRedirectsProvider("
+          "kind": "const",
+          "signature": "const CmsRedirectsProvider"
         },
         {
           "name": "useCmsRedirectsConfig",
-          "kind": "function",
-          "signature": "function useCmsRedirectsConfig(): ResolvedCmsRedirectsConfig"
+          "kind": "const",
+          "signature": "const useCmsRedirectsConfig"
         },
         {
           "name": "cmsRedirectsKeys",
@@ -4507,13 +4502,13 @@
       "exports": [
         {
           "name": "CmsSeoProvider",
-          "kind": "function",
-          "signature": "function CmsSeoProvider("
+          "kind": "const",
+          "signature": "const CmsSeoProvider"
         },
         {
           "name": "useCmsSeoConfig",
-          "kind": "function",
-          "signature": "function useCmsSeoConfig(): ResolvedCmsSeoConfig"
+          "kind": "const",
+          "signature": "const useCmsSeoConfig"
         },
         {
           "name": "cmsSeoKeys",
@@ -4725,13 +4720,13 @@
       "exports": [
         {
           "name": "DashboardsProvider",
-          "kind": "function",
-          "signature": "function DashboardsProvider("
+          "kind": "const",
+          "signature": "const DashboardsProvider"
         },
         {
           "name": "useDashboardsConfig",
-          "kind": "function",
-          "signature": "function useDashboardsConfig(): ResolvedDashboardsConfig"
+          "kind": "const",
+          "signature": "const useDashboardsConfig"
         },
         {
           "name": "UseDashboardRenderOptions",
@@ -5991,14 +5986,13 @@
         {
           "name": "FeaturesConfig",
           "kind": "interface",
-          "signature": "interface FeaturesConfig",
+          "signature": "interface FeaturesConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "FeaturesProviderProps",
-          "kind": "interface",
-          "signature": "interface FeaturesProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type FeaturesProviderProps = GranitProviderProps<FeaturesConfig>"
         },
         {
           "name": "SetFeatureOverrideVariables",
@@ -6013,13 +6007,13 @@
       "exports": [
         {
           "name": "HostnamesProvider",
-          "kind": "function",
-          "signature": "function HostnamesProvider("
+          "kind": "const",
+          "signature": "const HostnamesProvider"
         },
         {
           "name": "useHostnamesConfig",
-          "kind": "function",
-          "signature": "function useHostnamesConfig(): ResolvedHostnamesConfig"
+          "kind": "const",
+          "signature": "const useHostnamesConfig"
         },
         {
           "name": "useHostnames",
@@ -6635,13 +6629,13 @@
         },
         {
           "name": "MobilePushProvider",
-          "kind": "function",
-          "signature": "function MobilePushProvider("
+          "kind": "const",
+          "signature": "const MobilePushProvider"
         },
         {
           "name": "useMobilePushConfig",
-          "kind": "function",
-          "signature": "function useMobilePushConfig(): ResolvedMobilePushProviderConfig"
+          "kind": "const",
+          "signature": "const useMobilePushConfig"
         }
       ]
     },
@@ -6750,14 +6744,13 @@
         {
           "name": "PartiesConfig",
           "kind": "interface",
-          "signature": "interface PartiesConfig",
+          "signature": "interface PartiesConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "PartiesProviderProps",
-          "kind": "interface",
-          "signature": "interface PartiesProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type PartiesProviderProps = GranitProviderProps<PartiesConfig>"
         },
         {
           "name": "PartiesListProvider",
@@ -7009,14 +7002,13 @@
         {
           "name": "PrivacyConfig",
           "kind": "interface",
-          "signature": "interface PrivacyConfig",
+          "signature": "interface PrivacyConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "PrivacyProviderProps",
-          "kind": "interface",
-          "signature": "interface PrivacyProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type PrivacyProviderProps = GranitProviderProps<PrivacyConfig>"
         },
         {
           "name": "useApplicableRegulation",
@@ -7237,25 +7229,24 @@
       "exports": [
         {
           "name": "SchedulingProvider",
-          "kind": "function",
-          "signature": "function SchedulingProvider("
+          "kind": "const",
+          "signature": "const SchedulingProvider"
         },
         {
           "name": "useSchedulingConfig",
-          "kind": "function",
-          "signature": "function useSchedulingConfig(): ResolvedSchedulingConfig"
+          "kind": "const",
+          "signature": "const useSchedulingConfig"
         },
         {
           "name": "SchedulingConfig",
           "kind": "interface",
-          "signature": "interface SchedulingConfig",
+          "signature": "interface SchedulingConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "SchedulingProviderProps",
-          "kind": "interface",
-          "signature": "interface SchedulingProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type SchedulingProviderProps = GranitProviderProps<SchedulingConfig>"
         },
         {
           "name": "buildSchedulingQueryKey",
@@ -7409,8 +7400,8 @@
       "exports": [
         {
           "name": "TaxProvider",
-          "kind": "function",
-          "signature": "function TaxProvider("
+          "kind": "const",
+          "signature": "const TaxProvider"
         },
         {
           "name": "buildTaxQueryKey",
@@ -7419,20 +7410,19 @@
         },
         {
           "name": "useTaxConfig",
-          "kind": "function",
-          "signature": "function useTaxConfig(): ResolvedTaxConfig"
+          "kind": "const",
+          "signature": "const useTaxConfig"
         },
         {
           "name": "TaxConfig",
           "kind": "interface",
-          "signature": "interface TaxConfig",
+          "signature": "interface TaxConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "TaxProviderProps",
-          "kind": "interface",
-          "signature": "interface TaxProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type TaxProviderProps = GranitProviderProps<TaxConfig>"
         }
       ]
     },
@@ -7609,25 +7599,24 @@
       "exports": [
         {
           "name": "TemplatingProvider",
-          "kind": "function",
-          "signature": "function TemplatingProvider("
+          "kind": "const",
+          "signature": "const TemplatingProvider"
         },
         {
           "name": "useTemplatingConfig",
-          "kind": "function",
-          "signature": "function useTemplatingConfig(): ResolvedTemplatingConfig"
+          "kind": "const",
+          "signature": "const useTemplatingConfig"
         },
         {
           "name": "TemplatingConfig",
           "kind": "interface",
-          "signature": "interface TemplatingConfig",
+          "signature": "interface TemplatingConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "TemplatingProviderProps",
-          "kind": "interface",
-          "signature": "interface TemplatingProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type TemplatingProviderProps = GranitProviderProps<TemplatingConfig>"
         },
         {
           "name": "useTemplate",
@@ -7714,14 +7703,13 @@
         {
           "name": "TimelineProviderConfig",
           "kind": "interface",
-          "signature": "interface TimelineProviderConfig",
+          "signature": "interface TimelineProviderConfig extends GranitProviderConfig",
           "members": []
         },
         {
           "name": "TimelineProviderProps",
-          "kind": "interface",
-          "signature": "interface TimelineProviderProps",
-          "members": []
+          "kind": "type",
+          "signature": "type TimelineProviderProps = GranitProviderProps<TimelineProviderConfig>"
         },
         {
           "name": "useTimeline",
@@ -11299,13 +11287,13 @@
       "exports": [
         {
           "name": "WebhooksProvider",
-          "kind": "function",
-          "signature": "function WebhooksProvider("
+          "kind": "const",
+          "signature": "const WebhooksProvider"
         },
         {
           "name": "useWebhooksConfig",
-          "kind": "function",
-          "signature": "function useWebhooksConfig(): ResolvedWebhooksConfig"
+          "kind": "const",
+          "signature": "const useWebhooksConfig"
         },
         {
           "name": "useSubscription",
