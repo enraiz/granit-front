@@ -20,6 +20,8 @@ export { TextConfigForm } from './components/forms/text-config-form';
 // Pure helpers — exported for tests + custom palette / DnD wrappers
 export { reorderWidgets } from './lib/reorder-widgets';
 export { resizeWidget } from './lib/resize-widget';
+// react-grid-layout bridge — for apps composing their own grid surface.
+export { fromGridLayout, MAX_HEIGHT_ROWS, toGridLayout } from './lib/grid-layout-bridge';
 export {
   addWidget,
   composeCatalogs,
@@ -28,7 +30,7 @@ export {
   resolveWidgetMinSize,
 } from './lib/widget-catalog';
 export type { WidgetCatalogEntry } from './lib/widget-catalog';
-export { removeWidget, updateWidget } from './lib/update-widget';
+export { duplicateWidget, removeWidget, updateWidget } from './lib/update-widget';
 export { defaultWidgetConfigFormRegistry } from './lib/default-widget-config-form-registry';
 export { composeWidgetConfigFormRegistries } from './lib/widget-config-form-registry';
 export type {

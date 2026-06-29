@@ -15,7 +15,12 @@
 //
 // Mock data typed against `@granit/dashboards` wire contracts.
 
-import { Datasource, WIDGET_SIZE, widgetDefinitionToAddRequest } from '@granit/dashboards';
+import {
+  Datasource,
+  resolveWidgetCoordinates,
+  WIDGET_SIZE,
+  widgetDefinitionToAddRequest,
+} from '@granit/dashboards';
 
 import type {
   DashboardCatalogEntryResponse,
@@ -466,6 +471,10 @@ function seedStoredDashboard(
   status: StoredDashboard['status'],
   widgetIdBase: number
 ): StoredDashboard {
+  // First-fit pack mirrors the backend coordinate backfill so the mock store
+  // exposes realistic x/y for sample dashboards whose definitions predate the
+  // grid-coordinate fields.
+  const coords = resolveWidgetCoordinates(definition.widgets, definition.layout.columns);
   return {
     id,
     name: definition.name,
@@ -487,6 +496,8 @@ function seedStoredDashboard(
         id: `${id.slice(0, -3)}${(widgetIdBase + index).toString(16).padStart(3, '0')}`,
         widgetType: widget.type.charAt(0).toUpperCase() + widget.type.slice(1),
         position: widget.position,
+        x: widget.x ?? coords[index]?.x ?? 0,
+        y: widget.y ?? coords[index]?.y ?? 0,
         width: widget.size.width,
         height: widget.size.height,
         titleLocalizationKey: `Widget:${definition.name}.${widget.slug}`,
