@@ -58,12 +58,11 @@ export interface PartyAddressResponse {
   readonly kind: AddressKind;
   readonly isDefault: boolean;
   readonly label: string | null;
-  readonly line1: string;
+  readonly street1: string;
   readonly city: string;
   readonly postalCode: string;
   readonly country: string;
-  readonly companyName: string | null;
-  readonly line2: string | null;
+  readonly street2: string | null;
   readonly state: string | null;
 }
 
@@ -137,7 +136,16 @@ export interface PartyResponse {
   readonly modifiedAt: ISODateString | null;
 }
 
-/** Lightweight summary used by list endpoints. */
+/**
+ * Lightweight summary row for the query-engine party grid.
+ *
+ * This is a denormalized GRID PROJECTION, not a wire DTO: there is no matching
+ * schema in `contracts/openapi/parties.json`. In the spec's `Party` projection,
+ * `primaryEmail` / `primaryPhone` are full `PartyEmail` / `PartyPhone` objects;
+ * here they are flattened to the display string (the email address / phone
+ * number) consumed by `party-columns.tsx`. Keep the field set aligned with the
+ * columns rendered there, not with the backend `Party` projection.
+ */
 export interface PartyListItemResponse {
   readonly id: PartyId;
   readonly tenantId: TenantId | null;
@@ -146,7 +154,9 @@ export interface PartyListItemResponse {
   readonly roles: string;
   readonly status: PartyStatus;
   readonly defaultCurrency: string;
+  /** Flattened from the projection's `primaryEmail.address` (denormalized). */
   readonly primaryEmail: string | null;
+  /** Flattened from the projection's `primaryPhone.number` (denormalized). */
   readonly primaryPhone: string | null;
 }
 
@@ -236,15 +246,23 @@ export interface PartySuspendRequest {
 /** Request payload to add an address to a party. */
 export interface PartyAddressRequest {
   readonly kind: AddressKind;
-  readonly line1: string;
+  readonly street1: string;
   readonly city: string;
   readonly postalCode: string;
   readonly country: string;
-  readonly companyName?: string | null;
-  readonly line2?: string | null;
+  readonly street2?: string | null;
   readonly state?: string | null;
   readonly isDefault?: boolean;
   readonly label?: string | null;
+}
+
+/**
+ * Request payload to record a manual deliverability confirmation for a party
+ * address (tier-2 evidence). `evidence` is optional (absent from the spec's
+ * `required` set) and nullable; capped at 256 chars server-side.
+ */
+export interface PartyAddressConfirmRequest {
+  readonly evidence?: string | null;
 }
 
 /** Request payload to add an email to a party. */
@@ -273,12 +291,17 @@ export interface PartyRoleRequest {
   readonly role: PartyRole;
 }
 
-/** Request payload to set a party's customer-specific tax status. */
+/**
+ * Request payload to set a party's customer-specific tax status.
+ *
+ * Spec `required` is only `[isExempt, reverseCharge]`; `vatin` and
+ * `evidenceBlobId` are optional (absent from the `required` array) yet nullable.
+ */
 export interface PartyTaxStatusRequest {
   readonly isExempt: boolean;
   readonly reverseCharge: boolean;
-  readonly vatin: string | null;
-  readonly evidenceBlobId: EvidenceBlobId | null;
+  readonly vatin?: string | null;
+  readonly evidenceBlobId?: EvidenceBlobId | null;
 }
 
 // ── Merge ────────────────────────────────────────────────────────────────
