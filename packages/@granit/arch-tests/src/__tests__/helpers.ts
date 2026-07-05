@@ -119,6 +119,7 @@ export const UI_ROUTER_BASELINE: ReadonlyArray<string> = [
   '@granit/react-ui-hostnames',
   '@granit/react-ui-identity',
   '@granit/react-ui-invoicing',
+  '@granit/react-ui-iot',
   '@granit/react-ui-metering',
   '@granit/react-ui-multi-tenancy',
   '@granit/react-ui-notifications',
