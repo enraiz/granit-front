@@ -4,8 +4,8 @@
 
 export {
   mockEntityFollowers,
-  mockNotificationDefinitions,
   mockNotificationPreferences,
+  mockNotificationTypes,
   mockNotifications,
   mockSubscriptions,
 } from './data';

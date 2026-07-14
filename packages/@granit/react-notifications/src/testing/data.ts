@@ -1,9 +1,9 @@
 import { toEntityId, toISODateString } from '@granit/types';
 
 import type {
-  NotificationDefinition,
   NotificationPreferenceResponse,
   NotificationSubscriptionResponse,
+  NotificationTypeResponse,
   UserNotification,
 } from '@granit/notifications';
 import type { Mutable } from '@granit/testing';
@@ -254,110 +254,86 @@ export const mockNotifications: Mutable<UserNotification>[] = [
 /**
  * Registry of notification types returned by `GET /notifications/types`.
  *
- * Mirrors the bare `NotificationDefinition[]` the .NET endpoint produces. Every
+ * Mirrors the bare `NotificationTypeResponse[]` the .NET endpoint produces. Every
  * `notificationTypeName` used in {@link mockNotificationPreferences} and
  * {@link mockNotifications} has a matching entry so the preferences UI lines up
  * with the seeded preference rows. `security_alert` and `rgpd_request` are
  * mandatory (`allowUserOptOut: false`) — the preferences panel hides them.
  */
-export const mockNotificationDefinitions: NotificationDefinition[] = [
+export const mockNotificationTypes: NotificationTypeResponse[] = [
   {
     name: 'user_registered',
-    defaultSeverity: 'Info',
-    defaultChannels: ['InApp', 'Email'],
     displayName: 'User registered',
     description: 'A new user account has been created and is pending approval.',
     groupName: 'Users',
+    defaultSeverity: 'Info',
+    defaultChannels: ['InApp', 'Email'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'user_role_changed',
-    defaultSeverity: 'Info',
-    defaultChannels: ['InApp', 'Email'],
     displayName: 'User role changed',
     description: 'A role has been granted to or revoked from a user.',
     groupName: 'Users',
+    defaultSeverity: 'Info',
+    defaultChannels: ['InApp', 'Email'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'country_updated',
-    defaultSeverity: 'Success',
-    defaultChannels: ['InApp'],
     displayName: 'Country reference updated',
     description: 'A country in the reference data has been created, updated or deactivated.',
     groupName: 'Reference data',
+    defaultSeverity: 'Success',
+    defaultChannels: ['InApp'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'config_changed',
-    defaultSeverity: 'Warning',
-    defaultChannels: ['InApp', 'Email'],
     displayName: 'Configuration changed',
     description: 'A feature flag or system configuration value has been changed.',
     groupName: 'System',
+    defaultSeverity: 'Warning',
+    defaultChannels: ['InApp', 'Email'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'security_alert',
-    defaultSeverity: 'Error',
-    defaultChannels: ['InApp', 'Email', 'Push'],
     displayName: 'Security alert',
     description: 'A security-relevant event was detected (e.g. authentication failure spike).',
     groupName: 'Security',
+    defaultSeverity: 'Error',
+    defaultChannels: ['InApp', 'Email', 'Push'],
     allowUserOptOut: false,
-    allowDoNotDisturbBypass: true,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'service_health',
-    defaultSeverity: 'Warning',
-    defaultChannels: ['InApp', 'Email'],
     displayName: 'Service health',
     description:
       'Infrastructure or service health status changed (backups, degradation, maintenance).',
     groupName: 'System',
+    defaultSeverity: 'Warning',
+    defaultChannels: ['InApp', 'Email'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'audit_export',
-    defaultSeverity: 'Info',
-    defaultChannels: ['InApp', 'Email'],
     displayName: 'Audit export ready',
     description: 'A requested audit log export has finished and is ready to download.',
     groupName: 'Compliance',
+    defaultSeverity: 'Info',
+    defaultChannels: ['InApp', 'Email'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
   {
     name: 'rgpd_request',
-    defaultSeverity: 'Info',
-    defaultChannels: ['InApp', 'Email', 'Push'],
     displayName: 'RGPD request',
     description:
       'A GDPR data subject request (access, erasure) requires action within the legal delay.',
     groupName: 'Compliance',
+    defaultSeverity: 'Info',
+    defaultChannels: ['InApp', 'Email', 'Push'],
     allowUserOptOut: false,
-    allowDoNotDisturbBypass: true,
-    requiredPermission: null,
-    requiredFeature: null,
   },
 ];
 

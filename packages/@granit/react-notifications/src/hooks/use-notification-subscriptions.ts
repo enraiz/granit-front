@@ -16,8 +16,8 @@ import { useNotificationConfig } from '../providers/notifications-provider';
 import { buildNotificationsQueryKey } from './query-keys';
 
 import type {
-  NotificationDefinition,
   NotificationSubscriptionResponse,
+  NotificationTypeResponse,
 } from '@granit/notifications';
 import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 
@@ -31,7 +31,7 @@ import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
  *
  * `GET /api/v1/notifications/types`
  */
-export function useNotificationTypes(): UseQueryResult<readonly NotificationDefinition[]> {
+export function useNotificationTypes(): UseQueryResult<readonly NotificationTypeResponse[]> {
   const { config } = useNotificationConfig();
   const basePath = config.basePath ?? API_BASE_PATH;
   return useQuery({

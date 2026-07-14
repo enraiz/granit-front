@@ -8,8 +8,8 @@ import { API_BASE_PATH } from '../constants';
 
 import {
   mockEntityFollowers,
-  mockNotificationDefinitions,
   mockNotificationPreferences,
+  mockNotificationTypes,
   mockNotifications,
   mockSubscriptions,
 } from './data';
@@ -310,7 +310,7 @@ export function createNotificationsHandlers(baseUrl = API_BASE_PATH) {
 
     // GET notification type registry — drives the preferences UI
     http.get(`${baseUrl}/notifications/types`, () => {
-      return HttpResponse.json(mockNotificationDefinitions);
+      return HttpResponse.json(mockNotificationTypes);
     }),
 
     // GET notification preferences

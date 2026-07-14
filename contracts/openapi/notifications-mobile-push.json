@@ -70,21 +70,31 @@
           }
         }
       },
-      "get": {
+      "delete": {
         "tags": ["Notifications - Mobile Push"],
-        "summary": "Returns the current user's registered device tokens.",
-        "description": "Returns all device tokens registered by the authenticated user for the current tenant, including the platform (iOS, Android) and registration timestamp. The device token itself is a sendable push credential, so only a masked preview (last 4 characters) is returned — never the plaintext token.",
-        "operationId": "GetMobilePushTokens",
+        "summary": "Removes a mobile device token.",
+        "description": "Removes the device token carried in the request body for the authenticated user in the current tenant. The token is a sendable push credential, so it travels in the body — never in the URL, where it would leak into access and proxy logs. Call this when the user logs out or the token becomes invalid. No-op if the token does not exist.",
+        "operationId": "RemoveMobilePushToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MobilePushTokenRemoveRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
-          "200": {
-            "description": "OK",
+          "204": {
+            "description": "No Content"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MobilePushTokenResponse"
-                  }
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
                 }
               }
             }
@@ -120,27 +130,25 @@
             }
           }
         }
-      }
-    },
-    "/notifications/mobile-push/tokens/{deviceToken}": {
-      "delete": {
+      },
+      "get": {
         "tags": ["Notifications - Mobile Push"],
-        "summary": "Removes a mobile device token.",
-        "description": "Removes the specified device token for the authenticated user in the current tenant. Call this when the user logs out or the token becomes invalid. No-op if the token does not exist.",
-        "operationId": "RemoveMobilePushToken",
-        "parameters": [
-          {
-            "name": "deviceToken",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "Returns the current user's registered device tokens.",
+        "description": "Returns all device tokens registered by the authenticated user for the current tenant, including the platform (iOS, Android) and registration timestamp. The device token itself is a sendable push credential, so only a masked preview (last 4 characters) is returned — never the plaintext token.",
+        "operationId": "GetMobilePushTokens",
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MobilePushTokenResponse"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized",
@@ -221,6 +229,16 @@
           },
           "platform": {
             "$ref": "#/components/schemas/MobilePlatform"
+          }
+        }
+      },
+      "MobilePushTokenRemoveRequest": {
+        "required": ["deviceToken"],
+        "type": "object",
+        "properties": {
+          "deviceToken": {
+            "maxLength": 512,
+            "type": "string"
           }
         }
       },

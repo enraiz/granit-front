@@ -62,6 +62,7 @@ export function createAuthHandlers(baseUrl = '/api/v1/auth', _bffSessionsUrl?: s
           'Localization.Overrides.Read',
           'Localization.Overrides.Manage',
           'Notifications.UserNotifications.Read',
+          'Notifications.UserNotifications.Update',
           'Notifications.UserNotifications.Manage',
           'Privacy.LegalDocuments.Read',
           'Privacy.LegalDocuments.Create',

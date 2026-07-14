@@ -1,6 +1,10 @@
 import { buildApiUrl } from '@granit/api-client';
 
-import type { MobilePushTokenRegisterRequest, MobilePushTokenResponse } from '../types';
+import type {
+  MobilePushTokenRegisterRequest,
+  MobilePushTokenRemoveRequest,
+  MobilePushTokenResponse,
+} from '../types';
 import type { AxiosInstance } from '@granit/api-client';
 
 export async function registerDeviceToken(
@@ -11,14 +15,22 @@ export async function registerDeviceToken(
   await client.post(buildApiUrl(basePath, 'notifications', 'mobile-push', 'tokens'), payload);
 }
 
+/**
+ * Removes a registered device token for the current user.
+ *
+ * `DELETE {basePath}/notifications/mobile-push/tokens` — the token is a sendable
+ * push credential, so it travels in the request body, never in the URL where it
+ * would leak into access and proxy logs. No-op if the token does not exist.
+ */
 export async function unregisterDeviceToken(
   client: AxiosInstance,
   basePath: string,
   token: string
 ): Promise<void> {
-  await client.delete(
-    buildApiUrl(basePath, 'notifications', 'mobile-push', 'tokens', encodeURIComponent(token))
-  );
+  const request: MobilePushTokenRemoveRequest = { deviceToken: token };
+  await client.delete(buildApiUrl(basePath, 'notifications', 'mobile-push', 'tokens'), {
+    data: request,
+  });
 }
 
 /**

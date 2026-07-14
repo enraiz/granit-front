@@ -443,7 +443,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/NotificationDefinition"
+                    "$ref": "#/components/schemas/NotificationTypeResponse"
                   }
                 }
               }
@@ -871,45 +871,6 @@
           }
         }
       },
-      "NotificationDefinition": {
-        "required": ["name"],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "defaultSeverity": {
-            "$ref": "#/components/schemas/NotificationSeverity"
-          },
-          "defaultChannels": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "displayName": {
-            "type": ["null", "string"]
-          },
-          "description": {
-            "type": ["null", "string"]
-          },
-          "groupName": {
-            "type": ["null", "string"]
-          },
-          "allowUserOptOut": {
-            "type": "boolean"
-          },
-          "allowDoNotDisturbBypass": {
-            "type": "boolean"
-          },
-          "requiredPermission": {
-            "type": ["null", "string"]
-          },
-          "requiredFeature": {
-            "type": ["null", "string"]
-          }
-        }
-      },
       "NotificationPreferenceResponse": {
         "required": [
           "id",
@@ -991,6 +952,44 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "NotificationTypeResponse": {
+        "required": [
+          "name",
+          "displayName",
+          "description",
+          "groupName",
+          "defaultSeverity",
+          "defaultChannels",
+          "allowUserOptOut"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": ["null", "string"]
+          },
+          "description": {
+            "type": ["null", "string"]
+          },
+          "groupName": {
+            "type": ["null", "string"]
+          },
+          "defaultSeverity": {
+            "type": "string"
+          },
+          "defaultChannels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowUserOptOut": {
+            "type": "boolean"
           }
         }
       },

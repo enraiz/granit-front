@@ -1,10 +1,10 @@
 import { buildApiUrl } from '@granit/api-client';
 
 import type {
-  NotificationDefinition,
   NotificationPreferenceResponse,
   NotificationPreferenceUpdateRequest,
   NotificationSubscriptionResponse,
+  NotificationTypeResponse,
   UserNotificationPage,
 } from '../types/index';
 import type { AxiosInstance } from '@granit/api-client';
@@ -100,8 +100,8 @@ export async function updatePreference(
 export async function listNotificationTypes(
   client: AxiosInstance,
   basePath: string
-): Promise<readonly NotificationDefinition[]> {
-  const { data } = await client.get<NotificationDefinition[]>(
+): Promise<readonly NotificationTypeResponse[]> {
+  const { data } = await client.get<NotificationTypeResponse[]>(
     buildApiUrl(basePath, 'notifications', 'types')
   );
   return data;

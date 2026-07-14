@@ -8,6 +8,7 @@ import { mockMobilePushTokens } from './data';
 
 import type {
   MobilePushTokenRegisterRequest,
+  MobilePushTokenRemoveRequest,
   MobilePushTokenResponse,
 } from '@granit/notifications-mobile-push';
 
@@ -46,10 +47,10 @@ export function createMobilePushHandlers(baseUrl = DEFAULT_BASE_PATH) {
       return noContent();
     }),
 
-    // DELETE unregister a device token — 204 No Content
-    http.delete(`${tokensUrl}/:token`, ({ params }) => {
-      const token = decodeURIComponent(params.token as string);
-      tokens = tokens.filter((t) => t.deviceTokenPreview !== token);
+    // DELETE unregister a device token — token in the request body, 204 No Content
+    http.delete(tokensUrl, async ({ request }) => {
+      const { deviceToken } = (await request.json()) as MobilePushTokenRemoveRequest;
+      tokens = tokens.filter((t) => t.deviceTokenPreview !== deviceToken);
       return noContent();
     }),
   ];

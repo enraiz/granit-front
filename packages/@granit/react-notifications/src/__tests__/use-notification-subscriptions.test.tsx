@@ -17,8 +17,8 @@ import { axiosResponse, createMockClient } from './test-utils';
 
 import type {
   NotificationConfig,
-  NotificationDefinition,
   NotificationSubscriptionResponse,
+  NotificationTypeResponse,
 } from '@granit/notifications';
 import type { AxiosInstance } from 'axios';
 import type { ReactNode } from 'react';
@@ -37,18 +37,15 @@ function createWrapper(client: AxiosInstance, basePath = '/api/v1') {
   };
 }
 
-const MOCK_TYPES: NotificationDefinition[] = [
+const MOCK_TYPES: NotificationTypeResponse[] = [
   {
     name: 'NewMessage',
-    defaultSeverity: 'Info',
-    defaultChannels: ['InApp'],
     displayName: 'New message',
     description: null,
     groupName: 'inbox',
+    defaultSeverity: 'Info',
+    defaultChannels: ['InApp'],
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
 ];
 

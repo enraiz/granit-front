@@ -242,7 +242,7 @@ export const CONTRACTS: readonly ModuleContract[] = [
     slug: 'notifications',
     package: 'notifications',
     types: [
-      'NotificationDefinition',
+      'NotificationTypeResponse',
       'NotificationSubscriptionResponse',
       'NotificationPreferenceResponse',
       'NotificationPreferenceUpdateRequest',
@@ -270,7 +270,11 @@ export const CONTRACTS: readonly ModuleContract[] = [
   {
     slug: 'notifications-mobile-push',
     package: 'notifications-mobile-push',
-    types: ['MobilePushTokenRegisterRequest', 'MobilePushTokenResponse'],
+    types: [
+      'MobilePushTokenRegisterRequest',
+      'MobilePushTokenRemoveRequest',
+      'MobilePushTokenResponse',
+    ],
   },
   {
     slug: 'localization',

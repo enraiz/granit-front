@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   createNotificationsHandlers,
-  mockNotificationDefinitions,
+  mockNotificationTypes,
   notificationQueryMetadata,
 } from '../testing/index';
 
@@ -20,7 +20,7 @@ describe('createNotificationsHandlers /meta', () => {
 });
 
 describe('createNotificationsHandlers /types', () => {
-  it('responds with the notification definition registry as a bare array', async () => {
+  it('responds with the notification type registry as a bare array', async () => {
     server.use(...createNotificationsHandlers(BASE));
     const response = await fetch(`${BASE}/notifications/types`);
     expect(response.status).toBe(200);
@@ -28,6 +28,6 @@ describe('createNotificationsHandlers /types', () => {
     // Contract: GET /notifications/types returns a bare JSON array, not an
     // envelope — the preferences panel calls `.filter` on it directly.
     expect(Array.isArray(body)).toBe(true);
-    expect(body).toEqual(mockNotificationDefinitions);
+    expect(body).toEqual(mockNotificationTypes);
   });
 });

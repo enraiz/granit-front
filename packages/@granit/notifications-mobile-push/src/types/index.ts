@@ -8,6 +8,16 @@ export interface MobilePushTokenRegisterRequest {
   readonly platform: MobilePlatform;
 }
 
+/**
+ * Write DTO for token removal. Mirrors `MobilePushTokenRemoveRequest` from .NET.
+ *
+ * The device token is a sendable push credential, so it travels in the request
+ * body — never in the URL, where it would leak into access and proxy logs.
+ */
+export interface MobilePushTokenRemoveRequest {
+  readonly deviceToken: string;
+}
+
 export interface MobilePushTokenResponse {
   /** Masked preview of the stored device token (the full token is never returned). */
   readonly deviceTokenPreview: string;

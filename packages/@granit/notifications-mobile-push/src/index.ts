@@ -6,5 +6,6 @@ export {
 export type {
   MobilePlatform,
   MobilePushTokenRegisterRequest,
+  MobilePushTokenRemoveRequest,
   MobilePushTokenResponse,
 } from './types';

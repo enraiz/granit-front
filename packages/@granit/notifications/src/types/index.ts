@@ -62,13 +62,7 @@ export interface NotificationTransportMessage {
  * Consumer apps and backend may define additional channels.
  */
 export type NotificationChannel =
-  | 'InApp'
-  | 'Email'
-  | 'Sms'
-  | 'WhatsApp'
-  | 'Push'
-  | 'MobilePush'
-  | (string & {});
+  'InApp' | 'Email' | 'Sms' | 'WhatsApp' | 'Push' | 'MobilePush' | (string & {});
 
 /**
  * Well-known channel identifiers matching the .NET `NotificationChannels` class.
@@ -113,28 +107,27 @@ export interface NotificationPreferenceUpdateRequest {
 }
 
 // ---------------------------------------------------------------------------
-// Notification type definitions — mirrors NotificationDefinition .NET
+// Notification type definitions — mirrors NotificationTypeResponse .NET
 // ---------------------------------------------------------------------------
 
 /**
- * Metadata for a notification type, returned by `GET /types`. Mirrors
- * `Granit.Notifications.NotificationDefinition`.
+ * Metadata for a notification type, returned by `GET /types`. Mirrors the
+ * projected wire DTO `Granit.Notifications.Endpoints.Dtos.NotificationTypeResponse`
+ * (the server-side registration carries more — do-not-disturb bypass, required
+ * permission/feature — but those are not projected onto the wire).
  */
-export interface NotificationDefinition {
+export interface NotificationTypeResponse {
   readonly name: string;
-  readonly defaultSeverity: NotificationSeverity;
-  readonly defaultChannels: readonly string[];
   readonly displayName: string | null;
   readonly description: string | null;
   readonly groupName: string | null;
+  readonly defaultSeverity: NotificationSeverity;
+  readonly defaultChannels: readonly string[];
   /**
    * When `false`, the notification is always sent regardless of user
    * preferences (e.g. security alerts, GDPR breach notifications).
    */
   readonly allowUserOptOut: boolean;
-  readonly allowDoNotDisturbBypass: boolean;
-  readonly requiredPermission: string | null;
-  readonly requiredFeature: string | null;
 }
 
 // ---------------------------------------------------------------------------

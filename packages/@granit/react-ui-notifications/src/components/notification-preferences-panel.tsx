@@ -16,7 +16,7 @@ import { cn } from '@granit/utils';
 import { Settings } from 'lucide-react';
 import { useState, useTransition } from 'react';
 
-import type { NotificationChannel, NotificationDefinition } from '@granit/notifications';
+import type { NotificationChannel, NotificationTypeResponse } from '@granit/notifications';
 
 const channels: NotificationChannel[] = ['InApp', 'Email', 'Push'];
 
@@ -49,7 +49,7 @@ export function NotificationPreferencesPanel() {
   const findPreference = (typeName: string, channel: string) =>
     preferences.find((p) => p.notificationTypeName === typeName && p.channelName === channel);
 
-  const isChecked = (def: NotificationDefinition, channel: string): boolean => {
+  const isChecked = (def: NotificationTypeResponse, channel: string): boolean => {
     const pendingValue = pending.get(keyOf(def.name, channel));
     if (pendingValue !== undefined) return pendingValue;
 
@@ -59,7 +59,7 @@ export function NotificationPreferencesPanel() {
     return def.defaultChannels.includes(channel);
   };
 
-  const handleToggle = (def: NotificationDefinition, channel: string, isEnabled: boolean) => {
+  const handleToggle = (def: NotificationTypeResponse, channel: string, isEnabled: boolean) => {
     const key = keyOf(def.name, channel);
     const existing = findPreference(def.name, channel);
 

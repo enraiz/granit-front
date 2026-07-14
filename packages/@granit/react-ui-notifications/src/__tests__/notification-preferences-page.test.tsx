@@ -26,13 +26,10 @@ const mockDefinitions = [
     name: 'security.login',
     displayName: 'Login alerts',
     description: null,
+    groupName: null,
     defaultSeverity: 'Info',
     defaultChannels: ['InApp', 'Email'],
-    groupName: null,
     allowUserOptOut: true,
-    allowDoNotDisturbBypass: false,
-    requiredPermission: null,
-    requiredFeature: null,
   },
 ];
 

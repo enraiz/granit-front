@@ -23,24 +23,25 @@ describe('mobile-push-api', () => {
     });
   });
 
-  it('should unregister a device token', async () => {
+  it('should unregister a device token via the request body', async () => {
     const client = createMockClient();
 
     await unregisterDeviceToken(client, '/api/v1', 'fcm-token-123');
 
-    expect(client.delete).toHaveBeenCalledWith(
-      '/api/v1/notifications/mobile-push/tokens/fcm-token-123'
-    );
+    // The token is a sendable credential, so it travels in the body, never the URL.
+    expect(client.delete).toHaveBeenCalledWith('/api/v1/notifications/mobile-push/tokens', {
+      data: { deviceToken: 'fcm-token-123' },
+    });
   });
 
-  it('should encode special characters in token for unregister', async () => {
+  it('should carry tokens with special characters unescaped in the body', async () => {
     const client = createMockClient();
 
     await unregisterDeviceToken(client, '/api/v1', 'token/with+special=chars');
 
-    expect(client.delete).toHaveBeenCalledWith(
-      '/api/v1/notifications/mobile-push/tokens/token%2Fwith%2Bspecial%3Dchars'
-    );
+    expect(client.delete).toHaveBeenCalledWith('/api/v1/notifications/mobile-push/tokens', {
+      data: { deviceToken: 'token/with+special=chars' },
+    });
   });
 
   it('should fetch all device tokens', async () => {
